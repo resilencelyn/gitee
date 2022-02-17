@@ -1,0 +1,22 @@
+{
+  "app": {
+    "bundleName": "com.poetry.jianjia",
+    "vendor": "jianjian",
+    "version": {
+      "code": 1,
+      "name": "1.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "package": "poerty.jianjian.converter.gson",
+    "deviceType": [
+      "phone"
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "gson",
+      "moduleType": "har"
+    }
+  }
+}

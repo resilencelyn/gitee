@@ -1,0 +1,33 @@
+name: release
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        goos: [ linux, windows, darwin ]
+        goarch: [ "386", amd64, arm, arm64 ]
+        exclude:
+          - goos: darwin
+            goarch: arm
+          - goos: darwin
+            goarch: "386"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env
+        run: |
+          echo BUILD_TIME=$(date --rfc-3339=seconds) >> ${GITHUB_ENV}
+          echo Tags=${GITHUB_REF##*/} >> ${GITHUB_ENV}
+      - uses: wangyoucao577/go-release-action@v1.22
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: "https://golang.org/dl/go1.17.3.linux-amd64.tar.gz"
+          ldflags: -w -s -X "main.BuildTime=${{ env.BUILD_TIME }}" -X main.CommitId=${{ github.sha }} -X main.Tags=${{ env.Tags }}
+          project_path: "./cmd"

@@ -1,0 +1,23 @@
+﻿################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/.vs
+/PaddleOCRSharpDemo/bin/Debug
+/PaddleOCRSharp/bin/Debug
+/PaddleOCRSharp/bin/Release
+/PaddleOCRSharpDemo/bin/Release
+/PaddleOCRSharp/obj
+/.cr/personal/FavoritesList/List.xml
+/PaddleOCRSharpDemo/obj/Debug
+/PaddleOCRSharpDemo/obj/Release
+/PaddleOCRSharpDemo/obj
+/PaddleOCRCppDemo/Release
+/PaddleOCRCppDemo/x64/Release
+/PaddleOCRCppDemo/PaddleOCRCppDemo.Build.CppClean.log
+/PaddleOCRSharp/bin/x64/Release
+/PaddleOCRSharpDemo/bin/x64/Release
+/PaddleOCRSharpDemo/bin/x64/Debug
+/PaddleOCRSharp/bin/x64/Debug
+/PaddleOCRCppDemo/x64/Debug
+/x64/Debug

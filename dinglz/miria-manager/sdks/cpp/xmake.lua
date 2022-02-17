@@ -1,0 +1,7 @@
+add_rules("mode.debug", "mode.release")
+add_requires("spdlog")
+target("miraiManager-sdk")
+    set_kind("binary")
+    add_files("src/*.cpp")
+    add_packages("spdlog")
+    add_links("wsock32","ws2_32")

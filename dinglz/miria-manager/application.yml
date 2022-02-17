@@ -1,0 +1,4 @@
+server:
+  port: 80
+http:
+  url: http://localhost:666/ #反向http的地址

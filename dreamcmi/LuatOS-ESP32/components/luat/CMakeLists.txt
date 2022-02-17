@@ -1,0 +1,66 @@
+idf_component_register(
+    SRC_DIRS 
+            freertos
+            port
+            ../../../LuatOS/luat/modules 
+            ../../../LuatOS/luat/vfs
+            ../../../LuatOS/luat/packages/lua-cjson
+            ../../../LuatOS/luat/packages/eink
+            ../../../LuatOS/luat/packages/epaper
+            ../../../LuatOS/luat/packages/qrcode
+            ../../../LuatOS/luat/packages/u8g2
+            ../../../LuatOS/luat/packages/lfs
+            ../../../LuatOS/luat/packages/minmea 
+            ../../../LuatOS/components/cjson
+            ../../../LuatOS/components/coremark
+            ../../../LuatOS/components/sfud
+            ../../../LuatOS/components/lcd
+            ../../../LuatOS/components/lvgl/gen/lv_core
+            ../../../LuatOS/components/lvgl/gen/lv_draw
+            ../../../LuatOS/components/lvgl/gen/lv_font
+            ../../../LuatOS/components/lvgl/gen/lv_misc
+            ../../../LuatOS/components/lvgl/gen/lv_themes
+            ../../../LuatOS/components/lvgl/gen/lv_widgets
+            ../../../LuatOS/components/lvgl/font
+            ../../../LuatOS/components/lvgl/binding
+            ../../../LuatOS/components/lvgl/src/lv_core
+            ../../../LuatOS/components/lvgl/src/lv_draw
+            ../../../LuatOS/components/lvgl/src/lv_font
+            ../../../LuatOS/components/lvgl/src/lv_hal
+            ../../../LuatOS/components/lvgl/src/lv_misc
+            ../../../LuatOS/components/lvgl/src/lv_themes
+            ../../../LuatOS/components/lvgl/src/lv_widgets
+            ../../../LuatOS/components/lvgl/exts/lv_qrcode
+            ../../../LuatOS/components/lvgl/exts/lv_bmp
+            ../../../LuatOS/components/lvgl/exts/lv_png
+            ../../../LuatOS/components/lvgl/exts/lv_sjpg
+
+    INCLUDE_DIRS include 
+            ../../../LuatOS/lua/include 
+            ../../../LuatOS/luat/include 
+            ../../../LuatOS/luat/packages/lua-cjson
+            ../../../LuatOS/luat/packages/eink
+            ../../../LuatOS/luat/packages/epaper
+            ../../../LuatOS/luat/packages/qrcode
+            ../../../LuatOS/luat/packages/u8g2
+            ../../../LuatOS/luat/packages/fatfs
+            ../../../LuatOS/luat/packages/lfs
+            ../../../LuatOS/luat/packages/minmea
+            ../../../LuatOS/components/cjson
+            ../../../LuatOS/components/coremark
+            ../../../LuatOS/components/sfud
+            ../../../LuatOS/components/lcd
+            ../../../LuatOS/components/lvgl
+            ../../../LuatOS/components/lvgl/src
+            ../../../LuatOS/components/lvgl/binding
+            ../../../LuatOS/components/lvgl/gen
+            ../../../LuatOS/components/lvgl/font
+            ../../../LuatOS/components/lvgl/exts/lv_bmp
+            ../../../LuatOS/components/lvgl/exts/lv_sjpg
+            ../../../LuatOS/components/lvgl/exts/lv_gif
+            ../../../LuatOS/components/lvgl/exts/lv_png
+            ../../../LuatOS/components/lvgl/exts/lv_qrcode
+    REQUIRES lua freertos spiffs vfs esp_adc_cal bt mbedtls esp_http_client esp_hw_support mqtt
+)
+
+idf_build_set_property(C_COMPILE_OPTIONS "-D__LUATOS__=1 -Wno-error=unused-const-variable -Wno-error=pointer-sign" APPEND)

@@ -1,0 +1,22 @@
+{
+  "app": {
+    "bundleName": "com.poetry.jianjia",
+    "vendor": "poetry",
+    "version": {
+      "code": 1,
+      "name": "1.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "package": "com.poetry.jianjia",
+    "deviceType": [
+      "phone"
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "jianjia",
+      "moduleType": "har"
+    }
+  }
+}

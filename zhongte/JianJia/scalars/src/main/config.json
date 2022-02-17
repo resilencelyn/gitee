@@ -1,0 +1,27 @@
+{
+  "app": {
+    "bundleName": "com.poetry.jianjia",
+    "vendor": "jianjia",
+    "version": {
+      "code": 1000000,
+      "name": "1.0.0"
+    }
+  },
+  "deviceConfig": {
+  },
+  "module": {
+    "package": "poetry.jianjia.converter.scalars",
+    "deviceType": [
+      "phone",
+      "tablet",
+      "tv",
+      "wearable",
+      "car"
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "scalars",
+      "moduleType": "har"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+# 图片格式
+*.jpg
+*.jpeg
+*.png
+*.svg
+*.gif
+
+# 视频格式
+*.mp4
+*.avi
+.ipynb_checkpoints
+__pycache__
+/utils/__pycache__
+/DateFrames
+
+# 日志格式
+*.log
+*.csv
+*.data
+*.csv
+
+# 参数文件
+*.yaml
+*.json
+
+# 压缩文件
+*.zip
+*.tar
+*.tar.gz
+*.rar
+/CompressFrames
+
+# 字体格式
+/fonts
+/utils/fonts
+*.ttc
+*.ttf
+*.otf
+
+test.py
+/log
+/test

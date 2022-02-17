@@ -1,0 +1,8 @@
+build/
+.vscode/
+sdkconfig
+sdkconfig.old
+release/
+tools/__pycache__/
+tools/*.soc
+tools/disk.fs

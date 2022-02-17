@@ -1,0 +1,9 @@
+.idea/
+.mvn/
+cache/
+target/
+bin/
+device.json
+sdks/cpp/.vscode/
+sdks/cpp/.xmake/
+sdks/cpp/build/

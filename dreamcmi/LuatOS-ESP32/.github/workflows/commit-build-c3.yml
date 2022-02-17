@@ -1,0 +1,47 @@
+name: esp32c3
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '.github/workflows/commit-build-c3.yml'
+      - 'components/**'
+      - 'main/**'
+      - 'tools/**'
+      - 'sdkconfig.defaults'
+      - 'sdkconfig.defaults.esp32c3'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: get esp-idf
+        run: |
+          pip3 install --upgrade pip
+          mkdir -p ~/esp
+          cd ~/esp
+          git clone -b v4.4 --recursive https://github.com/espressif/esp-idf.git
+          cd ~/esp/esp-idf
+          ./install.sh esp32c3
+      - name: get LuatOS repo
+        run: |
+          cd ..
+          git clone https://github.com/openLuat/LuatOS
+      - name: build c3
+        run: |
+          source ~/esp/esp-idf/export.sh
+          idf.py --version
+          idf.py set-target esp32c3
+          idf.py build
+      - name: pack firmware
+        run: |
+          pip3 install -r tools/requirements.txt
+          cd tools/
+          python3 esp32v3.py -t esp32c3 -p
+          cd ..
+          mkdir firmware
+          mv tools/* firmware
+      - name: Upload firmware
+        uses: actions/upload-artifact@main
+        with:
+          name: c3-master
+          path: firmware/

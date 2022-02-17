@@ -1,0 +1,53 @@
+{
+  "name": "site-ssr",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "start": "egg-scripts start --port=7001 --daemon --title=egg-aomao-ssr --env=prod",
+    "stop": "egg-scripts stop --title=egg-aomao-ssr",
+    "dev": "egg-bin dev --port=7001 --sticky",
+    "debug": "cross-env RM_TMPDIR=none COMPRESS=none egg-bin debug",
+    "test": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "dependencies": {
+    "cross-env": "^5.2.0",
+    "egg": "^2.33.1",
+    "egg-cors": "^2.2.3",
+    "egg-scripts": "^2.13.0",
+    "egg-view-assets": "^1.8.0",
+    "egg-view-nunjucks": "^2.3.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "jsdom": "^16.4.0",
+    "prop-types": "^15.6.2",
+    "qs": "^6.7.0",
+    "stream-wormhole": "^1.1.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.5.3",
+    "autod": "^3.1.2",
+    "autod-egg": "^1.0.0",
+    "babel-plugin-dva-hmr": "^0.4.0",
+    "babel-plugin-import": "^1.12.0",
+    "egg-bin": "^4.16.3",
+    "egg-mock": "^4.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-egg": "^7.1.0",
+    "redbox-react": "^1.5.0",
+    "webstorm-disable-index": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,11 @@
+.editor-toolbar-group {
+    padding: 4px;
+    width: auto;
+    border-left: 1px solid #e8e8e8;
+    display: flex;
+    align-items: stretch;
+}
+
+.editor-toolbar .editor-toolbar-group:nth-child(1) {
+    border-left: none;
+}
