@@ -1,6 +1,8 @@
-package com.dinglz.mariamanager;
+package com.dinglz.mariamanager.api;
 
 import com.alibaba.fastjson.JSON;
+import com.dinglz.mariamanager.HttpData;
+import com.dinglz.mariamanager.HttpDataGroupMsg;
 import com.moandjiezana.toml.Toml;
 import com.github.kevinsawicki.http.HttpRequest;
 import io.swagger.annotations.*;
@@ -158,7 +160,7 @@ public class api {
     }
 
     @PostMapping("/login")
-    @ApiOperation(value = "登录一个机器人",tags = "login")
+    @ApiOperation(value = "登录一个机器人",tags = "登录")
     public JsonAll LoginAbot(@RequestParam(value = "id") @ApiParam(value = "qq账号") Long qqid,@RequestParam(value = "password") @ApiParam(value = "密码") String password)
     {
         Bot bot = BotFactory.INSTANCE.newBot(qqid, password, new BotConfiguration() {{
@@ -239,7 +241,7 @@ public class api {
     }
 
     @PostMapping("/close_bot")
-    @ApiOperation(value = "下线一个机器人",tags = "login")
+    @ApiOperation(value = "下线一个机器人",tags = "登录")
     public JsonAll CloseBot(@RequestParam(value = "id") @ApiParam(value = "下线qq机器人账号") Long id)
     {
         for(Bot abot:MariaBots)
@@ -251,7 +253,7 @@ public class api {
     }
 
     @PostMapping("/get_all_bot")
-    @ApiOperation(value = "获取所有机器人信息",tags = "login")
+    @ApiOperation(value = "获取所有机器人信息",tags = "机器人信息")
     public JsonAll GetAllBot()
     {
         List<BotInfo> bots = new ArrayList<BotInfo>();

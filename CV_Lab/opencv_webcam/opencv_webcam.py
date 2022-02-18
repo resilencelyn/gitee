@@ -190,7 +190,7 @@ def webcam_opencv(device_index="0",                 # 设备号
             # ------------------倒计时150帧启动程序------------------
             if (frame_countdown <= COUNTDOWN_FRAMES):
                 # 倒计时提示信息
-                countdown_msg = f'倒计时：{COUNTDOWN_FRAMES - frame_countdown + 1}\n请将设备调整到合适的位置，\n准备开始。。。'
+                countdown_msg = f'倒计时：{COUNTDOWN_FRAMES - frame_countdown + 1}帧\n请将设备调整到合适的位置，\n准备开始。。。'
                 # 帧转换
                 frame_array = frames_transform(
                     frame, countdown_msg, textFont, (x_c, y_c), COUNTDOWN_FONTSIZE)
@@ -211,13 +211,15 @@ def webcam_opencv(device_index="0",                 # 设备号
                         break
                     if (frame_num % frame_nSave == 0):  # 每隔n帧保存一次
                         frame_n_num += 1
-                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame, resize_frame,
-                                  resizeRatio_frame, frame_namePrefix, frame_saveStyle, jpg_quality, png_quality)
+                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame,
+                                  resize_frame, resizeRatio_frame, frame_namePrefix, frame_saveStyle,
+                                  jpg_quality, png_quality)
                 elif (is_handSaveFrame):  # 手动保存
                     if wait_key == ord(frame_capKey):  # 保存键
                         frame_hand_num += 1  # 手动帧计数
-                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame, resize_frame,
-                                  resizeRatio_frame, frame_namePrefix, frame_saveStyle, jpg_quality, png_quality)
+                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame,
+                                  resize_frame, resizeRatio_frame, frame_namePrefix, frame_saveStyle,
+                                  jpg_quality, png_quality)
 
                 # ------------------快捷键设置------------------
                 if wait_key == ord(quit_key):  # 退出 ord：字符转ASCII码

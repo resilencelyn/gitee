@@ -1,4 +1,4 @@
-# 🔥 opencv-webcam-script（PyPi版）
+# 🔥 opencv-webcam-script（PyPI版）
 
 ## 创建人：曾逸夫
 

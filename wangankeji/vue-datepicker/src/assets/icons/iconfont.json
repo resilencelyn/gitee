@@ -1,0 +1,51 @@
+{
+  "id": "1648256",
+  "name": "date-picker",
+  "font_family": "datepicker-iconfont",
+  "css_prefix_text": "datepicker--icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1161665",
+      "name": "date",
+      "font_class": "datetime",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "773018",
+      "name": "time",
+      "font_class": "time",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "122691",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "1441172",
+      "name": "calendar",
+      "font_class": "date",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "505806",
+      "name": "right",
+      "font_class": "right-d",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "11349318",
+      "name": "right",
+      "font_class": "right",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    }
+  ]
+}
