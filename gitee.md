@@ -1,6 +1,7 @@
 
 
-**2022-02-17**- [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
+**2022-02-17**
+- [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
 - [丁丁/MiriaManager](https://gitee.com/dinglz/miria-manager)
 - [Calvin/AIAS](https://gitee.com/mymagicpower/AIAS)
 - [梦程MI/LuatOS-ESP32](https://gitee.com/dreamcmi/LuatOS-ESP32)
@@ -17,7 +18,8 @@
 - [OpenKG/deepke](https://gitee.com/openkg/deepke)
 
 
-**2022-02-18**- [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
+**2022-02-18**-
+ [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
 - [丁丁/MiriaManager](https://gitee.com/dinglz/miria-manager)
 - [Calvin/AIAS](https://gitee.com/mymagicpower/AIAS)
 - [梦程MI/LuatOS-ESP32](https://gitee.com/dreamcmi/LuatOS-ESP32)
@@ -34,7 +36,8 @@
 - [OpenKG/deepke](https://gitee.com/openkg/deepke)
 
 
-**2022-02-19**- [成都网安科技发展有限公司/vue-datepicker](https://gitee.com/wangankeji/vue-datepicker)
+**2022-02-19**
+- [成都网安科技发展有限公司/vue-datepicker](https://gitee.com/wangankeji/vue-datepicker)
 - [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
 - [丁丁/MiriaManager](https://gitee.com/dinglz/miria-manager)
 - [人工智能加速器套件/AIAS](https://gitee.com/mymagicpower/AIAS)
