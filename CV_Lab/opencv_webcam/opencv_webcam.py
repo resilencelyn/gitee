@@ -24,7 +24,7 @@ from utils.fonts_opt import is_fonts
 
 ROOT_PATH = sys.path[0]  # 项目根目录
 OWS_VERSION = 'OpenCV Webcam Script v0.6'  # 项目名称与版本号
-COUNTDOWN_FRAMES = 200  # 倒计时帧数
+COUNTDOWN_FRAMES = 150  # 倒计时帧数
 COUNTDOWN_FONTSIZE = 25  # 倒计时字体大小
 
 
@@ -236,15 +236,15 @@ def webcam_opencv(device_index="0",                 # 设备号
             frameSaveMsg = f'自动版：共计{frame_num}帧，已保存在：{frame_savePath}\n'
             print(frameSaveMsg)
             log_management(f'{frameSaveMsg}', logName, logMode)  # 记录帧保存信息
-            date_time_frames(logTime, frame_num)  # 记录时间与帧数
+            date_time_frames(logTime, frame_num, frame_dirName)  # 记录时间与帧数
         elif (is_handSaveFrame):
             # 帧保存信息（手动版）
             frameSaveMsg = f'手动版：共计{frame_hand_num}帧，已保存在：{frame_savePath}\n'
             print(frameSaveMsg)
             log_management(f'{frameSaveMsg}', logName, logMode)  # 记录帧保存信息
-            date_time_frames(logTime, frame_hand_num)  # 记录时间与帧数
+            date_time_frames(logTime, frame_hand_num, frame_dirName)  # 记录时间与帧数
         else:
-            date_time_frames(logTime, 0)  # 记录非帧保存状态
+            date_time_frames(logTime, 0, frame_dirName)  # 记录非帧保存状态
 
         # ------------------资源释放------------------
         cap.release()  # 释放缓存资源

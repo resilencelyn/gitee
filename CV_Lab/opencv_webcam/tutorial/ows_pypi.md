@@ -2,6 +2,14 @@
 
 ## 创建人：曾逸夫
 
+<p align="left">
+<a href="https://pypi.org/project/opencv-webcam-script/0.5.1/"><img src="https://img.shields.io/badge/PyPI-v0.5.1-brightgreen?logo=pypi" alt="PyPI" /></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads" alt="PyPI All Downloads"></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads/month" alt="PyPI Month Downloads"></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=week&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads/week" alt="PyPI Week Downloads"></a>
+<a href="https://snyk.io/advisor/python/opencv-webcam-script"><img src="https://snyk.io/advisor/python/opencv-webcam-script/badge.svg" alt="PyPI Package Health"></a>
+</p>
+
 
 
 <h3 align="center">🚀 安装教程</h3>

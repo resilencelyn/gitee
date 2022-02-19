@@ -24,7 +24,7 @@ def is_compressFile(compressStyle):
         sys.exit()
 
 
-# webcam压缩
+# webcam帧压缩
 def webcam_compress(compressStyle, is_autoCompressName, compressName, preCompressFilePath, compressMode):
     # 帧压缩文件保存路径管理
     COMPRESS_PATH = increment_path(
@@ -51,14 +51,14 @@ def webcam_compress(compressStyle, is_autoCompressName, compressName, preCompres
         for i in file_tqdm:
             file_tqdm.set_description(f'正在压缩：{i}')
             compressing_file = f'{preCompressFilePath}/{i}'
-            compress_file.write(
-                compressing_file, compress_type=zipfile.ZIP_DEFLATED)  # 写入zip文件
+            compress_file.write(compressing_file,
+                                compress_type=zipfile.ZIP_DEFLATED)  # 写入zip文件
     elif (compressStyle == COMPRESS_SUFFIX[1]):
         # tar压缩
         compress_file = tarfile.open(compressName, compressMode)
         for i in file_tqdm:
-            file_tqdm.set_description(f'正在压缩：{i}')
-            compressing_file = f'{preCompressFilePath}/{i}'
+            file_tqdm.set_description(f'正在压缩：{i}')  # 加入打印压缩信息
+            compressing_file = f'{preCompressFilePath}/{i}'  # 压缩文件
             compress_file.add(compressing_file)  # 写入tar文件
 
     # ----------压缩结束----------

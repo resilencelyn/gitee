@@ -24,10 +24,9 @@
 <a href='https://gitee.com/CV_Lab/opencv_webcam/stargazers'><img src='https://gitee.com/CV_Lab/opencv_webcam/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/CV_Lab/opencv_webcam/members'><img src='https://gitee.com/CV_Lab/opencv_webcam/badge/fork.svg?theme=dark' alt='fork'></img></a>
 <a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/docker/pulls/zengdockerdocker/opencv-webcam-script?logo=docker" alt="Docker Pulls"></a>
-<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads" alt="PyPI Downloads"></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads" alt="PyPI All Downloads"></a>
 <a href="https://snyk.io/advisor/python/opencv-webcam-script"><img src="https://snyk.io/advisor/python/opencv-webcam-script/badge.svg" alt="PyPI Package Health"></a>
 </p>
-
 
 
 

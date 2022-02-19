@@ -14,7 +14,7 @@ fonts_suffix = ['ttc', 'ttf', 'otf']  # 字体后缀
 
 # 创建字体库
 def add_fronts(fonts_file=f'{ROOT_PATH}/fonts.sh'):
-    os.system(f'bash {fonts_file}')
+    os.system(f'bash {fonts_file}')  # 执行下载字体库文件bash指令
     print(f'字体文件加载完成！')
 
 

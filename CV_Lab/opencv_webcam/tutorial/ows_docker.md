@@ -2,6 +2,10 @@
 
 ## 创建人：曾逸夫
 
+<p align="left">
+<a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/badge/docker-v0.5-blue?logo=docker" alt="Docker" /></a>
+<a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/docker/pulls/zengdockerdocker/opencv-webcam-script?logo=docker" alt="Docker Pulls"></a>
+</p>
 
 
 <h3 align="center">🚀 安装教程</h3>

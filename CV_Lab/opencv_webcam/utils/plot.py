@@ -14,7 +14,10 @@ from utils.time_format import time_format
 
 OWS_VERSION = 'OpenCV Webcam Script v0.6'  # 项目名称与版本号
 ROOT_PATH = sys.path[0]  # 项目根目录
-COLOR_LIST = ['#f96801']  # 颜色列表
+
+# -----------颜色列表-----------
+COLOR_LIST = ['#f96801', '#800000', '#FFCC00', '#808000', '#00FF80', '#008080', '#000080',
+              '#4B0080', '#FF7F50', '#CC5500', '#B87333', '#CC7722', '#704214', '#50C878', '#DE3163', '#003153']
 
 # -----------字体库-----------
 # 宋体
@@ -26,15 +29,25 @@ TimesNesRoman = font_manager.FontProperties(
 
 
 # 创建折线图
-def createLineChart(frames_y, date_list, time_list):
+def createLineChart(frames_y, date_list, time_list, fdn_list):
     chart_startTime = time.time()  # 作图开始时间
 
-    # -----------作图开始-----------
-    # 画布尺寸
-    plt.figure(figsize=(8, 4))
-    # 设置线型
-    plt.plot(time_list, frames_y, color=COLOR_LIST[0], marker='o',
-             label='时间点', markerfacecolor=COLOR_LIST[0], markersize=5)
+    # ---------------------作图开始---------------------
+    plt.figure(figsize=(8, 4))  # 画布尺寸
+
+    fdn_list_cls = list(set(fdn_list))  # 去重
+    fdn_list_cls.sort(key=fdn_list.index)  # 顺序
+    for i in range(len(fdn_list_cls)):
+        tmp_time = []  # 临时时间列表，记录每个类
+        tmp_frames = []  # 临时帧数列表，记录每个类
+        for j in range(len(fdn_list)):
+            if (fdn_list[j] == fdn_list_cls[i]):
+                # 每个类别的时间和帧数
+                tmp_time.append(time_list[j])  # 时间
+                tmp_frames.append(frames_y[j])  # 帧数
+        # 设置线型
+        plt.plot(tmp_time, tmp_frames, color=COLOR_LIST[i], marker='o',
+                 label=f'{fdn_list_cls[i]}', markerfacecolor=COLOR_LIST[i], markersize=5)
 
     plt.ylim(ymin=0)  # 纵坐标限定
     plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))  # 纵坐标设置为整数
@@ -48,7 +61,7 @@ def createLineChart(frames_y, date_list, time_list):
     for a, b in zip(time_list, frames_y):
         plt.text(a, b, b, ha='center', va='bottom', fontsize=10.5)
 
-    # -----------标题、横纵轴、图例等-----------
+    # ---------------------标题、横纵轴、图例等---------------------
     plt.title(OWS_VERSION, fontsize=12, fontproperties=TimesNesRoman)  # 标题
 
     plt.xlabel(date_list[0], fontsize=12,
@@ -61,16 +74,17 @@ def createLineChart(frames_y, date_list, time_list):
 
     # chart保存信息
     os.makedirs("DateFrames", exist_ok=True)  # 创建DateFrames目录
+    # 图片路径
     date_frames_chart_path = f'{ROOT_PATH}/DateFrames/date_frames_{date_list[0]}.png'
 
     # 保存图像
     plt.savefig(date_frames_chart_path, dpi=300, bbox_inches='tight')
 
-    # -----------作图结束-----------
+    # ---------------------作图结束---------------------
     chart_endTime = time.time()  # 作图结束时间
     chart_totalTime = chart_endTime - chart_startTime  # 作图用时
-    print(f'日期-帧数图创建成功！用时：{time_format(chart_totalTime)}，已保存在{date_frames_chart_path}，'
-          f'总帧数：{sum(frames_y)}')
+    print(f'日期-帧数图创建成功！用时：{time_format(chart_totalTime)}，'
+          f'已保存在{date_frames_chart_path}，总帧数：{sum(frames_y)}')
 
 
 # csv2chart
@@ -80,7 +94,8 @@ def csv2chart(csv_path):
 
     d_list = []  # 日期列表
     t_list = []  # 时间列表
-    frames_list = []  # 时间列表
+    frames_list = []  # 帧数列表
+    fdn_list = []  # 类别列表
 
     tmp_date = f_list[0][0].split(' ')[0]  # 临时日期
     for i in range(len(f_list)):
@@ -88,16 +103,19 @@ def csv2chart(csv_path):
         time_item = f_list[i][0].split(' ')[1]  # 时间
 
         if (tmp_date != date_item):
-            createLineChart(frames_list, d_list, t_list)  # 创建日期-帧数图
+            createLineChart(frames_list, d_list, t_list, fdn_list)  # 创建日期-帧数图
             tmp_date = date_item  # 替换
             # -----------清空列表-----------
             d_list = []
             t_list = []
             frames_list = []
+            fdn_list = []
 
         d_list.append(date_item)  # 日期
         t_list.append(time_item)  # 时间
         frames_list.append(int(f_list[i][1]))  # 帧数
+        fdn_list.append(f_list[i][2])  # 类别
+
         if (i == len(f_list)-1):
             # 最后一组
-            createLineChart(frames_list, d_list, t_list)  # 创建日期-帧数图
+            createLineChart(frames_list, d_list, t_list, fdn_list)  # 创建日期-帧数图
