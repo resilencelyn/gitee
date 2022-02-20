@@ -378,7 +378,7 @@ python opencv_webcam.py -ishsf -isrf -rrf 0.5 # 手动版
 #### 💡 自定义保存路径
 
 ```shell
-# 设置保存路径，默认保存路径为./WebcamFrame
+# 设置保存路径，默认保存路径为WebcamFrame
 python opencv_webcam.py -fsd custom_dir -isasf # 以自动版为例
 ```
 
@@ -500,7 +500,7 @@ usage: opencv_webcam.py [-h] [--device DEVICE] [--quit QUIT] [--is_autoSaveFrame
                         [--frame_saveStyle FRAME_SAVESTYLE] [--jpg_quality JPG_QUALITY] [--png_quality PNG_QUALITY] [--pause PAUSE] [--auto_frameNum AUTO_FRAMENUM] [--logName LOGNAME]
                         [--logMode LOGMODE] [--is_compress] [--compressStyle COMPRESSSTYLE] [--is_autoCompressName] [--compressName COMPRESSNAME] [--compressMode COMPRESSMODE]
 
-OpenCV Webcam Script v0.5
+OpenCV Webcam Script v0.6
 
 optional arguments:
   -h, --help            show this help message and exit

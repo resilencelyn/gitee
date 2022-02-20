@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoctan.api.mapper.ExecuteplanbatchMapper">
+  <resultMap id="BaseResultMap" type="com.zoctan.api.entity.Executeplanbatch">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="executeplanid" jdbcType="BIGINT" property="executeplanid" />
+    <result column="executeplanname" jdbcType="VARCHAR" property="executeplanname" />
+    <result column="batchname" jdbcType="VARCHAR" property="batchname" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lastmodify_time" jdbcType="TIMESTAMP" property="lastmodifyTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="exectype" jdbcType="VARCHAR" property="exectype" />
+    <result column="execdate" jdbcType="VARCHAR" property="execdate" />
+
+  </resultMap>
+
+  <select id="getbatchbyplan" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM executeplanbatch a
+    where a.executeplanid=#{executeplanid}
+  </select>
+
+
+  <select id="getallexplanbatch" resultMap="BaseResultMap">
+    SELECT b.executeplanname,a.*
+    FROM executeplanbatch a inner JOIN executeplan b on a.executeplanid=b.id
+  </select>
+
+  <select id="getbatchidbyplanidandbatchname" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM executeplanbatch a
+    where a.executeplanid=#{executeplanid} and batchname =#{batchname}
+  </select>
+
+  <select id="getbatchbyexectype" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM executeplanbatch a
+    where a.exectype=#{exectype} and a.execdate between DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%s')
+      and  DATE_FORMAT(date_sub(curdate(),interval -1 day),'%Y-%m-%d %H:%i:%s')
+  </select>
+
+
+  <select id="findexplanbatchWithName" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM executeplanbatch a
+    <where>
+      <if test="batchname != null and batchname != ''">a.batchname = #{batchname} </if>
+      <if test="executeplanname != null and executeplanname != ''">and a.executeplanname like CONCAT('%',#{executeplanname},'%')</if>
+    </where>
+    order by lastmodify_time  DESC
+  </select>
+</mapper>

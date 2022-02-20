@@ -13,7 +13,6 @@ from utils.time_format import time_format
 from utils.ows_path import increment_path
 
 
-# ROOT_PATH = sys.path[0]  # 项目根目录
 COMPRESS_SUFFIX = ['zip', 'tar']  # 压缩文件格式
 
 

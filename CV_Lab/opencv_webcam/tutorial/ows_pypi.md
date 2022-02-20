@@ -10,8 +10,6 @@
 <a href="https://snyk.io/advisor/python/opencv-webcam-script"><img src="https://snyk.io/advisor/python/opencv-webcam-script/badge.svg" alt="PyPI Package Health"></a>
 </p>
 
-
-
 <h3 align="center">🚀 安装教程</h3>
 
 #### 📌 第一步：创建虚拟环境
@@ -136,7 +134,7 @@ webcam_opencv(is_handSaveFrame=True, is_resizeFrame=True, resizeRatio_frame=0.5)
 #### ✨ 自定义保存路径
 
 ```python
-# 设置保存路径，默认保存路径为./WebcamFrame
+# 设置保存路径，默认保存路径为WebcamFrame
 webcam_opencv(is_autoSaveFrame=True, frame_saveDir="custom_dir") # 以自动版为例
 ```
 
@@ -224,7 +222,7 @@ def webcam_opencv(device_index="0",                 # 设备号
                   quit_key="q",                     # 退出键
                   pause_key="p",                    # 暂停键
                   is_autoSaveFrame=False,           # 自动保存帧
-                  frame_saveDir="./WebcamFrame",    # 帧保存路径
+                  frame_saveDir="WebcamFrame",    	# 帧保存路径
                   frame_dirName="frames",           # 帧目录
                   frame_nSave=1,                    # 每隔n帧保存一次
                   auto_frameNum=0,                  # 自动保存最大帧数

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoctan.api.mapper.ApicasesReportMapper">
+  <resultMap id="BaseResultMap" type="com.zoctan.api.entity.ApicasesReport">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="caseid" jdbcType="BIGINT" property="caseid" />
+    <result column="testplanid" jdbcType="BIGINT" property="testplanid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="batchname" jdbcType="VARCHAR" property="batchname" />
+    <result column="respone" jdbcType="LONGVARCHAR" property="respone" />
+    <result column="assertvalue" jdbcType="LONGVARCHAR" property="assertvalue" />
+    <result column="runtime" jdbcType="BIGINT" property="runtime" />
+    <result column="expect" jdbcType="LONGVARCHAR" property="expect" />
+    <result column="errorinfo" jdbcType="LONGVARCHAR" property="errorinfo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lastmodify_time" jdbcType="TIMESTAMP" property="lastmodifyTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="requestheader" jdbcType="LONGVARCHAR" property="requestheader" />
+    <result column="requestdatas" jdbcType="LONGVARCHAR" property="requestdatas" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="requestmethod" jdbcType="VARCHAR" property="requestmethod" />
+  </resultMap>
+
+  <select id="findApicasereportWithName" resultMap="BaseResultMap">
+    SELECT b.casename,b.apiname,a.status,a.url,a.requestmethod,a.batchname,b.deployunitname,a.respone,a.assertvalue,a.runtime,a.expect,a.errorinfo,a.create_time,a.requestheader,a.requestdatas
+    FROM apicases_report a inner join apicases b on a.caseid=b.id
+    <where>
+      <if test="testplanid != null and testplanid != ''">a.testplanid =#{testplanid}</if>
+      <if test="batchname != null  and batchname != ''">and a.batchname =#{batchname}</if>
+    </where>
+    order by a.create_time desc
+  </select>
+
+
+  <select id="getApicasetotalsWithName" resultType="java.lang.Long">
+    SELECT count(*) as totalcasenums
+    FROM apicases_report a
+    <where>
+      <if test="testplanid != null and testplanid != ''">a.testplanid =#{testplanid}</if>
+      <if test="batchname != null  and batchname != ''">and a.batchname =#{batchname}</if>
+    </where>
+  </select>
+
+  <select id="getApicasenumbystatus" resultType="java.lang.Long">
+    SELECT count(*) as totalcasenums
+    FROM apicases_report a
+    <where>
+      <if test="testplanid != null and testplanid != ''">a.testplanid =#{testplanid}</if>
+      <if test="batchname != null  and batchname != ''">and a.batchname =#{batchname}</if>
+      <if test="status != null  and status != ''">and a.status =#{status}</if>
+    </where>
+  </select>
+
+  <select id="getApicasecosttimes" resultType="java.lang.Long">
+    SELECT sum(runtime) as totalrumtimes
+    FROM apicases_report a
+    <where>
+      <if test="testplanid != null and testplanid != ''">a.testplanid =#{testplanid}</if>
+      <if test="batchname != null  and batchname != ''">and a.batchname =#{batchname}</if>
+    </where>
+  </select>
+
+  <select id="listallresult" resultMap="BaseResultMap">
+    SELECT b.casename,b.apiname,a.requestheader,a.requestdatas,a.status,a.batchname,b.deployunitname,a.respone,a.assertvalue,a.runtime,a.expect,a.errorinfo,a.create_time
+    FROM apicases_report a inner join apicases b on a.caseid=b.id
+  </select>
+</mapper>

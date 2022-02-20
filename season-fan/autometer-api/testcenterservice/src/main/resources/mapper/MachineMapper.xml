@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoctan.api.mapper.MachineMapper">
+  <resultMap id="BaseResultMap" type="com.zoctan.api.entity.Machine">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="machinename" jdbcType="VARCHAR" property="machinename" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="cpu" jdbcType="VARCHAR" property="cpu" />
+    <result column="disk" jdbcType="VARCHAR" property="disk" />
+    <result column="mem" jdbcType="VARCHAR" property="mem" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lastmodify_time" jdbcType="TIMESTAMP" property="lastmodifyTime" />
+  </resultMap>
+
+
+  <select id="findMachineWithName" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM machine a
+    <where>
+      <if test="machinename != null and machinename != ''">a.machinename like CONCAT('%',#{machinename},'%')</if>
+      <if test="ip != null  and ip != ''">and a.ip like CONCAT('%',#{ip},'%')</if>
+    </where>
+    order by lastmodify_time  DESC
+  </select>
+
+  <select id="findmachinebymachineandip" resultMap="BaseResultMap">
+    SELECT * FROM machine
+    WHERE ( machinename = #{machinename} or ip = #{ip}) and id != #{id}
+  </select>
+
+  <select id="findmachinebymachinename" resultMap="BaseResultMap">
+    SELECT *
+    FROM machine a
+    where a.machinename =#{machinename}
+  </select>
+
+  <select id="getmachinenum" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM machine a
+  </select>
+
+  <select id="findmachinebyip" resultMap="BaseResultMap">
+    SELECT *
+    FROM machine a
+    where a.ip =#{ip}
+  </select>
+
+  <update id="updateMachine" parameterType="com.zoctan.api.entity.Machine">
+    update machine set machinename = #{machinename},ip=#{ip},cpu=#{cpu},disk=#{disk},
+    mem = #{mem},creator = #{creator}, lastmodify_time = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')
+    where id = #{id};
+  </update>
+</mapper>

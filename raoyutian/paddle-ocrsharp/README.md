@@ -21,6 +21,41 @@ net35;net40;net461;net48;netstandard2.0;netcoreapp3.1;net5.0;net6.0;
 
 [百度飞桨PaddleOCR模型下载地址](https://gitee.com/paddlepaddle/PaddleOCR/blob/release/2.4/doc/doc_ch/models_list.md)
 
+如果需要修改成服务器版模型库，参考代码如下：(假设服务器版模型库在运行目录的文件夹inferenceserver下)
+```
+
+           OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "*.*|*.bmp;*.jpg;*.jpeg;*.tiff;*.tiff;*.png";
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+            var imagebyte = File.ReadAllBytes(ofd.FileName);
+            Bitmap bitmap = new Bitmap(new MemoryStream(imagebyte));
+
+             //OCRModelConfig config = null;
+             // 使用服务器模型
+             OCRModelConfig config = new OCRModelConfig();
+             string root =Environment.CurrentDirectory;
+             config = new OCRModelConfig();
+             string modelPathroot = root + @"\inferenceserver";
+             config.det_infer = modelPathroot + @"\ch_ppocr_server_v2.0_det_infer";
+             config.cls_infer = modelPathroot + @"\ch_ppocr_mobile_v2.0_cls_infer";
+             config.rec_infer = modelPathroot + @"\ch_ppocr_server_v2.0_rec_infer";
+             config.keys = modelPathroot + @"\ppocr_keys.txt"; 
+
+
+            OCRParameter oCRParameter = new  OCRParameter ();
+            OCRResult ocrResult = new OCRResult();
+            using (PaddleOCREngine engine = new PaddleOCREngine(config, oCRParameter))
+            {
+                ocrResult = engine.DetectText(bitmap );
+            }
+            if (ocrResult != null)
+            {
+                MessageBox.Show(ocrResult.Text,"识别结果");
+            }
+
+
+```
+
  [百度飞桨windows下C++预测库下载地址](https://paddleinference.paddlepaddle.org.cn/user_guides/download_lib.html#windows)
 
 

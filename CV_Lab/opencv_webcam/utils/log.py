@@ -24,6 +24,6 @@ def log_management(logContent, logName, logSaveMode):
 
 
 # 日期时间&帧数
-def date_time_frames(date_time, frames, fdn):
+def date_time_frames(date_time, frames, fdn, fsd):
     f = open(f'{ROOT_PATH}/date_time_frames.csv', 'a')  # 创建文件
-    f.write(f'{date_time},{frames},{fdn}\n')  # 写入
+    f.write(f'{date_time},{frames},{fdn},{fsd}\n')  # 写入
