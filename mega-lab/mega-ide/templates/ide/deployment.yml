@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ide-{{id}}
+  namespace: {{namespace}}
+spec:
+  serviceName: ide-{{id}}
+  selector:
+    matchLabels:
+      app: ide-{{id}}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ide-{{id}}
+        uid: "{{id}}"
+      name: lab-{{id}}
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ide-{{id}}
+        - name: datasets
+          emptyDir: {}
+        - name: dshm
+          emptyDir:
+            medium: Memory
+      {% if volume_config | length%}
+      {% set configs = volume_config.split(',') %}
+      {% for item in configs %}
+      {% set vol = item.split(':') %}
+        - name: {{vol[0]}}
+          hostPath:
+            path: {{vol[1]}}
+            type: DirectoryOrCreate
+      {% endfor %}
+      {% endif %}
+
+      nodeSelector:
+      {% if node_name | length%}
+        nodename: "{{node_name}}"
+      {% endif %}
+
+      {% if runtime | length%}
+        node: "{{runtime}}"
+      {% endif %}
+
+      containers:
+      - name: ide
+        imagePullPolicy: Always
+        image: {{image_name}}
+
+        volumeMounts:
+          - name: data
+            mountPath: /etherfurnace
+          - name: dshm
+            mountPath: /dev/shm
+          - name: datasets
+            mountPath: /datasets
+
+        {% if extra_volume_config | length%}
+        {% set configs = extra_volume_config.split(',') %}
+        {% for item in configs %}
+          {% set vol = item.split(':') %}
+          - name: {{vol[0]}}
+            mountPath: {{vol[2]}}
+        {% endfor %}
+        {% endif %}
+
+        resources:
+          limits:
+            nvidia.com/gpu: "0"
+            {% if memory_limit | length%}
+            memory: "{{memory_limit}}Gi"
+            {% endif %}
+            {% if cpu_limit | length%}
+            cpu: "{{cpu_limit}}"
+            {% endif %}
+          requests:
+            nvidia.com/gpu: "0"
+            {% if memory_request | length%}
+            memory: "{{memory_request}}Gi"
+            {% endif %}
+            {% if cpu_request | length%}
+            cpu: "{{cpu_request}}"
+            {% endif %}
+        ports:
+        - containerPort: 8888
+
+        args:
+        {% if ide_type =='vscode' %}
+          - "code-server"
+          - "--auth=none"
+          - "--host=0.0.0.0"
+          - "--port=8888"
+        {% endif %}
+
+        {% if ide_type =='jupyter' %}
+          - "jupyter"
+          - "lab"
+          - "--notebook-dir=/etherfurnace"
+          - "--NotebookApp.base_url={{id}}.ide.cc"
+          - "--NotebookApp.ip=0.0.0.0"
+          - "--NotebookApp.open_browser=False"
+          - "--NotebookApp.allow_root=True"
+          - "--NotebookApp.allow_remote_access=True"
+          - --NotebookApp.token=''
+          - --NotebookApp.password=''
+        {% endif %}
