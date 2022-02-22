@@ -5,7 +5,6 @@ import {handleRemove} from '@/utils/actions';
 import MegaCreateForm from '@/compoments/MegaCreateForm';
 import MegaUpdateForm from '@/compoments/MegaUpdateForm';
 import {
-  deleteIdeEnvironment,
   listIdeEnvironmentOptions,
 } from '@/pages/IdeEnvironment/api';
 import {renderRunningStatue} from '@/utils/fieldRenders';
@@ -22,8 +21,7 @@ import {
   updateIde,
 } from '@/pages/Ide/api';
 import {formChildren} from '@/pages/Ide/form';
-import {message} from 'antd';
-
+import { listIdeRegistryOptions } from '../IdeRegistry/api';
 
 export default function RegistryIndexPage() {
   const actionRef = useRef<ActionType>();
@@ -32,23 +30,39 @@ export default function RegistryIndexPage() {
     useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] =
     useState<boolean>(false);
-  const [currentEntity, setCurrentEntity] = useState<BaseTableEntity>();
+  const [currentEntity, setCurrentEntity] = useState<IdeEntity>();
+  const [ideRegistryOptions, setIdeRegistryOptions] = useState([]);
   const [ideEnvironmentOptions, setIdeEnvironmentOptions] = useState([]);
 
+  async function initIdeRegistryData() {
+    const options = await listIdeRegistryOptions();
+    setIdeRegistryOptions(options);
+  }
+
+  async function initIdeEnvironmentData() {
+    const options = await listIdeEnvironmentOptions();
+    setIdeEnvironmentOptions(options);
+  }
 
   useEffect(() => {
-
-    async function initData() {
-      let options = await listIdeEnvironmentOptions();
-      setIdeEnvironmentOptions(options);
-    }
-
-    initData().then(() => {
-    });
-
+    initIdeEnvironmentData();
+    initIdeRegistryData();
   }, []);
 
   const tableColumns: ProColumns<IdeEntity>[] = [
+    {
+      title: '镜像源',
+      dataIndex: 'ide_registry',
+      valueType: 'select',
+      fieldProps: {
+        options: ideRegistryOptions,
+      },
+    },
+    {
+      title: '镜像',
+      dataIndex: 'ide_image',
+      hideInSearch: true,
+    },
     {
       title: '环境',
       dataIndex: 'ide_environment',
@@ -79,7 +93,7 @@ export default function RegistryIndexPage() {
       title: '操作',
       valueType: 'option',
       render: (text, record, _, action) => {
-        let buttons = [];
+        const buttons = [];
         buttons.push(
           <a
             key='edit'
@@ -158,26 +172,27 @@ export default function RegistryIndexPage() {
         handleCreateModalVisible={handleCreateModalVisible}
         deleteRowAction={deleteIde}
         tableRequest={listIde}
-      ></MegaTable>
-
+      />
       <MegaCreateForm
         title={'新增开发环境'}
         handleModalVisible={handleCreateModalVisible}
         actionRef={actionRef}
         modalVisible={createModalVisible}
-        children={formChildren()}
         addEntityAction={addIde}
-      ></MegaCreateForm>
+      >
+        {formChildren()}
+      </MegaCreateForm>
       <MegaUpdateForm
         title={'编辑开发环境'}
         modalVisible={updateModalVisible}
         handleModalVisible={handleUpdateModalVisible}
         actionRef={actionRef}
         getEntityAction={getIde}
-        children={formChildren()}
         updateEntityAction={updateIde}
         currentEntity={currentEntity}
-      ></MegaUpdateForm>
+      >
+        {formChildren()}
+      </MegaUpdateForm>
     </div>
   );
 }

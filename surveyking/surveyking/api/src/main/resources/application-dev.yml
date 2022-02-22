@@ -1,0 +1,18 @@
+server:
+  port: 7007
+  servlet:
+    session:
+      timeout: 1h
+  compression:
+    enabled: true
+    min-response-size: 1024
+file-storage:
+  local:
+    root-path: ./files
+custom-cache:
+  entries:
+    fileCache: 1h
+    userCache: 1h
+    deptCache: 1d
+    projectPermissionCache: 1d
+    commonCache: 30d

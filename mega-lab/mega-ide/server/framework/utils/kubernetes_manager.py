@@ -98,7 +98,7 @@ class KubernetesManager:
             labels = node.metadata.labels
             pods = []
             for pod in all_pods.items:
-                if pod.spec.node_name == labels['kubernetes.io/hostname']:
+                if pod.spec.node_name == labels['kubernetes.io/hostname'] and 'ide' in pod.spec.node_name:
                     pods.append({
                         'name': pod.metadata.name,
                         'namespace': pod.metadata.namespace,

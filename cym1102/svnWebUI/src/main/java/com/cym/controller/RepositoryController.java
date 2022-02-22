@@ -399,7 +399,7 @@ public class RepositoryController extends BaseController {
 	@Mapping("scan")
 	public JsonResult scan() {
 		repositoryService.scan();
-
+		configService.refresh();
 		return renderSuccess();
 	}
 
