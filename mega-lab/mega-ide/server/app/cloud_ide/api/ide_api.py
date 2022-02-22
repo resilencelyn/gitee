@@ -17,7 +17,18 @@ ide_api = APIRouter()
 @ide_api.get("/get_entity", name='获取ide实体')
 async def get_entity(id: str = Query(None, description='开发环境id'),
                      db: Session = Depends(get_db)) -> Ide:
-    entity = db.query(Ide).filter(id == Ide.id).one()
+    entity = db.query(Ide.id, Ide.name, Ide.create_user_name,
+                      Ide.ide_environment_id, Ide.status, Ide.created,
+                      IdeEnvironment.name.label('ide_environment'),
+                      IdeEnvironment.id.label('ide_environment_id'),
+                      IdeImage.name.label('ide_image'),
+                      IdeImage.id.label('ide_image_id'),
+                      IdeRegistry.name.label('ide_registry'),
+                      IdeRegistry.id.label('ide_registry_id')) \
+        .join(IdeEnvironment, Ide.ide_environment_id == IdeEnvironment.id) \
+        .join(IdeImage, Ide.ide_image_id == IdeImage.id) \
+        .join(IdeRegistry, IdeImage.ide_registry_id == IdeRegistry.id) \
+        .filter(id == Ide.id).one()
     return entity
 
 

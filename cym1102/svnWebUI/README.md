@@ -20,14 +20,16 @@ svnWebUI是一款图形化管理Subversion的配置得工具, 虽说现在已进
 
 Windows上倒是有不错的svn服务端软件即VisualSVN, 但一来Windows服务器少之又少, 第二VisualSVN没有web界面, 每次配置需要开启远程桌面, 安全性不高.
 
-经历几次失败的图形界面配置后, 萌生了写一个现代svn服务端管理软件, 让svn的服务端管理有gitea的轻松体验的想法.
+经历几次失败的图形界面配置后, 萌生了写一个现代svn服务端管理软件, 让svn的服务端管理有gitea一般的轻松体验的想法.
 
 
 #### 技术说明
 
 本项目是基于solon的java项目, 数据库使用h2, 因此服务器上不需要安装任何数据库, 同时也兼容使用mysql
 
-使用本软件前请先安装Subversion
+本地运行本软件，请先安装Subversion，并使用svn:\\\\协议进行checkout。
+
+使用docker版则无需安装任何其他软件，使用http:\\\\协议进行checkout。
 
 
 ```
@@ -72,9 +74,9 @@ Path : JDK安装目录\bin
 2.下载最新版发行包jar
 
 ```
-Linux: wget -O /home/svnWebUI/svnWebUI.jar http://file.nginxwebui.cn/svnWebUI-1.3.5.jar
+Linux: wget -O /home/svnWebUI/svnWebUI.jar http://file.nginxwebui.cn/svnWebUI-1.4.0.jar
 
-Windows: 直接使用浏览器下载 http://file.nginxwebui.cn/svnWebUI-1.3.5.jar
+Windows: 直接使用浏览器下载 http://file.nginxwebui.cn/svnWebUI-1.4.0.jar
 ```
 
 有新版本只需要修改路径中的版本即可

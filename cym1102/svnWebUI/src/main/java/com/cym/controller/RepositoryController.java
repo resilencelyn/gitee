@@ -212,7 +212,7 @@ public class RepositoryController extends BaseController {
 			if (!port.equals("80")) {
 				url += (":" + port);
 			}
-			url += "/svn";
+			//url += "/svn";
 		} else {
 			url = "svn://" + getIP();
 			if (!port.equals("3690")) {
