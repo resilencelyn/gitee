@@ -1,4 +1,4 @@
-from server.app.cloud_ide.model import IdeImage, Ide
+from server.app.cloud_ide.model import IdeImage, Ide, IdeRegistry
 from server.framework.core.database import SessionLocal
 from server.framework.core.logger import logger
 import requests
@@ -42,6 +42,26 @@ def build_image_scanner():
                 if job['status']['phase'] in ['Failed', 'Error']:
                     image.status = 2
                 db.commit()
+    db.close()
+
+
+@scheduler.scheduled_job('interval', id='registry_scanner', seconds=5)
+def registry_scanner():
+    logger.info('扫描镜像源状态....')
+    db = SessionLocal()
+    registrys = db.query(IdeRegistry).filter(IdeRegistry.enable != 0).all()
+    for registry in registrys:
+        try:
+            logger.info(f'检查镜像源[{registry.name}]')
+            status = requests.get(f'http://{registry.registry}', timeout=2000)
+            if registry.enable == 1 and status.status_code != 200:
+                registry.enable = 2
+                db.commit()
+            if registry.enable == 2 and status.status_code == 200:
+                registry.enable = 1
+                db.commit()
+        except Exception:
+            pass
     db.close()
 
 

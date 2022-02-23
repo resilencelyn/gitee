@@ -31,8 +31,9 @@
 				<#list page.records as repositoryUserExt>
 				<tr>
 					<td>${repositoryUserExt.user.trueName}</td>
-					<td>${repositoryUserExt.path}
-					&nbsp;&nbsp; <a style="color: blue;" href="javascript:copyToClipboard('${repositoryUserExt.path}')">复制</a>
+					<td style="width: 600px;word-break: break-all; word-wrap: break-word;">
+						${repositoryUserExt.path}
+						&nbsp;&nbsp; <a style="color: blue;" href="javascript:copyToClipboard('${repositoryUserExt.path}')">复制</a>
 					</td>
 					<td>
 					<#if repositoryUserExt.permission == 'r'>
@@ -72,7 +73,7 @@
 						<input type="text" name="path" id="path" class="layui-input" >
 					</div>
 					<div class="layui-input-inline">
-						<button type="button" class="layui-btn" onclick="rootSelect.selectRoot('path','${repositoryId}')">选择</button>
+						<button type="button" class="layui-btn" onclick="selectRoot('path','${repositoryId}')">选择</button>
 					</div>
 				</div>
 				<div class="layui-form-item">

@@ -1,0 +1,61 @@
+# 这里定义 storage 所有可以使用的操作，使用命令验证方案
+# 定义结构体名称以及方法使， 方法全部小写使用 _ 分割，结构体名称全部大写且结构体名称需要加上 _X, 如 LIST_X
+
+STRING_X:
+  - set
+  - get
+  - add
+  - reduce
+  - set_bit
+  - get_bit
+  - get_range
+  - get_set
+  - str_len
+  - setnx
+
+LIST_X:
+ - l_index
+ - l_len
+ - l_pop
+ - l_push
+ - l_push_x # 列表不存在则不插入
+ - l_range
+ - l_rem
+ - l_set
+ - r_pop
+ - l_trim  # 对列表进行切片
+ - r_push
+ - r_push_x  # 对已经存在的列表尾插
+
+HASH_X:
+ - h_del
+ - h_exists
+ - h_get
+ - h_get_all
+ - h_incr_by
+ - h_keys
+ - h_len
+ - h_set
+ - h_set_x
+
+SET_X:
+ - s_add
+ - s_card
+ - s_diff
+ - s_diff_store
+ - s_inter
+ - s_inter_store
+ - s_is_member
+ - s_move
+ - s_pop
+ - s_rem
+ - s_union
+ - s_union_store
+ - s_scan
+
+CHANNEL_X:
+ - c_push
+ - c_pop
+ - c_make
+ - c_len
+ - c_clean

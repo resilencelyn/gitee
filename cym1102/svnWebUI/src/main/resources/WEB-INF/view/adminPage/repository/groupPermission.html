@@ -31,8 +31,9 @@
 				<#list page.records as repositoryGroupExt>
 				<tr>
 					<td>${repositoryGroupExt.group.name}</td>
-					<td>${repositoryGroupExt.path}
-					&nbsp;&nbsp; <a style="color: blue;" href="javascript:copyToClipboard('${repositoryGroupExt.path}')">复制</a>
+					<td style="width: 600px;word-break: break-all; word-wrap: break-word;">
+						${repositoryGroupExt.path}
+						&nbsp;&nbsp; <a style="color: blue;" href="javascript:copyToClipboard('${repositoryGroupExt.path}')">复制</a>
 					</td>
 					<td>
 					<#if repositoryGroupExt.permission == 'r'>
@@ -74,7 +75,7 @@
 						<input type="text" name="path" id="path" class="layui-input" >
 					</div>
 					<div class="layui-input-inline">
-						<button type="button" class="layui-btn" onclick="rootSelect.selectRoot('path','${repositoryId}')">选择</button>
+						<button type="button" class="layui-btn" onclick="selectRoot('path','${repositoryId}')">选择</button>
 					</div>
 				</div>
 				

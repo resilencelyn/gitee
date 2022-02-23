@@ -1,0 +1,81 @@
+syntax = "proto3";
+import "base.proto";
+option go_package = "pkg/proto";
+
+message HDelRequest {
+  BaseKey key = 1;
+  repeated string h_keys = 2;
+}
+
+message HDelResponse {
+}
+
+message HExistsRequest {
+  BaseKey key = 1;
+  string h_key = 2;
+}
+
+message HExistsResponse {
+  bool exists = 1;
+}
+
+message HGetRequest {
+  BaseKey key = 1;
+  repeated string h_keys = 2;
+}
+
+message HGetResponse {
+  map<string, string> items = 1;
+}
+
+message HGetAllRequest {
+  BaseKey key = 1;
+}
+
+message HGetAllResponse {
+  map<string, string> items = 1;
+}
+
+message HIncrByRequest {
+  BaseKey key = 1;
+  repeated string h_keys = 2;
+  int32 renewal = 3;
+}
+
+message HIncrByResponse {
+  int32 count = 1;
+  repeated string values = 2;
+}
+
+message HKeysRequest {
+  BaseKey key = 1;
+}
+
+message HKeysResponse {
+  repeated string keys = 1;
+}
+
+message HLenRequest {
+  BaseKey key = 1;
+}
+
+message HLenResponse {
+  int32 length = 1;
+}
+
+message HSetRequest {
+  BaseKey key = 1;
+  map<string, string> items = 2;
+}
+
+message HSetResponse {
+}
+
+message HSetXRequest {
+  BaseKey key = 1;
+  map<string, string> items = 2;
+}
+
+message HSetXResponse {
+  int32 count = 1;
+}

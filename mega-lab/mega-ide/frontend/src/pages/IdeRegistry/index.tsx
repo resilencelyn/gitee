@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
-import type { ActionType } from '@ant-design/pro-table';
-import { ProColumns } from '@ant-design/pro-table';
-import { IdeRegistryEntity } from '@/pages/IdeRegistry/entities';
+import React, {useRef, useState} from 'react';
+import type {ActionType} from '@ant-design/pro-table';
+import {ProColumns} from '@ant-design/pro-table';
+import {IdeRegistryEntity} from '@/pages/IdeRegistry/entities';
 import {
   addIdeRegistry,
   deleteIdeRegistry,
@@ -9,12 +9,12 @@ import {
   listIdeRegistry,
   updateIdeRegistry,
 } from '@/pages/IdeRegistry/api';
-import { handleRemove } from '@/utils/actions';
+import {handleRemove} from '@/utils/actions';
 import MegaCreateForm from '@/compoments/MegaCreateForm';
-import { formChildren } from '@/pages/IdeRegistry/form';
+import {formChildren} from '@/pages/IdeRegistry/form';
 import MegaUpdateForm from '@/compoments/MegaUpdateForm';
 import MegaTable from '@/compoments/MegaTable';
-import { renderEnableStatue } from '@/pages/IdeRegistry/render';
+import {renderEnableStatue} from '@/pages/IdeRegistry/render';
 
 export default function RegistryIndexPage() {
   const tableActionRef = useRef<ActionType>();
@@ -46,6 +46,9 @@ export default function RegistryIndexPage() {
         },
         1: {
           text: '启用',
+        },
+        2: {
+          text: '不可用',
         },
       },
       render: (_, record) => renderEnableStatue(record.enable),

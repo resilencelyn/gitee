@@ -1,0 +1,126 @@
+syntax = "proto3";
+import "base.proto";
+option go_package = "pkg/proto";
+
+message SAddRequest {
+  BaseKey key = 1;
+  repeated string member = 2;
+}
+
+message SAddResponse {
+}
+
+message SCardRequest {
+  BaseKey key = 1;
+}
+
+message SCardResponse {
+  int32 length = 1;
+}
+
+message SDiffRequest {
+  BaseKey key = 1;
+  repeated string s_keys = 2;
+}
+
+message SDiffResponse {
+  External e = 1;
+  repeated string result = 2;
+}
+
+message SDiffStoreRequest {
+  BaseKey key = 1;
+  repeated string s_keys = 2;
+  string save_key = 3;
+}
+
+message SDiffStoreResponse {
+  External e = 1;  //加上 External 表示这个接口的返回值会对外调用
+}
+
+message SInterRequest {
+  BaseKey key = 1;
+  repeated string s_keys = 2;
+}
+
+message SInterResponse {
+  External e = 1;
+  repeated string result = 2;
+}
+
+message SInterStoreRequest {
+  BaseKey key = 1;
+  repeated string s_keys = 2;
+  string save_key = 3;
+}
+
+message SInterStoreResponse {
+  External e = 1;
+}
+
+message SIsMemberRequest {
+  BaseKey key = 1;
+  string member = 2;
+}
+
+message SIsMemberResponse {
+  bool exist = 1;
+}
+
+message SMoveRequest {
+  BaseKey key = 1;
+  string move_key = 2;
+  repeated string members = 3;
+}
+
+message SMoveResponse {
+  External e = 1;
+}
+
+message SPopRequest {
+  BaseKey key = 1;
+  int32 count = 2;
+}
+
+message SPopResponse {
+  repeated string members = 1;
+}
+
+message SRemRequest {
+  BaseKey key = 1;
+  int32 count = 2;
+}
+
+message SRemResponse {
+}
+
+message SUnionRequest {
+  BaseKey key = 1;
+  repeated string s_keys = 2;
+}
+
+message SUnionResponse {
+  External e = 1;
+  repeated string result = 2;
+}
+
+message SUnionStoreRequest {
+  BaseKey key = 1;
+  repeated string s_keys = 2;
+  string save_key = 3;
+}
+
+message SUnionStoreResponse {
+  External e = 1;
+}
+
+message SScanRequest {
+  BaseKey key = 1;
+  int32 cursor = 2;
+  string regexp = 3;
+  int32 count = 4;
+}
+
+message SScanResponse {
+  repeated string results = 1;
+}

@@ -18,6 +18,7 @@ import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
 import com.cym.utils.BeanExtUtil;
 import com.cym.utils.JsonResult;
+import com.cym.utils.SystemTool;
 
 @Controller
 @Mapping("/adminPage/info")
@@ -43,10 +44,7 @@ public class InfoController extends BaseController {
 			Repository repository = sqlHelper.findById(repositoryUserExt.getRepositoryId(), Repository.class);
 			repositoryUserExt.setRepository(repository);
 
-			String url = "svn://" + getIP();
-			if (!port.equals("3690")) {
-				url += (":" + port);
-			}
+			String url = buildUrl(port);
 			url += ("/" + repository.getName() + repositoryUserExt.getPath());
 			repositoryUserExt.setPath(url);
 		}
@@ -57,6 +55,23 @@ public class InfoController extends BaseController {
 		return modelAndView;
 	}
 
+	private String buildUrl(String port) {
+		String url = null;
+		if (SystemTool.inDocker()) {
+			url = "http://" + getIP();
+			if (!port.equals("80")) {
+				url += (":" + port);
+			}
+		} else {
+			url = "svn://" + getIP();
+			if (!port.equals("3690")) {
+				url += (":" + port);
+			}
+		}
+		return url;
+	}
+	
+	
 	@Mapping("changeOver")
 	public JsonResult changeOver( String oldPass, String newPass, String repeatPass) {
 		User user = getLoginUser();

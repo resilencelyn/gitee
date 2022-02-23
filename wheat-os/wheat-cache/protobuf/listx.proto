@@ -1,0 +1,109 @@
+syntax = "proto3";
+import "base.proto";
+option go_package = "pkg/proto";
+
+message LIndexRequest {
+  BaseKey key = 1;
+  int32 index = 2;
+}
+
+message LIndexResponse {
+  string result = 1;
+}
+
+message LLenRequest {
+  BaseKey key = 1;
+}
+
+message LLenResponse {
+  int32 length = 1;
+}
+
+message LPopRequest {
+  BaseKey key = 1;
+  int32 count = 2;
+}
+
+message LPopResponse {
+  repeated string results = 1;
+}
+
+message LPushRequest {
+  BaseKey key = 1;
+  repeated string values = 2;
+}
+
+message LPushResponse {
+}
+
+message LPushXRequest {
+  BaseKey key = 1;
+  repeated string values = 2;
+}
+
+message LPushXResponse {
+}
+
+message LRangeRequest {
+  BaseKey key = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
+message LRangeResponse {
+  repeated string values = 2;
+}
+
+message LRemRequest {
+  BaseKey key = 1;
+  // count > 0 头搜索，count < 0 尾搜索
+  int32 count = 2;
+  string value = 3;
+}
+
+message LRemResponse {
+  int32 count = 1;
+}
+
+message LSetRequest {
+  BaseKey key = 1;
+  int32 index = 2;
+  string value = 3;
+}
+
+message LSetResponse {
+}
+
+message RPopRequest {
+  BaseKey key = 1;
+  int32 count = 2;
+}
+
+message RPopResponse {
+  repeated string result = 1;
+}
+
+message LTrimRequest {
+  BaseKey key = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
+message LTrimResponse {
+}
+
+message RPushRequest {
+  BaseKey key = 1;
+  repeated string values = 2;
+}
+
+message RPushResponse {
+}
+
+message RPushXRequest {
+  BaseKey key = 1;
+  repeated string values = 2;
+}
+
+message RPushXResponse {
+}

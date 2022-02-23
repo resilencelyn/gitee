@@ -1,0 +1,101 @@
+version: '3'
+services:
+  sonic-server-eureka:
+    image: "sonicorg/sonic-server-eureka:v1.3.1-beta"
+    hostname: sonic-server-eureka
+    environment:
+      - EUREKA_HOST=sonic-server-eureka
+    volumes:
+      - ./logs/:/logs/
+    networks:
+      - sonic-network
+    ports:
+      - "9090:9090"
+  sonic-server-bus:
+    image: "sonicorg/sonic-server-bus:v1.3.1-beta"
+    environment:
+      - PROFILE=prod
+      - EUREKA_URL=http://sonic:sonic@sonic-server-eureka:9090/eureka/
+    networks:
+      - sonic-network
+    volumes:
+      - ./config:/config
+      - ./logs/:/logs/
+    depends_on:
+      - sonic-server-eureka
+  sonic-server-gateway:
+    image: "sonicorg/sonic-server-gateway:v1.3.1-beta"
+    environment:
+      - PROFILE=prod
+      - EUREKA_URL=http://sonic:sonic@sonic-server-eureka:9090/eureka/
+    networks:
+      - sonic-network
+    volumes:
+      - ./logs/:/logs/
+    depends_on:
+      - sonic-server-bus
+      - sonic-server-eureka
+    ports:
+      - "8094:8094"
+  sonic-server-controller:
+    image: "sonicorg/sonic-server-controller:v1.3.1-beta"
+    environment:
+      - PROFILE=prod
+      - EUREKA_URL=http://sonic:sonic@sonic-server-eureka:9090/eureka/
+    networks:
+      - sonic-network
+    volumes:
+      - ./logs/:/logs/
+    depends_on:
+      - sonic-server-bus
+      - sonic-server-eureka
+      - sonic-server-gateway
+  sonic-server-folder:
+    image: "sonicorg/sonic-server-folder:v1.3.1-beta"
+    environment:
+      - PROFILE=prod
+      - EUREKA_URL=http://sonic:sonic@sonic-server-eureka:9090/eureka/
+    networks:
+      - sonic-network
+    volumes:
+      - ./keepFiles/:/keepFiles/
+      - ./imageFiles/:/imageFiles/
+      - ./recordFiles/:/recordFiles/
+      - ./packageFiles/:/packageFiles/
+      - ./logs/:/logs/
+    depends_on:
+      - sonic-server-bus
+      - sonic-server-eureka
+      - sonic-server-gateway
+  sonic-server-task:
+    image: "sonicorg/sonic-server-task:v1.3.1-beta"
+    environment:
+      - PROFILE=prod
+      - EUREKA_URL=http://sonic:sonic@sonic-server-eureka:9090/eureka/
+    networks:
+      - sonic-network
+    volumes:
+      - ./logs/:/logs/
+    depends_on:
+      - sonic-server-bus
+      - sonic-server-eureka
+      - sonic-server-gateway
+  sonic-server-transport:
+    image: "sonicorg/sonic-server-transport:v1.3.1-beta"
+    environment:
+      - PROFILE=prod
+      - EUREKA_URL=http://sonic:sonic@sonic-server-eureka:9090/eureka/
+    networks:
+      - sonic-network
+    volumes:
+      - ./logs/:/logs/
+    depends_on:
+      - sonic-server-bus
+      - sonic-server-eureka
+      - sonic-server-gateway
+    ports:
+      - "8095:8095"
+
+networks:
+  sonic-network:
+    driver: bridge
