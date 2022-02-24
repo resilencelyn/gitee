@@ -64,7 +64,6 @@ public class RepositoryController extends BaseController {
 	PathUtls pathUtls;
 	@Inject
 	HomeConfig homeConfig;
-	
 	@Inject
 	SvnAdminUtils svnAdminUtils;
 
@@ -76,7 +75,7 @@ public class RepositoryController extends BaseController {
 
 		Page<RepositoryExt> pageExt = BeanExtUtil.copyPageByProperties(page, RepositoryExt.class);
 		for (RepositoryExt repositoryExt : (List<RepositoryExt>) pageExt.getRecords()) {
-			String url = buildUrl(port);
+			String url = pathUtls.buildUrl(port);
 
 			url += "/" + repositoryExt.getName();
 			repositoryExt.setUrl(url);
@@ -119,7 +118,7 @@ public class RepositoryController extends BaseController {
 	public JsonResult detail(String id) {
 		Repository repository = sqlHelper.findById(id, Repository.class);
 		RepositoryExt repositoryExt = BeanExtUtil.copyNewByProperties(repository, RepositoryExt.class);
-		String url = buildUrl(settingService.get("port"));
+		String url = pathUtls.buildUrl(settingService.get("port"));
 
 		url += "/" + repositoryExt.getName();
 		repositoryExt.setUrl(url);
@@ -150,7 +149,7 @@ public class RepositoryController extends BaseController {
 		for (RepositoryUserExt repositoryUserExt : (List<RepositoryUserExt>) pageExt.getRecords()) {
 			repositoryUserExt.setUser(sqlHelper.findById(repositoryUserExt.getUserId(), User.class));
 
-			String url = buildUrl(port);
+			String url = pathUtls.buildUrl(port);
 			url += ("/" + repository.getName() + repositoryUserExt.getPath());
 			if (url.endsWith("/")) {
 				url = url.substring(0, url.length() - 1);
@@ -200,7 +199,7 @@ public class RepositoryController extends BaseController {
 		for (RepositoryGroupExt repositoryGroupExt : (List<RepositoryGroupExt>) pageExt.getRecords()) {
 			repositoryGroupExt.setGroup(sqlHelper.findById(repositoryGroupExt.getGroupId(), Group.class));
 
-			String url = buildUrl(port);
+			String url = pathUtls.buildUrl(port);
 			url += ("/" + repository.getName() + repositoryGroupExt.getPath());
 
 			if (url.endsWith("/")) {
@@ -216,21 +215,7 @@ public class RepositoryController extends BaseController {
 		return modelAndView;
 	}
 
-	private String buildUrl(String port) {
-		String url = null;
-		if (SystemTool.inDocker()) {
-			url = "http://" + getIP();
-			if (!port.equals("80")) {
-				url += (":" + port);
-			}
-		} else {
-			url = "svn://" + getIP();
-			if (!port.equals("3690")) {
-				url += (":" + port);
-			}
-		}
-		return url;
-	}
+
 
 	@Mapping("addGroup")
 	public JsonResult addGroup(RepositoryGroup repositoryGroup) {

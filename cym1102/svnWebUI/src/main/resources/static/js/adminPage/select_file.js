@@ -31,7 +31,7 @@ function seeFile(url) {
 	layer.open({
 		type: 1,
 		title: "文件目录",
-		area: ['600px', '620px'], // 宽高
+		area: ['600px', '560px'], // 宽高
 		content: $('#fileSelectDiv')
 	});
 }

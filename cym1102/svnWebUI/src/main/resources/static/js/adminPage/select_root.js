@@ -43,7 +43,7 @@ function selectRoot(id, repositoryId) {
 				rootSelect.index = layer.open({
 					type: 1,
 					title: "选择路径",
-					area: ['600px', '620px'], // 宽高
+					area: ['600px', '560px'], // 宽高
 					content: $('#rootSelectDiv')
 				});
 			} else {

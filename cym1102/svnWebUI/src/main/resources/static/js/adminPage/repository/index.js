@@ -181,7 +181,7 @@ function groupPermission(id,name) {
 	layer.open({
 		type: 2,
 		title: name + '-小组授权',
-		area: ['1000px', '720px;'],
+		area: ['1000px', '630px;'],
 		content: ctx + "/adminPage/repository/groupPermission?repositoryId=" + id
 	});
 }
@@ -190,7 +190,7 @@ function userPermission(id,name) {
 	layer.open({
 		type: 2,
 		title: name + '-用户授权',
-		area: ['1000px', '720px;'],
+		area: ['1000px', '630px;'],
 		content: ctx + "/adminPage/repository/userPermission?repositoryId=" + id
 	});
 }

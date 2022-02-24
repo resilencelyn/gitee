@@ -47,6 +47,8 @@ public class InitConfig {
 	HttpdUtils httpdUtils;
 	@Inject
 	ConfigService configService;
+	@Inject
+	ScheduleTask scheduleTask;
 
 	@Init
 	public void init() {
@@ -98,8 +100,11 @@ public class InitConfig {
 			logger.info(e.getMessage(), e);
 		}
 
+	
+		
 		// 刷新配置文件
 		configService.refresh();
+		
 		// 删除conf文件夹
 		File conf = new File(homeConfig.home + File.separator + "repo" + File.separator + "conf");
 		File passwd = new File(homeConfig.home + File.separator + "repo" + File.separator + "conf" + File.separator + "passwd");
@@ -113,6 +118,9 @@ public class InitConfig {
 		if (conf.exists() && FileUtil.isDirEmpty(conf)) {
 			conf.delete();
 		}
+		
+		// 预热定时任务
+		scheduleTask.hookTasks();
 	}
 
 	/**

@@ -93,7 +93,7 @@ async def edit(data: IdeUpdateRequest = Body(None, description='编辑IDE实体'
 async def get_ide_url(id: str = Query(None, description='开发环境id'),
                       db: Session = Depends(get_db)):
     ide = db.query(Ide).filter(Ide.id == id).one()
-    return CommonResponseSchema(data={'url': f'http://{ide.id}.ide.cc'}, message=f'')
+    return CommonResponseSchema(data={'url': f'http://{ide.id}.{settings.ide_domain}'}, message=f'')
 
 
 @ide_api.get("/start", name='启动IDE', response_model=CommonResponseSchema)

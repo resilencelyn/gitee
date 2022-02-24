@@ -1,5 +1,8 @@
 package com.cym.utils;
 
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Init;
 
@@ -11,8 +14,8 @@ public class SvnAdminUtils {
 	public String adminUserPass;
 	
 	@Init
-	public void init() {
-		adminUserName = "svnWebUISuperAdministrator";
+	public void init() throws UnknownHostException, SocketException {
+		adminUserName = "svnAdmin";
 		adminUserPass = UUID.randomUUID().toString();
 	}
 

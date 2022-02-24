@@ -160,3 +160,21 @@
 - [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
 - [丁丁/MiriaManager](https://gitee.com/dinglz/miria-manager)
 - [人工智能加速器套件/AIAS](https://gitee.com/mymagicpower/AIAS)
+
+
+**2022-02-25**
+- [孙震宇/iVerilogAssistant](https://gitee.com/sunzhenyu59/i-verilog-assistant)
+- [sonic-cloud/sonic-server](https://gitee.com/sonic-cloud/sonic-server)
+- [Wheat/WheatCache](https://gitee.com/wheat-os/wheat-cache)
+- [邢鹏成/easy-es](https://gitee.com/easy-es/easy-es)
+- [peridyno/peridyno](https://gitee.com/peridyno/peridyno)
+- [云智慧/CW-Zabbix](https://gitee.com/CloudWise/CW-Zabbix)
+- [SurveyKing/SurveyKing](https://gitee.com/surveyking/surveyking)
+- [陈钇蒙/svnWebUI](https://gitee.com/cym1102/svnWebUI)
+- [MegaLab/mega-ide](https://gitee.com/mega-lab/mega-ide)
+- [丶远方/v-form-antd](https://gitee.com/yuan_fangY/v-form-antd)
+- [yanhom/dynamic-tp](https://gitee.com/yanhom/dynamic-tp)
+- [Season-Fan/AutoMeter-API](https://gitee.com/season-fan/autometer-api)
+- [网安科技/vue-datepicker](https://gitee.com/wangankeji/vue-datepicker)
+- [裴云飞/蒹葭](https://gitee.com/zhongte/JianJia)
+- [丁丁/MiriaManager](https://gitee.com/dinglz/miria-manager)

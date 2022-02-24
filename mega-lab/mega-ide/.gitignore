@@ -214,7 +214,8 @@ venv.bak/
 
 # mkdocs documentation
 /site
-
+alembic.ini
+alembic
 # mypy
 .mypy_cache/
 .dmypy.json

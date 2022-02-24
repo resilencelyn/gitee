@@ -4,13 +4,13 @@ import {
   Settings as LayoutSettings,
 } from '@ant-design/pro-layout';
 import Keycloak from 'keycloak-js';
-import { RequestConfig } from 'umi';
+import {RequestConfig} from 'umi';
 
-import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
+import {ReactKeycloakProvider, useKeycloak} from '@react-keycloak/web';
 
 const keycloak = Keycloak({
     'realm': 'dev',
-    'url': 'http://keycloak.lab.cc/auth',
+    'url': 'http://keycloak.lixulife.com/auth',
     'clientId': 'megalab',
   },
 );
@@ -35,22 +35,23 @@ export function rootContainer(container: any) {
 
   return React.createElement(ReactKeycloakProvider, {
     authClient: keycloak, autoRefreshToken: true,
-    initOptions: { onLoad: 'login-required', checkLoginIframe: false, enableLogging: true },
+    initOptions: {onLoad: 'login-required', checkLoginIframe: false, enableLogging: true},
   }, container);
 }
+
 
 export const request: RequestConfig = {
   timeout: 10000,
   errorConfig: {},
   middlewares: [],
+  // @ts-ignore
   requestInterceptors: [(url, options) => {
-    if (options.method == 'post') {
-      options.data['create_user_id'] = keycloak.tokenParsed?.sub;
-      options.data['create_user_name'] = keycloak.tokenParsed?.name;
-    }
+    let headers = {'token': keycloak.token}
     return {
       url: `${url}`,
-      options: { ...options, interceptors: true },
+      options: {
+        ...options, headers: headers, interceptors: true
+      },
     };
   }],
   responseInterceptors: [],

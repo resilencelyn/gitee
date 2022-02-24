@@ -19,17 +19,20 @@
 </p>
 
 ## What is Easy-Es?
+---
 
 Easy-Es is a powerfully enhanced toolkit of RestHighLevelClient for simplify development. This toolkit provides some efficient, useful, out-of-the-box features for ElasticSearch. By using Easy-Es, you can use MySQL syntax to complete Es queries. Use it can effectively save your development time.
 
 
 ## Links
+---
 - [中文版](https://github.com/xpc1024/easy-es/blob/main/README-ZH.md)
 - [Documentation](https://www.yuque.com/laohan-14b9d/tald79/qf7ns2)
 - [Samples](https://github.com/xpc1024/easy-es/tree/main/easy-es-sample)
 - [Demo in Springboot](https://github.com/xpc1024/easy-es-springboot-demo-en)
 
 ## Features
+---
 
 -   Auto configuration on startup
 -   Out-of-the-box interfaces for operate es
@@ -40,6 +43,7 @@ Easy-Es is a powerfully enhanced toolkit of RestHighLevelClient for simplify dev
 -   ...
 
 ## Compare
+---
 
 > Demand: Query all documents with title equals "Hi" and author equals "Guy"
 
@@ -74,6 +78,7 @@ String indexName = "document";
 
 > The above is just a simple query demonstration. The more complex the actual query scene, the better the effect, which can save 3-5 times the amount of code on average.
 ## Getting started
+---
 
 -   Add Easy-Es dependency
     - Latest Version: [![Maven Central](https://img.shields.io/github/v/release/xpc1024/easy-es?include_prereleases&logo=xpc&style=plastic)](https://search.maven.org/search?q=g:io.github.xpc1024%20a:easy-*)
@@ -117,6 +122,7 @@ String indexName = "document";
 > This showcase is just a small part of Easy-Es features. If you want to learn more, please refer to the [documentation](https://www.yuque.com/laohan-14b9d/tald79/qf7ns2).
 
 ## Syntax comparison with MySQL
+---
 |  MySQL   | Easy-Es  |
 |  ----  | ----  |
 | and  | and |
@@ -153,9 +159,11 @@ String indexName = "document";
 ---
 
 ## Donate
+---
 [Donate Easy-Es](https://www.yuque.com/laohan-14b9d/tald79/oqpgto)
 
 
 ## License
+---
 
 Easy-Es is under the Apache 2.0 license. See the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0) file for details.

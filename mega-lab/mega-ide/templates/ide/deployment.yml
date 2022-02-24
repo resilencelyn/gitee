@@ -99,7 +99,7 @@ spec:
           - "jupyter"
           - "lab"
           - "--notebook-dir=/etherfurnace"
-          - "--NotebookApp.base_url={{id}}.ide.cc"
+          - "--NotebookApp.base_url={{id}}.{{domain}}"
           - "--NotebookApp.ip=0.0.0.0"
           - "--NotebookApp.open_browser=False"
           - "--NotebookApp.allow_root=True"

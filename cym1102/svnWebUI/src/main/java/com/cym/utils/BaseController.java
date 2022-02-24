@@ -63,14 +63,14 @@ public class BaseController {
 
 
 
-	public String getIP() {
-		URI uri = null;
-		try {
-			uri = new URI(Context.current().url() + "/");
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		return uri.getHost();
-	}
+//	public String getIP() {
+//		URI uri = null;
+//		try {
+//			uri = new URI(Context.current().url() + "/");
+//		} catch (URISyntaxException e) {
+//			e.printStackTrace();
+//		}
+//		return uri.getHost();
+//	}
 
 }

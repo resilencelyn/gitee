@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.gzip import GZipMiddleware
 
 from server.app.routers import api_router
-from server.framework.core.scheduler import scheduler
+from server.framework.core.middlewares import AuthorizerMiddleware
 from server.framework.core.settings import settings
 
 
@@ -35,6 +35,7 @@ def inject_middleware(application: FastAPI):
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    application.add_middleware(AuthorizerMiddleware)
     application.add_middleware(GZipMiddleware, minimum_size=1000)
 
 

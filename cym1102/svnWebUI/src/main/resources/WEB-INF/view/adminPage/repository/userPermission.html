@@ -10,7 +10,7 @@
 	<div style="padding: 15px">
 		<form action="${ctx}/adminPage/repository/userPermission" id="searchForm" method="post">
 			<div class="layui-inline">
-				<button type="button" class="layui-btn layui-btn-danger" onclick="add()">添加用户</button>
+				<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" onclick="add()">添加用户</button>
 			</div>
 			
 			<input type="hidden" name="repositoryId" value="${repositoryId}"> 
@@ -18,7 +18,7 @@
 			<input type="hidden" name="limit" value="${page.limit}">
 		</form>
 
-		<table class="layui-table">
+		<table class="layui-table" lay-size="sm">
 			<thead>
 				<tr>
 					<th>用户</th>

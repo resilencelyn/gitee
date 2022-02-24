@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     kube_config_file: str = ''
     argo_url: str = ''
     prometheus_address: str = 'http://prometheus.lab.cc'
+    ide_domain: str = ''
+    keycloak_url: str = ''
 
     class Config:
         env_file = '.env'

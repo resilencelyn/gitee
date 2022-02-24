@@ -15,6 +15,7 @@ import {formChildren} from '@/pages/IdeRegistry/form';
 import MegaUpdateForm from '@/compoments/MegaUpdateForm';
 import MegaTable from '@/compoments/MegaTable';
 import {renderEnableStatue} from '@/pages/IdeRegistry/render';
+import {ReactKeycloakProvider, useKeycloak} from '@react-keycloak/web';
 
 export default function RegistryIndexPage() {
   const tableActionRef = useRef<ActionType>();
@@ -85,8 +86,8 @@ export default function RegistryIndexPage() {
       ],
     },
   ];
-
   return (
+
     <div>
       <MegaTable
         polling={undefined}

@@ -14,7 +14,7 @@ def ide_status_scanner():
     ides = db.query(Ide).all()
     for ide in ides:
         try:
-            status = requests.get(f'http://{ide.id}.ide.cc', timeout=2000)
+            status = requests.get(f'http://{ide.id}.{settings.ide_domain}', timeout=2000)
             if ide.status == 1 and status.status_code == 200:
                 ide.status = 2
                 db.commit()

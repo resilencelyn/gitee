@@ -44,6 +44,7 @@ class KubernetesManager:
 
     def start_ide(self, dynamic_dict: dict):
         dynamic_dict['namespace'] = self.namespace
+        dynamic_dict['domain'] = settings.ide_domain
 
         pvc_template = core_template.get_template('ide/pvc.yml')
         pvc = pvc_template.render(dynamic_dict)
