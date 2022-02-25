@@ -9,6 +9,8 @@ import java.util.List;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
@@ -28,6 +30,7 @@ import cn.hutool.core.util.StrUtil;
 
 @Component
 public class PathUtls {
+	Logger logger = LoggerFactory.getLogger(getClass());
 	@Inject
 	SqlHelper sqlHelper;
 	@Inject
@@ -59,7 +62,7 @@ public class PathUtls {
 			}
 
 		} catch (SVNException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return list;
 	}
@@ -103,7 +106,7 @@ public class PathUtls {
 				return uri.getHost();
 			}
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "localhost";
 	}

@@ -8,6 +8,7 @@ export default defineConfig({
   },
   devtool: 'source-map',
   routes: [
+    { path: '/index.html', redirect: '/ide_registry' },
     { path: '/', redirect: '/ide_registry' },
     {
       path: '/ide_registry',
@@ -30,7 +31,7 @@ export default defineConfig({
   },
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8001',
+      target: 'http://megaide.lixulife.com',
       changeOrigin: true,
     },
   },

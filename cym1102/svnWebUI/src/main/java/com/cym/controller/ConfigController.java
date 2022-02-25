@@ -1,6 +1,7 @@
 package com.cym.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
 
 import com.cym.config.HomeConfig;
@@ -151,66 +153,9 @@ public class ConfigController extends BaseController {
 	}
 
 	@Mapping("test.js")
-	public JsonResult test(TestObj testObj) {
-		System.err.println(JSONUtil.toJsonPrettyStr(testObj));
+	public JsonResult test(Context ctx) throws IOException {
+		System.err.println(ctx.body());
 		return renderSuccess();
 	}
 
-	public static class TestObj {
-		String repository;
-		String author;
-		String commitMessage;
-		String revision;
-		String password;
-		String time;
-
-		public String getTime() {
-			return time;
-		}
-
-		public void setTime(String time) {
-			this.time = time;
-		}
-
-		public String getRepository() {
-			return repository;
-		}
-
-		public void setRepository(String repository) {
-			this.repository = repository;
-		}
-
-		public String getAuthor() {
-			return author;
-		}
-
-		public void setAuthor(String author) {
-			this.author = author;
-		}
-
-		public String getCommitMessage() {
-			return commitMessage;
-		}
-
-		public void setCommitMessage(String commitMessage) {
-			this.commitMessage = commitMessage;
-		}
-
-		public String getRevision() {
-			return revision;
-		}
-
-		public void setRevision(String revision) {
-			this.revision = revision;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-
-	}
 }

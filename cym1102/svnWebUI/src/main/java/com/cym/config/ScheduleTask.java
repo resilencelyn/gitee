@@ -89,7 +89,7 @@ public class ScheduleTask {
 						paramMap.put("revision", svnlogentry.getRevision());
 						paramMap.put("password", webHook.getPassword());
 						paramMap.put("time", DateUtil.format(svnlogentry.getDate(), "yyyy-MM-dd HH:mm:ss"));
-						HttpUtil.post(webHook.getUrl(), paramMap);
+						HttpUtil.post(webHook.getUrl(), paramMap, 2000);
 					}
 				}
 			});

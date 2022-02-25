@@ -35,7 +35,6 @@ public class ConfigService {
 	@Inject
 	HomeConfig homeConfig;
 
-
 	@Inject
 	SvnAdminUtils svnAdminUtils;
 
@@ -93,7 +92,7 @@ public class ConfigService {
 		ClassPathResource resource = new ClassPathResource("file/svnserve.conf");
 		List<Repository> repositories = sqlHelper.findAll(Repository.class);
 		for (Repository repository : repositories) {
-			boolean hasAdmin = false;
+			boolean hasRoot = false; // 是否已配置/的权限
 
 			List<String> paths = getPaths(repository.getId());
 			for (String path : paths) {
@@ -106,7 +105,7 @@ public class ConfigService {
 				for (RepositoryGroup repositoryGroup : repositoryGroups) {
 					Group group = sqlHelper.findById(repositoryGroup.getGroupId(), Group.class);
 					if (group != null) {
-						authzLines.add("@" + group.getName() + " = " + repositoryGroup.getPermission());
+						authzLines.add("@" + group.getName() + " = " + val(repositoryGroup.getPermission()));
 					}
 				}
 
@@ -117,28 +116,41 @@ public class ConfigService {
 				for (RepositoryUser repositoryUser : repositoryUsers) {
 					User user = sqlHelper.findById(repositoryUser.getUserId(), User.class);
 					if (user != null) {
-						authzLines.add(user.getName() + " = " + repositoryUser.getPermission());
+						authzLines.add(user.getName() + " = " + val(repositoryUser.getPermission()));
 					}
 				}
 
 				if (path.equals("/")) {
 					authzLines.add(svnAdminUtils.adminUserName + " = rw");
-					hasAdmin = true;
+					if (!repository.getAllPermission().equals("no")) { // 全体权限
+						authzLines.add("* = " + val(repository.getAllPermission()));
+					}
+					hasRoot = true;
 				}
 
 			}
 
-			if (!hasAdmin) {
+			if (!hasRoot) {
 				authzLines.add("[" + repository.getName() + ":/]");
 				authzLines.add(svnAdminUtils.adminUserName + " = rw");
+				if (!repository.getAllPermission().equals("no")) { // 全体权限
+					authzLines.add("* = " + val(repository.getAllPermission()));
+				}
 			}
-			
+
 			// 拷贝配置文件
 			String svnserve_conf = homeConfig.home + "/repo/" + repository.getName() + "/conf/svnserve.conf";
 			FileUtil.writeFromStream(resource.getStream(), svnserve_conf);
 		}
-		
+
 		FileUtil.writeLines(authzLines, authz, Charset.forName("UTF-8"));
+	}
+
+	private String val(String permission) {
+		if (permission.equals("no")) {
+			return "";
+		}
+		return permission;
 	}
 
 	// 去掉路径最后的/

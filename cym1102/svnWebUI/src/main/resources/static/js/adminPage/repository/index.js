@@ -84,45 +84,12 @@ function addOver() {
 	
 	$.ajax({
 		type: 'POST',
-		url: ctx + '/adminPage/repository/checkDir',
+		url: ctx + '/adminPage/repository/addOver',
 		data: {
 			name: $("#name").val()
 		},
 		dataType: 'json',
 		success: function(data) {
-			if (data.success) {
-				if(data.obj){
-					var del = confirm("该仓库目录已存在, 是否删除已有目录?");
-					insert(del);
-				}else{
-					insert(true);
-				}
-			} else {
-				layer.msg(data.msg);
-			}
-		},
-		error: function() {
-			closeLoad();
-			alert("出错了,请联系技术人员!");
-		}
-	});
-
-	
-}
-
-function insert(del){
-	showLoad();
-	$.ajax({
-		type: 'POST',
-		url: ctx + '/adminPage/repository/addOver',
-		data: {
-			id: $("#id").val(),
-			name: $("#name").val(),
-			del : del
-		},
-		dataType: 'json',
-		success: function(data) {
-			closeLoad();
 			if (data.success) {
 				location.reload();
 			} else {
@@ -194,6 +161,64 @@ function userPermission(id,name) {
 		content: ctx + "/adminPage/repository/userPermission?repositoryId=" + id
 	});
 }
+
+function allPermission(id, name){
+	$("#perId").val(id);
+	$.ajax({
+		type: 'POST',
+		url: ctx + '/adminPage/repository/detail',
+		data: {
+			id: id
+		},
+		dataType: 'json',
+		success: function(data) {
+			if (data.success) {
+				var repository = data.obj;
+				$("#allPermission").val(repository.allPermission);
+				form.render();
+				layer.open({
+					type: 1,
+					title: name + '-全体授权',
+					area: ['400px', '300px;'],
+					content: $('#allPermissionDiv')
+				});
+	
+	
+			} else {
+				layer.msg(data.msg)
+			}
+		},
+		error: function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+	
+}
+
+function allPermissionOver(){
+	
+	$.ajax({
+		type: 'POST',
+		url: ctx + '/adminPage/repository/allPermissionOver',
+		data: {
+			id: $("#perId").val(),
+			allPermission : $("#allPermission").val()
+		},
+		dataType: 'json',
+		success: function(data) {
+			if (data.success) {
+				layer.closeAll();
+			} else {
+				layer.msg(data.msg)
+			}
+		},
+		error: function() {
+			alert("出错了,请联系技术人员!");
+		}
+	});
+	
+}
+
 
 var index;
 function loadBak(id, name) {

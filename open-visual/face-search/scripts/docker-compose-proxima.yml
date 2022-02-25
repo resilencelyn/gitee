@@ -1,0 +1,62 @@
+version: '3.5'
+
+services:
+  visual-mysql:
+    container_name: face-search-server-mysql
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: visual_face_search
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+      TZ: Asia/Shanghai
+    expose:
+      - "3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/mysql:/var/lib/mysql
+    restart: always
+
+  visual-proxima:
+    container_name: face-search-proxima-standalone
+    image: divenswu/proxima-be:0.2.0-official
+#    image: ghcr.io/proximabilin/proxima-be:0.2.0   # so slowly
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/proxima/data:/var/lib/proxima-be/data
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/proxima/log:/var/lib/proxima-be/log
+#    ports:
+#      - "16000:16000"    #grpc
+#      - "16001:16001"    #http
+    restart: always
+
+  visual-facesearch:
+    container_name: face-search-server-standalone
+    image: divenswu/face-search:1.0.0
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://visual-mysql:3306/visual_face_search?useUnicode=true&characterEncoding=utf8'
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      VISUAL_ENGINE_SELECTED: proxima
+      VISUAL_ENGINE_PROXIMA_HOST: visual-proxima
+      VISUAL_ENGINE_PROXIMA_PORT: 16000
+      VISUAL_SWAGGER_ENABLE: 'true'
+      JAVA_OPTS: '-XX:MaxDirectMemorySize=400M'
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/search/logs:/app/face-search/logs
+    ports:
+      - "56789:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '1'
+          memory: 500M
+    depends_on:
+      - "visual-mysql"
+      - "visual-proxima"
+    restart: always
+
+networks:
+  default:
+    name: facesearch-proxima

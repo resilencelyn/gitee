@@ -17,7 +17,6 @@ public class SvnWebUI {
 				}
 				c.pathNew(path);
 			});
-			;
 
 			app.onEvent(freemarker.template.Configuration.class, cfg -> {
 				cfg.setSetting("classic_compatible", "true");

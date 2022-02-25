@@ -1,0 +1,94 @@
+version: '3.5'
+
+services:
+  visual-mysql:
+    container_name: face-search-server-mysql
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: visual_face_search
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+      TZ: Asia/Shanghai
+    expose:
+      - "3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/mysql:/var/lib/mysql
+    restart: always
+
+  visual-etcd:
+    container_name: face-search-milvus-etcd
+    image: quay.io/coreos/etcd:v3.5.0
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/etcd:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    restart: always
+
+  visual-minio:
+    container_name: face-search-milvus-minio
+    image: minio/minio:RELEASE.2020-12-03T00-03-10Z
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/minio:/minio_data
+    command: minio server /minio_data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: always
+
+  visual-milvus:
+    container_name: face-search-milvus-standalone
+    image: milvusdb/milvus:v2.0.0-rc8-20211104-d1f4106
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: visual-etcd:2379
+      MINIO_ADDRESS: visual-minio:9000
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/milvus:/var/lib/milvus
+#    ports:
+#      - "19530:19530"
+    depends_on:
+      - "visual-etcd"
+      - "visual-minio"
+    restart: always
+
+  visual-facesearch:
+    container_name: face-search-server-standalone
+    image: divenswu/face-search:1.0.0
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:mysql://visual-mysql:3306/visual_face_search?useUnicode=true&characterEncoding=utf8'
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      VISUAL_ENGINE_SELECTED: milvus
+      VISUAL_ENGINE_MILVUS_HOST: visual-milvus
+      VISUAL_ENGINE_MILVUS_PORT: 19530
+      VISUAL_SWAGGER_ENABLE: 'true'
+      JAVA_OPTS: '-XX:MaxDirectMemorySize=400M'
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes-face-search/search/logs:/app/face-search/logs
+    ports:
+      - "56789:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '1'
+          memory: 500M
+    depends_on:
+      - "visual-mysql"
+      - "visual-milvus"
+    restart: always
+
+networks:
+  default:
+    name: facesearch-milvus

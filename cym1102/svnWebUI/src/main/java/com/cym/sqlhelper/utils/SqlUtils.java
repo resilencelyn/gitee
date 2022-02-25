@@ -66,7 +66,7 @@ public class SqlUtils {
 				}
 				logger.info(sql);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}

@@ -15,8 +15,8 @@ from server.framework.core.settings import settings
 class Authenticator:
     key_pattern: typing.Optional[str] = None
     keycloak_openid = KeycloakOpenID(server_url=settings.keycloak_url,
-                                     client_id="megaide",
-                                     realm_name="dev",
+                                     client_id=settings.keycloak_client_id,
+                                     realm_name=settings.keycloak_realm_name,
                                      client_secret_key="secret")
 
     def authenticate(self, conn: HTTPConnection) -> bool:

@@ -1,19 +1,19 @@
 import { request } from 'umi';
 import { IdeImageEntity } from '@/pages/IdeImage/entities';
 
-export async function getBuildInfo(id: string | undefined) {
+export async function getBuildInfo(id: string) {
   return await request(`/api/cloud_ide/ide_image/show_logs?id=${id}`, {
     method: 'GET',
   });
 }
 
-export async function buildIdeImage(id: string | undefined) {
+export async function buildIdeImage(id: string) {
   return await request<IdeImageEntity>(`/api/cloud_ide/ide_image/build?id=${id}`, {
     method: 'GET',
   });
 }
 
-export async function getIdeImage(id: string | undefined) {
+export async function getIdeImage(id: string) {
   return await request<IdeImageEntity>(`/api/cloud_ide/ide_image/get_entity?id=${id}`, {
     method: 'GET',
   });

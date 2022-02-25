@@ -4,8 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.gzip import GZipMiddleware
-
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from server.app.routers import api_router
+from server.framework.core.handlers import not_found_handlers
 from server.framework.core.middlewares import AuthorizerMiddleware
 from server.framework.core.settings import settings
 
@@ -37,6 +38,8 @@ def inject_middleware(application: FastAPI):
     )
     application.add_middleware(AuthorizerMiddleware)
     application.add_middleware(GZipMiddleware, minimum_size=1000)
+
+    application.add_exception_handler(StarletteHTTPException, not_found_handlers)
 
 
 def init_router(application: FastAPI):

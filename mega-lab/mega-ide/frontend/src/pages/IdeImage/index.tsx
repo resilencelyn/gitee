@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {message, Tag} from 'antd';
-import type {ActionType} from '@ant-design/pro-table';
-import {ProColumns} from '@ant-design/pro-table';
-import {listIdeRegistryOptions} from '@/pages/IdeRegistry/api';
-import {IdeImageEntity} from '@/pages/IdeImage/entities';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { message, Tag } from 'antd';
+import type { ActionType } from '@ant-design/pro-table';
+import { ProColumns } from '@ant-design/pro-table';
+import { listIdeRegistryOptions } from '@/pages/IdeRegistry/api';
+import { IdeImageEntity } from '@/pages/IdeImage/entities';
 import {
   addIdeImage,
   buildIdeImage,
@@ -13,7 +13,7 @@ import {
   listIdeImage,
   updateIdeImage,
 } from '@/pages/IdeImage/api';
-import {handleAdd, handleRemove, handleUpdate} from '@/utils/actions';
+import { handleRemove } from '@/utils/actions';
 import {
   CheckCircleOutlined,
   SyncOutlined,
@@ -21,108 +21,73 @@ import {
   MinusCircleOutlined,
 } from '@ant-design/icons';
 import MegaCreateForm from '@/compoments/MegaCreateForm';
-import {formChidren} from '@/pages/IdeImage/form';
+import { formChidren } from '@/pages/IdeImage/form';
 import MegaUpdateForm from '@/compoments/MegaUpdateForm';
 import MegaTable from '@/compoments/MegaTable';
-import {DrawerForm, ModalForm, ProFormInstance} from '@ant-design/pro-form';
+import MegaLog from '@/compoments/MegaLog';
 
 export default function RegistryIndexPage() {
   const actionRef = useRef<ActionType>();
 
-  const [createModalVisible, handleCreateModalVisible] =
-    useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] =
-    useState<boolean>(false);
-  const [buildInfoModalVisible, handleBuildInfoModalVisible] =
-    useState<boolean>(false);
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const [currentEntity, setCurrentEntity] = useState<BaseTableEntity>();
   const [ideRegistryOptions, setIdeRegistryOptions] = useState([]);
 
-  const [buildInfo, setBuildInfo] = useState('');
-  const [timerId, setTimerId] = useState();
-  useEffect(() => {
-    if (buildInfoModalVisible == false) {
-      clearInterval(timerId)
-    } else {
-      let id = setInterval(() => {
-        let entity = currentEntity as IdeImageEntity
-        return injectBuildInfo(entity.id)
-      }, 5000)
-      // @ts-ignore
-      setTimerId(id)
-    }
-  }, [buildInfoModalVisible]);
-
-  const injectBuildInfo = async (id: string) => {
-    let buildResult = await getBuildInfo(id);
-    let data = buildResult.data.replaceAll('\n', '<br>');
-    setBuildInfo(data);
-  }
-  const showBuildInfo = async (record: IdeImageEntity) => {
-    handleBuildInfoModalVisible(true);
-    injectBuildInfo(record.id)
-    setCurrentEntity(record)
-
-  };
-
   const buildStatus = (record: IdeImageEntity) => {
-    if (record.status == 0) {
-      return (
-        <Tag icon={<MinusCircleOutlined/>} color="default">
-          未构建
-        </Tag>
-      );
-    }
-    if (record.status == 1) {
-      return (
-        <a
-          onClick={() => {
-            showBuildInfo(record);
-          }}
-        >
-          <Tag icon={<SyncOutlined spin/>} color="processing">
-            构建中
-          </Tag>
-        </a>
-      );
-    }
-    if (record.status == 2) {
-      return (
-        <a
-          onClick={() => {
-            showBuildInfo(record);
-          }}
-        >
-          <Tag icon={<CloseCircleOutlined/>} color="error">
-            构建失败
-          </Tag>
-        </a>
-      );
-    }
-    if (record.status == 3) {
-      return (
-        <a
-          onClick={() => {
-            showBuildInfo(record);
-          }}
-        >
-          <Tag icon={<CheckCircleOutlined/>} color="success">
-            构建成功
-          </Tag>
-        </a>
-      );
-    }
+    const logsRef = useRef<{ show: () => void }>(null);
+    const STATUSES = [
+      {
+        icon: <MinusCircleOutlined />,
+        color: 'default',
+        text: '未构建',
+        clickable: false,
+      },
+      {
+        icon: <SyncOutlined spin />,
+        color: 'processing',
+        text: '构建中',
+        clickable: true,
+      },
+      {
+        icon: <CloseCircleOutlined />,
+        color: 'error',
+        text: '构建失败',
+        clickable: true,
+      },
+      {
+        icon: <CheckCircleOutlined />,
+        color: 'success',
+        text: '构建成功',
+        clickable: true,
+      }
+    ]
+    const STATUS = STATUSES[record.status];
+    if (!STATUS) return null;
+    const { icon, color, text, clickable } = STATUS;
+    const tag = (
+      <Tag icon={icon} color={color}>
+        {text}
+      </Tag>
+    )
+    return clickable ? (
+      <Fragment>
+        <a onClick={() => {
+          if (logsRef.current) logsRef.current.show();
+        }}>{tag}</a>
+        <MegaLog ref={logsRef} id={record.id} status={record.status} action={getBuildInfo} />
+      </Fragment>
+    ) : tag;
   };
 
-  useEffect(() => {
-    async function initData() {
-      let options = await listIdeRegistryOptions();
-      setIdeRegistryOptions(options);
-    }
+  async function initIdeRegistryData() {
+    const options = await listIdeRegistryOptions();
+    setIdeRegistryOptions(options);
+  }
 
-    initData().then(() => {
-    });
+  useEffect(() => {
+    initIdeRegistryData()
   }, []);
 
   const tableColumns: ProColumns<IdeImageEntity>[] = [
@@ -219,28 +184,21 @@ export default function RegistryIndexPage() {
         handleModalVisible={handleCreateModalVisible}
         actionRef={actionRef}
         modalVisible={createModalVisible}
-        children={formChidren()}
         addEntityAction={addIdeImage}
-      ></MegaCreateForm>
+      >
+        {formChidren()}
+      </MegaCreateForm>
       <MegaUpdateForm
         title={'编辑镜像'}
         handleModalVisible={handleUpdateModalVisible}
         actionRef={actionRef}
         modalVisible={updateModalVisible}
-        children={formChidren()}
         currentEntity={currentEntity}
         getEntityAction={getIdeImage}
         updateEntityAction={updateIdeImage}
-      ></MegaUpdateForm>
-
-      <DrawerForm
-        title="构建详情"
-        visible={buildInfoModalVisible}
-        submitter={false}
-        onVisibleChange={handleBuildInfoModalVisible}
       >
-        <div dangerouslySetInnerHTML={{__html: buildInfo}}></div>
-      </DrawerForm>
+        {formChidren()}
+      </MegaUpdateForm>
     </div>
   );
 }

@@ -42,6 +42,9 @@
 					<#if repositoryUserExt.permission == 'rw'>
 						读写
 					</#if>
+					<#if repositoryUserExt.permission == ''>
+						禁止
+					</#if>
 					</td>
 					<td>
 						<button class="layui-btn layui-btn-sm" onclick="edit('${repositoryUserExt.id}')">编辑</button>
@@ -82,6 +85,7 @@
 						<select type="text" name="permission" id="permission">
 							<option value="rw">读写</option>
 							<option value="r">只读</option>
+							<option value="no">禁止</option>
 						</select>
 					</div>
 				</div>

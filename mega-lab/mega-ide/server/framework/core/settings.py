@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     prometheus_address: str = 'http://prometheus.lab.cc'
     ide_domain: str = ''
     keycloak_url: str = ''
+    keycloak_client_id: str = ''
+    keycloak_realm_name: str = ''
 
     class Config:
         env_file = '.env'

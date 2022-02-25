@@ -44,13 +44,14 @@ export const request: RequestConfig = {
   timeout: 10000,
   errorConfig: {},
   middlewares: [],
-  // @ts-ignore
   requestInterceptors: [(url, options) => {
-    let headers = {'token': keycloak.token}
+    const { headers = {} } = options;
     return {
       url: `${url}`,
       options: {
-        ...options, headers: headers, interceptors: true
+        ...options, 
+        headers: { token: keycloak.token || '', ...headers}, 
+        interceptors: true
       },
     };
   }],

@@ -6,6 +6,10 @@ import java.util.List;
 
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.extend.aspect.annotation.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 
 import com.cym.config.HomeConfig;
 import com.cym.ext.GroupExt;
@@ -30,7 +34,7 @@ import cn.hutool.core.util.StrUtil;
 
 @Service
 public class RepositoryService {
-
+	Logger logger = LoggerFactory.getLogger(getClass());
 	@Inject
 	SqlHelper sqlHelper;
 	@Inject
@@ -68,31 +72,26 @@ public class RepositoryService {
 
 	}
 
-	public void insertOrUpdate(Repository repository, Boolean del) {
+	public void insertOrUpdate(String name) {
 
-		if (StrUtil.isEmpty(repository.getId())) {
-			// 创建仓库
-			String dir = homeConfig.home + "/repo/" + repository.getName();
-			if (del) {
-				FileUtil.del(dir);
-				FileUtil.mkdir(dir);
-
-				try {
-					String rs = RuntimeUtil.execForStr("svnadmin", "create", dir);
-					System.out.println(rs);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+		// 创建仓库
+		String dir = homeConfig.home + File.separator + "repo" + File.separator + name;
+		if (!FileUtil.exist(dir + File.separator + "db")) {
+			// RuntimeUtil.execForStr("svnadmin", "create", dir);
+			try {
+				SVNRepositoryFactory.createLocalRepository(new File(dir), true, false);
+			} catch (SVNException e) {
+				logger.error(e.getMessage(), e);
 			}
-			
 		}
 
+		Repository repository = new Repository();
+		repository.setName(name);
 		sqlHelper.insertOrUpdate(repository);
 
 		// 目录授权
-		if(SystemTool.inDocker()) {
-			RuntimeUtil.execForStr("chown apache.apache -R " + homeConfig.home + File.separator + "repo/");
+		if (SystemTool.inDocker()) {
+			RuntimeUtil.execForStr("chown apache.apache -R " + homeConfig.home + File.separator + "repo" + File.separator);
 		}
 	}
 
@@ -217,20 +216,24 @@ public class RepositoryService {
 			if (FileUtil.isDirectory(file)) {
 				Long count = sqlHelper.findCountByQuery(new ConditionAndWrapper().eq(Repository::getName, file.getName()), Repository.class);
 				if (count == 0) {
-					Repository repository = new Repository();
-					repository.setName(file.getName());
-					insertOrUpdate(repository, false);
+					insertOrUpdate(file.getName());
 				}
 			}
 		}
 	}
 
 	public Repository getByUrl(String url) {
-		
+
 		String[] urls = url.split("/");
 		String name = urls[3];
-		
+
 		return sqlHelper.findOneByQuery(new ConditionAndWrapper().eq(Repository::getName, name), Repository.class);
+	}
+
+	public void allPermissionOver(String id, String allPermission) {
+		Repository repository = sqlHelper.findById(id, Repository.class);
+		repository.setAllPermission(allPermission);
+		sqlHelper.updateById(repository);
 	}
 
 }

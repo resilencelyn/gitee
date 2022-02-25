@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: open-face-search
+  profiles:
+    active: dev
