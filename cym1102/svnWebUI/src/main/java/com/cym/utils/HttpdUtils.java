@@ -19,24 +19,33 @@ public class HttpdUtils {
 	Logger logger = LoggerFactory.getLogger(HttpdUtils.class);
 	
 	public void modHttpdPort(String port) {
-		List<String> lines = FileUtil.readLines(new File("/etc/httpd/conf/httpd.conf"), Charset.forName("UTF-8"));
+		List<String> lines = FileUtil.readLines(new File("/etc/apache2/ports.conf"), Charset.forName("UTF-8"));
 		List<String> reLines = new ArrayList<String>();
+		boolean hasSvnCof = false;
 		for (String line : lines) {
 			if (line.startsWith("Listen ")) {
 				line = "Listen " + port;
 			}
 			reLines.add(line);
+			if(line.contains("SVNUseUTF8")) {
+				hasSvnCof = true;
+			}
 		}
-		FileUtil.writeLines(reLines, new File("/etc/httpd/conf/httpd.conf"), Charset.forName("UTF-8"));
+		if(!hasSvnCof) {
+			reLines.add("<IfModule mod_dav_svn.c>");
+			reLines.add("SVNUseUTF8  On");
+			reLines.add("</IfModule>");
+		}
+		FileUtil.writeLines(reLines, new File("/etc/apache2/ports.conf"), Charset.forName("UTF-8"));
 	}
 
 	public void start() {
-		String rs = RuntimeUtil.execForStr("httpd -k start");
+		String rs = RuntimeUtil.execForStr("apache2 -k start");
 		logger.info(rs);
 	}
 
 	public void stop() {
-		RuntimeUtil.execForStr("pkill httpd");
+		RuntimeUtil.execForStr("pkill apache2");
 	}
 
 }

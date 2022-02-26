@@ -18,7 +18,7 @@ export default defineConfig({
     { path: '/ide_image', name: '镜像', component: '@/pages/IdeImage/index' },
     {
       path: '/ide_enviroment',
-      name: '资源配置',
+      name: '资源配额',
       component: '@/pages/IdeEnvironment/index',
     },
     { path: '/ide', name: '开发环境', component: '@/pages/Ide/index' },
@@ -31,7 +31,7 @@ export default defineConfig({
   },
   proxy: {
     '/api': {
-      target: 'http://megaide.lixulife.com',
+      target: 'http://127.0.0.1:8001',
       changeOrigin: true,
     },
   },

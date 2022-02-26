@@ -1,0 +1,35 @@
+Enumerating objects: 17, done.
+Counting objects: 100% (17/17), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (14/14), done.
+Writing objects: 100% (15/15), 290.87 MiB | 2.83 MiB/s, done.
+Total 15 (delta 4), reused 0 (delta 0), pack-reused 0
+remote: Powered by GITEE.COM [GNK-6.2]
+remote: error: File: f1acf7dd4aed0d9d0b660f9b968626272ca10ff4 154.02 MB, exceeds 100.00 MB.
+remote: Use command below to see the filename:
+remote: git rev-list --objects --all | grep f1acf7dd4aed0d9d0b660f9b968626272ca10ff4
+remote: Please remove the file from history and try again. (https://gitee.com/help/articles/4232)
+To https://gitee.com/hhhmoonhhh/wica
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'https://gitee.com/hhhmoonhhh/wica'
+
+
+remote: Powered by GITEE.COM [GNK-6.2]
+remote: error: File: f1acf7dd4aed0d9d0b660f9b968626272ca10ff4 154.02 MB, exceeds 100.00 MB.
+remote: Use command below to see the filename:
+remote: git rev-list --objects --all | grep f1acf7dd4aed0d9d0b660f9b968626272ca10ff4
+remote: Please remove the file from history and try again. (https://gitee.com/help/articles/4232)
+To https://gitee.com/hhhmoonhhh/wica
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'https://gitee.com/hhhmoonhhh/wica'
+
+
+
+remote: error: File: f1acf7dd4aed0d9d0b660f9b968626272ca10ff4 154.02 MB, exceeds 100.00 MB.
+remote: Use command below to see the filename:
+remote: git rev-list --objects --all | grep f1acf7dd4aed0d9d0b660f9b968626272ca10ff4
+remote: Please remove the file from history and try again. (https://gitee.com/help/articles/4232)
+To https://gitee.com/hhhmoonhhh/wica
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'https://gitee.com/hhhmoonhhh/wica'
+

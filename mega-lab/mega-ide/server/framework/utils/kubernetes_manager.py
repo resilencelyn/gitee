@@ -3,6 +3,7 @@ from kubernetes import config, client
 from nanoid import generate
 
 from server.app.cloud_ide.model import Ide, IdeEnvironment, IdeImage
+from server.framework.core.logger import logger
 from server.framework.core.settings import settings
 from server.framework.core.template_loader import core_template
 
@@ -29,45 +30,74 @@ class KubernetesManager:
         self.argo_resource_version = "v1alpha1"
 
     def delete_ide(self, uid: str, delete_pvc: bool):
-        self.app_api.delete_namespaced_stateful_set(namespace=self.namespace, name='ide-' + uid)
+        target_name = 'ide-' + uid
+        try:
+            logger.info(f'删除StatefulSet:[{target_name}]')
+            self.app_api.delete_namespaced_stateful_set(namespace=self.namespace, name=target_name)
+        except Exception:
+            pass
 
-        self.core_api.delete_namespaced_service(namespace=self.namespace, name='ide-' + uid)
+        try:
+            logger.info(f'删除Service:[{target_name}]')
+            self.core_api.delete_namespaced_service(namespace=self.namespace, name=target_name)
+        except Exception:
+            pass
 
-        self.custom_object_api.delete_namespaced_custom_object(group=self.traefik_resource_group,
-                                                               version="v1alpha1",
-                                                               plural="ingressroutes", namespace=self.namespace,
-                                                               name='ide-' + uid)
+        try:
+            logger.info(f'删除IngressRoute:[{target_name}]')
+            self.custom_object_api.delete_namespaced_custom_object(group=self.traefik_resource_group,
+                                                                   version="v1alpha1",
+                                                                   plural="ingressroutes", namespace=self.namespace,
+                                                                   name=target_name)
+        except Exception:
+            pass
 
         if delete_pvc:
-            self.core_api.delete_namespaced_persistent_volume_claim(
-                namespace=self.namespace, name='ide-' + uid)
+            try:
+                logger.info(f'删除卷:[{target_name}]')
+                self.core_api.delete_namespaced_persistent_volume_claim(
+                    namespace=self.namespace, name=target_name)
+            except Exception:
+                pass
 
     def start_ide(self, dynamic_dict: dict):
         dynamic_dict['namespace'] = self.namespace
         dynamic_dict['domain'] = settings.ide_domain
 
-        pvc_template = core_template.get_template('ide/pvc.yml')
-        pvc = pvc_template.render(dynamic_dict)
-        self.core_api.create_namespaced_persistent_volume_claim(namespace=self.namespace,
-                                                                body=yaml.safe_load(pvc))
+        try:
+            pvc_template = core_template.get_template('ide/pvc.yml')
+            pvc = pvc_template.render(dynamic_dict)
+            self.core_api.create_namespaced_persistent_volume_claim(namespace=self.namespace,
+                                                                    body=yaml.safe_load(pvc))
+        except Exception:
+            pass
 
-        deployment_template = core_template.get_template('ide/deployment.yml')
-        deployment = deployment_template.render(dynamic_dict)
-        self.app_api.create_namespaced_stateful_set(
-            namespace=self.namespace, body=yaml.safe_load(deployment))
+        try:
+            deployment_template = core_template.get_template('ide/deployment.yml')
+            deployment = deployment_template.render(dynamic_dict)
+            self.app_api.create_namespaced_stateful_set(
+                namespace=self.namespace, body=yaml.safe_load(deployment))
+        except Exception:
+            pass
 
-        svc_template = core_template.get_template('ide/svc.yml')
-        svc = svc_template.render(dynamic_dict)
-        self.core_api.create_namespaced_service(
-            namespace=self.namespace, body=yaml.safe_load(svc))
+        try:
+            svc_template = core_template.get_template('ide/svc.yml')
+            svc = svc_template.render(dynamic_dict)
+            self.core_api.create_namespaced_service(
+                namespace=self.namespace, body=yaml.safe_load(svc))
+        except Exception:
+            pass
 
-        ingress_template = core_template.get_template('ide/ingress.yml')
-        ingress = ingress_template.render(dynamic_dict)
-        self.custom_object_api.create_namespaced_custom_object(group=self.traefik_resource_group,
-                                                               version="v1alpha1",
-                                                               plural="ingressroutes",
-                                                               body=yaml.safe_load(ingress),
-                                                               namespace=self.namespace)
+        try:
+            ingress_template = core_template.get_template('ide/ingress.yml')
+            ingress = ingress_template.render(dynamic_dict)
+            self.custom_object_api.create_namespaced_custom_object(group=self.traefik_resource_group,
+                                                                   version="v1alpha1",
+                                                                   plural="ingressroutes",
+                                                                   body=yaml.safe_load(ingress),
+                                                                   namespace=self.namespace)
+        except Exception:
+            pass
 
     def run_build_image_workflow(self, dynamic_args: dict) -> str:
         """

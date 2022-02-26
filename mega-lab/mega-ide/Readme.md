@@ -13,32 +13,36 @@ MegaIDE是一款基于Kubernetes的云IDE管理系统，支持对VSCode、Jupyte
 
 ## 核心功能
 
-### 镜像源管理
+### 镜像源
 
 支持管理员配置多套IDE可以使用的镜像源
 
 ![](./docs/images/0.1.0/镜像源.png)
 
-### 镜像管理
+### 镜像
 
 镜像管理用于配置可供用户使用的镜像，并且提供构建镜像的能力
 
-![](./docs/images/0.1.0/镜像.png)
+![](./docs/images/0.2.0/镜像列表.png)
+![](./docs/images/0.2.0/镜像构建.png)
 
 ### 资源配置
 
 管理员可以通过资源配置，为不同的开发环境给定不同的配额，便于做资源的管理
 
-![](./docs/images/0.1.0/资源配置.png)
+![](./docs/images/0.2.0/资源配额.png)
 
 ### 开发环境
 
 用户可以在开发环境功能中开启多套开发环境，包括Jupyter Lab、VSCode、Projector等等
 
-![](./docs/images/0.1.0/开发环境.png)
+![](./docs/images/0.2.0/开发环境.png)
 
+
+#### JupyterLab开发环境
 ![](./docs/images/0.1.0/Jupyter开发环境.png)
 
-
+#### VSCode开发环境
+![](./docs/images/0.2.0/VSCode环境.png)
 ----
 [![Stargazers over time](https://whnb.wang/stars/mega-lab/mega-ide)](https://whnb.wang)

@@ -81,7 +81,7 @@ public class InitConfig {
 			// 修改端口号
 			httpdUtils.modHttpdPort(settingService.get("port"));
 			// 目录授权
-			RuntimeUtil.execForStr("chown apache.apache -R " + homeConfig.home + File.separator + "repo/");
+			RuntimeUtil.execForStr("chown www-data -R " + homeConfig.home + File.separator + "repo/");
 			// 启动httpd
 			httpdUtils.start();
 			// 客户端启动

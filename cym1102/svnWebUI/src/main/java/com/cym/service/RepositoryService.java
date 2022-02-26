@@ -1,6 +1,7 @@
 package com.cym.service;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,6 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.extend.aspect.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 
 import com.cym.config.HomeConfig;
 import com.cym.ext.GroupExt;
@@ -31,6 +30,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 
 @Service
 public class RepositoryService {
@@ -63,7 +63,7 @@ public class RepositoryService {
 
 	public void deleteById(String repositoryId) {
 		Repository repository = sqlHelper.findById(repositoryId, Repository.class);
-		String dir = homeConfig.home + "/repo/" + repository.getName();
+		String dir = homeConfig.home + File.separator + "repo" + File.separator + repository.getName();
 		FileUtil.del(dir);
 
 		sqlHelper.deleteById(repositoryId, Repository.class);
@@ -77,12 +77,13 @@ public class RepositoryService {
 		// 创建仓库
 		String dir = homeConfig.home + File.separator + "repo" + File.separator + name;
 		if (!FileUtil.exist(dir + File.separator + "db")) {
-			// RuntimeUtil.execForStr("svnadmin", "create", dir);
-			try {
-				SVNRepositoryFactory.createLocalRepository(new File(dir), true, false);
-			} catch (SVNException e) {
-				logger.error(e.getMessage(), e);
-			}
+			ClassPathResource resource = new ClassPathResource("file/repo.zip");
+			InputStream inputStream = resource.getStream();
+			File temp = new File(homeConfig.home + File.separator + "temp" + File.separator + "repo.zip");
+			FileUtil.writeFromStream(inputStream, temp);
+			FileUtil.mkdir(dir);
+			ZipUtil.unzip(temp, new File(dir));
+			FileUtil.del(temp);
 		}
 
 		Repository repository = new Repository();
@@ -206,12 +207,12 @@ public class RepositoryService {
 	}
 
 	public Boolean hasDir(String name) {
-		String dir = homeConfig.home + "/repo/" + name;
+		String dir = homeConfig.home + File.separator + "repo" + File.separator + name;
 		return FileUtil.exist(dir);
 	}
 
 	public void scan() {
-		File dir = new File(homeConfig.home + "/repo/");
+		File dir = new File(homeConfig.home + File.separator + "repo" + File.separator);
 		for (File file : dir.listFiles()) {
 			if (FileUtil.isDirectory(file)) {
 				Long count = sqlHelper.findCountByQuery(new ConditionAndWrapper().eq(Repository::getName, file.getName()), Repository.class);

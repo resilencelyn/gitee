@@ -1,6 +1,7 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, Body
+from fastapi import APIRouter, Depends, Query, Body, Request
+from logzero import logger
 from sqlalchemy.orm import Session
 
 from server.app.cloud_ide.model import Ide, IdeEnvironment, IdeImage, IdeRegistry
@@ -34,6 +35,7 @@ async def get_entity(id: str = Query(None, description='开发环境id'),
 
 @ide_api.get("/list", response_model=TableResponseSchema, name='获取IDE列表')
 async def list(
+        request: Request,
         name: Optional[str] = Query(None, description='过滤条件:ide名称'),
         current: Optional[int] = Query(0, description='当前页数'),
         pageSize: Optional[int] = Query(10, description='每页记录的数量'),
@@ -55,19 +57,23 @@ async def list(
         .join(IdeRegistry, IdeImage.ide_registry_id == IdeRegistry.id)
     if name is not None:
         query = query.filter(Ide.name.like("%" + name + "%"))
+    query = query.filter(Ide.create_user_id == request.state.user_id)
     total = query.count()
     items = query.limit(pageSize).offset((current - 1) * pageSize).all()
     return TableResponseSchema(data=items, total=total, page=pageSize, success=True)
 
 
 @ide_api.post("/create", response_model=CommonResponseSchema, name='创建IDE')
-async def create(data: IdeCreateRequest = Body(None, description='IDE创建实体'),
+async def create(request: Request,
+                 data: IdeCreateRequest = Body(None, description='IDE创建实体'),
                  db: Session = Depends(get_db)) -> CommonResponseSchema:
     """
     创建IDE
     :return:
     """
     entity = Ide(**data.dict())
+    entity.create_user_name = request.state.user_name
+    entity.create_user_id = request.state.user_id
     db.add(entity)
     db.commit()
     return CommonResponseSchema(data={'id': entity.id}, message=f'创建成功')
@@ -76,6 +82,9 @@ async def create(data: IdeCreateRequest = Body(None, description='IDE创建实�
 @ide_api.get("/delete", response_model=CommonResponseSchema, name='删除IDE')
 async def delete(ids: str = Query(None, description='镜像id，多条记录以逗号分割'),
                  db: Session = Depends(get_db)) -> CommonResponseSchema:
+    kubernetes_manager = KubernetesManager()
+    for id in ids.split(","):
+        kubernetes_manager.delete_ide(id, True)
     db.query(Ide).filter(Ide.id.in_(ids.split(","))).delete(synchronize_session=False)
     db.commit()
     return CommonResponseSchema(data={}, message=f'删除成功')
@@ -124,8 +133,8 @@ async def start(id: str = Query(None, description='开发环境id'),
         'node_name': '',
         'runtime': 'cpu',
         'extra_volume_config': '',
-        'memory_limit': '',
-        'cpu_limit': '',
+        'memory_limit': ide_environment.max_memory,
+        'cpu_limit': ide_environment.max_cpu * 1000,
         'memory_request': '',
         'cpu_request': '',
         'image_name': ide_registry.registry + '/' + ide_image.name + ':' + ide_image.version
@@ -145,7 +154,7 @@ async def stop(id: str = Query(None, description='开发环境id'),
     :return:
     """
     kubernetes_manager = KubernetesManager()
-    kubernetes_manager.delete_ide(id, True)
+    kubernetes_manager.delete_ide(id, False)
 
     ide = db.query(Ide).filter(Ide.id == id).one()
     ide.status = 3

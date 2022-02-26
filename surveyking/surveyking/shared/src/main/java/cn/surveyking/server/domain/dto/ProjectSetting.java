@@ -11,6 +11,11 @@ import java.util.LinkedHashMap;
 @Data
 public class ProjectSetting {
 
+	/**
+	 * 1开启 0停止
+	 */
+	private Integer status = 0;
+
 	private AnswerSetting answerSetting = new AnswerSetting();
 
 	private SubmittedSetting submittedSetting = new SubmittedSetting();
@@ -26,7 +31,7 @@ public class ProjectSetting {
 		/**
 		 * 显示填写进度条
 		 */
-		private Boolean progressBar = true;
+		private Boolean progressBar;
 
 		/**
 		 * 是否需要登录才能作答。 需要登录答卷的几种场景：1、问卷设置直接设置 2、工作流起始节点指定发起人 3、问卷里面有成员和部门题

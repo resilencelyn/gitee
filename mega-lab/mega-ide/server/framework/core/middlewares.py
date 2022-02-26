@@ -1,15 +1,16 @@
-import os
 import re
 import typing
-
+from typing import Callable
+import time
 from starlette.authentication import AuthenticationError
 from starlette.requests import HTTPConnection
 from starlette.responses import JSONResponse, Response
 from starlette.types import ASGIApp, Receive, Scope, Send
-
+import logging
 from keycloak import KeycloakOpenID
-
+from fastapi import FastAPI, Request, Response
 from server.framework.core.settings import settings
+from starlette.middleware.base import BaseHTTPMiddleware
 
 
 class Authenticator:
@@ -24,8 +25,9 @@ class Authenticator:
             raise AuthenticationError("请求未认证")
 
         token = conn.headers["token"]
-        self.keycloak_openid.userinfo(token)
-
+        userinfo = self.keycloak_openid.userinfo(token)
+        conn.state.user_id = userinfo['sub']
+        conn.state.user_name = userinfo['preferred_username']
         return True
 
 
@@ -43,9 +45,9 @@ class AuthorizerMiddleware(Authenticator):
         ] = (on_error if on_error is not None else self.default_on_error)
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        conn = HTTPConnection(scope)
         if settings.env == 'PROD':
             if '/api' in scope["path"]:
-                conn = HTTPConnection(scope)
                 try:
                     auth_result = self.authenticate(conn)
                 except AuthenticationError as e:
@@ -64,6 +66,8 @@ class AuthorizerMiddleware(Authenticator):
                 await self.app(scope, receive, send)
                 return
         else:
+            conn.state.user_id = 'mock'
+            conn.state.user_name = 'mock'
             await self.app(scope, receive, send)
             return
 

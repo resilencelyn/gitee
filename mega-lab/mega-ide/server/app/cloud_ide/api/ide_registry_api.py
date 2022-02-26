@@ -7,6 +7,7 @@ from server.app.cloud_ide.model import IdeRegistry
 from server.app.cloud_ide.schema.ide_registry_schema import IdeRegistryCreateRequest, IdeRegistryUpdateRequest
 from server.framework.core.http_schemas import CommonResponseSchema, TableResponseSchema
 from server.framework.core.injects import get_db
+from server.framework.core.logger import logger
 from server.framework.core.schemas import OptionsSchema
 
 ide_registry_api = APIRouter()
