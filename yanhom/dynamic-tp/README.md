@@ -308,6 +308,8 @@ public void setRejectedExecutionHandler(RejectedExecutionHandler handler);
 
 ### 监控日志
 
+![监控数据](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec5a7d1a31e7418ba5d9a101a5c03826~tplv-k3u1fbpfcp-zoom-1.image)
+
 通过collectType属性配置监控指标采集类型，默认 logging
 
 +   MicroMeter：通过引入相关MicroMeter依赖采集到相应的平台
@@ -355,6 +357,13 @@ public void setRejectedExecutionHandler(RejectedExecutionHandler handler);
 
 ***
 
+### 介绍文章
+
+[https://juejin.cn/post/7063408526894301192](https://juejin.cn/post/7063408526894301192)
+
+[https://juejin.cn/post/7069297636552998943](https://juejin.cn/post/7069297636552998943)
+
+***
 ### 联系我
 
 对项目有什么想法或者建议，可以加我微信交流，或者创建[issues](https://github.com/lyh200/dynamic-tp-spring-cloud-starter/issues)，一起完善项目

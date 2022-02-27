@@ -89,11 +89,6 @@ public class RepositoryService {
 		Repository repository = new Repository();
 		repository.setName(name);
 		sqlHelper.insertOrUpdate(repository);
-
-		// 目录授权
-		if (SystemTool.inDocker()) {
-			RuntimeUtil.execForStr("chown apache.apache -R " + homeConfig.home + File.separator + "repo" + File.separator);
-		}
 	}
 
 	public List<UserExt> getUserExts(String id) {
@@ -235,6 +230,11 @@ public class RepositoryService {
 		Repository repository = sqlHelper.findById(id, Repository.class);
 		repository.setAllPermission(allPermission);
 		sqlHelper.updateById(repository);
+	}
+
+	public List<Repository> getListByAll() {
+		
+		return sqlHelper.findListByQuery(new ConditionOrWrapper().eq(Repository::getAllPermission, "r").eq(Repository::getAllPermission, "rw"), Repository.class);
 	}
 
 }

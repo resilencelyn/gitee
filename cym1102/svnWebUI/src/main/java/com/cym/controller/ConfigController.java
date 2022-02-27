@@ -11,6 +11,8 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.cym.config.HomeConfig;
 import com.cym.model.WebHook;
@@ -29,7 +31,9 @@ import cn.hutool.json.JSONUtil;
 @Controller
 @Mapping("/adminPage/config")
 public class ConfigController extends BaseController {
+	Logger logger = LoggerFactory.getLogger(ConfigController.class);
 
+	
 	@Inject
 	SettingService settingService;
 	@Inject
@@ -71,9 +75,9 @@ public class ConfigController extends BaseController {
 		String status = "";
 
 		if (SystemTool.inDocker()) {
-			String[] command = { "/bin/sh", "-c", "ps -ef|grep httpd" };
+			String[] command = { "/bin/sh", "-c", "ps -ef|grep apache2" };
 			String rs = RuntimeUtil.execForStr(command);
-			isRun = rs.contains("httpd -k start");
+			isRun = rs.contains("apache2 -k start");
 		} else {
 			if (SystemTool.isWindows()) {
 				String[] command = { "tasklist" };
@@ -154,7 +158,7 @@ public class ConfigController extends BaseController {
 
 	@Mapping("test.js")
 	public JsonResult test(Context ctx) throws IOException {
-		System.err.println(ctx.body());
+		logger.info(ctx.body());
 		return renderSuccess();
 	}
 

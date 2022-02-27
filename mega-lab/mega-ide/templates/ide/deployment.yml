@@ -70,11 +70,11 @@ spec:
         resources:
           limits:
             nvidia.com/gpu: "0"
-            {% if memory_limit | length%}
+            {% if memory_limit %}
             memory: "{{memory_limit}}Gi"
             {% endif %}
-            {% if cpu_limit | length%}
-            cpu: "{{cpu_limit}}"
+            {% if cpu_limit %}
+            cpu: "{{cpu_limit}}m"
             {% endif %}
           requests:
             nvidia.com/gpu: "0"
@@ -82,7 +82,7 @@ spec:
             memory: "{{memory_request}}Gi"
             {% endif %}
             {% if cpu_request | length%}
-            cpu: "{{cpu_request}}"
+            cpu: "{{cpu_request}}m"
             {% endif %}
         ports:
         - containerPort: 8888

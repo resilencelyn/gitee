@@ -18,9 +18,10 @@
 # tag3 -> add the function of music player;
 # tag4 -> add the function of processing;
 # tag5 -> add the function of sending files;
-# tag6 -> .......
-# tag7 -> .......
-# .............
+# tag6 -> add the function of other helps;
+# tag7 -> add the function of looking phone files;
+# tag8 -> ......
+# tag9 -> ......
 # .............
 # 
 
@@ -42,6 +43,8 @@ main_tag_5.
 """
 
 
+# import imp
+# import pillow
 import re
 # import requests
 import win32con
@@ -90,6 +93,16 @@ from yolov5_using import using_yolov5 as yloo5
 from music_control import musiccontrol
 import music_control
 from music_control import *
+# from other_tools import tool1
+# from other_tools.tool1 import *
+import tool1
+from tool1 import sendingfiletophonesmain
+# from other_tools import tool2
+# from other_tools.tool2 import *
+# from other_tools import tool3
+# from other_tools.tool3 import *
+# from other_tools import ui01
+
 
 
 
@@ -684,6 +697,8 @@ class CalcFrame1(MyFrame1):
         tool -> show the phone files.
         """
 
+
+
         event.Skip()
         return super().m27phonefileslooking(event)
 
@@ -718,6 +733,8 @@ class CalcFrame1(MyFrame1):
         ..m29..
         app introductions.
         """
+
+        # app introductions -> introduce the app..
 
         introductions_of_app = "  这个软件的中文名称是: 智慧操控, (智慧操控: 基于uiautomator2模块的电脑操控手机的功能的实现), 英文的名称是Windows Intelligently Controlling Android , 英文缩写是WICA. 该软件的功能是通过电脑来对手机进行操控, 这样一来, 很多的手机操作可以在电脑上直接完成, 不需要切换两个设备就可以完成自己想要的功能, 十分方便快捷. 该软件可以较为灵敏的通过电脑来实现控制手机的功能, 最后, 祝您使用愉快! "  #  ！！"
         # use the dots of english because chinese dot does not match.  # wx -> messages.
@@ -756,6 +773,8 @@ class CalcFrame1(MyFrame1):
         helps(other helps).
         """
 
+
+
         event.Skip()
         return super().m31helpings(event)
 
@@ -767,6 +786,14 @@ class CalcFrame1(MyFrame1):
         sending files.
         """
 
+        ################################################################################
+        ####### There are some problems needed to be solved, caused by tool1.py. #######
+        ################################################################################
+
+        # use the method from tool1.py(other_tools/tool1.py has problems, so use the baked tool1..)
+        sendingfiletophonesmain()  
+        # the method to send the file that is selected.....
+        # send the files....
         event.Skip()
         return super().m32sendingfiles(event)
 
@@ -777,6 +804,8 @@ class CalcFrame1(MyFrame1):
         ..m33..
         the apps managing.
         """
+
+
 
         event.Skip()
         return super().m33appsmanager(event)
@@ -891,13 +920,13 @@ def adb_shell(cmd: str):  # :  # -> None:
     return None
 
 
-if __name__ == "__main__":  # main method.
-    """
+if __name__ == "__main__":  # .......main method.......
+    """.......
 
-    .the main method.
-    .(MAIN.).
+    .......the main method.......
+    .......(MAIN.......).......
     
-    """
+    ......."""
 
     # start the app first.
     app = wx.App(False)
@@ -964,8 +993,16 @@ if __name__ == "__main__":  # main method.
     # adb_sh.communicate('/data/lo/cal/tmp/atx-agent server -d')
 
     # get the information.(ip and so on)
-    phone_device = u2.connect()  # connect to get the message of the phone.
+# 
+    phone_device = u2.connect()  
+# 
+    # connect to get the message of the phone.
     # phone_device = u2.connect("192.168.0.104:5555")
+    # phone_device = u2.connect()  # connect to get the message of the phone.
+# 
+    # phone_device = u2.connect()  # connect to get the message of the phone.
+# 
+# 
     print(phone_device.device_info["serial"])  # print(phone_device.device_info)
     print(phone_device.wlan_ip)
 

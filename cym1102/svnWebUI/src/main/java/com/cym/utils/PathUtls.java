@@ -42,13 +42,13 @@ public class PathUtls {
 	@Inject
 	SvnAdminUtils svnAdminUtils;
 
-	public List<TreeNode> getPath(String url) {
+	public List<TreeNode> getPath(String url, String userName, String userPass) {
 		String relativePath = getRelativePath(url);
 
 		List<TreeNode> list = new ArrayList<TreeNode>();
 		try {
 			SVNRepository svnRepository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(url));
-			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(svnAdminUtils.adminUserName, svnAdminUtils.adminUserPass.toCharArray());
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userName, userPass.toCharArray());
 			svnRepository.setAuthenticationManager(authManager);
 
 			Collection<SVNDirEntry> entries = svnRepository.getDir(relativePath, -1, null, (Collection) null);

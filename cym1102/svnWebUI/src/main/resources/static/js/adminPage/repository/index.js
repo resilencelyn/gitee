@@ -53,7 +53,6 @@ function scan(){
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
-					alert("扫描完成");
 					location.reload();
 				} else {
 					layer.msg(data.msg);
@@ -270,3 +269,24 @@ function dumpBak(id) {
 }
 
 
+function download() {
+	var nodes = fileSelect.zTreeObj.getSelectedNodes();
+	if (nodes.length > 0) {
+		window.open(ctx + '/adminPage/repository/download?url=' + encodeURIComponent(nodes[0].id));
+	} else {
+		layer.msg("未选中文件");
+	}
+}
+
+
+function seeFile(url) {
+	url = encodeURIComponent(url);
+	fileSelect.setting.async.url = ctx + '/adminPage/repository/getFileList?url=' + url;
+	fileSelect.load();
+	layer.open({
+		type: 1,
+		title: "文件目录",
+		area: ['600px', '560px'], // 宽高
+		content: $('#fileSelectDiv')
+	});
+}

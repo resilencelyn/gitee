@@ -1,5 +1,6 @@
 package com.cym.service;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +145,11 @@ public class ConfigService {
 		}
 
 		FileUtil.writeLines(authzLines, authz, Charset.forName("UTF-8"));
+		
+		// 目录授权
+		if (SystemTool.inDocker()) {
+			RuntimeUtil.execForStr("chown www-data -R " + homeConfig.home + File.separator + "repo" + File.separator);
+		}
 	}
 
 	private String val(String permission) {

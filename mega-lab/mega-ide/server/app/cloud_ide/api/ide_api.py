@@ -1,8 +1,10 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, Body, Request
+from keycloak import KeycloakOpenID
 from logzero import logger
 from sqlalchemy.orm import Session
+from starlette.responses import JSONResponse
 
 from server.app.cloud_ide.model import Ide, IdeEnvironment, IdeImage, IdeRegistry
 from server.app.cloud_ide.schema.ide_schema import IdeCreateRequest, IdeUpdateRequest
@@ -13,6 +15,26 @@ from server.framework.core.template_loader import core_template
 from server.framework.utils.kubernetes_manager import KubernetesManager
 
 ide_api = APIRouter()
+
+
+@ide_api.get("/ide_auth", name='校验当前用户是否能够访问ide')
+async def ide_auth(request: Request,
+                   db: Session = Depends(get_db)) -> Ide:
+    try:
+        keycloak_openid = KeycloakOpenID(server_url=settings.keycloak_url,
+                                         client_id=settings.keycloak_client_id,
+                                         realm_name=settings.keycloak_realm_name,
+                                         client_secret_key="secret")
+        token = request.cookies['token']
+        user_info = keycloak_openid.userinfo(token)
+        ide_id = request.url.hostname.split('.')[0]
+        user_ide = db.query(Ide).filter(Ide.id == ide_id, Ide.create_user_id == user_info['sub']).one()
+        if user_ide is not None:
+            return JSONResponse({}, status_code=200)
+        else:
+            return JSONResponse({}, status_code=401)
+    except:
+        return JSONResponse({}, status_code=401)
 
 
 @ide_api.get("/get_entity", name='获取ide实体')
@@ -126,15 +148,15 @@ async def start(id: str = Query(None, description='开发环境id'),
     dynamic_dict = {
         'id': ide.id,
         'storage_class': 'local-path',
-        'storage_size': ide_environment.max_disk,
+        'storage_size': str(ide_environment.max_disk),
         'node_ports': '',
         'ide_type': ide_type,
         'volume_config': '',
         'node_name': '',
         'runtime': 'cpu',
         'extra_volume_config': '',
-        'memory_limit': ide_environment.max_memory,
-        'cpu_limit': ide_environment.max_cpu * 1000,
+        'memory_limit': str(ide_environment.max_memory),
+        'cpu_limit': str(ide_environment.max_cpu * 1000),
         'memory_request': '',
         'cpu_request': '',
         'image_name': ide_registry.registry + '/' + ide_image.name + ':' + ide_image.version

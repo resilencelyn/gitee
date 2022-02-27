@@ -60,7 +60,7 @@ import cn.hutool.core.util.StrUtil;
 @Mapping("/adminPage/repository")
 public class RepositoryController extends BaseController {
 	Logger logger = LoggerFactory.getLogger(RepositoryController.class);
-	
+
 	@Inject
 	InitConfig projectConfig;
 	@Inject
@@ -273,7 +273,6 @@ public class RepositoryController extends BaseController {
 		}
 		logger.info(rs);
 		FileUtil.del(dirTemp);
-		
 
 		return renderSuccess(rs.replace("\n", "<br>"));
 	}
@@ -318,27 +317,10 @@ public class RepositoryController extends BaseController {
 		if (StrUtil.isEmpty(id)) {
 			id = url;
 		}
-		// URLcode转码
 		id = URLDecoder.decode(id, Charset.forName("UTF-8"));
+		List<TreeNode> list = pathUtls.getPath(id, svnAdminUtils.adminUserName, svnAdminUtils.adminUserPass);
 
-		List<TreeNode> list = pathUtls.getPath(id);
-
-		// 按文件夹进行排序
-		list.sort(new Comparator<TreeNode>() {
-
-			@Override
-			public int compare(TreeNode o1, TreeNode o2) {
-
-				if (o1.getIsParent().equals("true") && o2.getIsParent().equals("false")) {
-					return -1;
-				}
-				if (o1.getIsParent().equals("false") && o2.getIsParent().equals("true")) {
-					return 1;
-				}
-
-				return o1.getName().compareToIgnoreCase(o2.getName());
-			}
-		});
+		sortFile(list);
 
 		return list;
 	}
@@ -358,14 +340,6 @@ public class RepositoryController extends BaseController {
 		context.headerAdd("Content-Disposition", "attachment;filename=" + URLEncoder.createDefault().encode(fileName, Charset.forName("UTF-8")));
 		svnRepository.getFile(pathUtls.getRelativePath(url), -1, null, context.outputStream());
 
-	}
-
-	private String getFileName(String relativePath) {
-		if (relativePath.contains("/")) {
-			String[] names = relativePath.split("/");
-			return names[names.length - 1];
-		}
-		return relativePath;
 	}
 
 	@Mapping("getUserList")
