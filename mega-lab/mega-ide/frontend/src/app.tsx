@@ -4,21 +4,21 @@ import {
   Settings as LayoutSettings,
 } from '@ant-design/pro-layout';
 import Keycloak from 'keycloak-js';
-import {RequestConfig} from 'umi';
+import { RequestConfig } from 'umi';
 
-import {ReactKeycloakProvider, useKeycloak} from '@react-keycloak/web';
+import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
 
-const base_domain = 'lixulife.com'
+const base_domain = process.env.MEGAIDE_ENV === 'dev' ? '' : 'lixulife.com';
 const keycloak = Keycloak({
-    'realm': 'dev',
-    'url': 'http://keycloak.lixulife.com/auth',
-    'clientId': 'megalab',
-  },
+  'realm': 'dev',
+  'url': 'http://keycloak.lixulife.com/auth',
+  'clientId': 'megalab',
+},
 );
 
 export const layout = ({
-                         initialState,
-                       }: {
+  initialState,
+}: {
   initialState: { settings?: LayoutSettings; };
 }): BasicLayoutProps => {
   return {
@@ -32,16 +32,18 @@ export async function getInitialState() {
 }
 
 export function rootContainer(container: any) {
-
   return React.createElement(ReactKeycloakProvider, {
     authClient: keycloak, autoRefreshToken: true,
-    initOptions: {onLoad: 'login-required', checkLoginIframe: false, enableLogging: true},
+    initOptions: { onLoad: 'login-required', checkLoginIframe: false, enableLogging: true },
     onEvent: (event, error) => {
-      if (event == 'onReady') {
-        document.cookie = `token=${keycloak.token}; domain=${base_domain};`
+      let domain = '';
+      if (base_domain) {
+        domain = `domain=${base_domain};`
       }
-      if (event == 'onAuthLogout') {
-        document.cookie = `token=null; domain=lixulife.com;`
+      if (event === 'onAuthSuccess') {
+        document.cookie = `token=${keycloak.token};${domain}`
+      } else if (event === 'onAuthLogout') {
+        document.cookie = `token=null;${domain}`
       }
     }
   }, container);
@@ -49,15 +51,14 @@ export function rootContainer(container: any) {
 
 export const request: RequestConfig = {
   timeout: 10000,
+  credentials: 'include',
   errorConfig: {},
   middlewares: [],
   requestInterceptors: [(url, options) => {
-    const {headers = {}} = options;
     return {
       url: `${url}`,
       options: {
         ...options,
-        headers: {token: keycloak.token || '', ...headers},
         interceptors: true
       },
     };

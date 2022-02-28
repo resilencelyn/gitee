@@ -59,7 +59,7 @@ public class ConfigService {
 			passwdLines.add(svnAdminUtils.adminUserName + " = " + svnAdminUtils.adminUserPass);
 		}
 
-		List<User> userList = sqlHelper.findAll(User.class);
+		List<User> userList = sqlHelper.findListByQuery(new ConditionAndWrapper().eq(User::getOpen, 0), User.class);
 		for (User user : userList) {
 			if (SystemTool.inDocker()) {
 				String pass = RuntimeUtil.execForStr("htpasswd -nb " + user.getName() + " " + user.getPass());
@@ -77,9 +77,13 @@ public class ConfigService {
 		for (Group group : groupList) {
 			String groupStr = group.getName() + " = ";
 
-			List<String> names = new ArrayList<>();
 			List<User> users = groupService.getUserList(group.getId());
-			names.addAll(users.stream().map(User::getName).collect(Collectors.toList()));
+			List<String> names = new ArrayList<>();
+			for (User user : users) {
+				if (user.getOpen() != null && user.getOpen() == 0) {
+					names.add(user.getName());
+				}
+			}
 			List<Group> groups = groupService.getGroupList(group.getId());
 			for (Group groupSlave : groups) {
 				names.add("@" + groupSlave.getName());
@@ -116,7 +120,7 @@ public class ConfigService {
 						RepositoryUser.class);
 				for (RepositoryUser repositoryUser : repositoryUsers) {
 					User user = sqlHelper.findById(repositoryUser.getUserId(), User.class);
-					if (user != null) {
+					if (user.getOpen() != null && user.getOpen() == 0) {
 						authzLines.add(user.getName() + " = " + val(repositoryUser.getPermission()));
 					}
 				}
@@ -145,7 +149,7 @@ public class ConfigService {
 		}
 
 		FileUtil.writeLines(authzLines, authz, Charset.forName("UTF-8"));
-		
+
 		// 目录授权
 		if (SystemTool.inDocker()) {
 			RuntimeUtil.execForStr("chown www-data -R " + homeConfig.home + File.separator + "repo" + File.separator);

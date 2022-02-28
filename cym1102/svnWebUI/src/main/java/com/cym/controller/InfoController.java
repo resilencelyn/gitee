@@ -24,6 +24,7 @@ import com.cym.model.Repository;
 import com.cym.model.RepositoryUser;
 import com.cym.model.TreeNode;
 import com.cym.model.User;
+import com.cym.service.ConfigService;
 import com.cym.service.RepositoryService;
 import com.cym.service.SettingService;
 import com.cym.utils.BaseController;
@@ -48,7 +49,10 @@ public class InfoController extends BaseController {
 	SettingService settingService;
 	@Inject
 	PathUtls pathUtls;
+	@Inject
+	ConfigService configService;
 
+	
 	@Mapping("")
 	public ModelAndView index() {
 		String port = settingService.get("port");
@@ -95,7 +99,7 @@ public class InfoController extends BaseController {
 
 		user.setPass(newPass);
 		sqlHelper.updateById(user);
-
+		configService.refresh();
 		return renderSuccess();
 	}
 

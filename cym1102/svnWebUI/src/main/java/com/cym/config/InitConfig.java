@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.noear.solon.annotation.Component;
@@ -118,7 +119,9 @@ public class InitConfig {
 		
 		// 预热定时任务
 		scheduleTask.hookTasks();
-	}
+		
+		
+ 	}
 
 	/**
 	 * 显示logo

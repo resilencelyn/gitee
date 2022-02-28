@@ -20,8 +20,9 @@
 # tag5 -> add the function of sending files;
 # tag6 -> add the function of other helps;
 # tag7 -> add the function of looking phone files;
-# tag8 -> ......
+# tag8 -> add the function of managing the phone apps;
 # tag9 -> ......
+# tag10 -> ......
 # .............
 # 
 
@@ -102,7 +103,11 @@ from tool1 import sendingfiletophonesmain
 # from other_tools import tool3
 # from other_tools.tool3 import *
 # from other_tools import ui01
-
+# from other_tools 
+import tool2
+# from other_tools.
+from tool2 import CalcFrame000002, otherhelpsoftheauthor
+from tool2 import otherhelpsoftheauthor
 
 
 
@@ -698,6 +703,9 @@ class CalcFrame1(MyFrame1):
         """
 
 
+        # maybe use the dir to show...
+
+
 
         event.Skip()
         return super().m27phonefileslooking(event)
@@ -750,6 +758,7 @@ class CalcFrame1(MyFrame1):
         ..m30..
         how to use.
         """
+
         # using mathods.
         using_1 = "1. 首先打开软件到达当前的这个页面说明手机以及电脑的配置都是合适的, 可以正常使用这个软件了; "
         using_2 = "2. 然后, 点击确认连接按钮可以将电脑与手机连接起来 (这里的IP以及端口会自动获取, 不需要修改) ; "
@@ -773,7 +782,13 @@ class CalcFrame1(MyFrame1):
         helps(other helps).
         """
 
-
+        # here is no problems...
+        # there is no problems here, although there is an app instead of the main app.......
+        # otherhelpsoftheauthor()
+        otherhelpsoftheauthor()
+        # tool2(tool2.)...
+        # otherhelpsoftheauthor()
+        # 
 
         event.Skip()
         return super().m31helpings(event)
@@ -804,6 +819,9 @@ class CalcFrame1(MyFrame1):
         ..m33..
         the apps managing.
         """
+
+
+        # need to use the connection to manage the apps....
 
 
 

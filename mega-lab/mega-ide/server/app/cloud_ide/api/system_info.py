@@ -16,13 +16,15 @@ async def list_node_info() -> CommonResponseSchema:
 
 @system_info_api.get("/query_metrics", name='获取指标信息', response_model=CommonResponseSchema)
 async def query_metrics(node_lists: str = Query(None, description='节点列表'),
-                        metric_name: str = Query(None, description='指标名称')) -> CommonResponseSchema:
+                        metric_names: str = Query(None, description='指标名称，多个指标以逗号分割')) -> CommonResponseSchema:
     prometheus_manager = PrometheusManager()
     if node_lists is not None:
         node_lists = node_lists.split(',')
-    if metric_name in prometheus_manager.query_type:
-        results = prometheus_manager.query_metrics(instances=node_lists,
-                                                   query=prometheus_manager.query_type[metric_name])
-        return CommonResponseSchema(data=results)
-    else:
-        return CommonResponseSchema(success=False, message='指标不存在')
+    monitor_value = {}
+    metrics = metric_names.split(',')
+    for metric_name in metrics:
+        if metric_name in prometheus_manager.query_type:
+            results = prometheus_manager.query_metrics(instances=node_lists,
+                                                       query=prometheus_manager.query_type[metric_name])
+            monitor_value[metric_name] = prometheus_manager.get_value(results)
+    return CommonResponseSchema(success=True, data=monitor_value)

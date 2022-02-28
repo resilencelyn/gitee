@@ -684,10 +684,9 @@ export default {
 			let area = {};
 
 			if (!text) return { code: -1, msg: "地址文本不能为空" };
-
+			//let newText = text.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\ ]/g,' ');
 			let textArr = text.split(/[^\u4e00-\u9fa5a-zA-Z0-9]+/g).filter(v => v.length);
 			if (textArr.length != 3) return { code: -1, msg: "请输入正确的内容" };
-
 			// 获取姓名和手机号
 			let temp;
 			let addressText; // 地址原文
@@ -704,7 +703,6 @@ export default {
 				// 当前字符串的长度和之前字符串的长度的对比，进而确定姓名和地址信息
 				temp.length > v.length? ((addressText = temp), (name = v)): ((addressText = v), (name = temp));
 			}
-
 			// 省
 			// 1.先找出省份，通过匹配前面两个字(中国34个省份中，前面两个字不会重复)
 			let firstTwoKey = addressText.substring(0, 2); //字符串开始的两个字符
@@ -719,8 +717,7 @@ export default {
 					break;
 				}
 			}
-			if (provinceIndex == -1)
-				return { code: -1, msg: `省份【${firstTwoKey}】没有找到，请输入正确的地址` };
+			if (provinceIndex == -1) return { code: -1, msg: `省份【${firstTwoKey}】没有找到，请输入正确的地址` };
 
 			// 获取市
 			let citysArr = citys[provinceIndex];
@@ -755,7 +752,7 @@ export default {
 				if (addressText.search(new RegExp(reg)) > -1) {
 					area = { code, name };
 					// 详情地址
-					address = addressText.split(new RegExp(reg))[1];
+					address = addressText.replace(new RegExp(reg), "~").split("~")[1];
 					areaIndex = i;
 					break;
 				}

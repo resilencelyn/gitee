@@ -13,15 +13,16 @@ export default defineConfig({
     {
       path: '/ide_registry',
       name: '镜像源',
-      component: '@/pages/IdeRegistry/index',
+      component: '@/pages/IdeRegistry',
     },
-    { path: '/ide_image', name: '镜像', component: '@/pages/IdeImage/index' },
+    { path: '/ide_image', name: '镜像', component: '@/pages/IdeImage' },
     {
       path: '/ide_enviroment',
       name: '资源配额',
-      component: '@/pages/IdeEnvironment/index',
+      component: '@/pages/IdeEnvironment',
     },
-    { path: '/ide', name: '开发环境', component: '@/pages/Ide/index' },
+    { path: '/ide', name: '开发环境', component: '@/pages/Ide' },
+    { component: '@/pages/404' },
   ],
   fastRefresh: {},
   layout: {
@@ -29,9 +30,12 @@ export default defineConfig({
     locale: true,
     layout: 'top',
   },
+  define: {
+    'process.env': process.env
+  },
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8001',
+      target: 'http://megaide.lixulife.com',
       changeOrigin: true,
     },
   },

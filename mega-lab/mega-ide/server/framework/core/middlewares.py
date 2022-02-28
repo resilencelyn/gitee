@@ -21,10 +21,10 @@ class Authenticator:
                                      client_secret_key="secret")
 
     def authenticate(self, conn: HTTPConnection) -> bool:
-        if "token" not in conn.headers:
+        if "token" not in conn.cookies:
             raise AuthenticationError("请求未认证")
 
-        token = conn.headers["token"]
+        token = conn.cookies["token"]
         userinfo = self.keycloak_openid.userinfo(token)
         conn.state.user_id = userinfo['sub']
         conn.state.user_name = userinfo['preferred_username']

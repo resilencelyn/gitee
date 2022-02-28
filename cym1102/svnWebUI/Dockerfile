@@ -21,4 +21,5 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.huaweicloud.com/@g /etc/apt/sources.l
     && rm -rf /var/cache/apk/* /tmp/*
 COPY target/svnWebUI-*.jar /home/svnWebUI.jar
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN ["chmod", "+x", "/usr/local/bin/entrypoint.sh"]
 ENTRYPOINT ["tini","/usr/local/bin/entrypoint.sh"]
