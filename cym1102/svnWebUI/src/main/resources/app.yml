@@ -4,7 +4,7 @@ server:
     maxRequestSize: 204800mb
   
 project:
-  sqlPrint: true
+  sqlPrint: false
   beanPackage: com.cym.model
   home: /home/svnWebUI/
   findPass: false

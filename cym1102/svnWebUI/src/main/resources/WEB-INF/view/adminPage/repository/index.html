@@ -51,6 +51,7 @@
 						<tr>
 							<th>仓库名</th>
 							<th>url</th>
+							<th>全体授权</th>
 							<th>授权</th>
 							<th>操作</th>
 						</tr>
@@ -62,6 +63,18 @@
 							<td>
 							${repositoryExt.url}
 							&nbsp;&nbsp; <a style="color: blue;" href="javascript:copyToClipboard('${repositoryExt.url}')">复制</a>
+							</td>
+							
+							<td>
+								<#if repositoryExt.allPermission == 'r'>
+									<span class="blue">只读</span>
+								</#if>
+								<#if repositoryExt.allPermission == 'rw'>
+									<span class="green">读写</span>
+								</#if>
+								<#if repositoryExt.allPermission == 'no'>
+									<span class="red">禁止</span>
+								</#if>
 							</td>
 							<td>
 								<button class="layui-btn layui-btn-sm" onclick="allPermission('${repositoryExt.id}','${repositoryExt.name}')">全体授权</button>

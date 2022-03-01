@@ -37,13 +37,13 @@
 					</td>
 					<td>
 					<#if repositoryUserExt.permission == 'r'>
-						读
+						<span class="blue">只读</span>
 					</#if>
 					<#if repositoryUserExt.permission == 'rw'>
-						读写
+						<span class="green">读写</span>
 					</#if>
-					<#if repositoryUserExt.permission == ''>
-						禁止
+					<#if repositoryUserExt.permission == 'no'>
+						<span class="red">禁止</span>
 					</#if>
 					</td>
 					<td>

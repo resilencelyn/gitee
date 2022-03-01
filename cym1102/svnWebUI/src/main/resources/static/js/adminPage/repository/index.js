@@ -206,7 +206,7 @@ function allPermissionOver(){
 		dataType: 'json',
 		success: function(data) {
 			if (data.success) {
-				layer.closeAll();
+				location.reload();
 			} else {
 				layer.msg(data.msg)
 			}
