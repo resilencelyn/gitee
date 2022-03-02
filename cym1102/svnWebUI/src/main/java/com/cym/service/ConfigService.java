@@ -152,7 +152,7 @@ public class ConfigService {
 
 		// 目录授权
 		if (SystemTool.inDocker()) {
-			RuntimeUtil.execForStr("chown www-data -R " + homeConfig.home + File.separator + "repo" + File.separator);
+			RuntimeUtil.execForStr("chown apache.apache -R " + homeConfig.home + File.separator + "repo" + File.separator);
 		}
 	}
 

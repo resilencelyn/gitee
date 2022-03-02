@@ -20,6 +20,8 @@ import com.cym.model.RepositoryGroup;
 import com.cym.model.RepositoryUser;
 import com.cym.model.User;
 import com.cym.sqlhelper.bean.Page;
+import com.cym.sqlhelper.bean.Sort;
+import com.cym.sqlhelper.bean.Sort.Direction;
 import com.cym.sqlhelper.utils.ConditionAndWrapper;
 import com.cym.sqlhelper.utils.ConditionOrWrapper;
 import com.cym.sqlhelper.utils.SqlHelper;
@@ -117,12 +119,60 @@ public class RepositoryService {
 		return groupExts;
 	}
 
-	public Page userPermission(Page page, String repositoryId) {
-		return sqlHelper.findPage(new ConditionAndWrapper().eq(RepositoryUser::getRepositoryId, repositoryId), page, RepositoryUser.class);
+	public Page userPermission(Page page, String repositoryId, String keywords, String order) {
+		ConditionAndWrapper conditionAndWrapper = new ConditionAndWrapper().eq(RepositoryUser::getRepositoryId, repositoryId);
+		if (StrUtil.isNotEmpty(keywords)) {
+			ConditionOrWrapper conditionOrWrapper = new ConditionOrWrapper();
+			List<String> userIds = sqlHelper.findIdsByQuery(new ConditionOrWrapper().like(User::getName, keywords).like(User::getTrueName, keywords), User.class);
+			if (userIds.size() > 0) {
+				conditionOrWrapper.in(RepositoryUser::getUserId, userIds);
+			}
+			List<String> repositoryIds = sqlHelper.findIdsByQuery(new ConditionOrWrapper().like(Repository::getName, keywords), Repository.class);
+			if (repositoryIds.size() > 0) {
+				conditionOrWrapper.in(RepositoryUser::getRepositoryId, repositoryIds);
+			}
+
+			conditionOrWrapper.like(RepositoryUser::getPath, keywords);
+			conditionAndWrapper.and(conditionOrWrapper);
+		}
+
+		Sort sort = new Sort();
+		if (order.equals("time")) {
+			sort.add(RepositoryUser::getId, Direction.DESC);
+		}
+		if (order.equals("path")) {
+			sort.add(RepositoryUser::getPath, Direction.ASC);
+		}
+
+		return sqlHelper.findPage(conditionAndWrapper, sort, page, RepositoryUser.class);
 	}
 
-	public Page groupPermission(Page page, String repositoryId) {
-		return sqlHelper.findPage(new ConditionAndWrapper().eq(RepositoryGroup::getRepositoryId, repositoryId), page, RepositoryGroup.class);
+	public Page groupPermission(Page page, String repositoryId, String keywords, String order) {
+		ConditionAndWrapper conditionAndWrapper = new ConditionAndWrapper().eq(RepositoryGroup::getRepositoryId, repositoryId);
+		if (StrUtil.isNotEmpty(keywords)) {
+			ConditionOrWrapper conditionOrWrapper = new ConditionOrWrapper();
+			List<String> groupIds = sqlHelper.findIdsByQuery(new ConditionOrWrapper().like(Group::getName, keywords), Group.class);
+			if (groupIds.size() > 0) {
+				conditionOrWrapper.in(RepositoryGroup::getGroupId, groupIds);
+			}
+			List<String> repositoryIds = sqlHelper.findIdsByQuery(new ConditionOrWrapper().like(Repository::getName, keywords), Repository.class);
+			if (repositoryIds.size() > 0) {
+				conditionOrWrapper.in(RepositoryUser::getRepositoryId, repositoryIds);
+			}
+
+			conditionOrWrapper.like(RepositoryGroup::getPath, keywords);
+			conditionAndWrapper.and(conditionOrWrapper);
+		}
+
+		Sort sort = new Sort();
+		if (order.equals("time")) {
+			sort.add(RepositoryGroup::getId, Direction.DESC);
+		}
+		if (order.equals("path")) {
+			sort.add(RepositoryGroup::getPath, Direction.ASC);
+		}
+
+		return sqlHelper.findPage(conditionAndWrapper, sort, page, RepositoryGroup.class);
 	}
 
 	public String getUserPermission(String userId, String repositoryId) {
@@ -233,7 +283,7 @@ public class RepositoryService {
 	}
 
 	public List<Repository> getListByAll() {
-		
+
 		return sqlHelper.findListByQuery(new ConditionOrWrapper().eq(Repository::getAllPermission, "r").eq(Repository::getAllPermission, "rw"), Repository.class);
 	}
 

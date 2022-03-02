@@ -21,9 +21,9 @@
 # tag6 -> add the function of other helps;
 # tag7 -> add the function of looking phone files;
 # tag8 -> add the function of managing the phone apps;
-# tag9 -> ......
-# tag10 -> ......
-# .............
+# tag9 -> add the function of managing the phone files;
+# tag10 -> final check.......
+# FINISHED.......
 # 
 
 
@@ -39,7 +39,7 @@ the main method of the project includes: (MAIN.).
 4.main method (__main__).
 5.other modules.
 
-main_tag_5.
+main_tag_10.
 
 """
 
@@ -106,8 +106,14 @@ from tool1 import sendingfiletophonesmain
 # from other_tools 
 import tool2
 # from other_tools.
+import tool3
 from tool2 import CalcFrame000002, otherhelpsoftheauthor
 from tool2 import otherhelpsoftheauthor
+from tool3 import apps_main_managing, CalcFrame0001
+from tool3 import apps_main_managing
+# too1, tool2, tool3
+# 
+
 
 
 
@@ -817,13 +823,14 @@ class CalcFrame1(MyFrame1):
         global phone_device
         """
         ..m33..
-        the apps managing.
+        the apps managing.(success....)
         """
-
-
+        """....seems successfull...."""
+        # use the apps_main_managing to manage apps.
+        # apps_main_managing().
+        apps_main_managing()
+        # apps_main_managing().
         # need to use the connection to manage the apps....
-
-
 
         event.Skip()
         return super().m33appsmanager(event)
@@ -938,13 +945,14 @@ def adb_shell(cmd: str):  # :  # -> None:
     return None
 
 
-if __name__ == "__main__":  # .......main method.......
-    """.......
-
-    .......the main method.......
-    .......(MAIN.......).......
-    
-    ......."""
+if __name__ == "__main__":  
+    # ..................main method..................
+    """..............................................
+    .................................................
+    .................the main method.................
+    ...............(.....MAIN........)...............
+    .................................................
+    .............................................."""
 
     # start the app first.
     app = wx.App(False)

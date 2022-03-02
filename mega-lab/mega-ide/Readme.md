@@ -44,5 +44,8 @@ MegaIDE是一款基于Kubernetes的云IDE管理系统，支持对VSCode、Jupyte
 
 #### VSCode开发环境
 ![](./docs/images/0.2.0/VSCode环境.png)
+
+### 节点管理
+![](./docs/images/0.2.0/节点管理.png)
 ----
 [![Stargazers over time](https://whnb.wang/stars/mega-lab/mega-ide)](https://whnb.wang)

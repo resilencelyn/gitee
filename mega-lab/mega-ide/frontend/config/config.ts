@@ -22,6 +22,7 @@ export default defineConfig({
       component: '@/pages/IdeEnvironment',
     },
     { path: '/ide', name: '开发环境', component: '@/pages/Ide' },
+    { path: '/node', name: '节点管理', component: '@/pages/Node' },
     { component: '@/pages/404' },
   ],
   fastRefresh: {},

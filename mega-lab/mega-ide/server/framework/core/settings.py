@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     kubernetes_namespace: str = 'default'
     kube_config_file: str = ''
     argo_url: str = ''
-    prometheus_address: str = 'http://prometheus.lab.cc'
+    prometheus_address: str = '19.30.100.11:9090'
     ide_domain: str = ''
     keycloak_url: str = ''
     keycloak_client_id: str = ''

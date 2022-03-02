@@ -1,16 +1,15 @@
-FROM ubuntu
-ARG DEBIAN_FRONTEND=noninteractive
+FROM alpine:3.15
 ENV LANG=zh_CN.UTF-8 \
     TZ=Asia/Shanghai \
     PS1="\u@\h:\w \$ "
-RUN sed -i s@/archive.ubuntu.com/@/mirrors.huaweicloud.com/@g /etc/apt/sources.list \
-	&& apt update \
-	&& apt install -y --no-install-recommends \
-	   language-pack-zh-han* \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk add --update --no-cache \
        subversion \
        apache2 \
-       libapache2-mod-svn \
-       openjdk-8-jre \
+       apache2-webdav \
+       apache2-utils \
+       mod_dav_svn \
+       openjdk8-jre \
        ttf-dejavu \
        fontconfig \
        tzdata \
@@ -22,4 +21,5 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.huaweicloud.com/@g /etc/apt/sources.l
 COPY target/svnWebUI-*.jar /home/svnWebUI.jar
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN ["chmod", "+x", "/usr/local/bin/entrypoint.sh"]
-ENTRYPOINT ["tini","/usr/local/bin/entrypoint.sh"]
+VOLUME ["/home/svnWebUI"]
+ENTRYPOINT ["tini", "entrypoint.sh"]

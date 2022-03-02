@@ -4,7 +4,7 @@ from server.framework.utils.prometheus_manager import PrometheusManager
 
 p = PrometheusManager()
 query_type = p.query_type
-NodeList = ["10.11.25.48", "10.11.25.49", "10.11.25.50"]
+NodeList = ["19.30.100.11"]
 
 class PrometheusManagerTest(unittest.TestCase):
     def test_query(self):
@@ -12,11 +12,17 @@ class PrometheusManagerTest(unittest.TestCase):
         res = p.query(exp)
         print(res)
 
-    def test_查询内存(self):
+    def test_查询已占用内存(self):
         res0 = p.query_metrics(None, query_type['memory_usage'])
         res1 = p.query_metrics(NodeList, query_type['memory_usage'])
-        print('---------------总内存GB--------------\n', p.get_value(res0))
-        print('---------------各节点内存--------------\n', p.get_value(res1))
+        print('---------------总已用内存GB--------------\n', (res0))
+        print('---------------各节点已用内存--------------\n', (res1))
+
+    def test_查询总内存(self):
+        res0 = p.query_metrics(None, query_type['memory_size'])
+        res1 = p.query_metrics(NodeList, query_type['memory_size'])
+        print('---------------总内存GB--------------\n', (res0))
+        print('---------------各节点内存--------------\n', (res1))
 
     def test_查询内存使用率(self):
         res0 = p.query_metrics(None, query_type['memory_percent_usage'])
@@ -29,6 +35,13 @@ class PrometheusManagerTest(unittest.TestCase):
         res1 = p.query_metrics(NodeList, query_type['cpu_cores'])
         print('---------------CPU核心总数--------------\n', p.get_value(res0))
         print('---------------各节点CPU核心数--------------\n', p.get_value(res1))
+
+    def test_查询使用cpu核心数(self):
+        res0 = p.query_metrics(None, query_type['cpu_usage'])
+        res1 = p.query_metrics(NodeList, query_type['cpu_usage'])
+        print('---------------使用CPU核心总数--------------\n', p.get_value(res0))
+        print('---------------各节点使用CPU核心数--------------\n', p.get_value(res1))
+
 
     def test_查询cpu使用率(self):
         res0 = p.query_metrics(None, query_type['cpu_percent_usage'])

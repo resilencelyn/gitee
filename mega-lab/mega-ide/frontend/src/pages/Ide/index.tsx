@@ -1,15 +1,18 @@
-import React, {useEffect, useRef, useState} from 'react';
-import type {ActionType} from '@ant-design/pro-table';
-import {ProColumns} from '@ant-design/pro-table';
-import {handleRemove} from '@/utils/actions';
+import React, { useEffect, useRef, useState } from 'react';
+import { Tag } from 'antd';
+import {
+  SyncOutlined,
+} from '@ant-design/icons';
+import type { ActionType } from '@ant-design/pro-table';
+import { ProColumns } from '@ant-design/pro-table';
+import { handleRemove } from '@/utils/actions';
 import MegaCreateForm from '@/compoments/MegaCreateForm';
 import MegaUpdateForm from '@/compoments/MegaUpdateForm';
 import {
   listIdeEnvironmentOptions,
 } from '@/pages/IdeEnvironment/api';
-import {renderRunningStatue} from '@/utils/fieldRenders';
 import MegaTable from '@/compoments/MegaTable';
-import {IdeEntity} from '@/pages/Ide/entities';
+import { IdeEntity } from '@/pages/Ide/entities';
 import {
   addIde,
   deleteIde,
@@ -20,7 +23,7 @@ import {
   stopIde,
   updateIde,
 } from '@/pages/Ide/api';
-import {formChildren} from '@/pages/Ide/form';
+import { formChildren } from '@/pages/Ide/form';
 import { listIdeRegistryOptions } from '../IdeRegistry/api';
 
 export default function RegistryIndexPage() {
@@ -80,7 +83,33 @@ export default function RegistryIndexPage() {
       title: '状态',
       dataIndex: 'status',
       hideInSearch: true,
-      render: (_, record) => renderRunningStatue(record.status),
+      render: (_, record) => {
+        const STATUSES = [
+          {
+            color: 'default',
+            text: '未运行',
+            clickable: false,
+          },
+          {
+            icon: <SyncOutlined spin />,
+            color: 'processing',
+            text: '启动中',
+          },
+          {
+            color: 'success',
+            text: '运行中',
+          },
+          {
+            icon: <SyncOutlined spin />,
+            color: 'processing',
+            text: '停止中',
+          },
+        ]
+        const STATUS = STATUSES[record.status];
+        if (!STATUS) return null;
+        const { icon, color, text } = STATUS || STATUS[0];
+        return <Tag icon={icon} color={color}>{text}</Tag>;
+      },
     },
     {
       title: '创建时间',

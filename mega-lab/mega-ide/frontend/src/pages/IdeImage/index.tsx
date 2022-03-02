@@ -64,8 +64,7 @@ export default function RegistryIndexPage() {
       }
     ]
     const STATUS = STATUSES[record.status];
-    if (!STATUS) return null;
-    const { icon, color, text, clickable } = STATUS;
+    const { icon, color, text, clickable } = STATUS || STATUS[0];
     const tag = (
       <Tag icon={icon} color={color}>
         {text}

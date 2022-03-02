@@ -151,10 +151,13 @@ public class RepositoryController extends BaseController {
 	}
 
 	@Mapping("userPermission")
-	public ModelAndView userPermission(Page page, String repositoryId) {
+	public ModelAndView userPermission(Page page, String keywords, String repositoryId, String order) {
 		String port = settingService.get("port");
+		if (StrUtil.isEmptyIfStr(order)) {
+			order = "time";
+		}
 
-		page = repositoryService.userPermission(page, repositoryId);
+		page = repositoryService.userPermission(page, repositoryId, keywords, order);
 		Repository repository = sqlHelper.findById(repositoryId, Repository.class);
 
 		Page<RepositoryUserExt> pageExt = BeanExtUtil.copyPageByProperties(page, RepositoryUserExt.class);
@@ -174,6 +177,8 @@ public class RepositoryController extends BaseController {
 
 		modelAndView.put("repositoryId", repositoryId);
 		modelAndView.put("page", pageExt);
+		modelAndView.put("keywords", keywords);
+		modelAndView.put("order", order);
 		return modelAndView;
 	}
 
@@ -201,10 +206,13 @@ public class RepositoryController extends BaseController {
 	}
 
 	@Mapping("groupPermission")
-	public ModelAndView groupPermission(Page page, String repositoryId) {
+	public ModelAndView groupPermission(Page page, String keywords, String repositoryId, String order) {
 		String port = settingService.get("port");
-
-		page = repositoryService.groupPermission(page, repositoryId);
+		if (StrUtil.isEmptyIfStr(order)) {
+			order = "time";
+		}
+		
+		page = repositoryService.groupPermission(page, repositoryId, keywords, order);
 		Repository repository = sqlHelper.findById(repositoryId, Repository.class);
 
 		Page<RepositoryGroupExt> pageExt = BeanExtUtil.copyPageByProperties(page, RepositoryGroupExt.class);
@@ -224,6 +232,8 @@ public class RepositoryController extends BaseController {
 
 		modelAndView.put("repositoryId", repositoryId);
 		modelAndView.put("page", pageExt);
+		modelAndView.put("keywords", keywords);
+		modelAndView.put("order", order);
 		return modelAndView;
 	}
 

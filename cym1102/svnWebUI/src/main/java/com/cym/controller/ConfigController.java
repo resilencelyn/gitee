@@ -75,9 +75,9 @@ public class ConfigController extends BaseController {
 		String status = "";
 
 		if (SystemTool.inDocker()) {
-			String[] command = { "/bin/sh", "-c", "ps -ef|grep apache2" };
+			String[] command = { "/bin/sh", "-c", "ps -ef|grep httpd" };
 			String rs = RuntimeUtil.execForStr(command);
-			isRun = rs.contains("apache2 -k start");
+			isRun = rs.contains("httpd -k start");
 		} else {
 			if (SystemTool.isWindows()) {
 				String[] command = { "tasklist" };
