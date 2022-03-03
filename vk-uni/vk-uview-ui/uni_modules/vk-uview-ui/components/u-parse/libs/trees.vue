@@ -90,7 +90,7 @@
 		sub: 1,
 		sup: 1
 	}
-	
+	let global = {};
 	global.Parser = {};
 	import trees from './trees'
 	import cfg from '../libs/config.js'

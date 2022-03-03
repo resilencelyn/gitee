@@ -102,7 +102,9 @@ public class RepositoryController extends BaseController {
 		if (StrUtil.isEmpty(name)) {
 			return renderError("仓库名为空");
 		}
-
+		if (isSpecialChar(name)) {
+			return renderError("名称包含特殊字符");
+		}
 		Repository repositoryOrg = repositoryService.getByName(name, null);
 		if (repositoryOrg != null) {
 			return renderError("此仓库名已存在");
@@ -211,7 +213,7 @@ public class RepositoryController extends BaseController {
 		if (StrUtil.isEmptyIfStr(order)) {
 			order = "time";
 		}
-		
+
 		page = repositoryService.groupPermission(page, repositoryId, keywords, order);
 		Repository repository = sqlHelper.findById(repositoryId, Repository.class);
 

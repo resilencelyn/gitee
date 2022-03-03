@@ -44,6 +44,15 @@ class KubernetesManager:
             pass
 
         try:
+            logger.info(f'删除Auth中间件:[{target_name}]')
+            self.custom_object_api.delete_namespaced_custom_object(group=self.traefik_resource_group,
+                                                                   version="v1alpha1",
+                                                                   plural="middlewares", namespace=self.namespace,
+                                                                   name=target_name + '-auth-middleware')
+        except Exception:
+            pass
+
+        try:
             logger.info(f'删除IngressRoute:[{target_name}]')
             self.custom_object_api.delete_namespaced_custom_object(group=self.traefik_resource_group,
                                                                    version="v1alpha1",
@@ -85,6 +94,17 @@ class KubernetesManager:
             svc = svc_template.render(dynamic_dict)
             self.core_api.create_namespaced_service(
                 namespace=self.namespace, body=yaml.safe_load(svc))
+        except Exception:
+            pass
+
+        try:
+            auth_template = core_template.get_template('ide/auth.yml')
+            auth_middleware = auth_template.render(dynamic_dict)
+            self.custom_object_api.create_namespaced_custom_object(group=self.traefik_resource_group,
+                                                                   version="v1alpha1",
+                                                                   plural="middlewares",
+                                                                   body=yaml.safe_load(auth_middleware),
+                                                                   namespace=self.namespace)
         except Exception:
             pass
 

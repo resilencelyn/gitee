@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, Body, Request
 from keycloak import KeycloakOpenID
 from logzero import logger
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 
 from server.app.cloud_ide.model import Ide, IdeEnvironment, IdeImage, IdeRegistry
 from server.app.cloud_ide.schema.ide_schema import IdeCreateRequest, IdeUpdateRequest
@@ -27,14 +27,19 @@ async def ide_auth(request: Request,
                                          client_secret_key="secret")
         token = request.cookies['token']
         user_info = keycloak_openid.userinfo(token)
-        ide_id = request.url.hostname.split('.')[0]
+        ide_id = request.headers['x-forwarded-host'].split('.')[0]
         user_ide = db.query(Ide).filter(Ide.id == ide_id, Ide.create_user_id == user_info['sub']).one()
         if user_ide is not None:
             return JSONResponse({}, status_code=200)
         else:
-            return JSONResponse({}, status_code=401)
-    except:
-        return JSONResponse({}, status_code=401)
+            return JSONResponse({
+                'message': '该用户无访问权限'
+            }, status_code=401)
+    except Exception as e:
+        logger.error(e)
+        return JSONResponse({
+            'message': '该用户无访问权限'
+        }, status_code=401)
 
 
 @ide_api.get("/get_entity", name='获取ide实体')

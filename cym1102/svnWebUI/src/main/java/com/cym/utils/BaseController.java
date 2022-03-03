@@ -1,18 +1,14 @@
 package com.cym.utils;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.Context;
-import org.noear.solon.core.handle.ModelAndView;
 
 import com.cym.config.VersionConfig;
 import com.cym.model.TreeNode;
 import com.cym.model.User;
-import com.cym.sqlhelper.bean.Page;
 import com.cym.sqlhelper.utils.SqlHelper;
 
 /**
@@ -22,10 +18,9 @@ import com.cym.sqlhelper.utils.SqlHelper;
 public class BaseController {
 	@Inject
 	VersionConfig versionConfig;
-	
+
 	@Inject
 	protected SqlHelper sqlHelper;
-
 
 	protected JsonResult renderError() {
 		JsonResult result = new JsonResult();
@@ -64,7 +59,6 @@ public class BaseController {
 		return (User) Context.current().session("user");
 	}
 
-
 	protected String getFileName(String relativePath) {
 		if (relativePath.contains("/")) {
 			String[] names = relativePath.split("/");
@@ -72,7 +66,7 @@ public class BaseController {
 		}
 		return relativePath;
 	}
-	
+
 	// 按文件夹进行排序
 	protected void sortFile(List<TreeNode> list) {
 		list.sort(new Comparator<TreeNode>() {
@@ -91,5 +85,14 @@ public class BaseController {
 			}
 		});
 	}
+
+	// 包含特殊字符
+	protected boolean isSpecialChar(String str) {
+		if (str.contains("\\") || str.contains("/")) {
+			return true;
+		}
+		return false;
+	}
+
 
 }

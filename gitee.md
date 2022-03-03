@@ -286,3 +286,21 @@
 - [陈钇蒙/svnWebUI](https://gitee.com/cym1102/svnWebUI)
 - [MegaLab/mega-ide](https://gitee.com/mega-lab/mega-ide)
 - [丶远方/v-form-antd](https://gitee.com/yuan_fangY/v-form-antd)
+
+
+**2022-03-04**
+- [OceanBase/oblogmsg](https://gitee.com/oceanbase/oblogmsg)
+- [江月/wica](https://gitee.com/hhhmoonhhh/wica)
+- [徐小夕/H5_Dooring](https://gitee.com/lowcode-china/h5_-dooring)
+- [vk-uni/uView Vue3.0](https://gitee.com/vk-uni/vk-uview-ui)
+- [open-visual/face-search](https://gitee.com/open-visual/face-search)
+- [孙震宇/iVerilogAssistant](https://gitee.com/sunzhenyu59/i-verilog-assistant)
+- [sonic-cloud/sonic-server](https://gitee.com/sonic-cloud/sonic-server)
+- [Wheat/WheatCache](https://gitee.com/wheat-os/wheat-cache)
+- [elastic search/easy-es](https://gitee.com/easy-es/easy-es)
+- [peridyno/peridyno](https://gitee.com/peridyno/peridyno)
+- [云智慧/CW-Zabbix](https://gitee.com/CloudWise/CW-Zabbix)
+- [SurveyKing/SurveyKing](https://gitee.com/surveyking/surveyking)
+- [陈钇蒙/svnWebUI](https://gitee.com/cym1102/svnWebUI)
+- [MegaLab/mega-ide](https://gitee.com/mega-lab/mega-ide)
+- [丶远方/v-form-antd](https://gitee.com/yuan_fangY/v-form-antd)

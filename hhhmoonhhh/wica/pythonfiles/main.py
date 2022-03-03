@@ -2,13 +2,15 @@
 # --!-- encoding: utf-8 --!--
 
 
-#########################################################################
 
+#########################################################################
+#########################################################################
 #########################################################################
 ###### by (Hu Yu Xuan)Y.X.Hu. ###### at 2022. ###### this is main. ######
 #########################################################################
-
 #########################################################################
+#########################################################################
+
 
 
 # 
@@ -27,7 +29,10 @@
 # 
 
 
+
 """
+
+main.py:
 
 encoding: utf-8.
 
@@ -36,23 +41,24 @@ the main method of the project includes: (MAIN.).
 1.click callback method.
 2.the ui class.
 3.adb shell method.
-4.main method (__main__).
+4.main method (:__main__).
 5.other modules.
 
-main_tag_10.
+main_tag_10..(.FINISHED.).
 
 """
+
 
 
 # import imp
 # import pillow
 import re
-# import requests
+import requests
 import win32con
 import win32api
 # from glob import glob
 # from matplotlib.pyplot import connect
-# import matplotlib
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.image as pimg
 # import math
@@ -111,8 +117,14 @@ from tool2 import CalcFrame000002, otherhelpsoftheauthor
 from tool2 import otherhelpsoftheauthor
 from tool3 import apps_main_managing, CalcFrame0001
 from tool3 import apps_main_managing
-# too1, tool2, tool3
+# too1, tool2, tool3, tool04.
 # 
+from other_tools import tool04
+import other_tools.tool04
+from other_tools.tool04 import phonefilesmanageandlookingmaining
+import other_tools
+
+
 
 
 
@@ -125,9 +137,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
     global phone_device, shrink
 
     if event == cv2.EVENT_LBUTTONDOWN:
-        """.L.
-        ..1.. left button. -> click the dot..
-        .L."""
+        """.L...
+        ....1.... left button. -> click the dot..
+        .L..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .1.1.circle..  
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .1.2.text..  
@@ -139,9 +151,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         # this can speed up.
 
     if event == cv2.EVENT_RBUTTONDOWN:
-        """.R.
-        ..2.. right button. -> back..
-        .R."""
+        """.R...
+        ....2.... right button. -> back..
+        .R..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .2.1.circle..
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .2.2.text..
@@ -152,9 +164,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_MBUTTONDOWN:
-        """.M.
-        ..3.. middle button. -> home..
-        .M."""
+        """.M...
+        ....3.... middle button. -> home..
+        .M..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .3.1.circle..
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .3.2.text..
@@ -165,9 +177,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_MOUSEWHEEL:
-        """.MW.
-        ..4.. mouse's wheel. -> scroll..
-        .MW."""
+        """.MW...
+        ....4.... mouse's wheel. -> scroll..
+        .MW..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .4.1.circle..
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .4.2.text..
@@ -185,9 +197,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_LBUTTONDBLCLK:
-        """.DL.
-        ..5.. double click left button. -> turn left..
-        .DL."""
+        """.DL...
+        ....5.... double click left button. -> turn left..
+        .DL..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .5.1.circle..
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .5.2.text..
@@ -200,9 +212,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_MBUTTONDBLCLK:
-        """.DM.
-        ..6.. click the double middle button. -> quick settings..
-        .DM."""
+        """.DM...
+        ....6.... click the double middle button. -> quick settings..
+        .DM..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .6.1.circle..
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .6.2.text..
@@ -214,9 +226,9 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_RBUTTONDBLCLK:
-        """.DR.
-        ..7.. double click right button. -> turn right..
-        .DR."""
+        """.DR...
+        ....7.... double click right button. -> turn right..
+        .DR..."""
         cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .7.1.circle..
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
                     1.0, (0, 0, 0), thickness=1)  # .7.2.text..
@@ -275,7 +287,7 @@ class CalcFrame1(MyFrame1):
     def m01to_connectthe_cap(self, event):
         global phone_device
         """
-        ..m01..
+        ...m01.....
         to connect the computer.
         """
         # pass.
@@ -303,7 +315,7 @@ class CalcFrame1(MyFrame1):
     def m02checkatx(self, event):
         global phone_device
         """
-        ..m02..
+        ...m02.....
         to check the atx-agent.
         """
         # pass.
@@ -325,7 +337,7 @@ class CalcFrame1(MyFrame1):
 
     def m03startatx(self, event):
         """
-        ..m03..
+        ...m03.....
         start the atx-agent.
         """
         # pass.
@@ -347,7 +359,7 @@ class CalcFrame1(MyFrame1):
 
     def m04startcontrol(self, event):
         """
-        ..m04..
+        ...m04.....
         start to control.(one of the most import methods.).
         """
         # pass.
@@ -399,7 +411,7 @@ class CalcFrame1(MyFrame1):
 
     def m05endcontrol(self, event):
         """
-        ..m05..
+        ...m05.....
         end the control of the computer to the phone.
         we must click the picture first, and then press q button, however, i do not know how to do this autoly.
         """
@@ -422,240 +434,240 @@ class CalcFrame1(MyFrame1):
     def m06openscreen(self, event):
         global phone_device
         # connecting.dev_open_screen() wrong.# connecting.dev_open_screen(dev0=phone_device) right.
-        """.
-        ..m06..
+        """...
+        ...m06.....
         .open the screen.
-        ."""# ..m01..
+        ."""# .....m01...
         connecting.dev_open_screen(dev0=phone_device)  
-        # .dev_open_screen.
+        # .dev_open_screen...
         event.Skip()
         return super().m06openscreen(event)
 
     
     def m07clickback(self, event):
         global phone_device
-        """.
-        ..m07..
+        """...
+        ...m07.....
         .press the button of back.
-        ."""# ..m02..
+        ."""# .....m02...
         connecting.dev_back(dev0=phone_device)  
-        # .dev_back.
+        # .dev_back...
         event.Skip()
         return super().m07clickback(event)
 
 
     def m08shownotifications(self, event):
         global phone_device
-        """.
-        ..m08..
+        """...
+        ...m08...
         .show the notifications.
-        ."""# ..m03..
+        ."""# .....m03.....
         connecting.dev_notifications_showing(dev0=phone_device)  
-        # .dev_notifications_showing.
+        # .dev_notifications_showing...
         event.Skip()
         return super().m08shownotifications(event)
 
 
     def m09turnleft(self, event):
         global phone_device
-        """.
-        ..m09..
+        """...
+        ...m09...
         .turn left.
-        ."""# ..m04..
+        ."""# .....m04.....
         connecting.dev_turn_left(dev0=phone_device)  
-        # .dev_turn_left.
+        # .dev_turn_left...
         event.Skip()
         return super().m09turnleft(event)
 
 
     def m10turnforward(self, event):
         global phone_device
-        """.
-        ..m10..
+        """...
+        ...m10...
         .turn forward.
-        ."""# ..m05..
+        ."""# .....m05.....
         connecting.dev_turn_forward(dev0=phone_device)  
-        # .dev_turn_forward.
+        # .dev_turn_forward...
         event.Skip()
         return super().m10turnforward(event)
 
 
     def m11voiceup(self, event):
         global phone_device
-        """.
-        ..m11..
+        """...
+        ...m11...
         .turn the voice up.
-        ."""# ..m06..
+        ."""# .....m06.....
         connecting.dev_voice_up(dev0=phone_device)   
-        # .dev_voice_up.
+        # .dev_voice_up...
         event.Skip()
         return super().m11voiceup(event)
 
 
     def m12novoice(self, event):
         global phone_device
-        """.
-        ..m12..
+        """...
+        ...m12...
         .shut up the voice.
-        ."""# ..m07..
+        ."""# .....m07.....
         connecting.dev_voice_shuttingup(dev0=phone_device)   
-        # .dev_voice_shuttingup.
+        # .dev_voice_shuttingup...
         event.Skip()
         return super().m12novoice(event)
 
 
     def m13recentapps(self, event):
         global phone_device
-        """.
-        ..m13..
+        """...
+        ...m13...
         .show the rencent apps.
-        ."""# ..m08..
+        ."""# .....m08.....
         connecting.dev_recent_apps(dev0=phone_device)  
-        # .dev_recent_apps.
+        # .dev_recent_apps...
         event.Skip()
         return super().m13recentapps(event)
 
 
     def m14runprocess(self, event):
         global phone_device
-        """.
-        ..m14..
+        """...
+        ...m14...
         .show the running processes.
-        ."""# ..m09..
+        ."""# .....m09.....
         connecting.dev_running_processing(dev0=phone_device)   
-        # .dev_running_processing.
+        # .dev_running_processing...
         event.Skip()
         return super().m14runprocess(event)
 
 
     def m15stopallapps(self, event):
         global phone_device
-        """.
-        ..m15..
+        """...
+        ...m15...
         .stop all the apps.
-        ."""# ..m10..
+        ."""# .....m10.....
         connecting.dev_stop_all_apps(dev0=phone_device)  
-        # .dev_stop_all_apps.
+        # .dev_stop_all_apps...
         event.Skip()
         return super().m15stopallapps(event)
 
 
     def m16closescreen(self, event):
         global phone_device
-        """.
-        ..m16..
+        """...
+        ...m16...
         .close the screen.
-        ."""# ..m11..
+        ."""# .....m11.....
         connecting.dev_close_screen(dev0=phone_device)  
-        # .dev_close_screen.
+        # .dev_close_screen...
         event.Skip()
         return super().m16closescreen(event)
 
 
     def m17clickhome(self, event):
         global phone_device
-        """.
-        ..m17..
+        """...
+        ...m17...
         .click the button of the phone home.
-        ."""# ..m12..
+        ."""# .....m12.....
         connecting.dev_home(dev0=phone_device)  
-        # .dev_home.
+        # .dev_home...
         event.Skip()
         return super().m17clickhome(event)
 
 
     def m18quicksettings(self, event):
         global phone_device
-        """.
-        ..m18..
+        """...
+        ...m18...
         .show the quick settings.
-        ."""# ..m13..
+        ."""# .....m13.....
         connecting.dev_quick_settings(dev0=phone_device)  
-        # .dev_quick_settings.
+        # .dev_quick_settings...
         event.Skip()
         return super().m18quicksettings(event)
 
 
     def m19turnright(self, event):
         global phone_device
-        """.
-        ..m19..
+        """...
+        ...m19...
         .turn right.
-        ."""# ..m14..
+        ."""# .....m14.....
         connecting.dev_turn_right(dev0=phone_device)  
-        # .dev_turn_right.
+        # .dev_turn_right...
         event.Skip()
         return super().m19turnright(event)
 
 
     def m20turnback(self, event):
         global phone_device
-        """.
-        ..m20..
+        """...
+        ...m20...
         .turn back.
-        ."""# ..m15..
+        ."""# .....m15.....
         connecting.dev_turn_back(dev0=phone_device) 
-        # .dev_turn_back.
+        # .dev_turn_back...
         event.Skip()
         return super().m20turnback(event)
 
 
     def m21voicedown(self, event):
         global phone_device
-        """.
-        ..m21..
+        """...
+        ...m21...
         .turn the voice of the phone down.
-        ."""# ..m16..
+        ."""# .....m16.....
         connecting.dev_voice_down(dev0=phone_device)  
-        # .dev_voice_down.
+        # .dev_voice_down...
         event.Skip()
         return super().m21voicedown(event)
 
 
     def m22clickpower(self, event):
         global phone_device
-        """.
-        ..m22..
+        """...
+        ...m22...
         .click the button of the power.
-        ."""# ..m17..
+        ."""# .....m17.....
         connecting.dev_press_power(dev0=phone_device)  
-        # .dev_press_power.
+        # .dev_press_power...
         event.Skip()
         return super().m22clickpower(event)
 
 
     def m23healthprocessing(self, event):
         global phone_device
-        """.
-        ..m23..
+        """...
+        ...m23...
         .look the healthy processing.
-        ."""# ..m18..
+        ."""# .....m18.....
         connecting.dev_check_processing(dev0=phone_device)  
-        # .dev_check_processing.
+        # .dev_check_processing...
         event.Skip()
         return super().m23healthprocessing(event)
     
 
     def m24settingsmsg(self, event):
         global phone_device
-        """.
-        ..m24..
+        """...
+        ...m24...
         .look the settings massage.
-        ."""# ..m19..
+        ."""# .....m19.....
         connecting.dev_show_the_phone_settings(dev0=phone_device)  
-        # .dev_show_the_phone_settings.
+        # .dev_show_the_phone_settings...
         event.Skip()
         return super().m24settingsmsg(event)
 
     
     def m25phonemsg(self, event):
         global phone_device
-        """.
-        ..m25..
+        """...
+        ...m25...
         .show the phone details.
-        ."""# ..m20..
+        ."""# .....m20.....
         connecting.dev_show_phone_detail_mesages(dev0=phone_device)  
-        # .dev_show_phone_detail_mesages.
+        # .dev_show_phone_detail_mesages...
         event.Skip()
         return super().m25phonemsg(event)
 
@@ -663,7 +675,7 @@ class CalcFrame1(MyFrame1):
     def m26sending_texts(self, event):
         global phone_device
         """
-        ..m26..
+        ...m26...
         send the messages you want to send to the text dialogs.
         """
         text_of_send = self.m_textCtrl2.GetValue()  # get the content of the text.
@@ -704,14 +716,22 @@ class CalcFrame1(MyFrame1):
     def m27phonefileslooking(self, event):
         global phone_device
         """
-        ..m27..
+        ...m27...
         tool -> show the phone files.
+        use html file to see the files in the phone just like a file manager...
+        .hta file to show the phone files.
         """
 
-
         # maybe use the dir to show...
+        if self.m_toggleBtn2.GetValue() == True:  # True.(true)
+            phonefilesmanageandlookingmaining()
+            self.m_toggleBtn2.SetValue(False)
+            pass
 
-
+        else:  # False.(false)
+            wx.MessageBox("Please click the the button again.", "Message" ,wx.OK | wx.ICON_INFORMATION)  # need to click again.
+            self.m_toggleBtn2.SetValue(True)            
+            pass
 
         event.Skip()
         return super().m27phonefileslooking(event)
@@ -720,20 +740,25 @@ class CalcFrame1(MyFrame1):
     def m28usephoneyolov5(self, event):
         global phone_device
         """
-        ..m28..
-        tool -> yolov5.(use the yolov5 to identify the things)
+        ...m28...
+        tool -> (yolo -> you look only once.)yolov5.(use the yolov5 to identify the things)
         the tool of the yolov5 detcet.py -> yolo!!
         """
         get_ip = self.m_textCtrl1.GetValue()
         # the ip of the phone.
 
-        if self.m_toggleBtn2.GetValue() == True:  # true.
+        if self.m_toggleBtn1.GetValue() == True:  # true.
             # click -> true(click again -> false).
             yloo5(phone_ip=self.m_textCtrl1.GetValue())  # use the yloo5(). method.
             # run the code.
+            self.m_toggleBtn1.SetValue(False)
+            # 1.cls(yolov5)
             pass
+
         else:  # false.
             wx.MessageBox("Please click the the button again.", "Message" ,wx.OK | wx.ICON_INFORMATION)  # need to click again.
+            self.m_toggleBtn1.SetValue(True) 
+            # 1.
             pass  
         pass
 
@@ -744,7 +769,7 @@ class CalcFrame1(MyFrame1):
     def m29appintroductions(self, event):
         global phone_device
         """
-        ..m29..
+        ...m29...
         app introductions.
         """
 
@@ -761,7 +786,7 @@ class CalcFrame1(MyFrame1):
     def m30usingintroductions(self, event):
         global phone_device
         """
-        ..m30..
+        ...m30...
         how to use.
         """
 
@@ -784,7 +809,7 @@ class CalcFrame1(MyFrame1):
     def m31helpings(self, event):
         global phone_device
         """
-        ..m31..
+        ...m31...
         helps(other helps).
         """
 
@@ -792,7 +817,7 @@ class CalcFrame1(MyFrame1):
         # there is no problems here, although there is an app instead of the main app.......
         # otherhelpsoftheauthor()
         otherhelpsoftheauthor()
-        # tool2(tool2.)...
+        # tool2.(.tool2.)...
         # otherhelpsoftheauthor()
         # 
 
@@ -803,7 +828,7 @@ class CalcFrame1(MyFrame1):
     def m32sendingfiles(self, event):
         global phone_device
         """
-        ..m32..
+        ...m32...
         sending files.
         """
 
@@ -822,7 +847,7 @@ class CalcFrame1(MyFrame1):
     def m33appsmanager(self, event):
         global phone_device
         """
-        ..m33..
+        ...m33...
         the apps managing.(success....)
         """
         """....seems successfull...."""
@@ -839,7 +864,7 @@ class CalcFrame1(MyFrame1):
     def m34processinglooking(self, event):
         global phone_device
         """
-        ..m34..
+        ...m34...
         look the running processes of the phone.
         """
         # this is a method, needs ().
@@ -877,7 +902,7 @@ class CalcFrame1(MyFrame1):
     def m35musicvideo(self, event):
         global phone_device
         """
-        ..m35..
+        ...m35...
         listen to the music.
         """
         print("Start to play the music.......")
@@ -893,7 +918,7 @@ class CalcFrame1(MyFrame1):
     def m36authormessage(self, event):
         global phone_device
         """
-        ..m36..
+        ...m36...
         show the author's message to the users.
         """
         # pass.
@@ -908,7 +933,7 @@ class CalcFrame1(MyFrame1):
     def m37moneytheproject(self, event):
         global phone_device
         """
-        # ..m37..
+        # ...m37...
         money the project.
         """
 
@@ -940,19 +965,19 @@ def adb_shell(cmd: str):  # :  # -> None:
     run the adb shell.
     return None..
     """
-    # adb shell(sh).
+    # adb shell.(sh).
     sh = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     return None
 
 
 if __name__ == "__main__":  
-    # ..................main method..................
-    """..............................................
-    .................................................
-    .................the main method.................
-    ...............(.....MAIN........)...............
-    .................................................
-    .............................................."""
+    # .......................main method.......................
+    """........................................................
+    ...........................................................
+    ......................the masin method.....................
+    ...................(......MAIN.........)...................
+    ...........................................................
+    ........................................................"""
 
     # start the app first.
     app = wx.App(False)

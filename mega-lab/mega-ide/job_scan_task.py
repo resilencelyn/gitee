@@ -15,10 +15,12 @@ def ide_status_scanner():
     for ide in ides:
         try:
             status = requests.get(f'http://{ide.id}.{settings.ide_domain}', timeout=2000)
-            if ide.status == 1 and status.status_code == 200:
+            if ide.status == 1 and (
+                    status.status_code == 200 or status.status_code == 500 or status.status_code == 401):
                 ide.status = 2
                 db.commit()
-            if ide.status == 3 and status.status_code != 200:
+            if ide.status == 3 and (
+                    status.status_code != 200 or status.status_code != 500 or status.status_code != 401):
                 ide.status = 0
                 db.commit()
         except Exception:

@@ -72,6 +72,9 @@ class PrometheusManager:
         :return:
         """
         values = []
-        for i in datas:
-            values.append(i['data']['result'][0]['value'][1])
+        try:
+            for i in datas:
+                values.append(i['data']['result'][0]['value'][1])
+        except:
+            pass
         return values

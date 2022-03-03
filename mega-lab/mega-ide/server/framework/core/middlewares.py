@@ -9,6 +9,8 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 import logging
 from keycloak import KeycloakOpenID
 from fastapi import FastAPI, Request, Response
+
+from server.framework.core.logger import logger
 from server.framework.core.settings import settings
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -47,10 +49,11 @@ class AuthorizerMiddleware(Authenticator):
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         conn = HTTPConnection(scope)
         if settings.env == 'PROD':
-            if '/api' in scope["path"]:
+            if '/api' in scope["path"] and scope["path"] != '/api/cloud_ide/ide/ide_auth':
                 try:
                     auth_result = self.authenticate(conn)
                 except AuthenticationError as e:
+                    logger.error(e)
                     response = self.on_error(conn, e)
                     await response(scope, receive, send)
                     return
@@ -59,6 +62,7 @@ class AuthorizerMiddleware(Authenticator):
                     await self.app(scope, receive, send)
                     return
                 else:
+                    logger.info(f'用户认证失败,请求路径[{scope["path"]}]')
                     response = self.on_error(conn, None)
                     await response(scope, receive, send)
                     return

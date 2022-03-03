@@ -47,6 +47,7 @@ public class PathUtls {
 
 		List<TreeNode> list = new ArrayList<TreeNode>();
 		try {
+			url = transLocalhost(url);
 			SVNRepository svnRepository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(url));
 			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userName, userPass.toCharArray());
 			svnRepository.setAuthenticationManager(authManager);
@@ -67,6 +68,12 @@ public class PathUtls {
 		return list;
 	}
 
+	private String transLocalhost(String url) {
+		String host = url.split("/")[2].split(":")[0];
+		return url.replace(host, "localhost");
+
+	}
+
 	public String getRelativePath(String url) {
 		List<String> relativePaths = new ArrayList<String>();
 		String[] urls = url.split("/");
@@ -75,11 +82,6 @@ public class PathUtls {
 		}
 
 		return "/" + StrUtil.join("/", relativePaths);
-	}
-
-	public String baseUrl() {
-		String protocol = SystemTool.inDocker() ? "http" : "svn";
-		return protocol + "://localhost:" + settingService.get("port") + "/";
 	}
 
 	public String buildUrl(String port) {

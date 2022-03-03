@@ -32,18 +32,21 @@ export async function getInitialState() {
 }
 
 export function rootContainer(container: any) {
+  let domain = '';
+  if (base_domain) {
+    domain = `domain=${base_domain};`
+  }
   return React.createElement(ReactKeycloakProvider, {
-    authClient: keycloak, autoRefreshToken: true,
+    authClient: keycloak,
+    autoRefreshToken: true,
     initOptions: { onLoad: 'login-required', checkLoginIframe: false, enableLogging: true },
     onEvent: (event, error) => {
-      let domain = '';
-      if (base_domain) {
-        domain = `domain=${base_domain};`
-      }
       if (event === 'onAuthSuccess') {
         document.cookie = `token=${keycloak.token};${domain}`
       } else if (event === 'onAuthLogout') {
         document.cookie = `token=null;${domain}`
+      } else if (event === 'onTokenExpired') {
+        keycloak.logout();
       }
     }
   }, container);
