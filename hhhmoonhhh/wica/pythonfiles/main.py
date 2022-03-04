@@ -1,53 +1,42 @@
 # --*-- encoding: utf-8 --*--
-# --!-- encoding: utf-8 --!--
-
-
-
-#########################################################################
-#########################################################################
-#########################################################################
-###### by (Hu Yu Xuan)Y.X.Hu. ###### at 2022. ###### this is main. ######
-#########################################################################
-#########################################################################
-#########################################################################
-
-
-
-# 
-# tags:
-# tag1 -> all the basic functions;
-# tag2 -> add the function of yolov5;
-# tag3 -> add the function of music player;
-# tag4 -> add the function of processing;
-# tag5 -> add the function of sending files;
-# tag6 -> add the function of other helps;
-# tag7 -> add the function of looking phone files;
-# tag8 -> add the function of managing the phone apps;
-# tag9 -> add the function of managing the phone files;
-# tag10 -> final check.......
-# FINISHED.......
 # 
 
+#########################################################################
 
+#########################################################################
+##### The project is made by Hu Yuxuan, Liu Junwei and Liao Dexuan. #####
+#########################################################################
+
+#########################################################################
+
+# 
+# the project tags:
+# tag01 -> all the basic functions;
+# tag02 -> add the function of yolov5;
+# tag03 -> add the function of music player;
+# tag04 -> add the function of processing;
+# tag05 -> add the function of sending files;
+# tag06 -> add the function of other helps;
+# tag07 -> add the function of looking phone files;
+# tag08 -> add the function of managing the phone apps;
+# tag09 -> add the function of managing the phone files;
+# tag10 -> final check.
+# FINISHED.
+# 
 
 """
-
 main.py:
-
 encoding: utf-8.
 
-the main method of the project includes: (MAIN.).
-
+the main method of the project includes: (MAIN).
 1.click callback method.
 2.the ui class.
 3.adb shell method.
-4.main method (:__main__).
+4.main method (__main__).
 5.other modules.
 
-main_tag_10..(.FINISHED.).
-
+main_tag_10(FINISHED).
 """
-
 
 
 # import imp
@@ -61,7 +50,7 @@ import win32api
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.image as pimg
-# import math
+import math
 import qt5_tools, qt5_applications
 import wx  # wxpython.
 import cv2  # opencv.
@@ -111,39 +100,35 @@ from tool1 import sendingfiletophonesmain
 # from other_tools import ui01
 # from other_tools 
 import tool2
-# from other_tools.
+# from other_tools
 import tool3
 from tool2 import CalcFrame000002, otherhelpsoftheauthor
 from tool2 import otherhelpsoftheauthor
 from tool3 import apps_main_managing, CalcFrame0001
 from tool3 import apps_main_managing
-# too1, tool2, tool3, tool04.
-# 
+# too1, tool2, tool3, tool04
 from other_tools import tool04
 import other_tools.tool04
 from other_tools.tool04 import phonefilesmanageandlookingmaining
 import other_tools
 
 
-
-
-
-
 def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
     """
     the onclick method(buttoncallback). 
     """
-    xy = "(%d,%d)" % (x, y)   # get the position.
+    xy = "(%d,%d)" % (x, y)   
+    # get the position.
     global phone_device, shrink
 
     if event == cv2.EVENT_LBUTTONDOWN:
-        """.L...
-        ....1.... left button. -> click the dot..
-        .L..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .1.1.circle..  
+        """.L..
+        .1.. left button. -> click the dot..
+        .L."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .1.1.circle.  
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .1.2.text..  
-        cv2.imshow("image", shrink)  # .1.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .1.2.text.  
+        cv2.imshow("image", shrink)  # .1.3.show.
         print(x,y)
 
         phone_device.click(x / 0.4, y / 0.4)
@@ -151,39 +136,39 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         # this can speed up.
 
     if event == cv2.EVENT_RBUTTONDOWN:
-        """.R...
-        ....2.... right button. -> back..
-        .R..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .2.1.circle..
+        """.R..
+        .2.. right button. -> click the dot..
+        .R."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .2.1.circle.
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .2.2.text..
-        cv2.imshow("image", shrink)  # .2.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .2.2.text.
+        cv2.imshow("image", shrink)  # .2.3.show.
         print(x,y)   
 
         phone_device.press("back")
         return None
 
     if event == cv2.EVENT_MBUTTONDOWN:
-        """.M...
-        ....3.... middle button. -> home..
-        .M..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .3.1.circle..
+        """.M..
+        .3.. middle button. -> home..
+        .M."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .3.1.circle.
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .3.2.text..
-        cv2.imshow("image", shrink)  # .3.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .3.2.text.
+        cv2.imshow("image", shrink)  # .3.3.show.
         print(x,y)   
 
         phone_device.press("home")
         return None
 
     if event == cv2.EVENT_MOUSEWHEEL:
-        """.MW...
-        ....4.... mouse's wheel. -> scroll..
-        .MW..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .4.1.circle..
+        """.MW..
+        .4.. mouse's wheel. -> scroll..
+        .MW."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .4.1.circle.
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .4.2.text..
-        cv2.imshow("image", shrink)  # .4.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .4.2.text.
+        cv2.imshow("image", shrink)  # .4.3.show.
         print(x,y) 
 
         if flags > 0:  # flags -> scrolling 
@@ -197,13 +182,13 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_LBUTTONDBLCLK:
-        """.DL...
-        ....5.... double click left button. -> turn left..
-        .DL..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .5.1.circle..
+        """.DL..
+        .5.. double click left button. -> turn left..
+        .DL."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .5.1.circle.
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .5.2.text..
-        cv2.imshow("image", shrink)  # .5.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .5.2.text.
+        cv2.imshow("image", shrink)  # .5.3.show.
         print(x,y)
         print('double click left button.')
 
@@ -212,13 +197,13 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_MBUTTONDBLCLK:
-        """.DM...
-        ....6.... click the double middle button. -> quick settings..
-        .DM..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .6.1.circle..
+        """.DM..
+        .6.. click the double middle button. -> quick settings..
+        .DM."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .6.1.circle.
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .6.2.text..
-        cv2.imshow("image", shrink)  # .6.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .6.2.text.
+        cv2.imshow("image", shrink)  # .6.3.show.
         print(x,y)
         print('double click middle button.')
 
@@ -226,13 +211,13 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
         return None
 
     if event == cv2.EVENT_RBUTTONDBLCLK:
-        """.DR...
-        ....7.... double click right button. -> turn right..
-        .DR..."""
-        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .7.1.circle..
+        """.DR..
+        .7.. double click right button. -> turn right..
+        .DR."""
+        cv2.circle(shrink, (x, y), 12, (0, 0, 255), thickness=-1)  # .7.1.circle.
         cv2.putText(shrink, xy, (x, y), cv2.FONT_HERSHEY_PLAIN,
-                    1.0, (0, 0, 0), thickness=1)  # .7.2.text..
-        cv2.imshow("image", shrink)  # .7.3.show..
+                    1.0, (0, 0, 0), thickness=1)  # .7.2.text.
+        cv2.imshow("image", shrink)  # .7.3.show.
         print(x,y)
         print('double click right button.')
 
@@ -242,16 +227,13 @@ def on_EVENT_LBUTTONDOWN(event, x, y, flags, param):
 
 class CalcFrame1(MyFrame1):
     """
-    ui class. -> main ui..
+    ui class. -> main ui.
     """
-
     # global
     global phone_device, shrink
-    global phone_device_uid, phone_device_ip_eare  
-    # global variables.
+    global phone_device_uid, phone_device_ip_eare  # global variables.
 
-
-    # init...
+    # init.
     def __init__(self, parent):
         """
         init method. -> son class.
@@ -267,9 +249,8 @@ class CalcFrame1(MyFrame1):
         self.pd_number_first_define0 = 0  # intial is 0.  # define a variable to make the stopping below simple.
         
         self.icon1=wx.Icon(name=f"{BASE_DIR}\\pictures\\favicon.ico",type=wx.BITMAP_TYPE_ICO)
-        # set the icon...
+        # set the icon.
         self.SetIcon(self.icon1)
-
     # Virtual event handlers, overide them in your derived class.
 
 
@@ -287,10 +268,9 @@ class CalcFrame1(MyFrame1):
     def m01to_connectthe_cap(self, event):
         global phone_device
         """
-        ...m01.....
-        to connect the computer.
-        """
-        # pass.
+        .m01..
+        to connect the computer..
+        """# pass.
         phoneIP = self.m_textCtrl1.GetValue()
         phoneport = self.m_textCtrl2.GetValue()
 
@@ -306,19 +286,18 @@ class CalcFrame1(MyFrame1):
             wx.MessageBox(f"The correction state is true.", "Message" ,wx.OK | wx.ICON_INFORMATION)  # just check the connection.
         else:  # the network is terriable.
             wx.MessageBox(f"The correction state is false, please check the network state.", "Message" ,wx.OK | wx.ICON_INFORMATION)  
-        # check the network.    
-        #     
+        # check the network.      
         event.Skip()
-        return super().m01to_connectthe_cap(event)  # super -> the father class.
+        return super().m01to_connectthe_cap(event)  
+        # super -> the father class.
 
 
     def m02checkatx(self, event):
         global phone_device
         """
-        ...m02.....
-        to check the atx-agent.
-        """
-        # pass.
+        .m02..
+        to check the atx-agent..
+        """# pass.
         try:  # just start the atx again.  # check the atx-agent.
             u2_cmd00 = f"cd&&cd tools&&cd adbtool&&cd platform-tools_r32.0.0-windows&&cd platform-tools&&adb shell /data/local/tmp/atx-agent server -d&&exit"  # '/data/local/tmp/atx-agent server -d'"  # &&/data/local/tmp/atx-agent server -d"
             os.system(u2_cmd00)  # run the cmd commands.
@@ -337,15 +316,14 @@ class CalcFrame1(MyFrame1):
 
     def m03startatx(self, event):
         """
-        ...m03.....
-        start the atx-agent.
-        """
-        # pass.
+        .m03..
+        start the atx-agent..
+        """# pass.
         try:  # just connect again and start the atx-agent again.  # almost the same as the code above.
             u2_cmd00 = f"cd&&cd tools&&cd adbtool&&cd platform-tools_r32.0.0-windows&&cd platform-tools&&adb shell /data/local/tmp/atx-agent server -d&&exit"  # '/data/local/tmp/atx-agent server -d'"  # &&/data/local/tmp/atx-agent server -d"
             os.system(u2_cmd00)
         except Exception as e:
-            wx.MessageBox(f"Starting error...", "Message" ,wx.OK | wx.ICON_INFORMATION) 
+            wx.MessageBox(f"Starting error.", "Message" ,wx.OK | wx.ICON_INFORMATION) 
             print("error at m03startatx.")
             pass
         else:
@@ -359,10 +337,9 @@ class CalcFrame1(MyFrame1):
 
     def m04startcontrol(self, event):
         """
-        ...m04.....
-        start to control.(one of the most import methods.).
-        """
-        # pass.
+        .m04..
+        start to control.(one of the most import methods.)..
+        """# pass.
         global phone_device, shrink
 
         IP_of_phone = self.m_textCtrl1.GetValue()
@@ -411,18 +388,13 @@ class CalcFrame1(MyFrame1):
 
     def m05endcontrol(self, event):
         """
-        ...m05.....
-        end the control of the computer to the phone.
+        .m05..
+        end the control of the computer to the phone..
         we must click the picture first, and then press q button, however, i do not know how to do this autoly.
-        """
-        # pass.
-
+        """# pass.
         # this seems no use...
-        win32api.keybd_event(81,0,0,0)  
-        # q keydown.
-        win32api.keybd_event(81,0,0,0)  
-        # q keyup.
-
+        win32api.keybd_event(81,0,0,0)  # q keydown.
+        win32api.keybd_event(81,0,0,0)  # q keyup.
         # click (or press) the q keyboard.
         self.pd_number_first_define0 = 1  # set the number to 1.
         # to start the control or not.
@@ -434,240 +406,240 @@ class CalcFrame1(MyFrame1):
     def m06openscreen(self, event):
         global phone_device
         # connecting.dev_open_screen() wrong.# connecting.dev_open_screen(dev0=phone_device) right.
-        """...
-        ...m06.....
-        .open the screen.
-        ."""# .....m01...
+        """.
+        .m06..
+        .open the screen..
+        ."""# .m01.
         connecting.dev_open_screen(dev0=phone_device)  
-        # .dev_open_screen...
+        # .dev_open_screen..
         event.Skip()
         return super().m06openscreen(event)
 
     
     def m07clickback(self, event):
         global phone_device
-        """...
-        ...m07.....
-        .press the button of back.
-        ."""# .....m02...
+        """.
+        .m07..
+        .press the button of back..
+        ."""# .m02.
         connecting.dev_back(dev0=phone_device)  
-        # .dev_back...
+        # .dev_back..
         event.Skip()
         return super().m07clickback(event)
 
 
     def m08shownotifications(self, event):
         global phone_device
-        """...
-        ...m08...
-        .show the notifications.
-        ."""# .....m03.....
+        """.
+        .m08..
+        .show the notifications..
+        ."""# .m03.
         connecting.dev_notifications_showing(dev0=phone_device)  
-        # .dev_notifications_showing...
+        # .dev_notifications_showing..
         event.Skip()
         return super().m08shownotifications(event)
 
 
     def m09turnleft(self, event):
         global phone_device
-        """...
-        ...m09...
-        .turn left.
-        ."""# .....m04.....
+        """.
+        .m09..
+        .turn left..
+        ."""# .m04.
         connecting.dev_turn_left(dev0=phone_device)  
-        # .dev_turn_left...
+        # .dev_turn_left..
         event.Skip()
         return super().m09turnleft(event)
 
 
     def m10turnforward(self, event):
         global phone_device
-        """...
-        ...m10...
-        .turn forward.
-        ."""# .....m05.....
+        """.
+        .m10..
+        .turn forward..
+        ."""# .m05.
         connecting.dev_turn_forward(dev0=phone_device)  
-        # .dev_turn_forward...
+        # .dev_turn_forward..
         event.Skip()
         return super().m10turnforward(event)
 
 
     def m11voiceup(self, event):
         global phone_device
-        """...
-        ...m11...
-        .turn the voice up.
-        ."""# .....m06.....
+        """.
+        .m11..
+        .turn the voice up..
+        ."""# .m06.
         connecting.dev_voice_up(dev0=phone_device)   
-        # .dev_voice_up...
+        # .dev_voice_up..
         event.Skip()
         return super().m11voiceup(event)
 
 
     def m12novoice(self, event):
         global phone_device
-        """...
-        ...m12...
-        .shut up the voice.
-        ."""# .....m07.....
+        """.
+        .m12..
+        .shut up the voice..
+        ."""# .m07.
         connecting.dev_voice_shuttingup(dev0=phone_device)   
-        # .dev_voice_shuttingup...
+        # .dev_voice_shuttingup..
         event.Skip()
         return super().m12novoice(event)
 
 
     def m13recentapps(self, event):
         global phone_device
-        """...
-        ...m13...
-        .show the rencent apps.
-        ."""# .....m08.....
+        """.
+        .m13..
+        .show the rencent apps..
+        ."""# .m08.
         connecting.dev_recent_apps(dev0=phone_device)  
-        # .dev_recent_apps...
+        # .dev_recent_apps..
         event.Skip()
         return super().m13recentapps(event)
 
 
     def m14runprocess(self, event):
         global phone_device
-        """...
-        ...m14...
-        .show the running processes.
-        ."""# .....m09.....
+        """.
+        .m14..
+        .show the running processes..
+        ."""# .m09.
         connecting.dev_running_processing(dev0=phone_device)   
-        # .dev_running_processing...
+        # .dev_running_processing..
         event.Skip()
         return super().m14runprocess(event)
 
 
     def m15stopallapps(self, event):
         global phone_device
-        """...
-        ...m15...
-        .stop all the apps.
-        ."""# .....m10.....
+        """.
+        .m15..
+        .stop all the apps..
+        ."""# .m10.
         connecting.dev_stop_all_apps(dev0=phone_device)  
-        # .dev_stop_all_apps...
+        # .dev_stop_all_apps..
         event.Skip()
         return super().m15stopallapps(event)
 
 
     def m16closescreen(self, event):
         global phone_device
-        """...
-        ...m16...
-        .close the screen.
-        ."""# .....m11.....
+        """.
+        .m16..
+        .close the screen..
+        ."""# .m11.
         connecting.dev_close_screen(dev0=phone_device)  
-        # .dev_close_screen...
+        # .dev_close_screen..
         event.Skip()
         return super().m16closescreen(event)
 
 
     def m17clickhome(self, event):
         global phone_device
-        """...
-        ...m17...
-        .click the button of the phone home.
-        ."""# .....m12.....
+        """.
+        .m17..
+        .click the button of the phone home..
+        ."""# .m12.
         connecting.dev_home(dev0=phone_device)  
-        # .dev_home...
+        # .dev_home..
         event.Skip()
         return super().m17clickhome(event)
 
 
     def m18quicksettings(self, event):
         global phone_device
-        """...
-        ...m18...
-        .show the quick settings.
-        ."""# .....m13.....
+        """.
+        .m18..
+        .show the quick settings..
+        ."""# .m13.
         connecting.dev_quick_settings(dev0=phone_device)  
-        # .dev_quick_settings...
+        # .dev_quick_settings..
         event.Skip()
         return super().m18quicksettings(event)
 
 
     def m19turnright(self, event):
         global phone_device
-        """...
-        ...m19...
-        .turn right.
-        ."""# .....m14.....
+        """.
+        .m19..
+        .turn right..
+        ."""# .m14.
         connecting.dev_turn_right(dev0=phone_device)  
-        # .dev_turn_right...
+        # .dev_turn_right..
         event.Skip()
         return super().m19turnright(event)
 
 
     def m20turnback(self, event):
         global phone_device
-        """...
-        ...m20...
-        .turn back.
-        ."""# .....m15.....
+        """.
+        .m20..
+        .turn back..
+        ."""# .m15.
         connecting.dev_turn_back(dev0=phone_device) 
-        # .dev_turn_back...
+        # .dev_turn_back..
         event.Skip()
         return super().m20turnback(event)
 
 
     def m21voicedown(self, event):
         global phone_device
-        """...
-        ...m21...
-        .turn the voice of the phone down.
-        ."""# .....m16.....
+        """.
+        .m21..
+        .turn the voice of the phone down..
+        ."""# .m16.
         connecting.dev_voice_down(dev0=phone_device)  
-        # .dev_voice_down...
+        # .dev_voice_down..
         event.Skip()
         return super().m21voicedown(event)
 
 
     def m22clickpower(self, event):
         global phone_device
-        """...
-        ...m22...
-        .click the button of the power.
-        ."""# .....m17.....
+        """.
+        .m22..
+        .click the button of the power..
+        ."""# .m17.
         connecting.dev_press_power(dev0=phone_device)  
-        # .dev_press_power...
+        # .dev_press_power..
         event.Skip()
         return super().m22clickpower(event)
 
 
     def m23healthprocessing(self, event):
         global phone_device
-        """...
-        ...m23...
-        .look the healthy processing.
-        ."""# .....m18.....
+        """.
+        .m23..
+        .look the healthy processing..
+        ."""# .m18.
         connecting.dev_check_processing(dev0=phone_device)  
-        # .dev_check_processing...
+        # .dev_check_processing..
         event.Skip()
         return super().m23healthprocessing(event)
     
 
     def m24settingsmsg(self, event):
         global phone_device
-        """...
-        ...m24...
-        .look the settings massage.
-        ."""# .....m19.....
+        """.
+        .m24..
+        .look the settings massage..
+        ."""# .m19.
         connecting.dev_show_the_phone_settings(dev0=phone_device)  
-        # .dev_show_the_phone_settings...
+        # .dev_show_the_phone_settings..
         event.Skip()
         return super().m24settingsmsg(event)
 
     
     def m25phonemsg(self, event):
         global phone_device
-        """...
-        ...m25...
-        .show the phone details.
-        ."""# .....m20.....
+        """.
+        .m25..
+        .show the phone details..
+        ."""# .m20.
         connecting.dev_show_phone_detail_mesages(dev0=phone_device)  
-        # .dev_show_phone_detail_mesages...
+        # .dev_show_phone_detail_mesages..
         event.Skip()
         return super().m25phonemsg(event)
 
@@ -675,8 +647,8 @@ class CalcFrame1(MyFrame1):
     def m26sending_texts(self, event):
         global phone_device
         """
-        ...m26...
-        send the messages you want to send to the text dialogs.
+        .m26..
+        send the messages you want to send to the text dialogs..
         """
         text_of_send = self.m_textCtrl2.GetValue()  # get the content of the text.
         # phone_device.set_fastinput_ime(True).
@@ -703,10 +675,8 @@ class CalcFrame1(MyFrame1):
                 pass
             pass
 
-        finally:  
-            # finnally.
-            # phone_device.set_fastinput_ime(False).  
-            # # no need to do so.
+        finally:  # finnally.
+            # phone_device.set_fastinput_ime(False).# # no need to do so.
             pass
 
         event.Skip()
@@ -716,13 +686,13 @@ class CalcFrame1(MyFrame1):
     def m27phonefileslooking(self, event):
         global phone_device
         """
-        ...m27...
-        tool -> show the phone files.
-        use html file to see the files in the phone just like a file manager...
+        .m27..
+        tool -> show the phone files..
+        use html file to see the files in the phone just like a file manager.
         .hta file to show the phone files.
         """
 
-        # maybe use the dir to show...
+        # maybe use the dir to show.
         if self.m_toggleBtn2.GetValue() == True:  # True.(true)
             phonefilesmanageandlookingmaining()
             self.m_toggleBtn2.SetValue(False)
@@ -740,8 +710,8 @@ class CalcFrame1(MyFrame1):
     def m28usephoneyolov5(self, event):
         global phone_device
         """
-        ...m28...
-        tool -> (yolo -> you look only once.)yolov5.(use the yolov5 to identify the things)
+        .m28..
+        tool -> (yolo -> you look only once.)yolov5.(use the yolov5 to identify the things)..
         the tool of the yolov5 detcet.py -> yolo!!
         """
         get_ip = self.m_textCtrl1.GetValue()
@@ -769,11 +739,11 @@ class CalcFrame1(MyFrame1):
     def m29appintroductions(self, event):
         global phone_device
         """
-        ...m29...
-        app introductions.
+        .m29..
+        app introductions..
         """
 
-        # app introductions -> introduce the app..
+        # app introductions -> introduce the app.
 
         introductions_of_app = "  这个软件的中文名称是: 智慧操控, (智慧操控: 基于uiautomator2模块的电脑操控手机的功能的实现), 英文的名称是Windows Intelligently Controlling Android , 英文缩写是WICA. 该软件的功能是通过电脑来对手机进行操控, 这样一来, 很多的手机操作可以在电脑上直接完成, 不需要切换两个设备就可以完成自己想要的功能, 十分方便快捷. 该软件可以较为灵敏的通过电脑来实现控制手机的功能, 最后, 祝您使用愉快! "  #  ！！"
         # use the dots of english because chinese dot does not match.  # wx -> messages.
@@ -786,8 +756,8 @@ class CalcFrame1(MyFrame1):
     def m30usingintroductions(self, event):
         global phone_device
         """
-        ...m30...
-        how to use.
+        .m30..
+        how to use..
         """
 
         # using mathods.
@@ -809,18 +779,13 @@ class CalcFrame1(MyFrame1):
     def m31helpings(self, event):
         global phone_device
         """
-        ...m31...
-        helps(other helps).
-        """
-
-        # here is no problems...
-        # there is no problems here, although there is an app instead of the main app.......
+        .m31..
+        helps(other helps)..
+        """# here is no problems.
+        # there is no problems here, although there is an app instead of the main app.
         # otherhelpsoftheauthor()
-        otherhelpsoftheauthor()
-        # tool2.(.tool2.)...
+        otherhelpsoftheauthor()  # tool2(tool2)
         # otherhelpsoftheauthor()
-        # 
-
         event.Skip()
         return super().m31helpings(event)
 
@@ -828,18 +793,17 @@ class CalcFrame1(MyFrame1):
     def m32sendingfiles(self, event):
         global phone_device
         """
-        ...m32...
-        sending files.
+        .m32..
+        sending files..
         """
 
         ################################################################################
         ####### There are some problems needed to be solved, caused by tool1.py. #######
         ################################################################################
 
-        # use the method from tool1.py(other_tools/tool1.py has problems, so use the baked tool1..)
-        sendingfiletophonesmain()  
-        # the method to send the file that is selected.....
-        # send the files....
+        # use the method from tool1.py(other_tools/tool1.py has problems, so use the baked tool1.)
+        sendingfiletophonesmain()  # the method to send the file that is selected.
+        # send the files.
         event.Skip()
         return super().m32sendingfiles(event)
 
@@ -847,16 +811,14 @@ class CalcFrame1(MyFrame1):
     def m33appsmanager(self, event):
         global phone_device
         """
-        ...m33...
-        the apps managing.(success....)
+        .m33..
+        the apps managing.(success)..
         """
-        """....seems successfull...."""
+        """seems successfull."""
         # use the apps_main_managing to manage apps.
         # apps_main_managing().
-        apps_main_managing()
-        # apps_main_managing().
-        # need to use the connection to manage the apps....
-
+        apps_main_managing()  # apps_main_managing().
+        # need to use the connection to manage the apps.
         event.Skip()
         return super().m33appsmanager(event)
 
@@ -864,8 +826,8 @@ class CalcFrame1(MyFrame1):
     def m34processinglooking(self, event):
         global phone_device
         """
-        ...m34...
-        look the running processes of the phone.
+        .m34..
+        look the running processes of the phone..
         """
         # this is a method, needs ().
         print(phone_device.app_list_running())
@@ -890,11 +852,9 @@ class CalcFrame1(MyFrame1):
         show_the_processes = show_the_processes[:-2]
         show_the_processes += '.'
 
-        time.sleep(0.3)
-        # make this real..
+        time.sleep(0.3)  # make this real..
         wx.MessageBox(f"{show_the_processes}", "Message" ,wx.OK | wx.ICON_INFORMATION)  
-        # show the message of the running processes...
-
+        # show the message of the running processes.
         event.Skip()
         return super().m34processinglooking(event)
 
@@ -902,14 +862,13 @@ class CalcFrame1(MyFrame1):
     def m35musicvideo(self, event):
         global phone_device
         """
-        ...m35...
-        listen to the music.
+        .m35..
+        listen to the music..
         """
-        print("Start to play the music.......")
+        print("Start to play the music.")
         # use this module to play the songs.
         # musiccontrol.main_music_playing()
-        musiccontrol.main_music_playing()
-        # musiccontrol.main_music_playing()
+        musiccontrol.main_music_playing()  # musiccontrol.main_music_playing()
 
         event.Skip()
         return super().m35musicvideo(event)
@@ -918,12 +877,11 @@ class CalcFrame1(MyFrame1):
     def m36authormessage(self, event):
         global phone_device
         """
-        ...m36...
-        show the author's message to the users.
-        """
-        # pass.
+        .m36..
+        show the author's message to the users..
+        """# pass.
         # basic messages.
-        author_msges = " Author: 胡宇轩 (Y.X.Hu) \n School: BUPT \n Class ID: 2020211115 \n Student ID: 2020210449 \n CSDN Blog: https://hyxmoon.blog.csdn.net/ \n GitHub: https://github.com/Huyuxuan-github \n Gitee: https://gitee.com/hhhmoonhhh"
+        author_msges = " Author: 胡宇轩, 刘钧伟, 廖德旋 \n School: BUPT \n Class ID: 2020211115 \n Student ID: 2020210449, 2020210452, 2020210451 \n Gitee: https://gitee.com/hhhmoonhhh/wica"
         wx.MessageBox(f"{author_msges}", "Message" ,wx.OK | wx.ICON_INFORMATION)  # show the message of the author.
 
         event.Skip()
@@ -933,25 +891,20 @@ class CalcFrame1(MyFrame1):
     def m37moneytheproject(self, event):
         global phone_device
         """
-        # ...m37...
-        money the project.
+        .m37..
+        money the project..
         """
-
         print(BASE_DIR)
-
         # img0 = pimg.imread(BASE_DIR + "\\pictures\\combine.png")
         # plt.imshow(img0)
-        # plt.show()
-        # error to use the plt.
+        # plt.show()  # error to use the plt.
 
-        # avoid some complicates...
+        # avoid some complicates.
         img00 = cv2.imread(BASE_DIR + "\\pictures\\combine.png")
         # use the cv2 to show the img.
-
         height00, width00 = img00.shape[:2]  
         size00 = (int(width00*0.29), int(height00*0.29))  
         shrink00 = cv2.resize(img00, size00, interpolation=cv2.INTER_AREA)  
-
         cv2.imshow("image", shrink00)
         cv2.waitKey(0)
 
@@ -959,40 +912,32 @@ class CalcFrame1(MyFrame1):
         return super().m37moneytheproject(event)
 
 
-def adb_shell(cmd: str):  # :  # -> None: 
-    # string -> str.
+def adb_shell(cmd: str):  # :  # -> None: # string -> str.
     """
     run the adb shell.
-    return None..
+    return None.
     """
-    # adb shell.(sh).
+    # adb shell(sh).
     sh = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     return None
 
 
 if __name__ == "__main__":  
-    # .......................main method.......................
-    """........................................................
-    ...........................................................
-    ......................the masin method.....................
-    ...................(......MAIN.........)...................
-    ...........................................................
-    ........................................................"""
-
-    # start the app first.
+    # ...main method...
+    """the main method(MAIN)..."""
+    # start the app first...
     app = wx.App(False)
-    # set the language of the apps(language.).
-    app.locale = wx.Locale(wx.LANGUAGE_CHINESE_SIMPLIFIED)  
-    # including the chinese language.
+    # set the language of the apps(language.)..
+    app.locale = wx.Locale(wx.LANGUAGE_CHINESE_SIMPLIFIED)  # including the chinese language..
 
-    # the first time to connect.
+    # the first time to connect..
     while True:   
-        # while.
-        # test the adb connection.
+        # while..
+        # test the adb connection..
         time.sleep(1.22)
 
         try:
-            # try to connect adb.
+            # try to connect adb..
             cmd_command_0 = f"cd&&cd tools&&cd adbtool&&cd platform-tools_r32.0.0-windows&&cd platform-tools&&adb devices"
             res = os.system(cmd_command_0)
             # print(res).
@@ -1027,7 +972,6 @@ if __name__ == "__main__":
                 # install the ATX.apk(atx-agent) (init -> install).
 
                 break
-
             else:
                 wx.MessageBox(f"Please connect the phone with wire first.", "Message" ,wx.OK | wx.ICON_INFORMATION)  
             pass
@@ -1040,38 +984,27 @@ if __name__ == "__main__":
     # os.system(u2_cmd)
     os.system(u2_cmd)  # run the code.
     # /data/local/tmp/atx-agent server -d
-    # adb_sh = adb_shell(u2_cmd)
-    # adb_sh.communicate('/data/lo/cal/tmp/atx-agent server -d')
+    # adb_sh = adb_shell(u2_cmd)  # adb_sh.communicate('/data/lo/cal/tmp/atx-agent server -d')
 
-    # get the information.(ip and so on)
-# 
-    phone_device = u2.connect()  
-# 
-    # connect to get the message of the phone.
+    # get the information.(ip and so on)# 
+    phone_device = u2.connect()  ## connect to get the message of the phone.
     # phone_device = u2.connect("192.168.0.104:5555")
-    # phone_device = u2.connect()  # connect to get the message of the phone.
-# 
-    # phone_device = u2.connect()  # connect to get the message of the phone.
-# 
-# 
+    # phone_device = u2.connect()  # connect to get the message of the phone.# # phone_device = u2.connect()  # connect to get the message of the phone.# # 
     print(phone_device.device_info["serial"])  # print(phone_device.device_info)
     print(phone_device.wlan_ip)
 
     phone_device_uid = phone_device.device_info["serial"]
     phone_device_ip_eare = phone_device.wlan_ip
 
-    # the second time to connect.....
+    # the second time to connect.
     cmd_command_000 = f"cd&&cd tools&&cd adbtool&&cd platform-tools_r32.0.0-windows&&cd platform-tools&&adb devices&&adb tcpip 5555&&adb kill-server&&adb connect {phone_device_ip_eare}:5555"
     os.system(cmd_command_000)  # reconnect.
-    # reconnect the adb.  
-    # # https://hyxmoon.blog.csdn.net/
+    # reconnect the adb.  # # https://hyxmoon.blog.csdn.net/
     wx.MessageBox(f"Please disconnect the phone with wire if you do not disconnect.", "Message" ,wx.OK | wx.ICON_INFORMATION)  
     # need to be checked.
     # u2_cmd = f"cd&&cd tools&&cd adbtool&&cd platform-tools_r32.0.0-windows&&cd platform-tools&&adb shell /data/local/tmp/atx-agent server -d"  # '/data/local/tmp/atx-agent server -d'"  # &&/data/local/tmp/atx-agent server -d"
-    #  /data/local/tmp/atx-agent server -d
-    # os.system(u2_cmd)
-    os.system(u2_cmd)
-    # os.system(u2_cmd).  # start the atx-agent again.
+    #  /data/local/tmp/atx-agent server -d  # os.system(u2_cmd)
+    os.system(u2_cmd)  # os.system(u2_cmd).  # start the atx-agent again.
 
     phone_device = u2.connect(f"{phone_device_ip_eare}:5555")  # reconnect the server.
     # notifications phone messages.
@@ -1079,8 +1012,7 @@ if __name__ == "__main__":
     wx.MessageBox(f"Your phone's ip is {phone_device_ip_eare}.", "Message" ,wx.OK | wx.ICON_INFORMATION) 
 
     # to connect the device.
-    image = phone_device.screenshot(format="opencv")  
-    # use the opencv format.
+    image = phone_device.screenshot(format="opencv")  # use the opencv format.
     # res = d.screenshot("test.jpg")  # print(res)
     # img = cv2.imread('C:\\Users\\1\\Desktop\\test_phone\\test.jpg')
     height, width = image.shape[:2]  
@@ -1090,16 +1022,15 @@ if __name__ == "__main__":
     """example:
     app = wx.App(False)
     frame = CalcFrame(None)
-    frame.Show(True)  # start the applications
+    frame.Show(True)  
+    # start the applications
     app.MainLoop()
     """  
-
     # app = wx.App(False)    
     # app.locale = wx.Locale(wx.LANGUAGE_CHINESE_SIMPLIFIED)
     # set the language.
-
     frame = CalcFrame1(None)
     frame.Show(True)
     app.MainLoop()  
-
     # mainloop -> execute the apps.
+

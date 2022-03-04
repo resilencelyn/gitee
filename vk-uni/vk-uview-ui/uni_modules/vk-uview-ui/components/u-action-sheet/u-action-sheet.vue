@@ -13,7 +13,7 @@
 				:class="[index < list.length - 1 ? 'u-border-bottom' : '']"
 				:hover-stay-time="150"
 			>
-				<text>{{item.text}}</text>
+				<text>{{item[labelName]}}</text>
 				<text class="u-action-sheet-item__subtext u-line-1" v-if="item.subText">{{item.subText}}</text>
 			</view>
 		</block>
@@ -108,7 +108,12 @@
 			cancelText: {
 				type: String,
 				default: '取消'
-			}
+			},
+			// 自定义label属性名
+			labelName: {
+				type: String,
+				default: 'text'
+			},
 		},
 		computed: {
 			// 顶部提示的样式
