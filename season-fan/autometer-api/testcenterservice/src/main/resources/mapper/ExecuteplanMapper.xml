@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoctan.api.mapper.ExecuteplanMapper">
+  <resultMap id="BaseResultMap" type="com.zoctan.api.entity.Executeplan">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="envid" jdbcType="BIGINT" property="envid" />
+    <result column="enviromentname" jdbcType="VARCHAR" property="enviromentname" />
+    <result column="executeplanname" jdbcType="VARCHAR" property="executeplanname" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="usetype" jdbcType="VARCHAR" property="usetype" />
+    <result column="businesstype" jdbcType="VARCHAR" property="businesstype" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="enviromentname" jdbcType="VARCHAR" property="enviromentname" />
+    <result column="runmode" jdbcType="VARCHAR" property="runmode" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lastmodify_time" jdbcType="TIMESTAMP" property="lastmodifyTime" />
+  </resultMap>
+
+  <select id="findexplanWithName" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM executeplan a
+    <where>
+      <if test="businesstype != null and businesstype != ''">a.businesstype = #{businesstype} </if>
+      <if test="executeplanname != null and executeplanname != ''">and a.executeplanname like CONCAT('%',#{executeplanname},'%')</if>
+    </where>
+    order by lastmodify_time  DESC
+  </select>
+
+  <select id="findexplanWithid" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM executeplan a
+    where a.id=#{id}
+  </select>
+
+  <select id="getallexplan" resultMap="BaseResultMap">
+    SELECT a.* FROM executeplan a
+  </select>
+
+  <select id="getallexplanbytype" resultMap="BaseResultMap">
+    SELECT a.* FROM executeplan a where usetype=#{usetype}
+  </select>
+
+  <select id="getexecuteplannum" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM executeplan a
+  </select>
+
+  <update id="updateexecuteplanname" parameterType="com.zoctan.api.entity.Executeplan">
+    update executeplan set executeplanname = #{executeplanname},envid = #{envid},businesstype=#{businesstype},enviromentname=#{enviromentname},
+     usetype=#{usetype}, memo = #{memo},runmode = #{runmode}, creator = #{creator}, lastmodify_time = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')
+    where id = #{id};
+  </update>
+
+
+  <update id="updatetestplanstatus">
+    update  executeplan set status=#{status} , lastmodify_time = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%m:%s') where id = #{id}
+  </update>
+
+  <select id="getstaticsplan" resultType="java.lang.String">
+    SELECT a.executeplanname
+    FROM executeplan a
+  </select>
+</mapper>

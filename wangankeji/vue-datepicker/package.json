@@ -1,0 +1,80 @@
+{
+  "name": "@wangankeji/vue-datepicker",
+  "version": "2.3.4",
+  "main": "dist/datepicker.common.js",
+  "unpkg": "dist/datepicker.umd.js",
+  "jsdelivr": "dist/datepicker.umd.js",
+  "scripts": {
+    "serve": "npx vue-cli-service serve",
+    "build": "npx vue-cli-service build --target lib --dest dist --name datepicker src/components/index.js",
+    "build:docs": "npx vue-cli-service build --dest=docs",
+    "release": "yarn run lint & yarn run build & yarn run build:docs & node version.js",
+    "lint": "npx vue-cli-service lint",
+    "test": "npx vue-cli-service lint & npx vue-cli-service build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/wangankeji/vue-datepicker.git"
+  },
+  "bugs": {
+    "url": "https://gitee.com/wangankeji/vue-datepicker/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "homepage": "https://wangankeji.gitee.io/vue-datepicker/",
+  "keywords": [
+    "vue",
+    "datepicker"
+  ],
+  "author": "wangankeji",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src/assets",
+    "src/components",
+    "types",
+    "LICENSE",
+    "README.md"
+  ],
+  "types": "types/index.d.ts",
+  "devDependencies": {
+    "@popperjs/core": "^2.6.0",
+    "@vue/cli-plugin-babel": "^4.2.0",
+    "@vue/cli-plugin-eslint": "^4.2.0",
+    "@vue/cli-service": "^4.2.0",
+    "babel-eslint": "^10.0.3",
+    "core-js": "^3.6.4",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.1.2",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
+    "stylelint": "^13.13.1",
+    "stylelint-no-unsupported-browser-features": "^5.0.2",
+    "vue": "2.6.10",
+    "vue-template-compiler": "2.6.10"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-debugger": "warn"
+    }
+  },
+  "browserslist": [
+    "firefox >= 56",
+    "chrome >= 56",
+    "ie >= 10"
+  ]
+}

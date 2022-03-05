@@ -10,9 +10,17 @@ ps:可能类似于go-cqhttp，但是该程序支持多个机器人同时登录
 
 已开放的api可以在部署地址/swagger/index.html观看
 
+如图1（swagger-ui版本）
+
+knife4j版本的api文档界面更加美观，人性化，可在部署地址/doc.html查看
+
+如图2
+
 内置文档通过swagger搭建
 
 ![1](img/1.png)
+
+![2](img/2.png)
 
 ## 在线api文档：https://dinglz.gitee.io/miria-manager
 
@@ -51,3 +59,11 @@ java -jar 发布的jar包
 QQ：1149978856
 
 邮箱：dlz1149978856
+
+# connect
+
+如果你想找个与开发者交流的地方，可以来这个群与我闲聊
+
+[加群链接](https://jq.qq.com/?wv=1027&k=xVeaNh1X)
+
+等该项目被我逐渐整活到完善，以及有一定量的用户，再考虑开用户群。现在该项目还处于不成熟阶段！

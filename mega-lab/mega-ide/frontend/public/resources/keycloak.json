@@ -1,0 +1,5 @@
+{
+  "realm": "Dev",
+  "url": "http://keycloak.lab.cc/auth",
+  "clientId": "megalab",
+}

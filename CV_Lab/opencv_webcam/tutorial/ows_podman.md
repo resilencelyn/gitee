@@ -35,12 +35,17 @@ python3 opencv_webcam.py -isasf # 自动保存帧
 
 ❤️ **其他使用方法和开发版一致，参见[README 使用教程](https://gitee.com/CV_Lab/opencv_webcam/blob/master/README.md)**
 
+❗ 注意：启动ows容器前，需要执行`xhost +local:root` 指令，确保连接到本地设备。
+
 
 
 #### ✨ 视频帧 podman2local
 
 ```shell
-
+# 获取Podman帧数据到本机
+sudo podman cp 容器名称:容器目录 本机宿主目录
+sudo podman cp ows:/usr/src/app/WebcamFrame /home/用户名 # 举例
+sudo chmod 777 -R WebcamFrame/ # 对所有用户执行读和写以及执行的权限
 ```
 
 
@@ -50,4 +55,15 @@ python3 opencv_webcam.py -isasf # 自动保存帧
 ```shell
 # 退出ows容器
 exit
+
+# 启动并进入ows容器
+sudo podman start ows
+sudo podman exec -it ows /bin/bash
+
+# 重新下载ows镜像
+# 注意：首先确保podman中无其他项目的镜像和容器
+sudo podman stop ows # 关闭容器
+sudo podman rm $(sudo podman ps -aq) # 删除全部容器
+sudo podman rmi -f $(sudo podman images -aq) # 删除全部镜像
+sudo podman pull docker.io/zengdockerdocker/opencv-webcam-script:v0.5 # 镜像拉取
 ```

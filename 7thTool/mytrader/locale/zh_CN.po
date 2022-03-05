@@ -1,0 +1,576 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2021-11-08 13:57+0800\n"
+"PO-Revision-Date: 2021-11-08 14:58+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: myctp/myctp.cpp:12
+msgid "PreDelta"
+msgstr "昨虚实度"
+
+#: myctp/myctp.cpp:13
+msgid "CurrDelta"
+msgstr "今虚实度"
+
+#: myctp/myctp.cpp:14 myctp/myctp.cpp:51
+msgid "TradingDay"
+msgstr "交易日"
+
+#: myctp/myctp.cpp:15
+msgid "LoginTime"
+msgstr "登录时间"
+
+#: myctp/myctp.cpp:16
+msgid "SystemName"
+msgstr "系统名称"
+
+#: myctp/myctp.cpp:17
+msgid "FrontID"
+msgstr "前置编号"
+
+#: myctp/myctp.cpp:18
+msgid "SessionID"
+msgstr "会话编号"
+
+#: myctp/myctp.cpp:19
+msgid "MaxOrderRef"
+msgstr "最大报单引用"
+
+#: myctp/myctp.cpp:20
+msgid "InvestorGroupID"
+msgstr "投资者分组代码"
+
+#: myctp/myctp.cpp:21
+msgid "IdentifiedCardType"
+msgstr "证件类型"
+
+#: myctp/myctp.cpp:22
+msgid "IdentifiedCardNo"
+msgstr "证件号码"
+
+#: myctp/myctp.cpp:23
+msgid "IsActive"
+msgstr "是否活跃"
+
+#: myctp/myctp.cpp:24
+msgid "Telephone"
+msgstr "联系电话"
+
+#: myctp/myctp.cpp:25
+msgid "Address"
+msgstr "通讯地址"
+
+#: myctp/myctp.cpp:26
+msgid "OpenDate"
+msgstr "开户日期"
+
+#: myctp/myctp.cpp:27
+msgid "Mobile"
+msgstr "手机"
+
+#: myctp/myctp.cpp:28
+msgid "CommModelID"
+msgstr "手续费率模板代码"
+
+#: myctp/myctp.cpp:29
+msgid "MarginModelID"
+msgstr "保证金率模板代码"
+
+#: myctp/myctp.cpp:30
+msgid "PreMortgage"
+msgstr "上次质押金额"
+
+#: myctp/myctp.cpp:31
+msgid "PreCredit"
+msgstr "上次信用额度"
+
+#: myctp/myctp.cpp:32
+msgid "PreDeposit"
+msgstr "上次存款额"
+
+#: myctp/myctp.cpp:33
+msgid "PreBalance"
+msgstr "上次结算准备金"
+
+#: myctp/myctp.cpp:34
+msgid "PreMargin"
+msgstr "上次占用的保证金"
+
+#: myctp/myctp.cpp:35
+msgid "InterestBase"
+msgstr "利息基数"
+
+#: myctp/myctp.cpp:36
+msgid "Interest"
+msgstr "利息收入"
+
+#: myctp/myctp.cpp:37
+msgid "Deposit"
+msgstr "入金金额"
+
+#: myctp/myctp.cpp:38
+msgid "Withdraw"
+msgstr "出金金额"
+
+#: myctp/myctp.cpp:39
+msgid "FrozenMargin"
+msgstr "冻结的保证金"
+
+#: myctp/myctp.cpp:40
+msgid "FrozenCash"
+msgstr "冻结的资金"
+
+#: myctp/myctp.cpp:41
+msgid "FrozenCommission"
+msgstr "冻结的手续费"
+
+#: myctp/myctp.cpp:42
+msgid "CurrMargin"
+msgstr "当前保证金总额"
+
+#: myctp/myctp.cpp:43
+msgid "CashIn"
+msgstr "资金差额"
+
+#: myctp/myctp.cpp:44
+msgid "Commission"
+msgstr "手续费"
+
+#: myctp/myctp.cpp:45
+msgid "CloseProfit"
+msgstr "平仓盈亏"
+
+#: myctp/myctp.cpp:46
+msgid "PositionProfit"
+msgstr "持仓盈亏"
+
+#: myctp/myctp.cpp:47
+msgid "Balance"
+msgstr "期货结算准备金"
+
+#: myctp/myctp.cpp:48
+msgid "Available"
+msgstr "可用资金"
+
+#: myctp/myctp.cpp:49
+msgid "WithdrawQuota"
+msgstr "可取资金"
+
+#: myctp/myctp.cpp:50
+msgid "Reserve"
+msgstr "基本准备金"
+
+#: myctp/myctp.cpp:52
+msgid "SettlementID"
+msgstr "结算编号"
+
+#: myctp/myctp.cpp:53
+msgid "Credit"
+msgstr "信用额度"
+
+#: myctp/myctp.cpp:54
+msgid "Mortgage"
+msgstr "质押金额"
+
+#: myctp/myctp.cpp:55
+msgid "ExchangeMargin"
+msgstr "交易所保证金"
+
+#: myctp/myctp.cpp:56
+msgid "DeliveryMargin"
+msgstr "投资者交割保证金"
+
+#: myctp/myctp.cpp:57
+msgid "ExchangeDeliveryMargin"
+msgstr "交易所交割保证金"
+
+#: myctp/myctp.cpp:58
+msgid "ReserveBalance"
+msgstr "保底期货结算准备金"
+
+#: myctp/myctp.cpp:59
+msgid "CurrencyID"
+msgstr "币种代码"
+
+#: myctp/myctp.cpp:60
+msgid "PreFundMortgageIn"
+msgstr "上次货币质出金额"
+
+#: myctp/myctp.cpp:61
+msgid "PreFundMortgageOut"
+msgstr "上次货币质出金额"
+
+#: myctp/myctp.cpp:62
+msgid "FundMortgageAvailable"
+msgstr "货币质押余额"
+
+#: myctp/myctp.cpp:63
+msgid "MortgageableFund"
+msgstr "可质押货币金额"
+
+#: myctp/myctp.cpp:64
+msgid "SpecProductMargin"
+msgstr "特殊产品占用保证金"
+
+#: myctp/myctp.cpp:65
+msgid "SpecProductFrozenMargin"
+msgstr "特殊产品冻结保证金"
+
+#: myctp/myctp.cpp:66
+msgid "SpecProductCommission"
+msgstr "特殊产品手续费"
+
+#: myctp/myctp.cpp:67
+msgid "SpecProductPositionProfit"
+msgstr "特殊产品持仓盈亏"
+
+#: myctp/myctp.cpp:68
+msgid "SpecProductCloseProfit"
+msgstr "特殊产品平仓盈亏"
+
+#: myctp/myctp.cpp:69
+msgid "SpecProductPositionProfitByAlg"
+msgstr "根据持仓盈亏算法计算的特殊产品持仓盈亏"
+
+#: myctp/myctp.cpp:70
+msgid "SpecProductExchangeMargin"
+msgstr "特殊产品交易所保证金"
+
+#: myctp/myctp.cpp:71 myctp/myctp.cpp:83
+msgid "BizType"
+msgstr "业务类型"
+
+#: myctp/myctp.cpp:72
+msgid "FrozenSwap"
+msgstr "延时换汇冻结金额"
+
+#: myctp/myctp.cpp:73
+msgid "RemainSwap"
+msgstr "剩余换汇额度"
+
+#: myctp/myctp.cpp:74
+msgid "InstrumentID"
+msgstr "合约代码"
+
+#: myctp/myctp.cpp:75
+msgid "InvestorRange"
+msgstr "投资者范围"
+
+#: myctp/myctp.cpp:76
+msgid "OpenRatioByMoney"
+msgstr "开仓手续费率"
+
+#: myctp/myctp.cpp:77
+msgid "OpenRatioByVolume"
+msgstr "开仓手续费"
+
+#: myctp/myctp.cpp:78
+msgid "CloseRatioByMoney"
+msgstr "平仓手续费率"
+
+#: myctp/myctp.cpp:79
+msgid "CloseRatioByVolume"
+msgstr "平仓手续费"
+
+#: myctp/myctp.cpp:80
+msgid "CloseTodayRatioByMoney"
+msgstr "平今手续费率"
+
+#: myctp/myctp.cpp:81
+msgid "CloseTodayRatioByVolume"
+msgstr "平今手续费"
+
+#: myctp/myctp.cpp:82
+msgid "ExchangeID"
+msgstr "交易所代码"
+
+#: myctp/myctp.cpp:84
+msgid "InvestUnitID"
+msgstr "投资单元代码"
+
+#: mytrader/myapp.cpp:1086 mytrader/myapp2.cpp:948
+msgid "help docs"
+msgstr "帮助文档"
+
+#: mytrader/mycalcdlg.cpp:285 mytrader/mysettingsdlg.cpp:71
+#: mytrader/mysettingsdlg.cpp:237 mytrader/mysettingsdlg.cpp:332
+msgid "&OK"
+msgstr "确定"
+
+#: mytrader/mycalcdlg.cpp:286 mytrader/mysettingsdlg.cpp:72
+#: mytrader/mysettingsdlg.cpp:238
+msgid "&Cancel"
+msgstr "取消"
+
+#: mytrader/mycalcframe.cpp:178
+msgid "&Compile\tAlt+C"
+msgstr "编译\tAlt+C"
+
+#: mytrader/mycalcframe.cpp:179
+msgid "&Save\tCtrl+S"
+msgstr "保存\tCtrl+S"
+
+#: mytrader/mycalcframe.cpp:188
+msgid "&Quit\tCtrl+Q"
+msgstr "退出\tCtrl+Q"
+
+#: mytrader/mycalcframe.cpp:192
+msgid "&Undo\tCtrl+Z"
+msgstr "撤销\tCtrl+Z"
+
+#: mytrader/mycalcframe.cpp:193
+msgid "&Redo\tCtrl+Shift+Z"
+msgstr "重做\tCtrl+Shift+Z"
+
+#: mytrader/mycalcframe.cpp:195
+msgid "Cu&t\tCtrl+X"
+msgstr "剪切\tCtrl+X"
+
+#: mytrader/mycalcframe.cpp:196
+msgid "&Copy\tCtrl+C"
+msgstr "复制\tCtrl+C"
+
+#: mytrader/mycalcframe.cpp:197
+msgid "&Paste\tCtrl+V"
+msgstr "粘贴\tCtrl+V"
+
+#: mytrader/mycalcframe.cpp:198
+msgid "&Delete\tDel"
+msgstr "删除\tDel"
+
+#: mytrader/mycalcframe.cpp:294
+msgid "&File"
+msgstr "文件"
+
+#: mytrader/mycalcframe.cpp:295
+msgid "&Edit"
+msgstr "编辑"
+
+#: mytrader/mycalcframe.cpp:407
+msgid "save success"
+msgstr "保存成功"
+
+#: mytrader/mycalcframe.cpp:465
+msgid "compile success"
+msgstr "编译成功"
+
+#: mytrader/mycalcframe.cpp:469
+msgid "compile error"
+msgstr "编译错误"
+
+#: mytrader/mycalcframe.cpp:490
+msgid "apply success"
+msgstr "应用成功"
+
+#: mytrader/mysettingsdlg.cpp:223
+msgid "Tech"
+msgstr "技术"
+
+#: mytrader/mysettingsdlg.cpp:246
+msgid "Custom anysec"
+msgstr "自定义秒"
+
+#: mytrader/mysettingsdlg.cpp:250
+msgid "Custom anymin"
+msgstr "自定义分"
+
+#: mytrader/mysettingsdlg.cpp:299 mytrader/mysettingsdlg.h:77
+#: mytrader/mytaskbar.cpp:168
+msgid "About"
+msgstr "关于"
+
+#: mytrader/mytechframe.cpp:505
+msgid "Limit Price"
+msgstr "限价"
+
+#: mytrader/mytechframe.cpp:506
+msgid "Upper Price"
+msgstr "涨停"
+
+#: mytrader/mytechframe.cpp:507
+msgid "Lower Price"
+msgstr "跌停"
+
+#: mytrader/mytechframe.cpp:508
+msgid "Market Price"
+msgstr "市价"
+
+#: mytrader/mytechframe.cpp:517
+msgid "Number Volume"
+msgstr "数量"
+
+#: mytrader/mytechframe.cpp:522
+msgid "Quick Buy"
+msgstr "快买"
+
+#: mytrader/mytechframe.cpp:523
+msgid "Quick Sell"
+msgstr "快卖"
+
+#: mytrader/mytechframe.cpp:524
+msgid "Quick Buy Close"
+msgstr "买平"
+
+#: mytrader/mytechframe.cpp:525
+msgid "Quick Sell Close"
+msgstr "卖平"
+
+#: mytrader/mytechframe.cpp:529
+msgid "Cancel All Order"
+msgstr "全撤"
+
+#: mytrader/mytechframe.cpp:530
+msgid "Close All Position"
+msgstr "全平"
+
+#: mytrader/settings.cpp:431
+#, c-format
+msgid "S%zu"
+msgstr ""
+
+#: mytrader/settings.cpp:435
+#, c-format
+msgid "H%zu"
+msgstr ""
+
+#: mytrader/settings.cpp:438
+#, c-format
+msgid "M%zu"
+msgstr ""
+
+#: mytrader/settings.h:113
+msgid "This language is not supported by the system."
+msgstr "系统不支持当前语言。"
+
+#: mytrader/settings.h:124
+#, c-format
+msgid "Couldn't find/load the '%s' catalog for locale '%s'."
+msgstr "不能找到/加载%s的本地化文件%s。"
+
+#: mytrader/settings.h:125
+msgid "unknown"
+msgstr "未知"
+
+#: mytrader/settings.h:147
+#, c-format
+msgid ""
+"Language: %s\n"
+"System locale name: %s\n"
+"Canonical locale name: %s\n"
+msgstr ""
+
+#~ msgid "Lock Trade"
+#~ msgstr "锁屏"
+
+#~ msgid "Unlock Trade"
+#~ msgstr "解锁"
+
+#~ msgid "Clear All"
+#~ msgstr "清仓"
+
+#~ msgid "EXCHANGE"
+#~ msgstr "市场"
+
+#~ msgid "PRODUCT"
+#~ msgstr "产品"
+
+#~ msgid "CODE"
+#~ msgstr "代码"
+
+#~ msgid "NAME"
+#~ msgstr "名称"
+
+#~ msgid "TYPE"
+#~ msgstr "类型"
+
+#~ msgid "TRADE_CODE"
+#~ msgstr "交易代码"
+
+#~ msgid "DATE"
+#~ msgstr "日期"
+
+#~ msgid "TIME"
+#~ msgstr "时间"
+
+#~ msgid "STATUS"
+#~ msgstr "状态"
+
+#~ msgid "ENTER_REASON"
+#~ msgstr "原因"
+
+#~ msgid "YCLOSE"
+#~ msgstr "昨收"
+
+#~ msgid "YSETTLE"
+#~ msgstr "昨结"
+
+#~ msgid "SETTLE"
+#~ msgstr "结算"
+
+#~ msgid "UPPER"
+#~ msgstr "涨停"
+
+#~ msgid "LOWER"
+#~ msgstr "跌停"
+
+#~ msgid "OPEN"
+#~ msgstr "开盘"
+
+#~ msgid "HIGH"
+#~ msgstr "最高"
+
+#~ msgid "LOW"
+#~ msgstr "最低"
+
+#~ msgid "CLOSE"
+#~ msgstr "现价"
+
+#~ msgid "AMOUNT"
+#~ msgstr "总额"
+
+#~ msgid "VOLUME"
+#~ msgstr "总量"
+
+#~ msgid "BID1"
+#~ msgstr "买一"
+
+#~ msgid "BID2"
+#~ msgstr "买二"
+
+#~ msgid "BID3"
+#~ msgstr "买三"
+
+#~ msgid "BID4"
+#~ msgstr "买四"
+
+#~ msgid "BID5"
+#~ msgstr "买五"
+
+#~ msgid "ASK1"
+#~ msgstr "卖一"
+
+#~ msgid "ASK2"
+#~ msgstr "卖二"
+
+#~ msgid "ASK3"
+#~ msgstr "卖三"
+
+#~ msgid "ASK4"
+#~ msgstr "卖四"
+
+#~ msgid "ASK5"
+#~ msgstr "卖五"
+
+#~ msgid "PreOpenInterest"
+#~ msgstr "昨持"

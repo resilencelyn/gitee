@@ -1,0 +1,8 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: ide-{{id}}-auth-middleware
+spec:
+  forwardAuth:
+    address: http://megaide.{{domain}}/api/cloud_ide/ide/ide_auth
+    trustForwardHeader: true

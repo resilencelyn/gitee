@@ -13,9 +13,9 @@
 <p align="center">
 <a href="https://gitee.com/CV_Lab/opencv_webcam/blob/master/CodeCheck.md"><img src="https://img.shields.io/badge/CodeCheck-passing-success" alt="code check" /></a>
 <a href="https://gitee.com/CV_Lab/opencv_webcam/releases/v0.5"><img src="https://img.shields.io/badge/Releases-v0.5-green" alt="Releases Version" /></a>
-<a href="https://pypi.org/project/opencv-webcam-script/0.5.1/"><img src="https://img.shields.io/badge/PyPi-v0.5.1-brightgreen?logo=pypi" alt="PyPi" /></a>
+<a href="https://pypi.org/project/opencv-webcam-script/0.5.1/"><img src="https://img.shields.io/badge/PyPI-v0.5.1-brightgreen?logo=pypi" alt="PyPI" /></a>
 <a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/badge/docker-v0.5-blue?logo=docker" alt="Docker" /></a>
-<a href="./tutorial/ows_podman.md)"><img src="https://img.shields.io/badge/Podman-v0.5-blueviolet?logo=podman" alt="Podman" /></a>
+<a href="./tutorial/ows_podman.md"><img src="https://img.shields.io/badge/Podman-v0.5-blueviolet?logo=podman" alt="Podman" /></a>
 <a href="https://gitee.com/CV_Lab/opencv_webcam/blob/master/tutorial/ows_jupyter.ipynb"><img src="https://img.shields.io/badge/Jupyter-v0.5-orange?logo=jupyter" alt="Jupyter" /></a>
 <a href="https://gitee.com/CV_Lab/opencv_webcam/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
@@ -24,8 +24,8 @@
 <a href='https://gitee.com/CV_Lab/opencv_webcam/stargazers'><img src='https://gitee.com/CV_Lab/opencv_webcam/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/CV_Lab/opencv_webcam/members'><img src='https://gitee.com/CV_Lab/opencv_webcam/badge/fork.svg?theme=dark' alt='fork'></img></a>
 <a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/docker/pulls/zengdockerdocker/opencv-webcam-script?logo=docker" alt="Docker Pulls"></a>
-<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPi%20downloads" alt="PyPi Downloads"></a>
-<a href="https://snyk.io/advisor/python/opencv-webcam-script"><img src="https://snyk.io/advisor/python/opencv-webcam-script/badge.svg" alt="PyPi Package Health"></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads" alt="PyPI Downloads"></a>
+<a href="https://snyk.io/advisor/python/opencv-webcam-script"><img src="https://snyk.io/advisor/python/opencv-webcam-script/badge.svg" alt="PyPI Package Health"></a>
 </p>
 
 
@@ -33,7 +33,7 @@
 
 - `2022-02-06` **⚡ [opencv-webcam-script v0.5 release version](https://gitee.com/CV_Lab/opencv_webcam/releases/v0.5)officially launched**
 - `2022-02-06` **⚡ [opencv-webcam-script v0.5 docker version](https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script)officially launched**
-- `2022-02-06` **⚡ [opencv-webcam-script v0.5.1 PyPi version](https://pypi.org/project/opencv-webcam-script/0.5.1/)officially launched**
+- `2022-02-06` **⚡ [opencv-webcam-script v0.5.1 PyPI version](https://pypi.org/project/opencv-webcam-script/0.5.1/)officially launched**
 - `2022-02-06` **⚡ [opencv-webcam-script v0.5 Jupyter version](https://gitee.com/CV_Lab/opencv_webcam/blob/master/tutorial/ows_jupyter.ipynb)officially launched**
 - ⚡ **[opencv-webcam-script historical version](./v_change)**
 
@@ -68,7 +68,7 @@
 │   │   ├── ows_path.py						# Save path management
 │   │   └── time_format.py					# time format
 │   ├── tutorial							# ows tutorial
-│   │   ├── ows_pypi.md						# ows pypi version tutorial
+│   │   ├── ows_pypi.md						# ows PyPI version tutorial
 │   │   ├── ows_docker.md					# ows docker version tutorial
 │   │   └── ows_jupyter.ipynb				# ows Jupyter version tutorial
 │   ├── v_change							# Version history
@@ -128,9 +128,9 @@ bash ./setup.sh
 
 
 
-### ✅ Method 2: pip quick installation (PyPi version)
+### ✅ Method 2: pip quick installation (PyPI version)
 
-#### 🔥 [opencv-webcam-script PyPi version detailed tutorial](./tutorial/ows_pypi.md)
+#### 🔥 [opencv-webcam-script PyPI version detailed tutorial](./tutorial/ows_pypi.md)
 
 #### 🎨 Easy Tutorial
 
@@ -309,7 +309,7 @@ python opencv_webcam.py -ishsf -isrf -rrf 0.5 # Manual version
 #### 💡 Custom save path
 
 ```shell
-# Set the save path, the default save path is ./WebcamFrame
+# Set the save path, the default save path is WebcamFrame
 python opencv_webcam.py -fsd custom_dir -isasf # Take the automatic version as an example
 ```
 
@@ -424,7 +424,7 @@ usage: opencv_webcam.py [-h] [--device DEVICE] [--quit QUIT] [--is_autoSaveFrame
                         [--frame_saveStyle FRAME_SAVESTYLE] [--jpg_quality JPG_QUALITY] [--png_quality PNG_QUALITY] [--pause PAUSE] [--auto_frameNum AUTO_FRAMENUM] [--logName LOGNAME]
                         [--logMode LOGMODE] [--is_compress] [--compressStyle COMPRESSSTYLE] [--is_autoCompressName] [--compressName COMPRESSNAME] [--compressMode COMPRESSMODE]
 
-OpenCV Webcam Script v0.5
+OpenCV Webcam Script v0.6
 
 optional arguments:
   -h, --help            show this help message and exit

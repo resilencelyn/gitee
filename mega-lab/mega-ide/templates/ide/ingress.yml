@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ide-{{id}}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{id}}.{{domain}}`)
+      kind: Rule
+      services:
+        - name: ide-{{id}}
+          port: 8888
+      middlewares:
+      - name: ide-{{id}}-auth-middleware

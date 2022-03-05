@@ -1,0 +1,14 @@
+fastapi==0.72.0
+uvicorn==0.17.0
+python-dotenv==0.19.2
+sqlalchemy==1.4.31
+kubernetes==21.7.0
+jinja2==2.8
+nanoid==2.0.0
+psycopg2-binary==2.9.3
+sqlalchemy-utils==0.38.2
+alembic==1.7.5
+logzero==1.7.0
+apscheduler==3.8.1
+markupsafe==2.0.1
+python-keycloak==0.27.0

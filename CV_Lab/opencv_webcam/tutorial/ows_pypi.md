@@ -1,8 +1,14 @@
-# 🔥 opencv-webcam-script（PyPi版）
+# 🔥 opencv-webcam-script（PyPI版）
 
 ## 创建人：曾逸夫
 
-
+<p align="left">
+<a href="https://pypi.org/project/opencv-webcam-script/0.5.1/"><img src="https://img.shields.io/badge/PyPI-v0.5.1-brightgreen?logo=pypi" alt="PyPI" /></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads" alt="PyPI All Downloads"></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads/month" alt="PyPI Month Downloads"></a>
+<a href="https://pypi.org/project/opencv-webcam-script"><img src="https://static.pepy.tech/personalized-badge/opencv-webcam-script?period=week&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI%20downloads/week" alt="PyPI Week Downloads"></a>
+<a href="https://snyk.io/advisor/python/opencv-webcam-script"><img src="https://snyk.io/advisor/python/opencv-webcam-script/badge.svg" alt="PyPI Package Health"></a>
+</p>
 
 <h3 align="center">🚀 安装教程</h3>
 
@@ -128,7 +134,7 @@ webcam_opencv(is_handSaveFrame=True, is_resizeFrame=True, resizeRatio_frame=0.5)
 #### ✨ 自定义保存路径
 
 ```python
-# 设置保存路径，默认保存路径为./WebcamFrame
+# 设置保存路径，默认保存路径为WebcamFrame
 webcam_opencv(is_autoSaveFrame=True, frame_saveDir="custom_dir") # 以自动版为例
 ```
 
@@ -216,7 +222,7 @@ def webcam_opencv(device_index="0",                 # 设备号
                   quit_key="q",                     # 退出键
                   pause_key="p",                    # 暂停键
                   is_autoSaveFrame=False,           # 自动保存帧
-                  frame_saveDir="./WebcamFrame",    # 帧保存路径
+                  frame_saveDir="WebcamFrame",    	# 帧保存路径
                   frame_dirName="frames",           # 帧目录
                   frame_nSave=1,                    # 每隔n帧保存一次
                   auto_frameNum=0,                  # 自动保存最大帧数

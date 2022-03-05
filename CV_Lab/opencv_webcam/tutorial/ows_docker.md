@@ -2,6 +2,10 @@
 
 ## 创建人：曾逸夫
 
+<p align="left">
+<a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/badge/docker-v0.5-blue?logo=docker" alt="Docker" /></a>
+<a href="https://hub.docker.com/r/zengdockerdocker/opencv-webcam-script"><img src="https://img.shields.io/docker/pulls/zengdockerdocker/opencv-webcam-script?logo=docker" alt="Docker Pulls"></a>
+</p>
 
 
 <h3 align="center">🚀 安装教程</h3>
@@ -35,6 +39,8 @@ python3 opencv_webcam.py -isasf # 自动保存帧
 
 ❤️ **其他使用方法和开发版一致，参见[README 使用教程](https://gitee.com/CV_Lab/opencv_webcam/blob/master/README.md)**
 
+❗ 注意：启动ows容器前，需要执行`xhost +local:root` 指令，确保连接到本地设备。
+
 
 
 #### ✨ 视频帧 docker2local
@@ -60,6 +66,7 @@ sudo docker exec -it ows /bin/bash
 
 # 重新下载ows镜像
 # 注意：首先确保docker中无其他项目的镜像和容器
+sudo docker stop ows # 关闭容器
 sudo docker rm $(sudo docker ps -aq) # 删除全部容器
 sudo docker rmi -f $(sudo docker images -aq) # 删除全部镜像
 sudo docker pull zengdockerdocker/opencv-webcam-script:v0.5 # 镜像拉取

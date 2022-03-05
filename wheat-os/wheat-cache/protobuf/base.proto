@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "pkg/proto";
+import "google/protobuf/timestamp.proto";
+
+message BaseKey {
+  string key = 1;
+  int64 ttl = 2;
+  google.protobuf.Timestamp expire = 3;
+}
+
+message External {
+  
+}

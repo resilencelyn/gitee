@@ -27,7 +27,8 @@ http://www.aias.top/
 2. Engine Hub
    包含了API平台引擎，搜索引擎，训练引擎，边缘计算引擎等。
 3. Suite Hub
-   包含了面向ToB，ToC，ToG各场景的套件。比如：泛安防套件，ToB套件（IOCR, 非结构化解析，推荐系统等）...
+   包含了面向ToB，ToC，ToG各场景的套件。
+   比如：泛安防套件，ToB套件（IOCR, 非结构化解析，推荐系统等）,生物医药，元宇宙...
 ```
 
 <div align="center">
@@ -128,6 +129,7 @@ http://www.aias.top/
 ```text
   1). 工具箱系列：RDKit工具箱，DNA工具箱
   2). DNA序列搜索
+  3). 分子搜索
       ...
 ```
 
@@ -144,12 +146,14 @@ http://www.aias.top/
 ```text
   1). OCR自定义模版识别
   2). 问答系统
+  3). 人脸图像搜素
       ...
 ```
 
 - 9. 9_metaverse - [元宇宙](http://aias.top/metaverse.html)
 ```text
   1). 2D虚拟偶像
+  2). 3D虚拟偶像
       ...
 ```
 
@@ -158,6 +162,7 @@ http://www.aias.top/
   <div align="center">QQ扫码入群 (111257454)</div>
 <img src="https://aias-home.oss-cn-beijing.aliyuncs.com/images/qq.png"  width = "300"  />
 </div>
+
 
 
 Calvin

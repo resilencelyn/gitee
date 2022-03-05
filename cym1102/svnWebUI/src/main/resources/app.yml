@@ -1,0 +1,29 @@
+server:
+  port: 6060
+  request:
+    maxRequestSize: 204800mb
+  
+project:
+  sqlPrint: false
+  beanPackage: com.cym.model
+  home: /home/svnWebUI/
+  findPass: false
+  
+solon:
+  app.name: svnWebUI
+  view.mapping.html: FreemarkerRender
+  logging:
+    logger:
+      "com.zaxxer":
+        level: "WARN"
+    appender:
+      file:
+        name: ${project.home}/log/${solon.app.name}
+        level: INFO
+
+database:
+  type: h2
+  url: 
+  username: 
+  password: 
+  

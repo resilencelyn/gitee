@@ -41,13 +41,13 @@ def frame_opt(frame,
                            interpolation=cv2.INTER_AREA)  # 重塑
 
     if (frame_saveStyle == 'jpg'):
-        cv2.imwrite(
-            f'./{frame_savePath}/{frame_namePrefix}-{frame_num}.{frame_saveStyle}', frame,
-            [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
+        # 写入jpg文件
+        cv2.imwrite(f'./{frame_savePath}/{frame_namePrefix}-{frame_num}.{frame_saveStyle}',
+                    frame, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
     elif (frame_saveStyle == 'png'):
-        cv2.imwrite(
-            f'./{frame_savePath}/{frame_namePrefix}-{frame_num}.{frame_saveStyle}', frame,
-            [int(cv2.IMWRITE_PNG_COMPRESSION), png_quality])
+        # 写入png文件
+        cv2.imwrite(f'./{frame_savePath}/{frame_namePrefix}-{frame_num}.{frame_saveStyle}',
+                    frame, [int(cv2.IMWRITE_PNG_COMPRESSION), png_quality])
     else:
         print(f'帧格式有问题！无法保存！')
         sys.exit()  # 结束程序
@@ -59,7 +59,8 @@ def frames_transform(frame, countdown_msg, textFont, xy_c, font_size):
     frame_img = Image.fromarray(frame)  # array2PIL
     # 加入倒计时提示信息
     ImageDraw.Draw(frame_img).multiline_text(
-        (xy_c[0]-font_size*13/2, xy_c[1]-font_size*3/2), countdown_msg, fill=(205, 250, 255), font=textFont, align="center")
+        (xy_c[0]-font_size*13/2, xy_c[1]-font_size*3/2), countdown_msg,
+        fill=(205, 250, 255), font=textFont, align="center")
     frame_array = np.array(frame_img)  # PIL2array
 
     return frame_array

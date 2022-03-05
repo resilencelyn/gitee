@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ide-{{id}}
+  namespace: {{namespace}}
+spec:
+  storageClassName: {{storage_class}}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{storage_size}}Gi

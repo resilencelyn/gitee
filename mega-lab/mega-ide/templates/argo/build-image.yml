@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: build-ide-{{uid}}
+  namespace: {{namespace}}
+spec:
+  # 7天后自动删除
+  ttlStrategy:
+    secondsAfterCompletion: 604800
+    secondsAfterSuccess: 604800
+    secondsAfterFailure: 604800
+  volumes:
+    - name: docker
+      hostPath:
+        path: /var/run/docker.sock
+  entrypoint: build-ide
+  templates:
+    - name: build-ide
+      container:
+        image: docker:19.03-git
+        imagePullPolicy: Always
+        command: [ "sh","-c" ]
+        args:
+          - -c
+          - |
+            cd /opt &&
+            echo git地址 {{gitlab_url}} &&
+            git clone {{gitlab_url}} ./ &&
+
+            docker build --network=host -t {{image_name}} -f Dockerfile .
+            docker push {{image_name}}
+        env:
+          - name: TZ
+            value: Asia/Shanghai
+        volumeMounts:
+          - name: docker
+            mountPath: /var/run/docker.sock

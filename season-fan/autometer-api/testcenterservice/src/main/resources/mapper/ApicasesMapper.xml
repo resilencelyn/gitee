@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoctan.api.mapper.ApicasesMapper">
+  <resultMap id="BaseResultMap" type="com.zoctan.api.entity.Apicases">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="apiid" jdbcType="BIGINT" property="apiid" />
+    <id column="deployunitid" jdbcType="BIGINT" property="deployunitid" />
+    <result column="apiname" jdbcType="VARCHAR" property="apiname" />
+    <result column="deployunitname" jdbcType="VARCHAR" property="deployunitname" />
+    <result column="casename" jdbcType="VARCHAR" property="casename" />
+    <result column="casejmxname" jdbcType="VARCHAR" property="casejmxname" />
+    <result column="casecontent" jdbcType="VARCHAR" property="casecontent" />
+    <result column="casetype" jdbcType="VARCHAR" property="casetype" />
+    <result column="threadnum" jdbcType="BIGINT" property="threadnum" />
+    <result column="loops" jdbcType="BIGINT" property="loops" />
+    <result column="expect" jdbcType="VARCHAR" property="expect" />
+    <result column="middleparam" jdbcType="VARCHAR" property="middleparam" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="lastmodify_time" jdbcType="TIMESTAMP" property="lastmodifyTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+
+  <select id="findApiCaseWithName" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM apicases a
+    <where>
+      <if test="apiname != null and apiname != ''">a.apiname = #{apiname}</if>
+      <if test="casetype != null and casetype != ''">and a.casetype = #{casetype}</if>
+      <if test="deployunitname != null  and deployunitname != ''">and a.deployunitname = #{deployunitname}</if>
+      <if test="casename != null and casename != ''">and a.casename like CONCAT('%',#{casename},'%')</if>
+    </where>
+    order by lastmodify_time  DESC
+  </select>
+
+  <select id="findApiCasebynameandcasetype" resultMap="BaseResultMap">
+    SELECT a.*
+    FROM apicases a
+    <where>
+      <if test="apiname != null and apiname != ''">a.apiname = #{apiname}</if>
+      <if test="deployunitname != null  and deployunitname != ''">and a.deployunitname = #{deployunitname}</if>
+      <if test="casetype != null and casetype != ''">and a.casetype = #{casetype}</if>
+    </where>
+  </select>
+
+  <select id="getapicasebyName" resultMap="BaseResultMap">
+    SELECT a.casename,a.id
+    FROM apicases a where a.apiname =#{apiname} and a.deployunitname = #{deployunitname}
+  </select>
+
+
+  <select id="forupdateifexist" resultMap="BaseResultMap">
+    SELECT id,apiname,deployunitname,casename,casejmxname,casecontent,casetype,expect,level,memo,create_time,lastmodify_time,creator FROM apicases
+    WHERE deployunitname = #{deployunitname} and apiname = #{apiname}
+    and id != #{id} and casename = #{casename}
+
+  </select>
+
+  <select id="getcasenum" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM apicases  where casetype=#{casetype}
+  </select>
+
+  <update id="updateApicase" parameterType="com.zoctan.api.entity.Apicases">
+    update apicases set casename = #{casename},casejmxname = #{casejmxname}, apiname = #{apiname}, deployunitname = #{deployunitname}, casecontent = #{casecontent},expect = #{expect},
+    memo = #{memo},casetype=#{casetype},threadnum=#{threadnum},loops=#{loops},middleparam=#{middleparam},level=#{level}, creator = #{creator},lastmodify_time = DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')
+    where id = #{id};
+  </update>
+
+  <select id="getstaticsdeployunitcases" resultMap="BaseResultMap">
+    SELECT deployunitname ,count(*) as apiid
+    FROM apicases group by deployunitname
+  </select>
+
+  <select id="getcasebydeployunitid" resultMap="BaseResultMap">
+    SELECT *
+    FROM apicases WHERE deployunitid = #{deployunitid}
+  </select>
+
+  <select id="getcasebyapiid" resultMap="BaseResultMap">
+    SELECT *
+    FROM apicases WHERE apiid = #{apiid}
+  </select>
+
+
+
+
+</mapper>

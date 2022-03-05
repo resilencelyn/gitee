@@ -24,7 +24,7 @@ from utils.fonts_opt import is_fonts
 
 ROOT_PATH = sys.path[0]  # 项目根目录
 OWS_VERSION = 'OpenCV Webcam Script v0.6'  # 项目名称与版本号
-COUNTDOWN_FRAMES = 200  # 倒计时帧数
+COUNTDOWN_FRAMES = 150  # 倒计时帧数
 COUNTDOWN_FONTSIZE = 25  # 倒计时字体大小
 
 
@@ -41,7 +41,7 @@ def parse_args(known=False):
     parser.add_argument('--is_resizeFrame', '-isrf',
                         action='store_true', help='is resize frame')
     parser.add_argument('--frame_saveDir', '-fsd',
-                        default="./WebcamFrame", type=str, help='save frame dir')
+                        default="WebcamFrame", type=str, help='save frame dir')
     parser.add_argument('--frame_dirName', '-fdn',
                         default="frames", type=str, help='save frame dir name')
     parser.add_argument('--frame_nSave', '-fns', default=1,
@@ -90,7 +90,7 @@ def webcam_opencv(device_index="0",                 # 设备号
                   quit_key="q",                     # 退出键
                   pause_key="p",                    # 暂停键
                   is_autoSaveFrame=False,           # 自动保存帧
-                  frame_saveDir="./WebcamFrame",    # 帧保存路径
+                  frame_saveDir="WebcamFrame",      # 帧保存路径
                   frame_dirName="frames",           # 帧目录
                   frame_nSave=1,                    # 每隔n帧保存一次
                   auto_frameNum=0,                  # 自动保存最大帧数
@@ -186,11 +186,12 @@ def webcam_opencv(device_index="0",                 # 设备号
             wait_key = cv2.waitKey(20) & 0xFF  # 键盘监听
             _, frame = cap.read()  # 捕获画面
             frame_countdown += 1  # 倒计时
+            cv2.namedWindow(OWS_VERSION)  # 设置窗口
 
             # ------------------倒计时150帧启动程序------------------
             if (frame_countdown <= COUNTDOWN_FRAMES):
                 # 倒计时提示信息
-                countdown_msg = f'倒计时：{COUNTDOWN_FRAMES - frame_countdown + 1}\n请将设备调整到合适的位置，\n准备开始。。。'
+                countdown_msg = f'倒计时：{COUNTDOWN_FRAMES - frame_countdown + 1}帧\n请将设备调整到合适的位置，\n准备开始。。。'
                 # 帧转换
                 frame_array = frames_transform(
                     frame, countdown_msg, textFont, (x_c, y_c), COUNTDOWN_FONTSIZE)
@@ -211,13 +212,15 @@ def webcam_opencv(device_index="0",                 # 设备号
                         break
                     if (frame_num % frame_nSave == 0):  # 每隔n帧保存一次
                         frame_n_num += 1
-                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame, resize_frame,
-                                  resizeRatio_frame, frame_namePrefix, frame_saveStyle, jpg_quality, png_quality)
+                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame,
+                                  resize_frame, resizeRatio_frame, frame_namePrefix, frame_saveStyle,
+                                  jpg_quality, png_quality)
                 elif (is_handSaveFrame):  # 手动保存
                     if wait_key == ord(frame_capKey):  # 保存键
                         frame_hand_num += 1  # 手动帧计数
-                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame, resize_frame,
-                                  resizeRatio_frame, frame_namePrefix, frame_saveStyle, jpg_quality, png_quality)
+                        frame_opt(frame_write, frame_savePath, frame_num, is_resizeFrame,
+                                  resize_frame, resizeRatio_frame, frame_namePrefix, frame_saveStyle,
+                                  jpg_quality, png_quality)
 
                 # ------------------快捷键设置------------------
                 if wait_key == ord(quit_key):  # 退出 ord：字符转ASCII码
@@ -234,15 +237,18 @@ def webcam_opencv(device_index="0",                 # 设备号
             frameSaveMsg = f'自动版：共计{frame_num}帧，已保存在：{frame_savePath}\n'
             print(frameSaveMsg)
             log_management(f'{frameSaveMsg}', logName, logMode)  # 记录帧保存信息
-            date_time_frames(logTime, frame_num)  # 记录时间与帧数
+            date_time_frames(logTime, frame_num, frame_dirName,
+                             frame_saveDir)  # 记录时间与帧数
         elif (is_handSaveFrame):
             # 帧保存信息（手动版）
             frameSaveMsg = f'手动版：共计{frame_hand_num}帧，已保存在：{frame_savePath}\n'
             print(frameSaveMsg)
             log_management(f'{frameSaveMsg}', logName, logMode)  # 记录帧保存信息
-            date_time_frames(logTime, frame_hand_num)  # 记录时间与帧数
+            date_time_frames(logTime, frame_hand_num,
+                             frame_dirName, frame_saveDir)  # 记录时间与帧数
         else:
-            date_time_frames(logTime, 0)  # 记录非帧保存状态
+            date_time_frames(logTime, 0, frame_dirName,
+                             frame_saveDir)  # 记录非帧保存状态
 
         # ------------------资源释放------------------
         cap.release()  # 释放缓存资源

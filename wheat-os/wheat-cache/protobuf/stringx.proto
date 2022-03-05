@@ -1,0 +1,92 @@
+syntax = "proto3";
+import "base.proto";
+option go_package = "pkg/proto";
+
+message SetRequest {
+  BaseKey key = 1;
+  string val = 2;
+}
+
+message SetResponse {
+  string result = 2;
+}
+
+message GetRequest {
+  BaseKey key = 1;
+}
+
+message GetResponse {
+  string result = 2;
+}
+
+message AddRequest {
+  BaseKey key = 1;
+  int32 renewal = 2;
+}
+
+message AddResponse {
+  string result = 2;
+}
+
+message ReduceRequest {
+  BaseKey key = 1;
+  int32 renewal = 2;
+}
+
+message ReduceResponse {
+  string result = 2;
+}
+
+
+message SetnxRequest {
+  BaseKey key = 1;
+  string val = 2;
+}
+
+message SetnxResponse {
+}
+
+message SetBitRequest {
+  BaseKey key = 1;
+  bool val = 2;
+  int32 offer = 3;
+}
+
+message SetBitResponse {
+}
+
+message GetBitRequest {
+  BaseKey key = 1;
+  int32 offer = 2;
+}
+
+message GetBitResponse {
+  bool val = 1;
+}
+
+message GetRangeRequest {
+  BaseKey key = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
+message GetRangeResponse {
+  string result = 1;
+}
+
+message GetSetRequest {
+  BaseKey key = 1;
+  string val = 2;
+}
+
+message GetSetResponse {
+  string result = 1;
+}
+
+message StrLenRequest {
+  BaseKey key = 1;
+}
+
+message StrLenResponse {
+  int32 length = 1;
+}

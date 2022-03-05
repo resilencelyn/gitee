@@ -1,0 +1,33 @@
+version: 0.0.1
+spring:
+  application:
+    name: survey
+  profiles:
+    active: @activeProfile@ # maven 配置
+#    active: ${activeProfile} # gradle 配置
+  mvc:
+    async:
+      request-timeout: -1
+    static-path-pattern: /notfound # 覆盖默认的 /**
+    throw-exception-if-no-handler-found: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+  jackson:
+    default-property-inclusion: non_null # 序列化忽略空值
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false # 反序列化时允许未知属性
+
+flowable:
+  async-executor-activate: false
+  database-schema-update: false
+
+api:
+  prefix: /api

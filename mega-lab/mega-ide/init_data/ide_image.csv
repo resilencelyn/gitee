@@ -1,0 +1,2 @@
+"id","created_date","git_url","note","idc_registry_id","update_date","name","version"
+"0b3abac3-3289-4430-8ac7-8757ef888b4a","2022/1/29 18:25:14.607648","","Tensorflow CPU Jupyterlab镜像","ce4aae8b-27f3-40a3-bf05-a29d6d7d1485","2022/1/29 18:25:14.60766","tensorflow-cpu","1.0.0-jupyterlab"

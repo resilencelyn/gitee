@@ -6,6 +6,7 @@ import {
 	ResizerInterface,
 	CardValue,
 	removeUnit,
+	CardActiveTrigger,
 } from '@aomao/engine';
 import {
 	$,
@@ -96,10 +97,6 @@ class VideoComponent<T extends VideoValue = VideoValue> extends Card<T> {
 	}
 
 	static get autoSelected() {
-		return false;
-	}
-
-	static get singleSelectable() {
 		return false;
 	}
 
@@ -326,7 +323,7 @@ class VideoComponent<T extends VideoValue = VideoValue> extends Card<T> {
 	getMaxWidth(node: NodeInterface = this.getCenter()) {
 		const block = this.editor.block.closest(node).get<HTMLElement>();
 		if (!block) return 0;
-		return block.clientWidth - 6;
+		return block.clientWidth;
 	}
 
 	/**
@@ -450,8 +447,6 @@ class VideoComponent<T extends VideoValue = VideoValue> extends Card<T> {
 		} else {
 			this.rate = naturalHeight / naturalWidth;
 		}
-		window.removeEventListener('resize', this.onWindowResize);
-		window.addEventListener('resize', this.onWindowResize);
 		// 拖动调整视频大小
 		const resizer = new Resizer({
 			imgUrl: cover,
@@ -698,22 +693,34 @@ class VideoComponent<T extends VideoValue = VideoValue> extends Card<T> {
 		}
 	}
 
-	handleClick = () => {
+	handleClick = (event: MouseEvent) => {
 		if (isEngine(this.editor) && !this.activated) {
-			this.editor.card.activate(this.root);
+			this.editor.card.activate(
+				this.root,
+				CardActiveTrigger.MOUSE_DOWN,
+				event,
+			);
 		}
 	};
 
+	didUpdate(): void {
+		super.didUpdate();
+		this.toolbarModel?.setDefaultAlign('top');
+	}
+
 	didRender() {
 		super.didRender();
+		window.addEventListener('resize', this.onWindowResize);
+		this.editor.on('editor:resize', this.onWindowResize);
 		this.toolbarModel?.setDefaultAlign('top');
-		this.container?.on('click', this.handleClick);
+		this.container?.on('mousedown', this.handleClick);
 	}
 
 	destroy() {
 		super.destroy();
-		this.container?.off('click', this.handleClick);
+		this.container?.off('mousedown', this.handleClick);
 		window.removeEventListener('resize', this.onWindowResize);
+		this.editor.off('editor:resize', this.onWindowResize);
 	}
 }
 

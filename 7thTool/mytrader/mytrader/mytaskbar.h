@@ -1,0 +1,49 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        tbtest.h
+// Purpose:     wxTaskBarIcon sample
+// Author:      Julian Smart
+// Modified by:
+// Created:     01/02/97
+// Copyright:   (c)
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+#pragma once
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#include <wx/taskbar.h>
+
+class MyTaskBarIcon : public wxTaskBarIcon
+{
+public:
+#if defined(__WXOSX__) && wxOSX_USE_COCOA
+    MyTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE)
+    :   wxTaskBarIcon(iconType)
+#else
+    MyTaskBarIcon()
+#endif
+    {}
+
+    void OnLeftButtonDClick(wxTaskBarIconEvent&);
+    void OnMenuRestore(wxCommandEvent&);
+	void OnAbout(wxCommandEvent&);
+	void OnPreference(wxCommandEvent&);
+	void OnClearData(wxCommandEvent&);
+	void OnResettings(wxCommandEvent&);
+	void OnReportContext(wxCommandEvent&);
+	void OnRestart(wxCommandEvent&);
+    void OnMenuExit(wxCommandEvent&);
+    void OnMenuSetNewIcon(wxCommandEvent&);
+    void OnMenuCheckmark(wxCommandEvent&);
+    void OnMenuUICheckmark(wxUpdateUIEvent&);
+    void OnMenuSub(wxCommandEvent&);
+    virtual wxMenu *CreatePopupMenu() wxOVERRIDE;
+
+    wxDECLARE_EVENT_TABLE();
+};

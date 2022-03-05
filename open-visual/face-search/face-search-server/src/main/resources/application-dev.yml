@@ -1,0 +1,303 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为80
+  port: 8080
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 10
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 5
+ 
+# 日志配置
+logging:
+  level:
+    com.visual.face.search: debug
+    org.springframework: warn
+
+# 模型配置
+visual:
+  model:
+    faceDetection:
+      name: PcnNetworkFaceDetection
+      modelPath:
+      thread: 1
+      backup:
+        name: InsightScrfdFaceDetection
+        modelPath:
+        thread: 1
+    faceKeyPoint:
+      name: InsightCoordFaceKeyPoint
+      modelPath:
+      thread: 1
+    faceAlignment:
+      name: Simple106pFaceAlignment
+      modelPath:
+      thread: 1
+    faceRecognition:
+      name: InsightArcFaceRecognition
+      modelPath:
+      thread: 1
+  engine:
+    selected: milvus
+    proxima:
+      host: 172.16.36.229
+      port: 16000
+    milvus:
+      host: 172.16.36.229
+      port: 19530
+  swagger:
+    enable: true
+
+# Spring配置
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  # 文件上传
+  servlet:
+     multipart:
+       # 单个文件大小
+       max-file-size:  10MB
+       # 设置总上传的文件大小
+       max-request-size:  20MB
+  #数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://172.16.36.228:3306/visual_face_search?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: model
+        password: Model123!@#
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+      # 初始连接数
+      initialSize: 5
+      # 最小连接池数量
+      minIdle: 10
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
+        url-pattern: /druid/*
+        # 控制台管理用户名和密码
+        login-username:
+        login-password:
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 用户配置
+#user:
+#  password:
+#    # 密码错误{maxRetryCount}次锁定10分钟
+#    maxRetryCount: 5
+#
+## Spring配置
+#spring:
+#  # 模板引擎
+#  thymeleaf:
+#    mode: HTML
+#    encoding: utf-8
+#    # 禁用缓存
+#    cache: false
+#  # 资源信息
+#  messages:
+#    # 国际化资源文件路径
+#    basename: static/i18n/messages
+#  jackson:
+#    time-zone: GMT+8
+#    date-format: yyyy-MM-dd HH:mm:ss
+#  # 文件上传
+#  servlet:
+#     multipart:
+#       # 单个文件大小
+#       max-file-size:  10MB
+#       # 设置总上传的文件大小
+#       max-request-size:  20MB
+#  #数据源
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    druid:
+#      # 主库数据源
+#      master:
+#        url: jdbc:mysql://127.0.0.1:3306/open_lab?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#        username: root
+#        password: root
+#      # 从库数据源
+#      slave:
+#        # 从数据源开关/默认关闭
+#        enabled: false
+#        url:
+#        username:
+#        password:
+#      # 初始连接数
+#      initialSize: 5
+#      # 最小连接池数量
+#      minIdle: 10
+#      # 最大连接池数量
+#      maxActive: 20
+#      # 配置获取连接等待超时的时间
+#      maxWait: 60000
+#      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+#      timeBetweenEvictionRunsMillis: 60000
+#      # 配置一个连接在池中最小生存的时间，单位是毫秒
+#      minEvictableIdleTimeMillis: 300000
+#      # 配置一个连接在池中最大生存的时间，单位是毫秒
+#      maxEvictableIdleTimeMillis: 900000
+#      # 配置检测连接是否有效
+#      validationQuery: SELECT 1 FROM DUAL
+#      testWhileIdle: true
+#      testOnBorrow: false
+#      testOnReturn: false
+#      webStatFilter:
+#        enabled: true
+#      statViewServlet:
+#        enabled: true
+#        # 设置白名单，不填则允许所有访问
+#        allow:
+#        url-pattern: /druid/*
+#        # 控制台管理用户名和密码
+#        login-username:
+#        login-password:
+#      filter:
+#        stat:
+#          enabled: true
+#          # 慢SQL记录
+#          log-slow-sql: true
+#          slow-sql-millis: 1000
+#          merge-sql: true
+#        wall:
+#          config:
+#            multi-statement-allow: true
+#  session:
+#    store-type: redis
+#  redis:
+#    database: 2
+#    host: 127.0.0.1
+#    port: 6379
+#    password:      # 密码（默认为空）
+#    timeout: 6000  # 连接超时时长（毫秒）
+#    jedis:
+#      pool:
+#        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+#        max-wait: -1ms    # 连接池最大阻塞等待时间（使用负值表示没有限制）
+#        max-idle: 10      # 连接池中的最大空闲连接
+#        min-idle: 5       # 连接池中的最小空闲连接
+#
+## MyBatis
+#mybatis:
+#    # 搜索指定包别名
+#    typeAliasesPackage: com.open.lab.manager.**.domain
+#    # 配置mapper的扫描，找到所有的mapper.xml映射文件
+#    mapperLocations: classpath*:mapper/**/*Mapper.xml
+#    # 加载全局的配置文件
+#    configLocation: classpath:mybatis/mybatis-config.xml
+#
+## PageHelper分页插件
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  params: count=countSql
+#
+## Shiro
+#shiro:
+#  cache:
+#    storeEngine: redis
+#  user:
+#    # 登录地址
+#    loginUrl: /login
+#    # 权限认证失败地址
+#    unauthorizedUrl: /unauth
+#    # 首页地址
+#    indexUrl: /index
+#    # 验证码开关
+#    captchaEnabled: true
+#    # 验证码类型 math 数组计算 char 字符
+#    captchaType: math
+#  cookie:
+#    # 设置Cookie的域名 默认空，即当前访问的域名
+#    domain:
+#    # 设置cookie的有效访问路径
+#    path: /
+#    # 设置HttpOnly属性
+#    httpOnly: true
+#    # 设置Cookie的过期时间，天为单位
+#    maxAge: 30
+#    # 设置密钥，务必保持唯一性（生成方式，直接拷贝到main运行即可）KeyGenerator keygen = KeyGenerator.getInstance("AES"); SecretKey deskey = keygen.generateKey(); System.out.println(Base64.encodeToString(deskey.getEncoded()));
+#    cipherKey: zSyK5Kp6PZAAjlT+eeNMlg==
+#  session:
+#    # Session超时时间，-1代表永不过期（默认30分钟）
+#    expireTime: 30
+#    # 同步session到数据库的周期（默认1分钟）
+#    dbSyncPeriod: 1
+#    # 相隔多久检查一次session的有效性，默认就是10分钟
+#    validationInterval: 10
+#    # 同一个用户最大会话数，比如2的意思是同一个账号允许最多同时两个人登录（默认-1不限制）
+#    maxSession: -1
+#    # 踢出之前登录的/之后登录的用户，默认踢出之前登录的用户
+#    kickoutAfter: false
+#
+## 防止XSS攻击
+#xss:
+#  # 过滤开关
+#  enabled: true
+#  # 排除链接（多个用逗号分隔）
+#  excludes: /system/notice/*
+#  # 匹配链接
+#  urlPatterns: /system/*,/monitor/*,/tool/*
+#
+## Swagger配置
+#swagger:
+#  # 是否开启swagger
+#  enabled: true
