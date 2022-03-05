@@ -150,6 +150,10 @@
 			changeCarInputMode() {
 				this.abc = !this.abc;
 			},
+			// 修改汽车牌键盘的输入模式，中文|英文
+			updateCarInputMode(abc) {
+				this.abc = abc;
+			},
 			// 点击退格键
 			backspaceClick() {
 				this.backspaceFn();

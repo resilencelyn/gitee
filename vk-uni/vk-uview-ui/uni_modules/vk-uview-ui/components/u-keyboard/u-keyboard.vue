@@ -48,23 +48,23 @@
 	 */
 	export default {
 		name: "u-keyboard",
-    emits: ["update:modelValue", "input", "change", "cancel", "confirm", "backspace"],
+		emits: ["update:modelValue", "input", "change", "cancel", "confirm", "backspace"],
 		props: {
-      // 通过双向绑定控制键盘的弹出与收起
-      value: {
-        type: Boolean,
-        default: false
-      },
-      modelValue: {
-        type: Boolean,
-        default: false
-      },
+			// 通过双向绑定控制键盘的弹出与收起
+			value: {
+				type: Boolean,
+				default: false
+			},
+			modelValue: {
+				type: Boolean,
+				default: false
+			},
 			// 键盘的类型，number-数字键盘，card-身份证键盘，car-车牌号键盘
 			mode: {
 				type: String,
 				default: 'number'
 			},
-      
+			
 			// 是否显示键盘的"."符号
 			dotEnabled: {
 				type: Boolean,
@@ -136,29 +136,29 @@
 				popupValue:false
 			}
 		},
-    watch: {
-      value(v1, v2) {
-        this.popupValue = v1;
-      },
-      modelValue(v1, v2) {
-        this.popupValue = v1;
-      },
-    },
+		watch: {
+			value(v1, v2) {
+				this.popupValue = v1;
+			},
+			modelValue(v1, v2) {
+				this.popupValue = v1;
+			},
+		},
 		computed: {
 			uZIndex() {
 				return this.zIndex ? this.zIndex : this.$u.zIndex.popup;
 			}
 		},
 		methods: {
-      getValue(){
-        // #ifndef VUE3
-        return this.value;
-        // #endif
-        
-        // #ifdef VUE3
-        return this.modelValue;
-        // #endif
-      },
+			getValue(){
+				// #ifndef VUE3
+				return this.value;
+				// #endif
+				
+				// #ifdef VUE3
+				return this.modelValue;
+				// #endif
+			},
 			change(e) {
 				this.$emit('change', e);
 			},
@@ -184,7 +184,10 @@
 			},
 			changeCarInputMode(){
 				if (this.$refs.uCarKeyboard) this.$refs.uCarKeyboard.changeCarInputMode();
-			}
+			},
+			updateCarInputMode(abcKey){
+				if (this.$refs.uCarKeyboard) this.$refs.uCarKeyboard.updateCarInputMode(abcKey);
+			},
 			// 关闭键盘
 			// close() {
 			// 	this.show = false;
