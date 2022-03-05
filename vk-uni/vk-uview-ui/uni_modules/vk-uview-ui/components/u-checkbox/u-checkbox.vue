@@ -19,7 +19,7 @@
 	 * @property {String Number} icon-size 图标大小，单位rpx（默认20）
 	 * @property {String Number} label-size label字体大小，单位rpx（默认28）
 	 * @property {String Number} name checkbox组件的标示符
-	 * @property {String} shape 形状，见官网说明（默认circle）
+	 * @property {String} shape 形状，外观形状，shape-方形，circle-圆形(默认circle)
 	 * @property {Boolean} disabled 是否禁用
 	 * @property {Boolean} label-disabled 是否禁止点击文本操作checkbox
 	 * @property {String} active-color 选中时的颜色，如设置CheckboxGroup的active-color将失效
@@ -44,7 +44,7 @@
 				type: [String, Number],
 				default: ''
 			},
-			// 形状，square为方形，circle为原型
+			// 形状，square为方形，circle为圆型
 			shape: {
 				type: String,
 				default: ''

@@ -64,7 +64,7 @@
 				type: Boolean,
 				default: false
 			},
-			// 形状，square为方形，circle为原型
+			// 形状，square为方形，circle为圆型
 			shape: {
 				type: String,
 				default: 'square'
