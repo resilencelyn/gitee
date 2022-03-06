@@ -156,15 +156,17 @@
 			},
 			// 点击退格键
 			backspaceClick() {
-				this.backspaceFn();
+				let count = 1;
+				this.backspaceFn(count);
 				clearInterval(this.timer); //再次清空定时器，防止重复注册定时器
 				this.timer = null;
 				this.timer = setInterval(() => {
-					this.backspaceFn();
+					count++;
+					this.backspaceFn(count);
 				}, 250);
 			},
-			backspaceFn(){
-				this.$emit('backspace');
+			backspaceFn(count){
+				this.$emit('backspace',count);
 			},
 			clearTimer() {
 				clearInterval(this.timer);

@@ -1,4 +1,5 @@
-import { Element, useEditor, useNode } from '@craftjs/core';
+import { useNode } from '@craftjs/core';
+import React from 'react';
 import styled from 'styled-components';
 import { CVideoSettings } from './CVideoSettings';
 
@@ -59,10 +60,6 @@ export const CVideo = props => {
     children,
   } = props;
 
-  const { enabled } = useEditor(state => ({
-    enabled: state.options.enabled,
-  }));
-
   const {
     connectors: { connect, drag },
   } = useNode();
@@ -83,7 +80,7 @@ export const CVideo = props => {
   };
 
   return (
-    <Wrapper ref={ref => connect(drag(ref))} enabled={enabled} style={calcStyle()}>
+    <Wrapper ref={connect} style={calcStyle()}>
       <video src={src} poster={poster} alt={alt} controls={controls} />
     </Wrapper>
   );
@@ -96,7 +93,3 @@ CVideo.craft = {
     toolbar: CVideoSettings,
   },
 };
-
-export function getVideo(props = {}) {
-  return <Element is={CVideo} canvas {...props}></Element>;
-}

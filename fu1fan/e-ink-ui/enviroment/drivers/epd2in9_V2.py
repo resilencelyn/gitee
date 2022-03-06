@@ -356,8 +356,9 @@ class Epd2in9V2:
 
 
 class Screen:
-    def __init__(self):
+    def __init__(self, logger):
         super().__init__()
+        self.logger = logger
         self._driver = Epd2in9V2()
 
         self._driver.init()
@@ -382,7 +383,7 @@ class Screen:
                 if time.time() - self._last_display >= self.auto_sleep_time:
                     self._driver.sleep()
                     self._status = False
-                    print("屏幕休眠。")
+                    self.logger.info("屏幕休眠")
 
         self.auto_refresh_thread = threading.Thread(target=auto_sleep_methode, daemon=True)
         self.auto_refresh_thread.start()
@@ -414,6 +415,7 @@ class Screen:
 
     def sleep(self):
         self._driver.sleep()
+        self._status = False
 
     def quit(self):
         self._driver.exit()

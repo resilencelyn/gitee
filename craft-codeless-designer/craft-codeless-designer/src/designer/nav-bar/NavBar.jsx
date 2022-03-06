@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons';
 import { useEditor } from '@craftjs/core';
 import { Button, Col, message, Row } from 'antd';
+import React from 'react';
 import styled from 'styled-components';
 import CCDIcon from '../../assets/ccd-icon.svg';
 
@@ -59,15 +60,28 @@ const NavBarWrapper = styled.div`
   }
 `;
 
+const iconStyle = { color: '#fff' };
+
 /**
  * @class NavBar
  *
  * The navigation bar at the top of the designer.
  *
+ * Callbacks on the props:
+ *
+ * - onPreview(evt)
+ * - onDelete(evt)
+ * - onUndo(evt)
+ * - onRedo(evt)
+ * - onSaveData(jsonStr)
+ * - onLoadData(evt)
+ * - onHelp()
+ *
  * @author 大漠穷秋<damoqiongqiu@126.com>
  */
 export const NavBar = props => {
-  const { actions, query } = useEditor();
+  const { query } = useEditor();
+  const { onPreview, onDelete, onUndo, onRedo, onSaveData, onLoadData, onHelp } = props;
 
   return (
     <NavBarWrapper>
@@ -77,48 +91,119 @@ export const NavBar = props => {
             <img src={CCDIcon}></img>
           </a>
           <span>Craft Codeless Designer</span>
-          <div className="versionText">v0.20.0</div>
+          <div className="versionText">v1.0.3</div>
         </Col>
         <Col span={12} style={{ textAlign: 'end' }}>
           <Button.Group className="buttonGroup">
-            <Button title="Preview the page." icon={<EyeOutlined style={{ color: '#fff' }} />}></Button>
-            <Button title="Delete, hit Delete key." icon={<DeleteOutlined style={{ color: '#fff' }} />} />
-            <Button title="Undo" icon={<UndoOutlined style={{ color: '#fff' }} />}></Button>
-            <Button title="Redo" icon={<RedoOutlined style={{ color: '#fff' }} />}></Button>
+            <Button
+              title="Preview the page."
+              icon={
+                <EyeOutlined
+                  style={iconStyle}
+                  onClick={evt => {
+                    try {
+                      onPreview && onPreview(evt);
+                    } catch (error) {
+                      console.error(error);
+                      message.error(error);
+                    }
+                  }}
+                />
+              }
+            ></Button>
+            <Button
+              title="Delete, hit Delete key."
+              icon={
+                <DeleteOutlined
+                  style={iconStyle}
+                  onClick={evt => {
+                    try {
+                      onDelete && onDelete(evt);
+                    } catch (error) {
+                      console.error(error);
+                      message.error(error);
+                    }
+                  }}
+                />
+              }
+            />
+            <Button
+              title="Undo"
+              icon={
+                <UndoOutlined
+                  style={iconStyle}
+                  onClick={evt => {
+                    try {
+                      onUndo && onUndo(evt);
+                    } catch (error) {
+                      console.error(error);
+                      message.error(error);
+                    }
+                  }}
+                />
+              }
+            ></Button>
+            <Button
+              title="Redo"
+              icon={
+                <RedoOutlined
+                  style={iconStyle}
+                  onClick={evt => {
+                    try {
+                      onRedo && onRedo(evt);
+                    } catch (error) {
+                      console.error(error);
+                      message.error(error);
+                    }
+                  }}
+                />
+              }
+            ></Button>
             <Button
               title="Save"
-              icon={<SaveOutlined style={{ color: '#fff' }} />}
+              icon={<SaveOutlined style={iconStyle} />}
               onClick={evt => {
                 try {
-                  const json = query.serialize();
-                  console.log(json);
-                  window.localStorage.setItem('test-data', JSON.stringify(json));
-                  message.success('Data saved to window.localStorage.');
+                  const jsonStr = query.serialize();
+                  console.log(jsonStr);
+                  onSaveData && onSaveData(jsonStr);
                 } catch (error) {
                   console.error(error);
-                  message.error('Save data failed.');
+                  message.error(error);
                 }
               }}
             ></Button>
             <Button
               title="Load"
-              icon={<DownloadOutlined style={{ color: '#fff' }} />}
+              icon={<DownloadOutlined style={iconStyle} />}
               onClick={evt => {
                 try {
-                  const data = props.onLoadData && props.onLoadData(evt);
-                  console.log(data);
-                  data && actions.deserialize(data);
-                  message.success('Load data success.');
+                  onLoadData && onLoadData(evt);
                 } catch (error) {
                   console.error(error);
-                  message.error('Load data failed.');
+                  message.error(error);
                 }
               }}
             ></Button>
-            <Button title="Help" icon={<QuestionCircleOutlined style={{ color: '#fff' }} />}></Button>
+            <Button
+              title="Help"
+              icon={
+                <QuestionCircleOutlined
+                  style={iconStyle}
+                  onClick={evt => {
+                    try {
+                      onHelp && onHelp(evt);
+                    } catch (error) {
+                      console.error(error);
+                      message.error(error);
+                    }
+                  }}
+                />
+              }
+            ></Button>
             <Button
               title="Github"
-              icon={<GithubOutlined style={{ color: '#fff' }} />}
+              icon={<GithubOutlined style={iconStyle} />}
               onClick={evt => {
                 window.open('https://github.com/craft-codeless-designer/craft-codeless-designer', '_blank');
               }}

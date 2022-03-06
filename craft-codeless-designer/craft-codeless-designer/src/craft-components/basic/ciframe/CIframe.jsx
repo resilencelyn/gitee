@@ -1,4 +1,5 @@
-import { Element, useEditor, useNode } from '@craftjs/core';
+import { useEditor, useNode } from '@craftjs/core';
+import React from 'react';
 import styled from 'styled-components';
 import { CIframeSettings } from './CIframeSettings';
 
@@ -77,7 +78,3 @@ CIframe.craft = {
     toolbar: CIframeSettings,
   },
 };
-
-export function getIframe(props = {}) {
-  return <Element is={CIframe} canvas {...props}></Element>;
-}

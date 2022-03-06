@@ -167,7 +167,7 @@ class BluetoothApp:
     def __init__(self, name, func, env):
         self.name = name
         self._func = func
-        self._env = func
+        self._env = env
 
     def __call__(self, *args, **kwargs):
         return self._func(*args, **kwargs)
@@ -186,6 +186,9 @@ class Env:
 
         self.Config = _configurator.Configurator(example=example_config)
 
+        # logger
+        self.Logger = _logger.Logger(0)
+
         # locks
         self.display_lock = _threading.Lock()
 
@@ -195,9 +198,6 @@ class Env:
         # screen
         self.Screen = simulator
         self.screen_reversed = self.Config.read("screen_reversed")
-
-        # logger
-        self.Logger = _logger.Logger(0)
 
         # threadpool
         self.Pool = _threadpool.ThreadPool(20, self.Logger.warn)
@@ -218,6 +218,7 @@ class Env:
 
         # bluetooth
         self.Bluetooth = _bluetooth.Bluetooth(self.Pool, self.Logger)
+        self._bluetooth_apps = {}
         self.bluetooth_service = self.Bluetooth.new_service("eink-clock", "94f39d29-7d6d-437d-973b-fba39e49d4ee",
                                                             self._bluetooth_handler,
                                                             status_callback=self._bluetooth_status_handler)
@@ -315,7 +316,7 @@ class Env:
         def set_theme(args, _):
             try:
                 self.change_theme(args["name"])
-                return  {"status": 1}
+                return {"status": 1}
             except (ValueError, KeyError):
                 return {"status": 0}
 
@@ -331,6 +332,44 @@ class Env:
                     continue
                 r.append(name)
             return {"status": 1, "installed": r}
+
+        @self.API.post_api("notice")
+        def notice(args, _):
+            try:
+                text = args["text"]
+            except KeyError:
+                return {"status": 0}
+            self.notice(text)
+            return {"status": 1}
+
+        @self.API.post_api("prompt")
+        def prompt(args, _):
+            try:
+                title = args["title"]
+                text = args["text"]
+            except KeyError:
+                return {"status": 0}
+            self.prompt(title, text)
+            return {"status": 1}
+
+        # WI-FI
+        @self.bluetooth_app("WI-FI")
+        def set_wifi(data):
+            index = data.find("|")
+            ssid, psk = data[0: index], data[index + 1:]
+            wpa_supplicant = open('/etc/wpa_supplicant/wpa_supplicant.conf', 'w')
+            wpa_supplicant.write('ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n')
+            wpa_supplicant.write('update_config=1\n')
+            wpa_supplicant.write('\n')
+            wpa_supplicant.write('network={\n')
+            wpa_supplicant.write('\tssid="' + ssid + '"\n')
+            wpa_supplicant.write('\tpsk="' + psk + '"\n')
+            wpa_supplicant.write('}')
+            wpa_supplicant.close()
+            set_wifi.send(1)
+            self.reboot()
+
+        # self.Pool.add(self.bluetooth_service.accept, True)
 
     def __getattr__(self, name):
         if name in self.plugins:
@@ -648,12 +687,25 @@ class Env:
         if index == -1:
             return
         try:
-            self.bluetooth_apps[data[:index]](data[index + 1:])
+            self._bluetooth_apps[data[:index]](data[index + 1:])
         except KeyError:
             pass
 
     def _bluetooth_status_handler(self, status):
         self._bluetooth_service_status = status
+
+    def bluetooth_app(self, name):
+        if name in self._bluetooth_apps:
+            raise RuntimeError("蓝牙应用已存在")
+
+        def decorator(func):
+            self._bluetooth_apps[name] = func
+            return BluetoothApp(name, func, self)
+
+        return decorator
+
+    def bluetooth_remove(self, name):
+        del self._bluetooth_apps[name]
 
     @property
     def bluetooth_service_status(self):

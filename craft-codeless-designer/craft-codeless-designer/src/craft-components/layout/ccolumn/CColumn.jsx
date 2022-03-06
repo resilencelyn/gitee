@@ -1,4 +1,4 @@
-import { Element, useNode } from '@craftjs/core';
+import { useNode } from '@craftjs/core';
 import React from 'react';
 import { CColumnSettings } from './CColumnSettings';
 
@@ -55,7 +55,7 @@ export const CColumn = props => {
   };
 
   return (
-    <div ref={ref => connect(drag(ref))} style={calcStyle()}>
+    <div ref={connect} style={calcStyle()}>
       {children}
     </div>
   );
@@ -71,7 +71,3 @@ CColumn.craft = {
     canMoveIn: nodes => nodes.every(node => node.data.type !== CColumn),
   },
 };
-
-export function getColumn(props = {}) {
-  return <Element is={CColumn} canvas {...props}></Element>;
-}

@@ -106,11 +106,13 @@
 		methods: {
 			// 点击退格键
 			backspaceClick() {
-				this.$emit('backspace');
+				let count = 1;
+				this.$emit('backspace', count);
 				clearInterval(this.timer); //再次清空定时器，防止重复注册定时器
 				this.timer = null;
 				this.timer = setInterval(() => {
-					this.$emit('backspace');
+					count++;
+					this.$emit('backspace', count);
 				}, 250);
 				if(this.vibrate) uni.vibrateShort();
 			},

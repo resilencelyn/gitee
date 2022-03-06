@@ -1,7 +1,6 @@
-import { Element, Frame, useNode } from '@craftjs/core';
+import { useNode } from '@craftjs/core';
 import React from 'react';
 import styled from 'styled-components';
-import { CColumn } from '../../craft-components/layout/ccolumn/CColumn';
 
 const RootAreaWrapper = styled.div`
   width: 100%;
@@ -19,29 +18,12 @@ const RootAreaWrapper = styled.div`
  *
  * @author 大漠穷秋<damoqiongqiu@126.com>
  */
-
-export const RootCanvasArea = ({ children }) => {
+export const RootCanvasArea = props => {
   const {
     connectors: { connect, drag },
   } = useNode();
+
+  const { children } = props;
+
   return <RootAreaWrapper ref={ref => connect(drag(ref))}>{children}</RootAreaWrapper>;
 };
-
-RootCanvasArea.craft = {
-  displayName: 'RootCanvasArea',
-  rules: {
-    canMoveIn: nodes => nodes.every(node => node.data.type !== CColumn),
-  },
-};
-
-/**
- * HOC
- * @returns
- */
-export function createCanvasArea() {
-  return (
-    <Frame>
-      <Element is={RootCanvasArea} canvas></Element>
-    </Frame>
-  );
-}

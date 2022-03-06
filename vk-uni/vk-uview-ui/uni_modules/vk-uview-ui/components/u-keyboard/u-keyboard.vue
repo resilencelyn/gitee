@@ -179,8 +179,8 @@
 				this.$emit('cancel');
 			},
 			// 退格键
-			backspace() {
-				this.$emit('backspace');
+			backspace(count) {
+				this.$emit('backspace',count);
 			},
 			changeCarInputMode(){
 				if (this.$refs.uCarKeyboard) this.$refs.uCarKeyboard.changeCarInputMode();
