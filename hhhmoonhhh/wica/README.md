@@ -1,16 +1,34 @@
 #  **智慧操控（WICA）** 
 
 
+
+
+
 ![项目的标志（icon）](symbol.png)
+
 
 
 ###   :sparkling_heart: 智慧操控：基于uiautomator2模块的电脑操控手机的功能的实现
 
 
+
 ###   :sparkling_heart: Windows Intelligently Controlling Android (WICA)
 
 
+
+
+
 ###   :tw-1f4ce: 项目地址：[https://gitee.com/hhhmoonhhh/wica](https://gitee.com/hhhmoonhhh/wica)
+
+
+
+
+
+
+
+
+
+
 
 <p>
 	<a href="https://gitee.com/hhhmoonhhh/wica/stargazers" target="_blank">
@@ -23,6 +41,13 @@
 		<img src="https://svg.hamm.cn/gitee.svg?type=watch&user=hhhmoonhhh&project=wica"/>
 	</a>
 </p>
+
+
+
+
+
+
+
 
 
 ###  :memo: 项目介绍

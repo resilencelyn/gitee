@@ -1,0 +1,5 @@
+0x00001000    phy_init             bootloader.bin
+0x00008000    partition-table  partition-table.bin
+0x00009000    nvs                   需要制作
+0x00010000   代码                  lvgl-dome.bin   
+0x00011000   spiffs                storage.bin

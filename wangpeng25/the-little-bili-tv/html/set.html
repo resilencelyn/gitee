@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html><head> 
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script>
+<title>esp32</title> 
+<style type="text/css">
+body
+{
+background:#FFF5EE;
+background-size:100%;
+text-align: center;}
+h1{color:#555555;}
+h2{margin-right:60%;color:#C0C0C0;}
+h3{margin-right:40%;color:#C0C0C0;}
+p{margin-right:30%;color:#C0C0C0;}
+h5{color:#C0C0C0;}
+.button {background-color: #555555;border: none;color: white;padding: 5px 15px;font-size: 16px;border-radius: 5px;
+}
+.input1
+{
+    border: none;
+	padding:5px 20px; 
+	background:#dddddd;
+	width:10%;
+	border-radius:10px;
+	margin-bottom: 1%;
+}
+.bt1{
+    background-color: #555555; /* Green */
+    border: none;
+    color: white;
+	margin-top: 10px;
+    padding: 5px 15px;
+	margin-left:5%;
+    font-size: 12px;
+	border-radius: 5px;
+}
+@media screen and (max-width: 480px) {
+h2{margin-right:80%;color:#C0C0C0;}
+.input1
+{
+    border: none;
+	padding:5px 20px; 
+	background:#dddddd;
+	width:30%;
+	border-radius:10px;
+	margin-bottom: 1%;
+}p{margin-right:50%;color:#C0C0C0;}
+}
+</style>
+</head>
+<body>
+<h1>信息设置</h1><h2>必填</h2>
+<h3>哔哩哔哩uid</h3>
+<input class="input1"  type="text" id="uid" placeholder="例如:138699039">
+<button class="bt1" id="test_uid">测试</button><br>
+<h5>哔哩哔哩uid每个用户唯一，用于查询粉丝数和关注数，如果没用设置默认为up主的uid</h5>
+<h3>所在城市拼音</h3>
+<input class="input1"  type="text" id="city" placeholder="例如:taiyuan">
+<button class="bt1" id="test_cy">测试</button><br>
+<h5>所选城市为市级城市名称，该接口调用的为心知天气接口，县级和区级为付费接口，暂不支持，
+<br>请填写城市拼音，默认为太原</h5>
+<button class="button" id="up">提交</button>
+<h2>选填</h2><h3>心知天气密匙 </h3>
+<input class="input1" type="text" id="pass" placeholder="例如:SSuB-x5pvaLBddTr_">
+<button class="bt1" id="test_xz">验证</button><br>
+<h5>由于使用的是up自己申请的心知天气id，每日访问存在上线，如果想要更好的体验，请更换为自己的id和密匙</h5>
+<button class="button" id="up2">提交</button>
+<h2>扩展-MQTT</h2>
+<p>mqtt-host</p>
+<input class="input1" type="text" id="host" placeholder="例如:47.92.29.155">
+<p>mqtt-id</p>
+<input class="input1" type="text" id="mid" >
+<p>mqtt-用户名</p>
+<input class="input1" type="text" id="name" >
+<p>mqtt-密码</p>
+<input class="input1" type="text" id="mpass" >
+<h5>mqtt账号可以在百度物联网平台申请，详细教程请移步<a href="https://blog.csdn.net/qq_33862616/article/details/105652284">百度云mqtt</a>
+<br>默认关注主题为blbl，temp，其中温湿度默认发送主题为temp</h5>
+<button class="button" id="mup">提交</button>
+</body>
+<script>
+$(document).ready(function(){
+var aa = function(x){ 
+    var re = /^\w{3,30}$/
+	if (x == '') {alert('不能为空');return 1;}
+	} 
+$.test = aa; 
+$("#up").click(function(){
+  	var uid= $("#uid").val();
+	var city= $("#city").val();
+	if($.test(city)){return;}
+	if($.test(uid)){return;}
+	var str=JSON.stringify({"n":1,"uid":uid,"city":city});
+  	$.post("/must",str,function(data,status){
+        alert("数据: \n" + data + "\n状态: " + status);
+    });
+  });
+$("#up2").click(function(){
+	var pass= $("#pass").val();
+	var str=JSON.stringify({"n":0,"pass":pass});
+  	$.post("/must",str,function(data,status){
+        alert("数据: \n" + data + "\n状态: " + status);
+    });
+  });
+$("#test_uid").click(function(){var uid= $("#uid").val();if($.test(uid)){return;}var url="https://api.bilibili.com/x/relation/stat?vmid="+uid;window.open(url) ;
+ });
+$("#test_cy").click(function(){
+var city= $("#city").val();if($.test(city)){return;}
+var url="https://api.seniverse.com/v3/weather/daily.json?key=SSuB-x5pvaLBddTr_&location="+city+"&language=zh-Hans&unit=c&start=0&days=5";window.open(url) ;
+});
+$("#test_xz").click(function(){
+var pass= $("#pass").val();if($.test(city)){return;}var url="https://api.seniverse.com/v3/weather/daily.json?key="+pass+"&location=taiyuan&language=zh-Hans&unit=c&start=0&days=5";window.open(url) ;
+  });
+$("#mup").click(function(){
+var host= $("#host").val();var mid= $("#mid").val();var name= $("#name").val();var mpass= $("#mpass").val();
+if($.test(host)){return;}if($.test(mid)){return;}if($.test(name)){return;}if($.test(mpass)){return;}	
+var str=JSON.stringify({"n":2,"host":host,"id":mid,"name":name,"pwd":mpass,"keep":60});
+$.post("/must",str,function(data,status){alert("数据: \n" + data + "\n状态: " + status);});});
+});
+</script>
+</html>

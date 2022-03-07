@@ -240,11 +240,14 @@ export default {
 			inputVal: 1, // 输入框中的值，不能直接使用props中的value，因为应该改变props的状态
 			timer: null, // 用作长按的定时器
 			changeFromInner: false, // 值发生变化，是来自内部还是外部
-			innerChangeTimer: null // 内部定时器
+			innerChangeTimer: null, // 内部定时器
 		};
 	},
 	created() {
 		this.inputVal = Number(this.getValue());
+	},
+	mounted() {
+
 	},
 	computed: {
 		getCursorSpacing() {

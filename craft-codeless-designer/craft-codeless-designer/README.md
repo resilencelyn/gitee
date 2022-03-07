@@ -8,6 +8,8 @@
 
 Craft Codeless Designer 是一款可视化的低代码/零代码页面设计器，基于 craft.js 扩展而来。
 
+🚀 [在线实例](https://craft-codeless-designer.github.io/craft-codeless-designer/)
+
 ## 2.用法
 
 - 在你的 React 项目中安装依赖： yarn add craft-codeless-designer

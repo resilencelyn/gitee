@@ -1,5 +1,5 @@
 <template>
-	<view class="u-checkbox-group u-clearfix">
+	<view class="u-checkbox-group u-clearfix" :class="uFromData.inputAlign == 'right' ? 'flex-end':''">
 		<slot></slot>
 	</view>
 </template>
@@ -97,12 +97,24 @@
 		},
 		data() {
 			return {
-        values:[]
+        values:[],
+				uFromData:{
+					inputAlign: 'left',  
+				}
 			}
 		},
 		created() {
 			// 如果将children定义在data中，在微信小程序会造成循环引用而报错
 			this.children = [];
+		},
+		mounted() {
+			// 支付宝、头条小程序不支持provide/inject，所以使用这个方法获取整个父组件，在created定义，避免循环应用
+			let parent = this.$u.$parent.call(this, 'u-form');
+			if (parent) {
+				Object.keys(this.uFromData).map(key => {
+					this.uFromData[key] = parent[key];
+				});
+			}
 		},
 		methods: {
 			emitEvent(obj) {
@@ -142,6 +154,13 @@
 	.u-checkbox-group {
 		/* #ifndef MP || APP-NVUE */
 		display: inline-flex;
+		flex-wrap: wrap;
+		/* #endif */
+	}
+	.u-checkbox-group.flex-end{
+		/* #ifndef APP-NVUE */
+		display: inline-flex;
+		justify-content: flex-end;
 		flex-wrap: wrap;
 		/* #endif */
 	}

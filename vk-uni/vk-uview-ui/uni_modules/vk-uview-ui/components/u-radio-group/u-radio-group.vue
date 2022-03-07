@@ -1,5 +1,5 @@
 <template>
-	<view class="u-radio-group u-clearfix">
+	<view class="u-radio-group u-clearfix" :class="uFromData.inputAlign == 'right' ? 'flex-end':''">
 		<slot></slot>
 	</view>
 </template>
@@ -76,9 +76,25 @@
 				default: false
 			}
 		},
+		data() {
+			return {
+				uFromData:{
+					inputAlign: 'left',  
+				}
+			}; 
+		},
 		created() {
 			// 如果将children定义在data中，在微信小程序会造成循环引用而报错
 			this.children = [];
+		},
+		mounted() {
+			// 支付宝、头条小程序不支持provide/inject，所以使用这个方法获取整个父组件，在created定义，避免循环应用
+			let parent = this.$u.$parent.call(this, 'u-form');
+			if (parent) {
+				Object.keys(this.uFromData).map(key => {
+					this.uFromData[key] = parent[key];
+				});
+			}
 		},
 		watch: {
 			// 当父组件需要子组件需要共享的参数发生了变化，手动通知子组件
@@ -137,6 +153,13 @@
 	.u-radio-group {
 		/* #ifndef MP || APP-NVUE */
 		display: inline-flex;
+		flex-wrap: wrap;
+		/* #endif */
+	}
+	.u-radio-group.flex-end{
+		/* #ifndef APP-NVUE */
+		display: inline-flex;
+		justify-content: flex-end;
 		flex-wrap: wrap;
 		/* #endif */
 	}

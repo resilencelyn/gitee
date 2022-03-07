@@ -25,7 +25,7 @@
 			</view>
 			<view class="u-form-item--right u-flex">
 				<view class="u-form-item--right__content">
-					<view class="u-form-item--right__content__slot ">
+					<view class="u-form-item--right__content__slot" :style="elLabelPosition == 'left' && elInputAlign == 'right' ? 'display: flex;justify-content: flex-end;' : ''">
 						<slot />
 					</view>
 					<view class="u-form-item--right__content__icon u-flex" v-if="$slots.right || rightIcon">
@@ -37,6 +37,7 @@
 		</view>
 		<view class="u-form-item__message" v-if="validateState === 'error' && showError('message')" :style="{
 			paddingLeft: elLabelPosition == 'left' ? $u.addUnit(elLabelWidth) : '0',
+			textAlign: elInputAlign == 'right' ? 'right' : 'left'
 		}">{{validateMessage}}</view>
 	</view>
 </template>
@@ -142,7 +143,11 @@
 			required: {
 				type: Boolean,
 				default: false
-			}
+			},
+			inputAlign:{
+				type: String,
+				default: ''
+			},
 		},
 		data() {
 			return {
@@ -159,7 +164,8 @@
 					labelWidth: 90,
 					labelPosition: 'left',
 					labelStyle: {},
-					labelAlign: 'left',
+					labelAlign: 'left', 
+					inputAlign: 'left',  
 				}
 			};
 		},
@@ -214,7 +220,10 @@
 				// 子组件的borderBottom默认为空字符串，如果不等于空字符串，意味着子组件设置了值，优先使用子组件的值
 				return this.borderBottom !== '' ? this.borderBottom : this.parentData.borderBottom ? this.parentData.borderBottom :
 					true;
-			}
+			},
+			elInputAlign() {
+				return this.inputAlign ? this.inputAlign : (this.parentData.inputAlign ? this.parentData.inputAlign : 'left');
+			},
 		},
 		methods: {
 			broadcastInputError() {
@@ -233,15 +242,15 @@
 				// 		return rule.required;
 				// 	});
 				// }
-        // #ifndef VUE3
-        // blur事件
-        this.$on('onFieldBlur', that.onFieldBlur);
-        // change事件
-        this.$on('onFieldChange', that.onFieldChange);
-        // #endif
-        // #ifdef VUE3
-        
-        // #endif
+				// #ifndef VUE3
+				// blur事件
+				this.$on('onFieldBlur', that.onFieldBlur);
+				// change事件
+				this.$on('onFieldChange', that.onFieldChange);
+				// #endif
+				// #ifdef VUE3
+				
+				// #endif
 			},
 
 			// 从u-form的rules属性中，取出当前u-form-item的校验规则
@@ -383,28 +392,28 @@
 				}
 			}
 		},
-    // #ifndef VUE3
-    // 组件销毁前，将实例从u-form的缓存中移除
-    beforeDestroy() {
-      // 如果当前没有prop的话表示当前不要进行删除（因为没有注入）
-      if (this.parent && this.prop) {
-        this.parent.fields.map((item, index) => {
-          if (item === this) this.parent.fields.splice(index, 1);
-        })
-      }
-    },
-    // #endif
-    
-    // #ifdef VUE3
-    beforeUnmount() {
-      // 如果当前没有prop的话表示当前不要进行删除（因为没有注入）
-      if (this.parent && this.prop) {
-        this.parent.fields.map((item, index) => {
-          if (item === this) this.parent.fields.splice(index, 1);
-        })
-      }
-    },
-    // #endif
+		// #ifndef VUE3
+		// 组件销毁前，将实例从u-form的缓存中移除
+		beforeDestroy() {
+			// 如果当前没有prop的话表示当前不要进行删除（因为没有注入）
+			if (this.parent && this.prop) {
+				this.parent.fields.map((item, index) => {
+					if (item === this) this.parent.fields.splice(index, 1);
+				})
+			}
+		},
+		// #endif
+		
+		// #ifdef VUE3
+		beforeUnmount() {
+			// 如果当前没有prop的话表示当前不要进行删除（因为没有注入）
+			if (this.parent && this.prop) {
+				this.parent.fields.map((item, index) => {
+					if (item === this) this.parent.fields.splice(index, 1);
+				})
+			}
+		},
+		// #endif
 		
 	};
 </script>
