@@ -6,15 +6,9 @@ const {
 
 const axios = require('axios');
 
-let URL;
-
-if (!process.browser) {
-  ({
-    URL
-  } = require('url'));
-} else {
-  URL = window.URL;
-}
+const {
+  URL
+} = require('../polyfill/URL');
 
 const errorHandler = require('../util/errorHandler');
 
@@ -27,7 +21,7 @@ const locationStr = `core.${path.basename(__filename, path.extname(__filename))}
  * @param {string} sessionKey 会话标识
  * @param {number} target     群成员所在群号
  * @param {number} memberId   群成员的 qq 号
- * @returns {Object} 结构 { name, specialTitle } 群名片和群头衔
+ * @returns {Object}
  */
 
 module.exports = async ({
@@ -50,11 +44,10 @@ module.exports = async ({
 
     try {
       var {
+        data,
         data: {
           msg: message,
-          code,
-          name,
-          specialTitle
+          code
         }
       } = responseData;
     } catch (error) {
@@ -66,10 +59,7 @@ module.exports = async ({
       throw new Error(message);
     }
 
-    return {
-      name,
-      specialTitle
-    };
+    return data;
   } catch (error) {
     console.error(`mirai-js: error ${locationStr}`);
     errorHandler(error);

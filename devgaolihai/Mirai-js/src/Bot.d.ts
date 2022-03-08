@@ -2,8 +2,8 @@ import {
     // 图片 id  语音 id  消息 id
     ImageId, VoiceId, MessageId,
 
-    // 事件类型    群成员权限
-    EventType, GroupPermission,
+    // 事件类型    群成员权限      性别
+    EventType, GroupPermission, SEX,
 
     // 接口               原始消息类型  事件处理器类型
     MessageChainGetable, BotConfigGetable, MessageType, Processor
@@ -173,7 +173,13 @@ export class Bot implements BotConfigGetable {
      * @param group 必选，群成员所在群号
      * @param qq    必选，群成员的 qq 号
      */
-    getMemberInfo(): Promise<Bot.MemberDetails>;
+    getMemberInfo({ group, qq }: Bot.GetMemberInfoOptions): Promise<Bot.MemberDetails>;
+
+    /**
+     * @description 获取群成员信息
+     * @param qq    必选，用户的 qq 号
+     */
+    getUserProfile({ qq }: Bot.GetUserProfileOptions): Promise<Bot.UserProfile>;
 
     /**
      * @description 设置群成员信息
@@ -184,6 +190,28 @@ export class Bot implements BotConfigGetable {
      * @param permission 可选，要设置的群头衔
      */
     setMemberInfo({ group, qq, name, title, permission }: Bot.SetMemberInfoOptions): Promise<void>;
+
+    /**
+     * @description 获取群公告列表迭代器
+     * @param group 必选，群号
+     * @returns 迭代器
+     */
+    getAnnoIter({ group }: Bot.GetAnnoIterOptions): AsyncGenerator<Bot.AnnoInfo>;
+
+    /**
+     * @description 发布群公告
+     * @param group 必选，群号
+     * @param content 必选，公告内容
+     */
+    async publishAnno({ group, content, pinned }: Bot.PublishAnnoOptions): Promise<void>;
+
+    /**
+     * @description 删除群公告
+     * @param {number} group 必选，群号
+     * @param {string} fid 必选，公告 id
+     * @reaturns {void}
+     */
+    async deleteAnno({ group, fid }: Bot.DeleteAnnoOptions): Promise<void>;
 
     /**
      * @description 禁言群成员
@@ -370,13 +398,36 @@ declare namespace Bot {
         permission: GroupPermission;
     }
 
+    interface GetMemberInfoOptions {
+        group: number;
+        qq: number;
+    }
+
     interface MemberDetails {
-        name: string;
+        id: number;
+        joinTimestamp: number;
+        lastSpeakTimestamp: number;
+        memberName: string;
+        nuteTimeRemaining: number;
+        permission: GroupPermission;
         title: string;
     }
 
     interface GetMemberListOptions {
         group: number;
+    }
+
+    interface GetUserProfileOptions {
+        qq: number;
+    }
+
+    interface UserProfile {
+        nickname: string;
+        email: string;
+        age: number;
+        level: number;
+        sign: string;
+        sex: SEX;
     }
 
     interface SetMemberInfoOptions {
@@ -385,6 +436,30 @@ declare namespace Bot {
         name?: string;
         title?: string;
         permission?: GroupPermission
+    }
+
+    interface GetAnnoIterOptions {
+        gourp: number;
+    }
+
+    interface PublishAnnoOptions {
+        group: number;
+        content: string;
+        pinned: boolean;
+    }
+
+    interface DeleteAnnoOptions {
+        group: number;
+        fid: string;
+    }
+    interface AnnoInfo {
+        group: { id: number; name: string; permission: GroupPermission; };
+        content: string;
+        senderId: number;
+        fid: string;
+        allConfirmed: boolean;
+        confirmedMembersCount: number;
+        publicationTime: number;
     }
 
     interface MuteOptions {
