@@ -37,6 +37,9 @@ export default {
 				Object.keys(this.parentData).map(key => {
 					this.parentData[key] = this.parent[key];
 				});
+				// #ifdef VUE3
+				this.parentData.value = this.parent.modelValue;
+				// #endif
 			}
 		},
 		// 阻止事件冒泡
