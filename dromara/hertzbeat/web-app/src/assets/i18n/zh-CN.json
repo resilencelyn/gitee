@@ -1,0 +1,121 @@
+{
+  "menu": {
+    "main": "主导航",
+    "lang": "语言",
+    "dashboard": "仪表盘",
+    "search.placeholder": "搜索监控：名称、IP等",
+    "fullscreen": "全屏",
+    "fullscreen.exit": "退出全屏",
+    "clear.local.storage": "清理本地缓存",
+    "monitor": {
+      "": "监控",
+      "service": "应用服务监控",
+      "db": "数据库监控",
+      "os": "操作系统监控",
+      "mid": "中间件监控",
+      "custom": "自定义监控"
+    },
+    "account": {
+      "": "个人页",
+      "center": "个人中心",
+      "settings": "账户设置",
+      "security": "安全设置",
+      "binding": "账号绑定",
+      "trigger": "触发错误",
+      "logout": "退出登录"
+    },
+    "alert": {
+      "": "告警",
+      "center": "告警中心",
+      "setting": "告警配置",
+      "dispatch": "告警通知"
+    },
+    "extras": {
+      "": "更多",
+      "help": "帮助中心",
+      "setting": "设置"
+    },
+    "more": "更多"
+  },
+  "monitor": {
+    "": "监控",
+    "category": {
+      "": "监控类别",
+      "service": "应用服务",
+      "db": "数据库",
+      "os": "操作系统",
+      "mid": "中间件",
+      "custom": "自定义监控"
+    },
+    "app": {
+      "": "监控类型",
+      "website": "网站监测",
+      "api": "HTTP API",
+      "http": "HTTP API",
+      "ping": "PING连通性",
+      "port": "端口可用性",
+      "mysql": "Mysql",
+      "oracle": "Oracle",
+      "redis": "Redis",
+      "fullsite": "全站监控"
+    }
+  },
+  "alert": {
+    "": "告警",
+    "status": {
+      "": "告警状态",
+      "0": "待处理",
+      "2": "已恢复",
+      "3": "已处理"
+    },
+    "priority": {
+      "": "告警级别",
+      "0": "紧急告警",
+      "1": "严重告警",
+      "2": "警告告警"
+    }
+  },
+  "app.lock": "锁屏",
+  "app.login.message-need-identifier": "请输入邮箱或手机号",
+  "app.login.message-need-credential": "请输入密码",
+  "app.login.message-invalid-credentials": "账户或密码错误",
+  "app.login.message-invalid-verification-code": "验证码错误",
+  "app.login.tab-login-credentials": "账户密码登录",
+  "app.login.tab-login-mobile": "手机号登录",
+  "app.login.remember-me": "自动登录",
+  "app.login.forgot-password": "忘记密码",
+  "app.login.sign-in-with": "其他登录方式",
+  "app.login.signup": "注册账户",
+  "app.login.login": "登录",
+  "app.password.forgot": "忘记密码",
+  "app.password.reset": "重置密码",
+  "app.register.register": "注册",
+  "app.register.get-verification-code": "获取验证码",
+  "app.register.sign-in": "使用已有账户登录",
+  "app.register-result.msg": "你的账户：{{email}} 注册成功",
+  "app.register-result.activation-email":
+    "额外赠送监控额度邮件已发送到你的邮箱中。请及时登录邮箱，点击邮件中的链接领取。",
+  "app.register-result.login": "开始登录",
+  "app.register-result.back-home": "返回首页",
+  "app.register-result.view-mailbox": "查看邮箱",
+  "validation.email.required": "请输入邮箱地址！",
+  "validation.email.wrong-format": "邮箱地址格式错误！",
+  "validation.email.invalid": "无效的邮箱地址！",
+  "validation.phone.invalid": "无效的手机号！",
+  "validation.verification-code.invalid": "无效的验证码,应是6位数字！",
+  "validation.password.required": "请输入密码！",
+  "validation.password.twice": "两次输入的密码不匹配!",
+  "validation.password.strength.msg": "请至少输入 6 个字符。请不要使用容易被猜到的密码。",
+  "validation.password.strength.strong": "强度：强",
+  "validation.password.strength.medium": "强度：中",
+  "validation.password.strength.short": "强度：太短",
+  "validation.confirm-password.required": "请确认密码！",
+  "validation.phone-number.required": "请输入手机号！",
+  "validation.phone-number.wrong-format": "手机号格式错误！",
+  "validation.verification-code.required": "请输入验证码！",
+  "validation.title.required": "请输入标题",
+  "validation.date.required": "请选择起止日期",
+  "validation.goal.required": "请输入目标描述",
+  "validation.standard.required": "请输入衡量标准",
+  "validation.required": "请填充必填项! "
+}

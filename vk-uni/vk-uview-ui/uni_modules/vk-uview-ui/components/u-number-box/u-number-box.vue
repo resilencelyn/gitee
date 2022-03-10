@@ -471,9 +471,18 @@ export default {
 	color: #c8c9cc !important;
 	background-color: #f2f3f5 !important;
 }
+/* #ifdef H5 */
 .num-btn {
 	font-weight: 550;
 	position: relative;
 	top: -4rpx;
 }
+/* #endif */
+/* #ifndef H5 */
+.num-btn {
+	font-weight: 550;
+	position: relative;
+	top: 0rpx;
+}
+/* #endif */
 </style>

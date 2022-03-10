@@ -13,7 +13,7 @@ PLATFORM_U	= WINDOWS
 GCC			= g++.exe
 DLLTOOL		= dlltool.exe
 RM			= del
-CFLAGS 		= -I"." -m64 -O3
+CFLAGS 		= -I"." -m64 -O3 -std=c++11
 OFLAGS		= -m64 -s
 LFLAGS		= -m64 -shared
 LIB			= -lopengl32 -lglu32 -lgdi32 -lcomdlg32 "lib\openal\OpenAL32.lib"
@@ -107,7 +107,7 @@ $(RESOBJ): $(BUILD_PATH)\\%.o: %.rc
 # 当前分支
 BRANCH		= AVdevelop
 # 提交信息
-COMMITMSG	= "update"
+COMMITMSG	= "bugfix"
 # 合并分支时的目标分支
 MERGE 		= AVDevelop
 

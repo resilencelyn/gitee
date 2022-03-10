@@ -1,0 +1,51 @@
+# 监控应用类型名称(与文件名保持一致) eg: linux windows tomcat mysql aws...
+app: example
+# 强制固定必须参数 - host(ipv4,ipv6,域名)
+param:
+    # field-字段名称标识符
+  - field: host
+    # name-参数字段显示名称
+    name: 主机Host
+    # type-字段类型,样式(大部分映射input标签type属性)
+    type: host
+    # 是否是必输项 true-必填 false-可选
+    required: true
+  - field: port
+    name: 端口
+    type: number
+    # 当type为number时,用range表示范围
+    range: '[0,65535]'
+    required: true
+    # 端口默认值
+    defaultValue: 80
+    # 参数输入框提示信息
+    placeholder: '请输入端口'
+  - field: username
+    name: 用户名
+    type: text
+    # 当type为text时,用limit表示字符串限制大小
+    limit: 20
+    required: false
+  - field: password
+    name: 密码
+    type: password
+    required: false
+  - field: ssl
+    name: 启动SSL
+    # 当type为boolean时,前端用switch展示开关
+    type: boolean
+    required: false
+  - field: method
+    name: 请求方式
+    type: radio
+    required: true
+    # 当type为radio单选框,checkbox复选框时,option表示可选项值列表 {name1:value1,name2:value2}
+    options:
+      - label: GET请求
+        value: GET
+      - label: POST请求
+        value: POST
+      - label: PUT请求
+        value: PUT
+      - label: DELETE请求
+        value: DELETE

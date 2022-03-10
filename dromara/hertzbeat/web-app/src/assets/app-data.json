@@ -1,0 +1,101 @@
+{
+  "app": {
+    "name": "TANCLOUD",
+    "description": "易用友好的高性能监控云"
+  },
+  "user": {
+    "name": "Admin",
+    "avatar": "./assets/img/avatar.svg",
+    "email": "管理员"
+  },
+  "menu": [
+    {
+      "text": "总览",
+      "i18n": "menu.main",
+      "group": true,
+      "hideInBreadcrumb": true,
+      "children": [
+        {
+          "text": "仪表盘",
+          "i18n": "menu.dashboard",
+          "icon": "anticon-dashboard",
+          "link": "/dashboard"
+        }
+      ]
+    },
+    {
+      "text": "监控",
+      "i18n": "menu.monitor",
+      "group": true,
+      "hideInBreadcrumb": true,
+      "children": [
+        {
+          "key": "service",
+          "text": "应用服务",
+          "i18n": "menu.monitor.service",
+          "icon": "anticon-cloud"
+        },
+        {
+          "key": "db",
+          "text": "数据库",
+          "i18n": "menu.monitor.db",
+          "icon": "anticon-database"
+        },
+        {
+          "key": "os",
+          "text": "操作系统",
+          "hide": true,
+          "i18n": "menu.monitor.os",
+          "icon": "anticon-windows"
+        },
+        {
+          "key": "custom",
+          "text": "自定义",
+          "i18n": "menu.monitor.custom",
+          "icon": "anticon-skin"
+        }
+      ]
+    },
+    {
+      "text": "告警",
+      "i18n": "menu.alert",
+      "group": true,
+      "hideInBreadcrumb": true,
+      "children": [
+        {
+          "text": "告警中心",
+          "i18n": "menu.alert.center",
+          "icon": "anticon-alert",
+          "link": "/alert/center"
+        },
+        {
+          "text": "告警配置",
+          "i18n": "menu.alert.setting",
+          "icon": "anticon-bulb",
+          "link": "/alert/setting"
+        },
+        {
+          "text": "告警通知",
+          "i18n": "menu.alert.dispatch",
+          "icon": "anticon-notification",
+          "link": "/alert/notice"
+        }
+      ]
+    },
+    {
+      "text": "More",
+      "i18n": "menu.extras",
+      "group": true,
+      "hideInBreadcrumb": true,
+      "children": [
+        {
+          "text": "helpCenter",
+          "externalLink": "https://tancloud.cn/docs/help/guide",
+          "target": "_blank",
+          "i18n": "menu.extras.help",
+          "icon": "anticon-global"
+        }
+      ]
+    }
+  ]
+}

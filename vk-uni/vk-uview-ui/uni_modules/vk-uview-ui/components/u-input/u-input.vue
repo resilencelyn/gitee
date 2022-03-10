@@ -6,9 +6,10 @@
 			'u-input--error': validateState
 		}"
 		:style="{
-			padding: `0 ${border ? 20 : 0}rpx`,
+			padding: padding ? padding : `0 ${border ? 20 : 0}rpx`,
 			borderColor: borderColor,
-			textAlign: inputAlignCom
+			textAlign: inputAlignCom,
+			backgroundColor: backgroundColor,
 		}"
 		@tap.stop="inputClick"
 	>
@@ -231,7 +232,15 @@ export default {
 		showConfirmbar: {
 			type: Boolean,
 			default: true
-		}
+		},
+		// input的背景色
+		backgroundColor: {
+			type: String,
+		},
+		// input的padding
+		padding: {
+			type: String,
+		},
 	},
 	data() {
 		return {
