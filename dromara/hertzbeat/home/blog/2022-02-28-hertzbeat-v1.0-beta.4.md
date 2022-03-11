@@ -1,5 +1,5 @@
 ---
-title: HertzBeat赫兹节拍 v1.0.beta.4 发布，易用友好的高性能监控告警系统   
+title: HertzBeat赫兹节拍 v1.0.beta.4 发布，易用友好的监控告警系统   
 author: tom  
 author_title: tom   
 author_url: https://github.com/tomsun28  

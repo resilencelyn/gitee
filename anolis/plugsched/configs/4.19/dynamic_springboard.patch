@@ -1,0 +1,57 @@
+// Copyright 2019-2022 Alibaba Group Holding Limited.
+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+
+From d627ff8250fdb7a092a75729b02c90cc75191640 Mon Sep 17 00:00:00 2001
+From: Yihao Wu <wuyihao@linux.alibaba.com>
+Date: Sun, 28 Mar 2021 01:59:28 +0800
+Subject: [PATCH] Dynamic __schedule springboard
+
+With this springboard, we don't have to customize the kernel's __schedule
+
+Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
+---
+ kernel/sched/mod/core.c | 12 +++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/mod/core.c b/kernel/sched/mod/core.c
+index 5ec2ca5..3b8925a 100644
+--- a/kernel/sched/mod/core.c
++++ b/kernel/sched/mod/core.c
+@@ -2590,6 +2590,8 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ /*
+  * context_switch - switch to the new MM and the new thread's register state.
+  */
++extern unsigned long sched_springboard;
++
+ static __always_inline struct rq *
+ context_switch(struct rq *rq, struct task_struct *prev,
+ 	       struct task_struct *next, struct rq_flags *rf)
+@@ -2634,7 +2636,17 @@ context_switch(struct rq *rq, struct task_struct *prev,
+ 	prepare_lock_switch(rq, next, rf);
+ 
+ 	/* Here we just switch the register state and the stack. */
+-	switch_to(prev, next, prev);
++	prepare_switch_to(next);
++	__asm__("mov %%rbp,%%rsp\n\t"
++		"sub %0,%%rsp\n\t"
++		"pushq %1\n\t"
++		"jmp __switch_to_asm"
++		:
++		:"i"(STACKSIZE_SCHEDULE + 0x28), "r"(sched_springboard), "D"(prev), "S"(next)
++		:"rbx","r12","r13","r14","r15"
++	);
++
++	/* Below will not be executed, we'll return to vmlinux here */
+ 	barrier();
+ 
+ 	return finish_task_switch(prev);
+@@ -3178,6 +3190,7 @@ again:
+  *
+  * WARNING: must be called with preemption disabled!
+  */
++__attribute__ ((optimize("no-omit-frame-pointer")))
+ static void __sched notrace __schedule(bool preempt)
+ {
+ 	struct task_struct *prev, *next;
+2.20.1.2432.ga663e714
+

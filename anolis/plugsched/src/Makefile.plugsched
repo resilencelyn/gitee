@@ -1,0 +1,26 @@
+# Copyright 2019-2022 Alibaba Group Holding Limited.
+# SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+
+include Makefile
+
+GCC_PLUGIN_FLAGS := -fplugin=/usr/lib64/gcc-python-plugin/python.so \
+		    -fplugin-arg-python-script=$(plugsched_tmpdir)/sched_boundary.py \
+		    -fplugin-arg-python-tmpdir=$(plugsched_tmpdir) \
+		    -fplugin-arg-python-modpath=$(plugsched_modpath) \
+		    -fplugin-arg-python-stage=
+
+PHONY += plugsched sidecar collect extract
+
+collect:   CFLAGS_KERNEL = $(GCC_PLUGIN_FLAGS)collect
+extract:   CFLAGS_KERNEL = $(GCC_PLUGIN_FLAGS)extract
+
+plugsched: scripts prepare sidecar
+	$(MAKE) CFLAGS_MODULE=-fkeep-static-functions -C $(srctree) M=$(plugsched_modpath) modules
+
+sidecar: $(plugsched_modpath)/export_jump_sidecar.h
+	python2 $(plugsched_tmpdir)/sidecar.py $< ./vmlinux $(plugsched_tmpdir) $(plugsched_modpath)
+
+collect: $(core-y) $(core-m) $(drivers-y) $(drivers-m) $(net-y) $(net-m) $(virt-y)
+analyze:
+	python2 $(plugsched_tmpdir)/process.py ./vmlinux $(plugsched_tmpdir) $(plugsched_modpath)
+extract: $(objs)

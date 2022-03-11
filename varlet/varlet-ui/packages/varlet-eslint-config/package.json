@@ -1,0 +1,30 @@
+{
+  "name": "@varlet/eslint-config",
+  "version": "1.26.4",
+  "description": "eslint config of varlet",
+  "keywords": [
+    "eslint",
+    "tslint",
+    "config",
+    "varlet"
+  ],
+  "author": "haoziqaq <357229046@qq.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/varletjs/varlet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/varletjs/varlet/issues"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-vue": "^7.1.0"
+  },
+  "gitHead": "42554856ff028f6f411a35f468e0f763978270b0"
+}

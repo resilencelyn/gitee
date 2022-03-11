@@ -33,7 +33,8 @@ https://github.com/zhangjingxun12/Lvgl_image_convert_tool
 #### 字体转换工具使用阿里兄工具  
 http://www.lfly.xyz/forum.php  
 #### 视频演示地址 
-https://www.bilibili.com/video/BV1zh411Z7DV  
+新版https://www.bilibili.com/video/BV1Xb4y1i7KE  
+旧版https://www.bilibili.com/video/BV1zh411Z7DV  
 #### 开发工具 
 采用vscode软件开发，安装espidf插件，idf版本为4.3 
 

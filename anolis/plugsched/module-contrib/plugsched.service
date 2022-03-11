@@ -1,0 +1,14 @@
+# Copyright 2019-2022 Alibaba Group Holding Limited.
+# SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+
+[Unit]
+Description=The plugsched service
+ConditionKernelCommandLine=!plugsched.enable=0
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/bash -c "hotfix_conflict_check /var/plugsched/$(uname -r)/tainted_functions"
+ExecStart=/usr/local/bin/scheduler-install install
+
+[Install]
+WantedBy=multi-user.target
