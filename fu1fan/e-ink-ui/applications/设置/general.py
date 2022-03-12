@@ -38,6 +38,8 @@ class GeneralSettingsPage(lib.Pages.ListPage):
             self.book.base.env.quit()
             os.system("sudo python3 updater.py &")
             os.kill(os.getpid(), signal.SIGTERM)
+        else:
+            self.env.display()
 
 
 class TapticSettingsPage(lib.Pages.ListPage):
@@ -206,7 +208,7 @@ class ThemeSelectPage(struct.Page):
             self.go_next()
 
     def active(self):
-        self.themes = list(self.env.themes.keys())
+        self.themes = [key for key, value in self.env.themes.items() if value.show_in_settings]
         self.now_theme = self.env.now_theme
         self.at = self.themes.index(self.now_theme)
         self.prev_button.set_show(self.at > 0, False)
