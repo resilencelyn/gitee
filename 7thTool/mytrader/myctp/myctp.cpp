@@ -1162,7 +1162,7 @@ uint32_t MyCTPModule::GetTradeTime(uint32_t* date, uint32_t* tradeday)
 	{
 		zqdb::Exchange exchange(sz_exchange);
 		if (exchange) {
-			auto time = ZQDBGetExchangeTime(exchange, date, tradeday);
+			auto time = ZQDBGetNowTime(exchange, date, tradeday);
 			if (time) {
 				return time;
 			}

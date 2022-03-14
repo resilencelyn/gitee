@@ -223,12 +223,14 @@ private:
 // MyCodeViewListRenderer
 // ----------------------------------------------------------------------------
 
+class MyCodeView;
 class MyCodeViewListRenderer : public wxDataViewCustomRenderer
 	, public zqdb::SkinMap<MyCodeViewListRenderer, SkinInfo>
 {
 public:
 	// a simple renderer that wraps each word on a new line
 	explicit MyCodeViewListRenderer();
+	explicit MyCodeViewListRenderer(MyCodeView* view);
 
 	void OnSkinInfoChanged();
 
@@ -247,6 +249,7 @@ public:
 #endif // wxUSE_ACCESSIBILITY
 
 private:
+	MyCodeView* view_;
 	SmartKBItem* val_ = nullptr;
 	wxFont fontName_;
 	wxFont fontCode_;

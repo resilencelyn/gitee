@@ -9,10 +9,17 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "mydataview.h"
+#include "mytechframe.h"
 
 // a simple renderer that wraps each word on a new line
 MyCodeViewListRenderer::MyCodeViewListRenderer()
-	: wxDataViewCustomRenderer("void*", wxDATAVIEW_CELL_INERT, 0)
+	: wxDataViewCustomRenderer("void*", wxDATAVIEW_CELL_INERT, 0), view_(nullptr)
+{
+	wxASSERT(0);
+}
+
+MyCodeViewListRenderer::MyCodeViewListRenderer(MyCodeView* view)
+	: wxDataViewCustomRenderer("void*", wxDATAVIEW_CELL_INERT, 0), view_(view)
 {
 }
 
@@ -59,7 +66,7 @@ bool MyCodeViewListRenderer::Render(wxRect rect, wxDC *dc, int state)
 
 	zqdb::Code code((HZQDB)val_->Data);
 	wxString strClose(wxT("！！")), strZD(wxT("！！")), strZDF(wxT("！！"));
-	double zd = 0.;
+	double zd = 0., zdf = 0.;
 	bool invalid_flag = true;
 	if (!ZQDBIsSubscribeMarketDataAll()) {
 		if (code.IsSubscribe()) {
@@ -75,8 +82,17 @@ bool MyCodeViewListRenderer::Render(wxRect rect, wxDC *dc, int state)
 	if (!invalid_flag) {
 		auto close = code->Close, yclose = IsInvalidValue(code->YSettle) ? code->YClose : code->YSettle;
 		strClose = wxString::Format("%.2f", close);
-		zd = close - yclose;
-		double zdf = zd / yclose * 100;
+		//
+		MY_CODE_SORT_TYPE type; 
+		auto sort = view_->IsSort(&type);
+		if (sort && type == SORT_ZDS) {
+			zd = val_->Value;
+			zdf = val_->ValueF * 100;
+		}
+		else {
+			zd = close - yclose;
+			zdf = zd / yclose * 100;
+		}
 		strZD = wxString::Format("%+.2f", zd);
 		strZDF = wxString::Format("%+.2f%%", zdf);
 	}

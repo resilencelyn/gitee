@@ -1419,12 +1419,17 @@ void MyApp::OnTimer(wxTimerEvent& evt)
 	else {
 		run_flag_++;
 
+#ifdef _DEBUG
+		const uint32_t close_time = 133000, close_end_time = 133100, max_close_end_time = 140000;
+#else
+		const uint32_t close_time = 203000, close_end_time = 203100, max_close_end_time = 210000;
+#endif//
 		if (ZQDBIsServer()) {
 			//每天20：30服务暂停服务至少1分钟
 			if (ZQDBIsListen()) {
 				uint32_t date = 0, time = 0;
 				date = XUtil::NowDateTime(&time);
-				if (time > 203000 && time < 203100) {
+				if (time > close_time && time < close_end_time) {
 					ZQDBStopListen();
 				}
 			}
@@ -1439,7 +1444,7 @@ void MyApp::OnTimer(wxTimerEvent& evt)
 					//每天【20：31-21：00】之间服务断开超过60秒且所有市场都可用就自动重启服务
 					uint32_t date = 0, time = 0;
 					date = XUtil::NowDateTime(&time);
-					if (time > 203100 && time < 210000) {
+					if (time > close_end_time && time < max_close_end_time) {
 						if (!ZQDBGetCalcAnyDisabledExchange()) {
 							if ((run_flag_ - suspend_flag_) > 60) {
 								ZQDBStartListen();
@@ -1452,7 +1457,7 @@ void MyApp::OnTimer(wxTimerEvent& evt)
 				if ((run_flag_ - suspend_flag_) > 30) {
 					uint32_t date = 0, time = 0;
 					date = XUtil::NowDateTime(&time);
-					if (time > 203000 && time < 210000) {
+					if (time > close_time && time < close_end_time) {
 						Restart(false);
 						return;
 					}

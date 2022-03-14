@@ -157,11 +157,11 @@ struct SmartKBItemSort
 public:
 	MY_CODE_SORT_TYPE type = SORT_ZDF;
 	int sort = 0; //-1升序，0不排序，1降序
-private:
 	union {
-		size_t duration; //ZDF排序时间，比如5分钟排序
+		size_t secs; //ZDS排序时间，比如1分钟排序
 		MDB_FIELD field = { 0 }; //Normalize过的field
 	};
+private:
 	zqdb::Calc::Sort calc_sort; //
 public:
 	SmartKBItemSort();
@@ -212,9 +212,9 @@ public:
 	//显示结果
 	virtual void ShowResult();
 	//排序
-	int IsSort(MY_CODE_SORT_TYPE* type = nullptr);
+	int IsSort(MY_CODE_SORT_TYPE* type = nullptr, size_t* secs = nullptr);
 	void Sort(bool force = false);
-	void SortByZD(MY_CODE_SORT_TYPE type, size_t duration, int sort);
+	void SortByZD(MY_CODE_SORT_TYPE type, size_t secs, int sort);
 	void SortByField(MDB_FIELD& field, int sort);
 	void SortByCalc(const zqdb::Calc::Sort& calc, int sort);
 	//获取数据

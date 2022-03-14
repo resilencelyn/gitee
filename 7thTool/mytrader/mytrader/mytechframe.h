@@ -40,6 +40,7 @@ enum
 	ID_FILTER_MAX = ID_FILTER + 32,
 	ID_SORT,
 	ID_SORT_QUICK,
+	ID_SORT_QUICK_MAX = ID_SORT_QUICK + 6,
 	ID_SORT_CALC,
 	ID_SORT_MAX = ID_SORT + 32,
 	ID_TEMPLATE_SAVE,
@@ -174,7 +175,7 @@ public:
 	void Up();
 	void Down();
 
-	int IsSort(MY_CODE_SORT_TYPE* type = nullptr);
+	int IsSort(MY_CODE_SORT_TYPE* type = nullptr, size_t* secs = nullptr);
 	void Sort();
 	void SortByZD(MY_CODE_SORT_TYPE type, size_t duration, int sort);
 	void SortByField(MDB_FIELD& field, int sort);
@@ -416,7 +417,7 @@ protected:
 
 	void GotoUser(HZQDB user);
 
-	int IsSort(MY_CODE_SORT_TYPE* type = nullptr);
+	int IsSort(MY_CODE_SORT_TYPE* type = nullptr, size_t* secs = nullptr);
 	void Sort();
 	void SortByZD(MY_CODE_SORT_TYPE type, size_t duration, int sort);
 	void SortByField(MDB_FIELD& field, int sort);

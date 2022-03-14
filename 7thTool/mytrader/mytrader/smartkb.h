@@ -61,6 +61,8 @@ struct SmartKBItem
 	std::wstring PinYin;	//拼音，如果该值为空，则使用拼音库
 	int Type = 0;			//自定义数据类型
 	void* Data = nullptr;	//自定义数据
+	double Value = 0;		//自定义数值
+	double ValueF = 0;		//自定义数值百分比，比如0.35
 };
 
 class SmartKB

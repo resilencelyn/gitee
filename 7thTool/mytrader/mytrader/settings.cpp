@@ -549,10 +549,10 @@ size_t ConfigInfo::GetSortQuick()
 	return config_->ReadLong(CONFIG_SORT_QUICK, 60);
 }
 
-void ConfigInfo::SetSortQuick(size_t size_t)
+void ConfigInfo::SetSortQuick(size_t secs)
 {
 	auto config_ = wxConfigBase::Get();
-	config_->Write(CONFIG_SORT_QUICK, (int)size_t);
+	config_->Write(CONFIG_SORT_QUICK, (int)secs);
 }
 
 void ConfigInfo::SetSortCalcFunc(const wxString& name)

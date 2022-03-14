@@ -494,7 +494,7 @@ SmartKBItemSort::SmartKBItemSort()
 
 }
 
-SmartKBItemSort::SmartKBItemSort(MY_CODE_SORT_TYPE type, size_t duration, int sort) :type(type), sort(sort), duration(duration)
+SmartKBItemSort::SmartKBItemSort(MY_CODE_SORT_TYPE type, size_t secs, int sort) :type(type), sort(sort), secs(secs)
 {
 
 }
@@ -512,8 +512,7 @@ SmartKBItemSort::SmartKBItemSort(const zqdb::Calc::Sort& calc, int sort) : type(
 bool SmartKBItemSort::operator() (const SmartKBItem& x, const SmartKBItem& y) const {
 	switch (type)
 	{
-	case SORT_ZDF:
-	case SORT_ZDS: {
+	case SORT_ZDF: {
 		zqdb::Code xcode((HZQDB)x.Data), ycode((HZQDB)y.Data);
 		double xzdf = 0, yzdf = 0;
 		if (!IsZeroValue(xcode->Volume)) {
@@ -525,6 +524,9 @@ bool SmartKBItemSort::operator() (const SmartKBItem& x, const SmartKBItem& y) co
 			yzdf = (yclose - yyclose) / yyclose;
 		}
 		return xzdf < yzdf;
+	} break;
+	case SORT_ZDS: {
+		return x.ValueF < y.ValueF;
 	} break;
 	case SORT_FIELD: {
 		ASSERT(MDBFieldIsNormalized(field) && sort != 0);
@@ -674,21 +676,64 @@ void MyCodeViewListModel::ShowResult()
 	}
 }
 
-int MyCodeViewListModel::IsSort(MY_CODE_SORT_TYPE* type)
+int MyCodeViewListModel::IsSort(MY_CODE_SORT_TYPE* type, size_t* secs)
 {
 	if (type) {
 		*type = sort_.type;
+	}
+	if (secs) {
+		*secs = sort_.secs;
 	}
 	return sort_.sort;
 }
 
 void MyCodeViewListModel::Sort(bool force)
 {
-	auto sort = IsSort();
-	if (sort > 0) {
+	switch (sort_.type)
+	{
+	case SORT_ZDS: {
+		uint32_t date = 0, time = 0;
+		date = XUtil::NowDateTime(&time);
+		uint32_t prev_date = date, prev_time = time;
+		for (auto& result : results_) {
+			zqdb::Code code((HZQDB)result.Data);
+			double price = code->Close;
+			auto cmp = ZQDBCmpTradingTime(code, date, time);
+			if (cmp < 0) {
+				//
+			}
+			else {
+				if (cmp > 0) {
+					uint32_t close_date = 0, close_time = 0;
+					close_time = code.GetCloseTime(&close_date);
+					prev_date = close_date, prev_time = close_time;
+					XUtil::PrevDateTime(prev_date, prev_time, sort_.secs);
+				}
+				else {
+					XUtil::PrevDateTime(prev_date, prev_time, sort_.secs);
+				}
+				double yclose = IsInvalidValue(code->YSettle) ? code->YClose : code->YSettle;
+				price = ZQDBGetPriceByTickTime(code, prev_date, prev_time, yclose);
+			}
+			if (IsInvalidValue(price) || IsZeroValue(price)) {
+				result.Value = 0;
+				result.ValueF = 0;
+			}
+			else {
+				result.Value = code->Close - price;
+				result.ValueF = result.Value / price;
+			}
+		}
+	} break;
+	default: {
+		
+	} break;
+	}
+	
+	if (sort_.sort > 0) {
 		std::sort(results_.rbegin(), results_.rend(), sort_);
 	}
-	else if(sort < 0) {
+	else if(sort_.sort < 0) {
 		std::sort(results_.begin(), results_.end(), sort_);
 	}
 	else if(force) {
@@ -696,9 +741,9 @@ void MyCodeViewListModel::Sort(bool force)
 	}
 }
 
-void MyCodeViewListModel::SortByZD(MY_CODE_SORT_TYPE type, size_t duration, int sort)
+void MyCodeViewListModel::SortByZD(MY_CODE_SORT_TYPE type, size_t secs, int sort)
 {
-	sort_ = SmartKBItemSort(type, duration, sort);
+	sort_ = SmartKBItemSort(type, secs, sort);
 	Sort(true);
 }
 

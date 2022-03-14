@@ -94,7 +94,7 @@ public:
 	void SetFilterCalcFunc(const wxString& name);
 	wxString GetFilterCalcFunc();
 
-	void SetSortQuick(size_t duration);
+	void SetSortQuick(size_t secs);
 	size_t GetSortQuick();
 	void SetSortCalcFunc(const wxString& name);
 	wxString GetSortCalcFunc();

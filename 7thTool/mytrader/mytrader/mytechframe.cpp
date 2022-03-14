@@ -21,7 +21,7 @@ MyCodeView::MyCodeView(wxWindow* parent, const char* xml, size_t xmlflag) : Base
 	ctrl_list_model_ = new MyCodeViewListModel;
 	ctrl_list_->AssociateModel(ctrl_list_model_.get());
 
-	ctrl_list_render_ = new MyCodeViewListRenderer();
+	ctrl_list_render_ = new MyCodeViewListRenderer(this);
 	auto code_col = new wxDataViewColumn("Code", ctrl_list_render_, MyCodeViewListModel::Col_Code
 		, 80, wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE);
 	ctrl_list_->AppendColumn(code_col);
@@ -294,9 +294,9 @@ void MyCodeView::Down()
 	SetCurItemPos(pos);*/
 }
 
-int MyCodeView::IsSort(MY_CODE_SORT_TYPE* type)
+int MyCodeView::IsSort(MY_CODE_SORT_TYPE* type, size_t* secs)
 {
-	return ctrl_list_model_->IsSort(type);
+	return ctrl_list_model_->IsSort(type, secs);
 }
 
 void MyCodeView::Sort()
@@ -1523,7 +1523,7 @@ void MyStatusBar::Update()
 		wxString strStatus;
 		auto status = ZQDBGetStatus(exchange->Exchange);
 		if (ZQDBIsTest() || status == STATUS_LOGGED) {
-			uint32_t Time = exchange.GetExchangeTime();
+			uint32_t Time = exchange.GetNowTime();
 			strStatus = wxString::Format(L"%02d:%02d:%02d", XUtil::GetHour(Time), XUtil::GetMinute(Time), XUtil::GetSecond(Time));
 		}
 		else {
@@ -2249,7 +2249,8 @@ void MyTechFrame::InnerUpdateSort()
 	//, wxArtProvider::GetBitmap(wxART_GO_UP, wxART_OTHER, wxSize(32, 32)));
 	sort_bar_->SetButtonMaxSizeClass(ID_SORT, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
 	sort_bar_->SetButtonMinSizeClass(ID_SORT, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
-	sort_bar_->AddButton(ID_SORT_QUICK, wxT("ÕÇµøËÙ"), skin_info_ptr_->GetBitmap32(wxT("ÕÇµøËÙ")));
+	sort_bar_->AddHybridButton(ID_SORT_QUICK
+		, wxString::Format(wxT("%zu·ÖÖÓÕÇµø"), wxGetApp().GetSortQuick() / 60), skin_info_ptr_->GetBitmap32(wxT("ÕÇµøËÙ")));
 	//, wxArtProvider::GetBitmap(wxART_GO_UP, wxART_OTHER, wxSize(32, 32)));
 	sort_bar_->SetButtonMaxSizeClass(ID_SORT_QUICK, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
 	sort_bar_->SetButtonMinSizeClass(ID_SORT_QUICK, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
@@ -2266,7 +2267,8 @@ void MyTechFrame::InnerUpdateSort()
 		sort_bar_->SetButtonMinSizeClass(ID_SORT_CALC + cur_sort_func_, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
 	}
 	MY_CODE_SORT_TYPE type;
-	int sort = IsSort(&type);
+	size_t secs = 0;
+	int sort = IsSort(&type, &secs);
 	if (sort) {
 		switch (type)
 		{
@@ -2274,7 +2276,8 @@ void MyTechFrame::InnerUpdateSort()
 			sort_bar_->SetButtonText(ID_SORT, sort > 0 ? wxT("ÕÇµø·ù¨‹") : wxT("ÕÇµø·ù¡ø"));
 			break;
 		case SORT_ZDS:
-			sort_bar_->SetButtonText(ID_SORT_QUICK, sort > 0 ? wxT("ÕÇµøËÙ¨‹") : wxT("ÕÇµøËÙ¡ø"));
+			sort_bar_->SetButtonText(ID_SORT_QUICK
+				, wxString::Format(wxT("%zu·ÖÖÓÕÇµø%s"), secs / 60, sort > 0 ? wxT("¨‹") : wxT("¡ø")));
 			break;
 		case SORT_CALC_SORT: {
 			zqdb::Calc::Func func(all_sort_func_[cur_sort_func_]);
@@ -2674,9 +2677,9 @@ void MyTechFrame::GotoUser(HZQDB user)
 	user_view_->Goto(user);
 }
 
-int MyTechFrame::IsSort(MY_CODE_SORT_TYPE* type)
+int MyTechFrame::IsSort(MY_CODE_SORT_TYPE* type, size_t* secs)
 {
-	return code_view_->IsSort(type);
+	return code_view_->IsSort(type, secs);
 }
 
 void MyTechFrame::Sort()
@@ -3230,14 +3233,17 @@ void MyTechFrame::OnFilterSetting(wxRibbonPanelEvent& evt)
 void MyTechFrame::Sort(int id)
 {
 	MY_CODE_SORT_TYPE old_type = SORT_ZDF;
-	int old_sort = IsSort(&old_type);
+	size_t old_secs = 0;
+	int old_sort = IsSort(&old_type, &old_secs);
 
 	MY_CODE_SORT_TYPE type = SORT_ZDF;
 	int sort = 0;
 	if (id < ID_SORT_CALC) {
 		switch (id)
 		{
-		case ID_SORT_QUICK: {
+		case ID_SORT: {
+		} break;
+		default: {
 			type = SORT_ZDS;
 		} break;
 		}
@@ -3247,20 +3253,25 @@ void MyTechFrame::Sort(int id)
 	}
 
 	if (id < ID_SORT_CALC) {
-		if (type != old_type) {
-			sort = 0;
-		}
-		else {
-			sort = old_sort;
-		}
-		size_t duration = 0;
+		size_t secs = 0;
 		switch (type)
 		{
 		case SORT_ZDF:
 			break;
 		case SORT_ZDS:
-			duration = wxGetApp().GetSortQuick();
+			secs = wxGetApp().GetSortQuick();
 			break;
+		}
+		if (type != old_type) {
+			sort = 0;
+		}
+		else {
+			if (secs != old_secs) {
+				sort = 0;
+			}
+			else {
+				sort = old_sort;
+			}
 		}
 		switch (sort)
 		{
@@ -3274,7 +3285,7 @@ void MyTechFrame::Sort(int id)
 			sort = -1;
 			break;
 		}
-		SortByZD(type, duration, sort);
+		SortByZD(type, secs, sort);
 	}
 	else {
 		size_t pos = id - ID_SORT_CALC;
@@ -3321,17 +3332,32 @@ void MyTechFrame::OnSortDropdown(wxRibbonButtonBarEvent& evt)
 	wxRibbonButtonBar* pBar = evt.GetBar();
 	if (pBar) {
 		wxMenu menu;
-		wxGetApp().ClearMenuMap();
-		for (size_t i = 0, j = all_sort_func_.size(); i < j; i++)
+		switch (evt.GetId()) 
 		{
-			zqdb::Calc::Func func(all_sort_func_[i]);
-			if (i == cur_sort_func_) {
-				continue;
+		case ID_SORT: {
+			//
+		} break;
+		case ID_SORT_QUICK: {
+			menu.Append(ID_SORT_QUICK + 1, wxT("1·ÖÖÓÕÇµø"));
+			menu.Append(ID_SORT_QUICK + 2, wxT("2·ÖÖÓÕÇµø"));
+			menu.Append(ID_SORT_QUICK + 3, wxT("3·ÖÖÓÕÇµø"));
+			menu.Append(ID_SORT_QUICK + 4, wxT("4·ÖÖÓÕÇµø"));
+			menu.Append(ID_SORT_QUICK + 5, wxT("5·ÖÖÓÕÇµø"));
+		} break;
+		default: {
+			wxGetApp().ClearMenuMap();
+			for (size_t i = 0, j = all_sort_func_.size(); i < j; i++)
+			{
+				zqdb::Calc::Func func(all_sort_func_[i]);
+				if (i == cur_sort_func_) {
+					continue;
+				}
+				else {
+					auto menu_item = menu.Append(ID_SORT_CALC + i, utf2wxString(func.GetCalcName()));
+				}
+				wxGetApp().SetMenuData(ID_SORT_CALC + i, all_sort_func_[i]);
 			}
-			else {
-				auto menu_item = menu.Append(ID_SORT_CALC + i, utf2wxString(func.GetCalcName()));
-			}
-			wxGetApp().SetMenuData(ID_SORT_CALC + i, all_sort_func_[i]);
+		} break;
 		}
 		evt.PopupMenu(&menu);
 	}
@@ -3339,6 +3365,31 @@ void MyTechFrame::OnSortDropdown(wxRibbonButtonBarEvent& evt)
 
 void MyTechFrame::OnSortGoto(wxCommandEvent& evt)
 {
+	if (evt.GetId() > ID_SORT_QUICK && evt.GetId() <= ID_SORT_QUICK_MAX) {
+		size_t secs = 0;
+		switch (evt.GetId()) 
+		{
+		case ID_SORT_QUICK + 1: {
+			secs = 60;
+		} break;
+		case ID_SORT_QUICK + 2: {
+			secs = 120;
+		} break;
+		case ID_SORT_QUICK + 3: {
+			secs = 180;
+		} break;
+		case ID_SORT_QUICK + 4: {
+			secs = 240;
+		} break;
+		case ID_SORT_QUICK + 5: {
+			secs = 300;
+		} break;
+		default: {
+			wxASSERT(0);
+		} break;
+		}
+		wxGetApp().SetSortQuick(secs);
+	}
 	Sort(evt.GetId());
 }
 
