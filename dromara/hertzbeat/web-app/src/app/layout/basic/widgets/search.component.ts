@@ -90,13 +90,17 @@ export class HeaderSearchComponent implements AfterViewInit, OnDestroy {
       )
       .subscribe(value => {
         // 远程加载搜索数据
-        let searchMonitors$ = this.monitorSvc.searchMonitors(value, value, 0, 10).subscribe(
+        let searchMonitors$ = this.monitorSvc.searchMonitors(null, value, 9, 0, 10).subscribe(
           message => {
             this.loading = false;
             searchMonitors$.unsubscribe();
             if (message.code === 0) {
               let page = message.data;
-              this.options = page.content;
+              if (page.content != undefined) {
+                this.options = page.content;
+              } else {
+                this.options = [];
+              }
               this.cdr.detectChanges();
             } else {
               console.warn(message.msg);
@@ -118,7 +122,7 @@ export class HeaderSearchComponent implements AfterViewInit, OnDestroy {
   qBlur(): void {
     this.focus = false;
     this.searchToggled = false;
-    this.options.length = 0;
+    this.options = [];
     this.toggleChangeChange.emit(false);
   }
 
