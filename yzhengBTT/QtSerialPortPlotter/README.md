@@ -31,6 +31,11 @@
 - 调整了点击QComboBox自动刷新串口列表的方式，原来是基于覆写QComboBox的方式，现在方式为基于事件。具体实现方法可见本篇博客：https://blog.csdn.net/qq153471503/article/details/123422722
 
 
+#### V1.2.1
+
+- 新增黑暗主题和亮白主题切换。具体切换方法为在配置文件'config.ini'中，修改theme这一项。
+	![](./theme.png)
+
 
 ### 2、软件使用方法
 

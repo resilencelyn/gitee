@@ -1,0 +1,59 @@
+@import './var.less';
+
+.v-form-row {
+  display: flex;
+  padding: 0 @padding;
+  border-bottom: 1px solid @border-color;
+  background: #fff;
+
+  &.is-disabled {
+    * {
+      color: @disabled-color !important;
+    }
+  }
+
+  &.hide-label {
+    .v-form-row__content {
+      padding-left: 0;
+    }
+  }
+
+  &.cell--center {
+    align-items: center;
+  }
+
+  .v-form-row__label {
+    width: 23%;
+    padding: 10px 0;
+    font-size: inherit;
+    line-height: 24px;
+  }
+
+  .v-form-row__required-mark {
+    vertical-align: middle;
+    color: @warning;
+  }
+
+  .v-form-row__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    word-break: break-all;
+
+    .van-cell {
+      padding: 0;
+    }
+
+    .v-form-row__error {
+      align-self: flex-start;
+      font-size: 12px;
+      color: @warning;
+    }
+  }
+
+  .v-form-row__extra {
+    display: flex;
+    align-items: center;
+  }
+}

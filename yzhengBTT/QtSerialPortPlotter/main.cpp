@@ -31,21 +31,28 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-#if 0
-    /* Apply style sheet */
-    QFile file(":/serial_port_plotter/styles/style.qss");
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    QFile config("config.ini");
+    if(config.exists())
     {
-        a.setStyleSheet(file.readAll());
-        file.close();
+        QSettings settings("config.ini", QSettings::IniFormat);
+        QString theme = settings.value("theme").toString();
+        if(theme == QString("dark"))
+        {
+            /* Apply style sheet */
+            QFile file(":/serial_port_plotter/styles/style.qss");
+            if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                a.setStyleSheet(file.readAll());
+                file.close();
+            }
+        }
     }
-#endif
 
     /* Get the icon for the window corner */
     MainWindow w;
     QIcon appIcon(":/serial_port_plotter/icons/serial_port_icon.icns");
     w.setWindowIcon(appIcon);
-    w.setWindowTitle("Serial Port Plotter V1.2");
+    w.setWindowTitle("Serial Port Plotter V1.2.1");
     w.show();
 
     return a.exec();

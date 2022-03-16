@@ -516,11 +516,11 @@ bool SmartKBItemSort::operator() (const SmartKBItem& x, const SmartKBItem& y) co
 		zqdb::Code xcode((HZQDB)x.Data), ycode((HZQDB)y.Data);
 		double xzdf = 0, yzdf = 0;
 		if (!IsZeroValue(xcode->Volume)) {
-			auto xclose = xcode->Close, xyclose = IsInvalidValue(xcode->YSettle) ? xcode->YClose : xcode->YSettle;
+			auto xclose = xcode->Close, xyclose = IsInvalidValue(xcode->YClose) ? xcode->YSettle : xcode->YClose;
 			xzdf = (xclose - xyclose) / xyclose;
 		}
 		if (!IsZeroValue(ycode->Volume)) {
-			auto yclose = ycode->Close, yyclose = IsInvalidValue(ycode->YSettle) ? ycode->YClose : ycode->YSettle;
+			auto yclose = ycode->Close, yyclose = IsInvalidValue(ycode->YClose) ? ycode->YSettle : ycode->YClose;
 			yzdf = (yclose - yyclose) / yyclose;
 		}
 		return xzdf < yzdf;
@@ -712,8 +712,8 @@ void MyCodeViewListModel::Sort(bool force)
 				else {
 					XUtil::PrevDateTime(prev_date, prev_time, sort_.secs);
 				}
-				double yclose = IsInvalidValue(code->YSettle) ? code->YClose : code->YSettle;
-				price = ZQDBGetPriceByTickTime(code, prev_date, prev_time, yclose);
+				double yclose = IsInvalidValue(code->YClose) ? code->YSettle : code->YClose;
+				price = ZQDBGetPriceByTickTime(code, prev_date, prev_time, code->YClose);
 			}
 			if (IsInvalidValue(price) || IsZeroValue(price)) {
 				result.Value = 0;

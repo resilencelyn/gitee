@@ -103,29 +103,6 @@ MainWindow::MainWindow (QWidget *parent) :
     connect (&updateTimer, SIGNAL (timeout()), this, SLOT (replot()));
 
     m_csvFile = nullptr;
-
-    /* Load configs */
-    QFile file("config.ini");
-    if(!file.exists())
-    {
-        QSettings settings("config.ini", QSettings::IniFormat);
-        settings.setValue("com", "");
-        settings.setValue("baudrate", 115200);
-        settings.setValue("databits", 0);
-        settings.setValue("stopbits", 0);
-        settings.setValue("paritybits", 0);
-    }
-
-    QSettings settings("config.ini", QSettings::IniFormat);
-    int index = ui->comboPort->findText(settings.value("com").toString());
-    if(index >= 0)
-    {
-        ui->comboPort->setCurrentIndex(index);
-    }
-    ui->comboBaud->setCurrentText(settings.value("baudrate").toString());
-    ui->comboData->setCurrentIndex(settings.value("databits").toInt());
-    ui->comboStop->setCurrentIndex(settings.value("stopbits").toInt());
-    ui->comboParity->setCurrentIndex(settings.value("paritybits").toInt());
 }
 
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -210,7 +187,47 @@ void MainWindow::createUI()
     ui->listWidget_Channels->clear();
 
     ui->comboPort->installEventFilter(this);
+
+    QFile file("config.ini");
+    if(!file.exists())
+    {
+        QSettings settings("config.ini", QSettings::IniFormat);
+        settings.setValue("com", "");
+        settings.setValue("baudrate", 115200);
+        settings.setValue("databits", 0);
+        settings.setValue("stopbits", 0);
+        settings.setValue("paritybits", 0);
+        settings.setValue("theme", "light");
+    }
+
+    QSettings settings("config.ini", QSettings::IniFormat);
+    int index = ui->comboPort->findText(settings.value("com").toString());
+    if(index >= 0)
+    {
+        ui->comboPort->setCurrentIndex(index);
+    }
+    ui->comboBaud->setCurrentText(settings.value("baudrate").toString());
+    ui->comboData->setCurrentIndex(settings.value("databits").toInt());
+    ui->comboStop->setCurrentIndex(settings.value("stopbits").toInt());
+    ui->comboParity->setCurrentIndex(settings.value("paritybits").toInt());
+
+    QString theme = settings.value("theme").toString();
+    if(theme == QString("light"))
+    {
+        gui_colors[0] = QColor (255,  255,  255,  255); /**<  0: qdark ui dark/background color */
+        gui_colors[1] = QColor (175,  175,  175,  255); /**<  0: qdark ui dark/background color */
+        gui_colors[2] = QColor (85,   85,   85,   255); /**<  0: qdark ui dark/background color */
+        gui_colors[3] = QColor (207,  208,  208,  200); /**<  0: qdark ui dark/background color */
+
+    }else if(theme == QString("dark"))
+    {
+        gui_colors[0] = QColor (48,  47,  47,  255); /**<  0: qdark ui dark/background color */
+        gui_colors[1] = QColor (80,  80,  80,  255); /**<  1: qdark ui medium/grid color */
+        gui_colors[2] = QColor (170, 170, 170, 255); /**<  2: qdark ui light/text color */
+        gui_colors[3] = QColor (48,  47,  47,  200); /**<  3: qdark ui dark/background color w/transparency */
+    }
 }
+
 /** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 /**
@@ -663,7 +680,25 @@ void MainWindow::legend_double_click(QCPLegend *legend, QCPAbstractLegendItem *i
     {
         QCPPlottableLegendItem *plItem = qobject_cast<QCPPlottableLegendItem*>(item);
         bool ok;
-        QString newName = QInputDialog::getText (this, "设置通道名称", "名称:", QLineEdit::Normal, plItem->plottable()->name(), &ok, Qt::Popup);
+#if 0
+        //QString newName = QInputDialog::getText (this, "设置通道名称", "名称:", QLineEdit::Normal, plItem->plottable()->name(), &ok, Qt::Popup);
+#else
+        QString newName;
+        QInputDialog dialog;
+        dialog.setWindowFlags(Qt::FramelessWindowHint);  // 隐藏顶部标题栏,无框显示
+        dialog.setTextEchoMode(QLineEdit::Normal);
+        dialog.setLabelText("名称:");
+        dialog.setOkButtonText("确定");
+        dialog.setCancelButtonText("取消");
+        if(dialog.exec() == QDialog::Accepted)
+        {
+            ok = true;
+            newName = dialog.textValue();
+        }else
+        {
+            ok = false;
+        }
+#endif
         if (ok)
         {
             plItem->plottable()->setName(newName);

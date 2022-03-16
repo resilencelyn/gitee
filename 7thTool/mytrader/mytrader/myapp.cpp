@@ -1419,8 +1419,8 @@ void MyApp::OnTimer(wxTimerEvent& evt)
 	else {
 		run_flag_++;
 
-#ifdef _DEBUG
-		const uint32_t close_time = 133000, close_end_time = 133100, max_close_end_time = 140000;
+#if 0
+		const uint32_t close_time = 110700, close_end_time = 110800, max_close_end_time = 113000;
 #else
 		const uint32_t close_time = 203000, close_end_time = 203100, max_close_end_time = 210000;
 #endif//
@@ -1457,7 +1457,7 @@ void MyApp::OnTimer(wxTimerEvent& evt)
 				if ((run_flag_ - suspend_flag_) > 30) {
 					uint32_t date = 0, time = 0;
 					date = XUtil::NowDateTime(&time);
-					if (time > close_time && time < close_end_time) {
+					if (time > close_time && time < max_close_end_time) {
 						Restart(false);
 						return;
 					}

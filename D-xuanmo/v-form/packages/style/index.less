@@ -1,0 +1,39 @@
+@import '~vant/lib/index.less';
+@import './var.less';
+
+.v-form-container {
+  @import './row.less';
+  @import './cell.less';
+  @import './checkbox.less';
+  @import './date-picker.less';
+  @import './radio.less';
+  @import './upload.less';
+
+  font-size: inherit;
+  line-height: 24px;
+
+  .v-form__input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  ::-webkit-input-placeholder,
+  .placeholder {
+    color: @placeholder-color;
+  }
+
+  .van-cell {
+    &:after {
+      display: none !important;
+    }
+  }
+
+  .van-picker__confirm {
+    color: @theme-color;
+  }
+
+  .vertical-middle {
+    vertical-align: middle;
+  }
+}

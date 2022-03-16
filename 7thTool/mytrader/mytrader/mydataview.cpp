@@ -80,7 +80,7 @@ bool MyCodeViewListRenderer::Render(wxRect rect, wxDC *dc, int state)
 		invalid_flag = IsZeroValue(code->Volume);
 	}
 	if (!invalid_flag) {
-		auto close = code->Close, yclose = IsInvalidValue(code->YSettle) ? code->YClose : code->YSettle;
+		auto close = code->Close, yclose = IsInvalidValue(code->YClose) ? code->YSettle : code->YClose;
 		strClose = wxString::Format("%.2f", close);
 		//
 		MY_CODE_SORT_TYPE type; 
