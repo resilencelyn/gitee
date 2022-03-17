@@ -17,7 +17,7 @@
                             <Wb-input v-model="dataMapValue" prop="dataMapValue" width="600px" />
                         </Form-item>
                         <Wb-button type="primary" class="map-button" @click="newDataMap">{{ $t('common.refresh') }}</Wb-button>
-                        <Icon class="question" type="question-circle-o" color="#555" size="22" :title="title" />
+                        <Icon class="question" type="ios-help-circle-outline" color="#555" size="22" :title="title" />
                     </div>
                 </Wb-form>
             </Cell>
@@ -262,10 +262,15 @@
             },
             cancel() {
                 this.$refs['clusterForm'].hide()
-            }
+            },
+            // 面包屑跳转
+            getRouter(e) {
+              this.$router.push({ path: e })
+            },
         }
     };
 </script>
+
 <style scoped lang="scss">
     .adr {
         display: inline-block;
@@ -278,7 +283,7 @@
     }
     .adr-wrapper {
         display: flex;
-        ::v-deep
+        /deep/
         .ui-form-item{
             width: 700px;
             margin-left: 20px;
@@ -287,6 +292,7 @@
             height: 35px;
         }
     }
+
     .parameter-input {
         width: 50%;
         margin-right: 40px;
@@ -302,4 +308,3 @@
         margin-left: 10px;
     }
 </style>
-

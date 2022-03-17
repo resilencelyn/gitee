@@ -19,7 +19,6 @@ package com.webank.wedatasphere.qualitis.converter;
 import com.webank.wedatasphere.qualitis.bean.DataQualityJob;
 import com.webank.wedatasphere.qualitis.bean.DataQualityTask;
 import com.webank.wedatasphere.qualitis.bean.RuleTaskDetail;
-import com.webank.wedatasphere.qualitis.config.DpmConfig;
 import com.webank.wedatasphere.qualitis.config.OptimizationConfig;
 import com.webank.wedatasphere.qualitis.constant.SpecCharEnum;
 import com.webank.wedatasphere.qualitis.entity.RuleMetric;
@@ -76,14 +75,13 @@ public class SqlTemplateConverter extends AbstractTemplateConverter {
     private AbstractTranslator abstractTranslator;
     @Autowired
     private OptimizationConfig optimizationConfig;
-    @Autowired
-    private DpmConfig dpmConfig;
 
     /**
      * For 2149 template mid input meta special solve.
      */
     private static final String EN_LINE_PRIMARY_REPEAT = "Field Replace Null Concat";
     private static final String CN_LINE_PRIMARY_REPEAT = "替换空字段拼接";
+    private static final String MESSAGE_LINE_PRIMARY_REPEAT = "{&FIELD_REPLACE_NULL_CONCAT}";
 
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile(".*\\$\\{(.*)}.*");
     private static final Pattern AGGREGATE_FUNC_PATTERN = Pattern.compile("[a-zA-Z]+\\([0-9a-zA-Z_]+\\)");
@@ -328,9 +326,10 @@ public class SqlTemplateConverter extends AbstractTemplateConverter {
                     count += 3;
                 }
             }
-
-            sqlList.addAll(getSaveMidTableSentenceSettings());
-            sqlList.addAll(getSaveMidTableSentence(midTableName, count, runDate));
+            if (rule.getTemplate().getSaveMidTable()) {
+                sqlList.addAll(getSaveMidTableSentenceSettings());
+                sqlList.addAll(getSaveMidTableSentence(midTableName, count, runDate));
+            }
         } else {
             // Generate select statement and save into hive database
             RuleDataSource ruleDataSource = rule.getRuleDataSources().stream().filter(dataSource -> dataSource.getDatasourceIndex() == null).iterator().next();
@@ -649,7 +648,7 @@ public class SqlTemplateConverter extends AbstractTemplateConverter {
         sparkSqlList.add(sparkSqlSentence);
         List<String> midTableInputNames = template.getTemplateMidTableInputMetas().stream().map(TemplateMidTableInputMeta::getName).collect(Collectors.toList());
 
-        boolean linePrimaryRepeat = CollectionUtils.isNotEmpty(midTableInputNames) && (midTableInputNames.contains(EN_LINE_PRIMARY_REPEAT) || midTableInputNames.contains(CN_LINE_PRIMARY_REPEAT));
+        boolean linePrimaryRepeat = CollectionUtils.isNotEmpty(midTableInputNames) && (midTableInputNames.contains(EN_LINE_PRIMARY_REPEAT) || midTableInputNames.contains(CN_LINE_PRIMARY_REPEAT) || midTableInputNames.contains(MESSAGE_LINE_PRIMARY_REPEAT));
         if (linePrimaryRepeat) {
             sparkSqlList.add("val fillNullDF_" + count + " = " + getVariableName(count) + ".na.fill(UUID)");
             sparkSqlList.add("val fileNullWithFullLineWithHashDF_" + count + " = fillNullDF_" + count + ".withColumn(\"qualitis_full_line_value\", to_json(struct($\"*\"))).withColumn(\"md5\", md5(to_json(struct($\"*\"))))");
