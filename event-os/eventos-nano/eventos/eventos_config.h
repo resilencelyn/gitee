@@ -34,46 +34,24 @@
 #ifndef EVENTOS_CONFIG_H__
 #define EVENTOS_CONFIG_H__
 
-// <<< Use Configuration Wizard in Context Menu >>>
-
 /* EventOS Nano General Configuration --------------------------------------- */
-
-// <h> EventOS Nano's basic configuration
-//   <o>  The MCU type: 8, 16 or 32 bits
 #define EOS_MCU_TYPE                            32
-
-//   <o>  The maximum number of actors: 1 - 32
-#define EOS_MAX_ACTORS                          32
-
-//   <o>  The platform type: 32 ort 64 bits.
+#define EOS_MAX_ACTORS                          4
 #define EOS_TEST_PLATFORM                       32
-
-//   <o>  The time of system tick.
 #define EOS_TICK_MS                             1
 
-
 /* Assert Configuration ----------------------------------------------------- */
-//   <o>  use ASSERT or not
 #define EOS_USE_ASSERT                          1
 
-// </h>
-
 /* State Machine Function Configuration ------------------------------------- */
-// <h> EventOS Nano's state-machine configuration
-//   <o>  use state-machine mode (1 or 0)
 #define EOS_USE_SM_MODE                         1
-
-//   <o>  use HSM mode (1 or 0)
 #define EOS_USE_HSM_MODE                        1
 #if (EOS_USE_SM_MODE != 0 && EOS_USE_HSM_MODE != 0)
-
-//   <o>  use hsm nest depth (2 - 4)
 #define EOS_MAX_HSM_NEST_DEPTH                  4
 #endif
 
 /* Publish & Subscribe Configuration ---------------------------------------- */
 #define EOS_USE_PUB_SUB                         1
-// </h>
 
 /* Time Event Configuration ------------------------------------------------- */
 #define EOS_USE_TIME_EVENT                      1
@@ -83,7 +61,7 @@
 
 /* Event's Data Configuration ----------------------------------------------- */
 #define EOS_USE_EVENT_DATA                      1
-#define EOS_SIZE_HEAP                           12800       // 设定堆大小
+#define EOS_SIZE_HEAP                           32767       // 设定堆大小
 
 /* Event Bridge Configuration ----------------------------------------------- */
 #define EOS_USE_EVENT_BRIDGE                    0

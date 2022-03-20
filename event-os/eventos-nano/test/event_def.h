@@ -12,8 +12,6 @@ enum {
     Event_Time_500ms,
     Event_Time_2000ms,
 
-    Event_Data,
-
     Event_ActEnd,
     
     Event_Max
