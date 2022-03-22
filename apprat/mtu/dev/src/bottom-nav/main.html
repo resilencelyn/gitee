@@ -1,0 +1,115 @@
+<div>
+  <m-bottom-nav onchange="console.log('change')">
+    <m-bottom-nav-item>
+      <m-icon value="brightness_low"></m-icon>
+      首页
+    </m-bottom-nav-item>
+    <m-bottom-nav-item>
+      <m-icon value="camera"></m-icon>
+      相机
+    </m-bottom-nav-item>
+    <m-bottom-nav-item>
+      <m-icon value="color_lens"></m-icon>
+      主题
+    </m-bottom-nav-item>
+    <m-bottom-nav-item>
+      <m-icon value="group"></m-icon>
+      我的
+    </m-bottom-nav-item>
+  </m-bottom-nav>
+
+  <m-bottom-nav theme="dark">
+    <m-bottom-nav-item>
+      <m-icon value="brightness_low"></m-icon>
+      首页
+    </m-bottom-nav-item>
+    <m-bottom-nav-item>
+      <m-icon value="camera"></m-icon>
+      相机
+    </m-bottom-nav-item>
+    <m-bottom-nav-item>
+      <m-icon value="color_lens"></m-icon>
+      主题
+    </m-bottom-nav-item>
+    <m-bottom-nav-item>
+      <m-icon value="group"></m-icon>
+      我的
+    </m-bottom-nav-item>
+  </m-bottom-nav>
+</div>
+
+<template>
+  <style>
+    ::slotted(:nth-child(1)) {
+      color: rgba(var(--color-accent));
+      --color-icon: rgba(var(--color-accent));
+      font-size: .875rem;
+    }
+
+    :host([theme=dark]) ::slotted(:nth-child(1)) {
+      color: #fff;
+      --color-icon: #fff
+    }
+  </style>
+  <style>
+    :host {
+      display: flex;
+      background: var(--color-background-card);
+      user-select: none;
+      height: 56px;
+      cursor: pointer;
+      justify-content: center;
+      color: var(--color-text-secondary);
+      font-size: .75rem;
+    }
+
+    :host([theme=dark]) {
+      background: rgba(var(--color-accent));
+      color: rgba(255, 255, 255, .7);
+      --color-ripple: rgba(255, 255, 255, .4);
+      --color-icon: rgba(255, 255, 255, .7)
+    }
+
+    .root {
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <div class="root" part="root">
+    <slot></slot>
+  </div>
+</template>
+<script type="module">
+  import './item.js'
+  import '../icon/main.js'
+</script>
+<script type="module">
+  import { define } from '../../core.js'
+
+  const template = $template
+  const props = ['select']
+  const setup = (shadow, node) => {
+    const root = shadow.querySelector('.root')
+    const style = shadow.querySelector('style')
+    const styleText = style.textContent
+    root.addEventListener('click', e => {
+      const path = []
+      for (const item of e.composedPath()) item.tagName && path.push(item.tagName)
+      if (!path.includes('M-BOTTOM-NAV-ITEM')) return
+      const v = [].slice.call(node.children).indexOf(e.target)
+      if (v !== node.select) node.dispatchEvent(new Event('change'))
+      node.select = v
+    })
+    return {
+      select: {
+        get: 0,
+        set: v => style.textContent = styleText.replace(new RegExp(':nth-child\\(1\\)', 'g'), `:nth-child(${v + 1})`)
+      },
+      theme: ['normal', 'dark']
+    }
+  }
+
+  define('bottom-nav', { template, props, setup })
+</script>

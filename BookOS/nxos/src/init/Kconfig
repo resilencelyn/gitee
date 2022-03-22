@@ -1,0 +1,10 @@
+config NX_PLATFROM_NAME
+    string "Platform name"
+    default "Unknown"
+
+#
+# CPU numbers
+#
+config NX_MULTI_CORES_NR
+    int "platform CPU core numbers"
+    default 1

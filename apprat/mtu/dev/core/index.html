@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta name=viewport content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>Mtu Dev</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <style>
+    body {
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    #theme {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(var(--color-accent));
+      box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 6px 10px 0 rgb(0 0 0 / 14%), 0 1px 18px 0 rgb(0 0 0 / 12%);
+      cursor: pointer;
+    }
+
+    #theme>svg {
+      fill: #fff;
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body theme="auto">
+  <div id="theme">
+    <svg viewBox="0 0 1024 1024">
+      <path
+        d="M426.666667 85.333333c-77.653333 0-150.613333 21.333333-213.333334 57.6C341.333333 216.746667 426.666667 354.133333 426.666667 512s-85.333333 295.253333-213.333334 369.066667C276.053333 917.333333 349.013333 938.666667 426.666667 938.666667a426.666667 426.666667 0 0 0 426.666666-426.666667A426.666667 426.666667 0 0 0 426.666667 85.333333z">
+      </path>
+    </svg>
+  </div>
+</body>
+<script>
+  document.querySelector('#theme').onclick = (e) => e.target.parentNode.setAttribute('theme', e.target.parentNode.getAttribute('theme') === 'dark' ? 'auto' : 'dark')
+</script>
+
+</html>

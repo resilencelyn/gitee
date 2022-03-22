@@ -1,0 +1,43 @@
+# 图片
+*.jpg
+*.jpeg
+*.png
+*.JPG
+*.JPEG
+*.PNG
+
+# 文本
+*.xml
+*.txt
+*.json
+*.csv
+*.yaml
+
+# 视频
+*.mp4
+*.avi
+*.mov
+*.MOV
+
+# 模型文件
+*.pt
+*.pth
+*.onnx
+
+# 压缩文件
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# 日志文件
+*.log
+*.data
+
+!data/imgs/*
+!data/videos/*
+
+/util/__pycache__
+/test
+/bak
+

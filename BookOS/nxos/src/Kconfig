@@ -1,0 +1,80 @@
+#
+# Kconfig for NXOS source code.
+#
+
+#
+# CPU 64 bits width
+#
+config NX_CPU_64BITS
+    bool 
+    default n
+
+menu "OS Kernel"
+    #
+    # Kernel
+    #
+    source "$NXOS_SRC_DIR/kernel/Kconfig"
+    
+    #
+    # Init
+    #
+    source "$NXOS_SRC_DIR/init/Kconfig"
+
+    #
+    # IO
+    #
+    source "$NXOS_SRC_DIR/io/Kconfig"
+    
+    #
+    # IPC
+    #
+    source "$NXOS_SRC_DIR/ipc/Kconfig"
+    
+    #
+    # MM
+    #
+    source "$NXOS_SRC_DIR/mm/Kconfig"
+
+    #
+    # Sched
+    #
+    source "$NXOS_SRC_DIR/sched/Kconfig"
+
+    #
+    # Process
+    #
+    source "$NXOS_SRC_DIR/process/Kconfig"    
+    
+    #
+    # Time or timer
+    #
+    source "$NXOS_SRC_DIR/time/Kconfig"
+endmenu
+
+#
+# platfrom config
+#
+menu "Platform"
+    source "$NXOS_SRC_DIR/platform/Kconfig"
+endmenu
+
+#
+# Device
+#
+menu "Device"
+    source "$NXOS_SRC_DIR/drivers/Kconfig"
+endmenu
+
+#
+# File system
+#
+menu "File System"
+    source "$NXOS_SRC_DIR/fs/Kconfig"
+endmenu
+
+#
+# Test framework and test code
+#
+menu "Tests"
+    source "$NXOS_SRC_DIR/test/Kconfig"
+endmenu

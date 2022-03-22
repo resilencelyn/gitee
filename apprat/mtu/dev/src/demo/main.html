@@ -1,0 +1,39 @@
+<div>
+  <m-demo>
+    示例组件
+  </m-demo>
+</div>
+
+<template>
+  <style>
+    :host {
+      display: inline-block;
+      background: var(--color-background-card);
+      border: solid var(--color-border) 1px;
+      border-radius: 2px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .root {
+      padding: 8px;
+    }
+  </style>
+  <m-ripple class="root">
+    <slot></slot>
+  </m-ripple>
+</template>
+<script type="module">
+  import { define } from '../../core.js'
+  import '../ripple/main.js'
+
+  const template = $template
+  const props = ['disabled']
+  const setup = () => {
+    return {
+      disabled: false
+    }
+  }
+
+  define('demo', { template, props, setup })
+</script>

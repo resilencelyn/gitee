@@ -1,0 +1,8 @@
+mainmenu "NXOS(Next XBook Operating System) Configuration"
+
+config NXOS_SRC_DIR
+    string
+    option env="NXOS_SRC_DIR"
+    default "./src"
+
+source "$NXOS_SRC_DIR/Kconfig"

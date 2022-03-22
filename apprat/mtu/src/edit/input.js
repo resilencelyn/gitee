@@ -1,0 +1,50 @@
+import { define } from '../../core.js'
+
+const template = `<style>:host{display:block}:host([disabled=true]){pointer-events:none;filter:grayscale(1);opacity:.6}.root{position:relative;overflow:hidden}.label{font-size:.75rem;color:var(--color-text-secondary);user-select:none;pointer-events:none;line-height:1;white-space:normal;overflow:hidden;text-overflow:ellipsis;transform:translateY(calc(8px + 1rem)) scale(calc(16 / 12));transform-origin:left;transition:transform .2s}.empty .label,.focus .label,:host([error=true]) .label{transform:translateY(0) scale(1)}:host([error=true]) .label{color:#f44336}:host([error=true]) .input::placeholder{opacity:1!important}.focus .label{color:rgba(var(--color-accent))}.label:empty{display:none}.root:not(.empty,.focus) .label:not(:empty)+label>.input::placeholder{opacity:0}label{display:flex;align-items:center;cursor:text}.input{border:0;outline:0;background:0;box-sizing:border-box;width:100%;font-family:inherit;color:inherit;line-height:1;caret-color:rgba(var(--color-accent));padding:8px 0;font-size:1rem;margin-bottom:1px}.input::selection{color:#fff;background:rgba(var(--color-accent))}.input::placeholder{color:var(--color-text-disabled);user-select:none;line-height:1}.outline{position:absolute;bottom:0;width:100%;left:0;pointer-events:none;height:1px}.outline::after,.outline::before{content:'';width:100%;display:block;box-sizing:border-box;position:absolute;left:0;bottom:0}.outline::before{border-bottom:solid 1px var(--color-text);opacity:.4}:host([disabled=true]) .outline::before{border-bottom-style:dashed}.outline::after{border-bottom:solid 2px rgba(var(--color-accent));transform:scaleX(0);transition:transform .2s}.focus .outline::after,:host([error=true]) .outline::after{transform:scaleX(1)}:host([error=true]) .outline::after{border-bottom-color:#f44336}::slotted([slot]){flex-shrink:0}.help{margin-top:8px;font-size:.875rem;color:var(--color-text-secondary);user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1}.help:empty{display:none}:host([error=true]) .help{color:#f44336}@media(pointer:fine){:host(:hover) .outline::before{border-bottom-width:2px;opacity:.8}}</style><div class="root" part="root"><div class="label"></div><label><input type="text" class="input" part="input"><slot name="end"></slot></label><div class="outline" part="outline"></div></div><div class="help"></div>`
+
+const props = ['disabled', 'type', 'value', 'placeholder', 'label', 'help', 'error']
+const setup = (shadow, node) => {
+  const root = shadow.querySelector('.root')
+  const label = shadow.querySelector('.label')
+  const input = shadow.querySelector('.input')
+  const help = shadow.querySelector('.help')
+  input.addEventListener('focus', () => root.classList.add('focus'))
+  input.addEventListener('blur', () => root.classList.remove('focus'))
+  const isEmpty = () => root.classList[input.value === '' ? 'remove' : 'add']('empty')
+  input.addEventListener('change', () => {
+    isEmpty()
+    node.dispatchEvent(new Event('change'))
+  })
+  return {
+    disabled: false,
+    type: {
+      get: () => input.type,
+      set: v => input.type = v
+    },
+    value: {
+      get: () => input.value,
+      set: v => {
+        input.value = v
+        isEmpty()
+      }
+    },
+    placeholder: {
+      get: () => input.placeholder,
+      set: v => input.placeholder = v
+    },
+    label: {
+      get: () => label.innerText,
+      set: v => label.innerText = v
+    },
+    help: {
+      get: () => help.innerText,
+      set: v => help.innerText = v
+    },
+    error: false
+  }
+}
+
+const shadowRootInit = { delegatesFocus: true }
+const options = { extends: 'input' }
+
+define('edit-input', { template, props, setup, shadowRootInit })

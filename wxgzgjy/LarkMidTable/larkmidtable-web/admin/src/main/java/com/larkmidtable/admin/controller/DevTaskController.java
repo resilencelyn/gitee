@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +29,13 @@ public class DevTaskController extends BaseController {
 
 	@ApiOperation("文件上传")
 	@PostMapping("/upload")
-	public ReturnT<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("filePath") String filePath) {
-		saveFile(file, filePath);
-		return ReturnT.SUCCESS;
+	public ReturnT<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("tasktype")String tasktype) {
+		try {
+			saveFile(file,tasktype);
+			return new ReturnT(ReturnT.SUCCESS_CODE,"文件上传成功！");
+		}catch (Exception e ){
+			return new ReturnT(ReturnT.FAIL_CODE,"文件上传失败！");
+		}
 	}
 
 	@PostMapping(value ="/execute")
@@ -82,18 +87,20 @@ public class DevTaskController extends BaseController {
 		return cmdArr.toArray(new String[cmdArr.size()]);
 	}
 
-	private void saveFile(MultipartFile file, String filePath) {
+	private void saveFile(MultipartFile file,String tasktype) {
 		if (!file.isEmpty()) {
 			String filename = file.getOriginalFilename(); //获取上传文件原来的名称
-			File temp = new File(filePath);
+			//获取spark或者flink
+			String path ="/home/larkmidtable/flink1.13/job";
+			//
+			File temp = new File(path);
 			if (!temp.exists()) {
 				temp.mkdirs();
 			}
 
-			File localFile = new File(filePath + filename);
+			File localFile = new File(path+"/"+filename);
 			try {
 				file.transferTo(localFile); //把上传的文件保存至本地
-				System.out.println(file.getOriginalFilename() + " 上传成功");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -105,9 +112,9 @@ public class DevTaskController extends BaseController {
 	public ReturnT<Map<String, Object>> selectList(@RequestParam(value = "current", required = false, defaultValue = "1") int current,
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 			@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "name", required = false) String tasktype) {
+			@RequestParam(value = "type", required = false) String type) {
 		// page list
-		List<DevTask> list = devTaskMapper.findList((current - 1) * size,size,name);
+		List<DevTask> list = devTaskMapper.findList((current - 1) * size,size,type);
 		Map<String, Object> maps = new HashMap<>();
 		maps.put("recordsTotal", list.size());    // 过滤后的总记录数
 		maps.put("data", list);                    // 分页列表

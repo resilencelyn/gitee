@@ -1,0 +1,132 @@
+<div>
+  <m-card>
+    <img slot="media"
+      src="data:image/svg+xml,%3Csvg%20width%3D%22344%22%20height%3D%22194%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%3Cdefs%3E%3Cpath%20id%3D%22a%22%20d%3D%22M-1%200h344v194H-1z%22%2F%3E%3C%2Fdefs%3E%3Cg%20transform%3D%22translate(1)%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cmask%20id%3D%22b%22%20fill%3D%22%23fff%22%3E%3Cuse%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2Fmask%3E%3Cuse%20fill%3D%22%23BDBDBD%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3Cg%20mask%3D%22url(%23b)%22%3E%3Cpath%20d%3D%22M173.65%2069.238L198.138%2027%20248%20112.878h-49.3c.008.348.011.697.011%201.046%200%2028.915-23.44%2052.356-52.355%2052.356C117.44%20166.28%2094%20142.84%2094%20113.924c0-28.915%2023.44-52.355%2052.356-52.355%2010%200%2019.347%202.804%2027.294%207.669zm0%200l-25.3%2043.64h50.35c-.361-18.478-10.296-34.61-25.05-43.64z%22%20fill%3D%22%23757575%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+    <div slot="title">
+      Card Title
+    </div>
+    <div slot="subtitle">
+      Secondary text
+    </div>
+    <div slot="content">
+      Greyhound divisively hello coldly wonderfully marginally far upon excluding.
+    </div>
+    <div slot="action">
+      <m-button theme="flat-color">action 1</m-button>
+      <m-button theme="flat-color">action 2</m-button>
+    </div>
+  </m-card>
+
+  <m-card theme="outlined">
+    <img slot="media"
+      src="data:image/svg+xml,%3Csvg%20width%3D%22344%22%20height%3D%22194%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%3Cdefs%3E%3Cpath%20id%3D%22a%22%20d%3D%22M-1%200h344v194H-1z%22%2F%3E%3C%2Fdefs%3E%3Cg%20transform%3D%22translate(1)%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cmask%20id%3D%22b%22%20fill%3D%22%23fff%22%3E%3Cuse%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2Fmask%3E%3Cuse%20fill%3D%22%23BDBDBD%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3Cg%20mask%3D%22url(%23b)%22%3E%3Cpath%20d%3D%22M173.65%2069.238L198.138%2027%20248%20112.878h-49.3c.008.348.011.697.011%201.046%200%2028.915-23.44%2052.356-52.355%2052.356C117.44%20166.28%2094%20142.84%2094%20113.924c0-28.915%2023.44-52.355%2052.356-52.355%2010%200%2019.347%202.804%2027.294%207.669zm0%200l-25.3%2043.64h50.35c-.361-18.478-10.296-34.61-25.05-43.64z%22%20fill%3D%22%23757575%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+    <div slot="title">
+      Card Title
+    </div>
+    <div slot="subtitle">
+      Secondary text
+    </div>
+    <div slot="content">
+      Greyhound divisively hello coldly wonderfully marginally far upon excluding.
+    </div>
+    <div slot="action">
+      <m-button theme="flat-color">action 1</m-button>
+      <m-button theme="flat-color">action 2</m-button>
+    </div>
+  </m-card>
+</div>
+
+<template>
+  <style>
+    :host {
+      background: var(--color-background-card);
+      box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+      border-radius: 4px;
+      display: inline-block;
+      width: 100%;
+      max-width: 320px;
+      box-sizing: border-box;
+    }
+
+    :host([theme=outlined]) {
+      box-shadow: none;
+      border: solid 1px var(--color-border);
+    }
+
+    [name=media] {
+      border-radius: inherit;
+    }
+
+    ::slotted([slot=media]) {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+      width: 100%;
+      user-select: none;
+    }
+
+    ::slotted([slot=media]:only-child) {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
+
+    .primary {
+      user-select: none;
+    }
+
+    ::slotted([slot=title]) {
+      margin: 16px 16px 0 16px;
+      font-size: 1.25rem;
+      line-height: 1.6;
+    }
+
+    ::slotted([slot=subtitle]) {
+      margin: 0 16px;
+      color: var(--color-text-secondary);
+    }
+
+
+    ::slotted([slot=content]) {
+      margin: 16px 16px 0 16px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    ::slotted([slot=action]) {
+      margin: 8px;
+      font-size: 0;
+      letter-spacing: 8px;
+      user-select: none;
+    }
+
+    ::slotted([slot]:not([slot=action]):not([slot=media]):last-child) {
+      margin-bottom: 16px;
+    }
+  </style>
+  <slot name="media"></slot>
+  <div class="primary">
+    <slot name="title"></slot>
+    <slot name="subtitle"></slot>
+  </div>
+  <slot name="content"></slot>
+  <slot></slot>
+  <slot name="action"></slot>
+</template>
+
+<script type="module">
+  import '../button/main.js'
+</script>
+
+<script type="module">
+  import { define } from '../../core.js'
+
+  const template = $template
+  const props = ['theme']
+
+  const setup = () => {
+    return {
+      theme: ['normal', 'outlined']
+    }
+  }
+
+  define('card', { template, props, setup })
+</script>

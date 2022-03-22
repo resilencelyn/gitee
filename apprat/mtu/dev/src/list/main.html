@@ -1,0 +1,57 @@
+<div>
+  <m-list>
+    <div slot="title">标题大哥</div>
+    <m-list-item checked="true">
+      <div slot="title">列表项</div>
+      <div>x</div>
+    </m-list-item>
+    <m-list-item>
+      <div slot="title">列表项</div>
+    </m-list-item>
+  </m-list>
+  <m-list>
+    <m-list-item>
+      <div slot="title">列表项</div>
+    </m-list-item>
+    <m-list-item>
+      <div slot="title">列表项</div>
+    </m-list-item>
+  </m-list>
+</div>
+
+<template>
+  <style>
+    :host {
+      display: block;
+      padding: 8px 0
+    }
+
+    :host(:not(:nth-of-type(1))) {
+      border-top: solid 1px var(--color-border)
+    }
+
+    ::slotted([slot=title]) {
+      margin-top: -8px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      color: var(--color-text-secondary);
+      user-select: none
+    }
+  </style>
+  <div class="root" part="root">
+    <slot name="title"></slot>
+    <slot></slot>
+  </div>
+</template>
+<script type="module">
+  import './item.js'
+</script>
+<script type="module">
+  import { define } from '../../core.js'
+
+  const template = $template
+
+  define('list', { template })
+</script>

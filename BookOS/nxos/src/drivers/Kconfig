@@ -1,0 +1,13 @@
+source "$NXOS_SRC_DIR/drivers/console/Kconfig"
+
+config NX_DRIVER_DUMMY
+    bool "Enable dummy device"
+    default n
+
+config NX_DRIVER_NULL
+    bool "Enable null device"
+    default y
+
+config NX_DRIVER_ZERO
+    bool "Enable zero device"
+    default y

@@ -1,0 +1,29 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+menuconfig DRIVERS_RF
+	bool "RF Device Support"
+	default n
+	---help---
+		Drivers for various RF devices
+
+if DRIVERS_RF
+
+config RF_DAT31R5SP
+	bool "Mini-Circuits DAT-31R5-SP digital attenuator support"
+	default n
+	select SPI
+	---help---
+		Enable driver support for the Mini-Circuits DAT-31R5-SP digital
+		attenuator.
+
+config RF_SPI_TEST_DRIVER
+	bool "SPI Test Driver"
+	default n
+	select SPI
+	---help---
+		Enable SPI Test Driver.
+
+endif # DRIVERS_RF

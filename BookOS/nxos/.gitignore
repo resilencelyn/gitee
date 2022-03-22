@@ -1,0 +1,8 @@
+.vscode/settings.json
+.config
+.config.old
+scripts/kconfiglib/__pycache__/*.pyc
+scripts/kconfiglib/kconfiglib.pyc
+src/platform/Kconfig
+src/include/nx_configure.h
+platform.mk

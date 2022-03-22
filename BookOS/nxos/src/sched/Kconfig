@@ -1,0 +1,19 @@
+config NX_MAX_THREAD_NR
+    int "Max thread numbers"
+    default 256
+
+config NX_THREAD_NAME_LEN
+    int "thread name length"
+    default 32
+
+config NX_THREAD_STACK_SIZE
+    int "default thread stack size (bytes)"
+    default 4096
+
+config NX_ENABLE_SCHED
+    bool "Enable thread scheduler"
+    default n
+
+config NX_THREAD_MAX_PRIORITY_NR
+    int "Max thread priority numbers"
+    default 16

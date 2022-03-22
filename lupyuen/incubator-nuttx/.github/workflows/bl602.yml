@@ -1,0 +1,163 @@
+## Build upstream NuttX every day and test...
+## - Auto-deploy to BL602 after build, capture the UART output and look for errors
+## - Use an SBC to auto-flash BL602 over UART (USB)
+## - SBC will toggle GPIO 8 to set the flashing mode
+## - SBC will restart BL602 before and after flashing
+## Why are we doing this? So that we can pick a stable upstream version of NuttX to merge into our fork of NuttX
+## See https://github.com/lupyuen/remote-bl602
+
+name: BL602 Upstream
+
+on:
+
+  ## Run every day at 0:30 UTC, because 0:00 UTC seems too busy for the scheduler
+  schedule:
+    - cron: '30 0 * * *'
+
+  ## Run on every commit
+  ## push:
+  ##   branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Install Build Tools
+      run:  |
+        sudo apt -y update
+        sudo apt -y install \
+        bison flex gettext texinfo libncurses5-dev libncursesw5-dev \
+        gperf automake libtool pkg-config build-essential gperf genromfs \
+        libgmp-dev libmpc-dev libmpfr-dev libisl-dev binutils-dev libelf-dev \
+        libexpat-dev gcc-multilib g++-multilib u-boot-tools util-linux \
+        kconfig-frontends \
+        wget
+
+    - name: Install Toolchain
+      run:  |
+        wget https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz
+        tar -xf riscv64-unknown-elf-gcc*.tar.gz
+
+    - name: Checkout Source Files
+      run:  |
+        mkdir nuttx
+        cd nuttx
+        git clone https://github.com/apache/incubator-nuttx nuttx
+        git clone https://github.com/apache/incubator-nuttx-apps apps
+          
+    - name: Build
+      run: |
+        ## Add toolchain to PATH
+        export PATH=$PATH:$PWD/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14/bin
+        cd nuttx/nuttx
+        
+        ## Configure the build
+        ./tools/configure.sh bl602evb:nsh
+        
+        ## Enable errors, warnings, info messages and assertions
+        kconfig-tweak --enable CONFIG_DEBUG_ERROR
+        kconfig-tweak --enable CONFIG_DEBUG_WARN
+        kconfig-tweak --enable CONFIG_DEBUG_INFO
+        kconfig-tweak --enable CONFIG_DEBUG_ASSERTIONS
+
+        ## Enable GPIO errors, warnings and info messages
+        kconfig-tweak --enable CONFIG_DEBUG_GPIO
+        kconfig-tweak --enable CONFIG_DEBUG_GPIO_ERROR
+        kconfig-tweak --enable CONFIG_DEBUG_GPIO_WARN
+        kconfig-tweak --enable CONFIG_DEBUG_GPIO_INFO
+
+        ## Enable SPI errors, warnings and info messages
+        kconfig-tweak --enable CONFIG_DEBUG_SPI
+        kconfig-tweak --enable CONFIG_DEBUG_SPI_ERROR
+        kconfig-tweak --enable CONFIG_DEBUG_SPI_WARN
+        kconfig-tweak --enable CONFIG_DEBUG_SPI_INFO
+
+        ## Enable Floating Point
+        kconfig-tweak --enable CONFIG_LIBC_FLOATINGPOINT
+
+        ## Enable Compiler Stack Canaries
+        kconfig-tweak --enable CONFIG_STACK_CANARIES
+
+        ## Enable NuttX Shell commands: cat, help, ls
+        kconfig-tweak --disable CONFIG_NSH_DISABLE_CAT
+        kconfig-tweak --disable CONFIG_NSH_DISABLE_HELP
+        kconfig-tweak --disable CONFIG_NSH_DISABLE_LS
+
+        ## Enable GPIO
+        kconfig-tweak --enable CONFIG_DEV_GPIO
+        kconfig-tweak --set-val CONFIG_DEV_GPIO_NSIGNALS 1
+
+        ## Enable GPIO Test App
+        kconfig-tweak --enable CONFIG_EXAMPLES_GPIO
+        kconfig-tweak --set-str CONFIG_EXAMPLES_GPIO_PROGNAME "gpio"
+        kconfig-tweak --set-val CONFIG_EXAMPLES_GPIO_PRIORITY 100
+        kconfig-tweak --set-val CONFIG_EXAMPLES_GPIO_STACKSIZE 2048
+
+        ## Enable SPI
+        kconfig-tweak --enable CONFIG_BL602_SPI0
+        kconfig-tweak --enable CONFIG_SPI
+        kconfig-tweak --enable CONFIG_SPI_EXCHANGE
+        kconfig-tweak --enable CONFIG_SPI_DRIVER
+
+        ## Enable UART1
+        kconfig-tweak --enable CONFIG_BL602_HAVE_UART1
+        kconfig-tweak --set-val CONFIG_UART1_BAUD 9600
+
+        ## Preserve the build config
+        cp .config nuttx.config
+        
+        ## Run the build
+        make
+
+        ## Dump the disassembly to nuttx.S
+        riscv64-unknown-elf-objdump \
+          -t -S --demangle --line-numbers --wide \
+          nuttx \
+          >nuttx.S \
+          2>&1
+
+    - name: Upload Build Outputs
+      uses: actions/upload-artifact@v2
+      with:
+        name: nuttx.zip
+        path: nuttx/nuttx/nuttx*
+
+    - name: Zip Build Outputs
+      run: |
+        cd nuttx/nuttx
+        zip nuttx.zip nuttx*
+
+    - name: Get Current Date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
+    - name: Create Draft Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: upstream-${{ steps.date.outputs.date }}
+        release_name: upstream-${{ steps.date.outputs.date }}
+        draft: true
+        prerelease: false
+
+    - name: Upload Release
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: nuttx/nuttx/nuttx.zip
+        asset_name: nuttx.zip
+        asset_content_type: application/zip
+
+    - name: Publish Release
+      uses: eregon/publish-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_id: ${{ steps.create_release.outputs.id }}

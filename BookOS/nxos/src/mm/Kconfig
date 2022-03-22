@@ -1,0 +1,7 @@
+config NX_KVADDR_OFFSET
+    hex "kernel virtual address offset to physic address"
+    default 0x00000000
+
+config NX_PAGE_SHIFT
+    int "page size shift"
+    default 12
