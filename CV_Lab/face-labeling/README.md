@@ -29,12 +29,11 @@
 
 
 
+<h2 align="center">💎项目流程与用途</h2>
 
-<h2 align="center">💎项目用途</h2>
-
-### 📌  项目1：人脸表情识别
-
-### 📌  项目2：口罩识别
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/face-labeling-workflow.png">
+</div>
 
 
 
@@ -144,6 +143,16 @@ python face_labeling.py -m video -vd ./video_dir # 指定视频目录
 ```shell
 # 默认为widerface-s
 python face_labeling.py -mn face_model # 以实时标注为例
+```
+
+
+
+### 💡 自定义类别
+
+```shell
+# 默认为face，以口罩识别为例
+python face_labeling.py -cls mask # 口罩类
+python face_labeling.py -cls without-mask # 未戴口罩类
 ```
 
 

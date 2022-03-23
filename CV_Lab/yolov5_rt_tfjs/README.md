@@ -15,14 +15,17 @@
 <a href="./CodeCheck.md"><img src="https://img.shields.io/badge/CodeCheck-passing-success" alt="code check" /></a>
 <a href="https://gitee.com/CV_Lab/yolov5_rt_tfjs/releases/v0.3"><img src="https://img.shields.io/badge/Releases-v0.3-green" alt="Releases Version" /></a>
 <a href="https://github.com/ultralytics/yolov5"><img src="https://img.shields.io/badge/YOLOv5-v6.1-blue" alt="YOLOv5 Version" /></a>
-<a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/TensorFlow.js-v3.13.0-important?logo=tensorflow" alt="TensorFlow.js Version" /></a>
-<a href="https://jquery.com/"><img src="https://img.shields.io/badge/jQuery-v3.6.0-%23436EEE?logo=jquery" alt="jQuery Version" /></a>
+<a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/TensorFlow.js-v3.13.0+-important?logo=tensorflow" alt="TensorFlow.js Version" /></a>
+<a href="https://jquery.com/"><img src="https://img.shields.io/badge/jQuery-v3.6.0+-%23436EEE?logo=jquery" alt="jQuery Version" /></a>
 <a href="https://gitee.com/CV_Lab/yolov5_rt_tfjs/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
 <p align="center">
 <a href="./yolov5_rt_tfjs_flask"><img src="https://img.shields.io/badge/flask-v2.0.3+-critical?logo=flask" alt="Flask Version" /></a>
 <a href="./yolov5_rt_tfjs_fastapi"><img src="https://img.shields.io/badge/fastapi-v0.74.1+-green?logo=fastapi" alt="FastAPI Version" /></a>
+<a href="./yolov5_rt_tfjs_bottle"><img src="https://img.shields.io/badge/bottle-v0.12.19%2B-blue" alt="Bottle Version" /></a>
 </p>
+
+
 
 
 
@@ -104,6 +107,11 @@ const cls_names = ['人', '自行车', '汽车', '摩托车', '飞机', '公交�
 │   │   │  	└── index.html					# fastapi html文件
 │   │   ├── server.py						# fastapi server文件
 │   │   └── README.md						# fastapi版项目说明
+│   ├── yolov5_rt_tfjs_bottle				# bottle版主目录
+│   │   ├── views							# bottle模板目录
+│   │   │  	└── index.html					# bottle html文件
+│   │   ├── server.py						# bottle server文件
+│   │   └── README.md						# bottle版项目说明
 │   ├── v_change							# 版本历史
 │   │   ├── v01_change.md					# v0.1版本变更
 │   │   ├── v02_change.md					# v0.2版本变更
@@ -184,14 +192,19 @@ python export.py --weights yolov5s.pt --include tfjs
 
 <div align="center">
     <a href="./yolov5_rt_tfjs_flask">
-        <img src="https://pycver.gitee.io/ows-pics/imgs/flask_logo.png" width="18%"/>
+        <img src="https://pycver.gitee.io/ows-pics/imgs/flask_logo.png" width="15%"/>
     </a>
     <a href="./yolov5_rt_tfjs_fastapi">
-        <img src="https://pycver.gitee.io/ows-pics/imgs/fastapi_logo.png" width="30%"/>
+        <img src="https://pycver.gitee.io/ows-pics/imgs/fastapi_logo.png" width="20%"/>
+    </a>
+    <a href="./yolov5_rt_tfjs_bottle">
+        <img src="https://pycver.gitee.io/ows-pics/imgs/bottle_logo.png" width="15%"/>
     </a>
 </div>
 
-❤️ 本项目提供了2种扩展演示：Flask版和FastAPI版，旨在表明该项目具有良好的可移植性。点击上面的logo可以了解详细的安装和使用教程。
+
+
+❤️ 本项目提供了3种扩展演示：Flask版、FastAPI版和Bottle版，旨在表明该项目具有良好的可移植性。点击上面的logo可以了解详细的安装和使用教程。
 
 ❗ 注：在使用以下方法前，必须确保`yolov5s_web_model` 目录加入到`yolov5_rt_tfjs_src/static` 中。
 
@@ -225,6 +238,23 @@ conda activate yolo # 进入环境
 
 ```shell
 bash setup_fastapi.sh
+```
+
+
+
+### ✅ 方法五：[Bottle版](./yolov5_rt_tfjs_bottle)
+
+📌 创建conda环境
+
+```shell
+conda create -n yolo python==3.8
+conda activate yolo # 进入环境
+```
+
+📌 执行[setup_bottle.sh](./setup_bottle.sh)脚本
+
+```shell
+bash setup_bottle.sh
 ```
 
 
@@ -274,6 +304,18 @@ python server.py
 <p align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/fastapi_flow_graph.png">
 </p>
+
+
+### 💡 方法四：[Bottle](https://github.com/bottlepy/bottle)版
+
+📌 运行文件[server.py](./yolov5_rt_tfjs_bottle/server.py)
+
+```shell
+python server.py
+```
+
+📌 浏览器输入`http://localhost:8080/`
+
 
 
 ## 🍷鸣谢

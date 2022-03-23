@@ -12,3 +12,6 @@
 # 视频格式
 *.mp4
 *.avi
+
+/static
+/__pycache__

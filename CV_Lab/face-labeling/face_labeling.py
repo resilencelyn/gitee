@@ -74,6 +74,9 @@ def parse_args(known=False):
     parser.add_argument(
         "--inference_size", "-isz", default=640, type=int, help="model inference size"
     )
+    parser.add_argument(
+        "--cls_name", "-cls", default="face", type=str, help="class name"
+    )
 
     args = parser.parse_known_args()[0] if known else parser.parse_args()
     return args
@@ -396,10 +399,11 @@ def face_label(
     nms_iou=0.45,
     max_detNum=1000,
     inference_size=640,
+    cls_name="face",
 ):
 
     model, cls_names = yolov5_model_load(
-        ROOT_PATH, model_name, nms_conf, nms_iou, max_detNum
+        ROOT_PATH, model_name, nms_conf, nms_iou, max_detNum, cls_name
     )
 
     # ----------创建帧文件----------
@@ -675,6 +679,7 @@ def main(args):
     nms_iou = args.nms_iou
     max_detNum = args.max_detNum
     inference_size = args.inference_size
+    cls_name = args.cls_name
 
     argsYaml(args)  # 脚本参数
 
@@ -690,6 +695,7 @@ def main(args):
         nms_iou,
         max_detNum,
         inference_size,
+        cls_name,
     )
 
 

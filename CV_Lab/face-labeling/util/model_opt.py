@@ -7,7 +7,7 @@ import torch
 
 
 # 模型加载
-def yolov5_model_load(file_path, model_name, nms_conf, nms_iou, max_detNum):
+def yolov5_model_load(file_path, model_name, nms_conf, nms_iou, max_detNum, cls_name):
     try:
         # 本地模型路径
         local_model_path = f"{file_path}/yolov5"
@@ -26,7 +26,7 @@ def yolov5_model_load(file_path, model_name, nms_conf, nms_iou, max_detNum):
         model.max_det = max_detNum  # 最大检测目标数
 
         # 类别名称
-        cls_names = ["face"]
+        cls_names = [cls_name]
 
         print("模型加载成功！")
 
