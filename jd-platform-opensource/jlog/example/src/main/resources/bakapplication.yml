@@ -1,0 +1,24 @@
+workers: [1,2,3]
+compress: 68
+threshold: 10000
+
+serverAddr: 101.42.242.201:2181
+server:
+  port: 8085
+
+test: true
+
+
+tag-config:
+  reqTags:
+    - uid
+    - url
+    - newK
+  logTags:
+    - node
+    - bizType
+  respTags:
+    - errno
+  delimiter: "|"
+  join: "="
+

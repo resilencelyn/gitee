@@ -1,0 +1,30 @@
+local:
+  address: ${localAddress:} #有些获取到的ip不能用，需要手工配worker的地址
+thread:
+  count: ${threadCount:8}
+queue:
+  maxSize: ${queueSize:16384}
+  preDbSize: ${preDbSize:10000}
+
+
+server:
+  port: 8086
+#ck信息，自行修改
+clickhouse:
+  url: jdbc:clickhouse://127.0.0.1:8123
+  db: default
+  username: default
+  password:
+  batchSize: ${BATCH_SIZE:5000}
+  poolSize: ${POOL_SIZE:5}
+  insertInterval: ${INSERT_INTERVAL:5}
+  nodeNumber: ${NODE_NUMBER:15}
+log:
+  batchSize: ${BATCH_SIZE:5000}
+  poolSize: ${POOL_SIZE:2}
+  insertInterval: ${INSERT_INTERVAL:5}
+  preDbSize: ${preDbSize:10000}
+
+
+# 此处仅供参考和测试
+workers: "['192.268.1.2:8888','192.268.1.3:8888']"

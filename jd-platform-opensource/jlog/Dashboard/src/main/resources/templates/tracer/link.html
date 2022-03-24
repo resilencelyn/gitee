@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('参数列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="config-form">
+
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    var tracerid = [[${id}]];
+    var createTime = [[${createTime}]];
+
+    var prefix = ctx + "tracer/cart";
+
+    $(function() {
+        var options = {
+            url: prefix + "/logList?id=" + tracerid + "&createTime=" + createTime,
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "参数",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'tracerId',
+                    title: 'tracerId'
+                },
+                {
+                    field: 'className',
+                    title: 'className',
+                    align: 'center'
+                },
+                {
+                    field: 'threadName',
+                    title: 'threadName'
+                },
+                {
+                    field: 'methodName',
+                    title: 'methodName',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value + "", 14, "open");
+                    }
+                },
+                {
+                    field: 'logLevel',
+                    title: 'logLevel'
+                },
+                {
+                    field: 'content',
+                    title: 'content',
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value + "", 25, "open");
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                }
+                ]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

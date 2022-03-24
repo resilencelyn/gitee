@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jd.platfrom.jlog</groupId>
+    <artifactId>JLog</artifactId>
+    <packaging>pom</packaging>
+    <version>1.4-SNAPSHOT</version>
+    <modules>
+        <module>common</module>
+        <module>worker</module>
+        <module>client</module>
+        <module>clientlog4j</module>
+        <module>clientlog4j2</module>
+        <module>clientlogback</module>
+        <module>Dashboard</module>
+        <module>example</module>
+        <module>config</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+</project>

@@ -31,9 +31,18 @@
 
 <h2 align="center">💎项目流程与用途</h2>
 
+### 📌 项目整体流程与扩展应用
+
 <div align="center" >
-<img src="https://pycver.gitee.io/ows-pics/imgs/face-labeling-workflow.png">
+<img src="https://pycver.gitee.io/ows-pics/imgs/face_labeling_work_flow.png">
 </div>
+
+### 📌 项目功能结构与信息流
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/face_labeling_work_io.png">
+</div>
+
 
 
 
@@ -96,13 +105,13 @@ cd ./face-labeling/yolov5
 pip install -r requirements.txt -U
 ```
 
-❗ 注意，yolov5默认采用pip安装PyTorch GPU版，如果采用官网安装**PyTorch GPU**版，参见[YOLOv5 PyTorch GPU安装教程](./yolov5_pytorch_gpu.md)
+❗ 注意：yolov5默认采用pip安装PyTorch GPU版，如果采用官网安装**PyTorch GPU**版，参见[YOLOv5 PyTorch GPU安装教程](./yolov5_pytorch_gpu.md)
 
 
 
 ### ✅ [基于YOLOv5的人脸检测模型的构建](./yolov5_widerface.md)
 
-本项目使用的**人脸检测模型**是在**WIDER FACE**数据集上，基于**YOLOv5 v6.1**训练的，具体训练过程参见[yolov5_widerface.md](./yolov5_widerface.md)
+本项目使用的**人脸检测模型**是在[WIDER FACE](http://shuoyang1213.me/WIDERFACE/)数据集上，基于[YOLOv5 v6.1](https://github.com/ultralytics/yolov5)训练的，具体训练过程参见[yolov5_widerface.md](./yolov5_widerface.md)
 
 本项目目前提供了一个demo模型，下载地址：[百度云](https://pan.baidu.com/s/1MP8XF5k5TREKns67ip9NBA) | 提取码：d9rs
 
@@ -135,6 +144,48 @@ python face_labeling.py -m img -imd ./img_dir # 指定图片目录
 python face_labeling.py -m video # 默认测试视频目录data/videos
 python face_labeling.py -m video -vd ./video_dir # 指定视频目录
 ```
+
+❗ 说明：以上三种检测模式都会在项目根目录中生成`FaceFrame`目录，该目录会生成`frame*`的子目录，子目录结构如下：
+
+```
+# webcam和图片标注的目录
+.
+├── FaceFrame						# 人脸数据保存目录
+│   ├── frame						# 子目录
+│   │   ├── raw						# 原始图片
+│   │   ├── tag						# 标记图片（包括：人脸检测框、人脸ID、置信度、帧ID、FPS、人脸总数，人脸尺寸类型（小、中、大）数量）
+│   │   ├── voc_xml					# PASCAL VOC XML 标注文件
+│   │   ├── coco_json				# MS COCO JSON 标注文件
+│   │   ├── yolo_txt				# YOLO TXT 标注文件
+│   ├── frame2						# 子目录
+│   │   ├── raw						# 原始图片
+│   │   ├── ......
+```
+
+
+
+```
+# 视频标注的目录
+.
+├── FaceFrame						# 人脸数据保存目录
+│   ├── frame						# 子目录
+│	│   ├── video_name01			# 子视频目录
+│   │   │   ├── raw					# 原始图片
+│   │   │   ├── tag					# 标记图片（包括：人脸检测框、人脸ID、置信度、帧ID、FPS、人脸总数，人脸尺寸类型（小、中、大）数量）
+│   │   │   ├── voc_xml				# PASCAL VOC XML 标注文件
+│   │   │   ├── coco_json			# MS COCO JSON 标注文件
+│   │   │   ├── yolo_txt			# YOLO TXT 标注文件
+│	│   ├── video_name02			# 子视频目录
+│   │   │   ├── raw					# 原始图片
+│   │   │   ├── ......
+```
+
+
+❗ 查看检测结果：人脸图片检测结果会保存在`FaceFrame/frame*/tag`中，以`python face_labeling.py -m img`为例运行项目自带检测图片，检测结果如下：
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/face_labeling_detect_test.jpg">
+</div>
 
 
 

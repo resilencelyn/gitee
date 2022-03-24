@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看详情')" />
+    <th:block th:include="include :: jsonview-css" />
+</head>
+<body class="white-bg">
+<!--<div class="wrapper wrapper-content animated fadeInRight ibox-content">-->
+<!--    <form class="form-horizontal m" id="form-bizenum-edit" th:object="${tracerVO}">-->
+<!--    <form class="form-horizontal m" id="form-bizenum-edit">-->
+<!--        <input name="pin" th:field="*{pin}" type="hidden">-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">请求正文：</label>
+<!--            <div class="col-sm-8">-->
+<!--                <input name="requestContent" id="requestContent" th:field="*{requestContent}" class="form-control" type="text">-->
+<!--            </div>-->
+            <div class="form-control-static"><textarea id="requestContent" cols="90" rows="40" style="margin-top: 10px" th:align="center"></textarea></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">响应正文：</label>
+<!--            <div class="col-sm-8">-->
+<!--                <input name="responseContent" id="responseContent" th:field="*{responseContent}" class="form-control" type="text">-->
+<!--            </div>-->
+            <div class="form-control-static"><textarea id="responseContent" cols="90" rows="40" style="margin-top: 10px" th:align="center"></textarea></div>
+        </div>
+<!--    </form>-->
+<!--</div>-->
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: jsonview-js" />
+<script th:inline="javascript">
+    $(function() {
+        // var str1 = $("#requestContent").value;
+        // var str2 = $("#responseContent").value;
+        try {
+            var str1 = JSON.parse([[${tracerVO.requestContent}]]);
+            $("#requestContent").val(JSON.stringify(str1, null, "\t"));
+            $("#requestContent").val(JSON.stringify(str1, null, 4));
+        } catch (e) {
+            var str1 = [[${tracerVO.requestContent}]];
+            $("#requestContent").val(str1);
+        }
+
+        try {
+            var str2 = JSON.parse([[${tracerVO.responseContent}]]);
+            $("#responseContent").val(JSON.stringify(str2, null, "\t"));
+            $("#responseContent").val(JSON.stringify(str2, null, 4));
+        } catch (e) {
+            var str2 = [[${tracerVO.responseContent}]];
+            $("#responseContent").val(str2);
+        }
+
+
+    });
+
+    function submitHandler() {
+        window.close();
+    }
+</script>
+</body>
+</html>

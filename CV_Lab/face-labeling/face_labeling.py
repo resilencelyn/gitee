@@ -23,8 +23,23 @@ from util.coco_json import coco_json_main
 from util.yolo_txt import create_yolo_txt
 from util.args_yaml import argsYaml
 
-IMG_FORMATS = ["jpg", "jpeg", "png"]
-VIDEO_FORMATS = ["mp4", "avi"]
+
+# ---------------------图片和视频格式---------------------
+IMG_FORMATS = ["jpg", "jpeg", "png", "bmp", "tif", "webp"]
+VIDEO_FORMATS = [
+    "mp4",
+    "avi",
+    "wmv",
+    "mkv",
+    "mov",
+    "gif",
+    "vob",
+    "swf",
+    "mpg",
+    "flv",
+    "3gp",
+    "3g2",
+]
 
 
 ROOT_PATH = sys.path[0]  # 根目录
@@ -376,8 +391,6 @@ def face_detect(
 
             face_id += 1  # 人脸ID自增
 
-    frame_id += 1  # 帧ID自增
-
     if mode == "webcam":
         return frame, img_size, wait_key, face_id
     elif mode == "img":
@@ -389,8 +402,8 @@ def face_detect(
 # 智能人脸标注
 def face_label(
     mode="webcam",
-    img_dir="./faceimg",
-    video_dir="./video",
+    img_dir="./data/imgs",
+    video_dir="./data/videos",
     model_name="widerface-s.pt",
     imgName="face_test",
     frame_saveDir="FaceFrame",
@@ -412,17 +425,16 @@ def face_label(
     )  # 增量运行
     frame_savePath.mkdir(parents=True, exist_ok=True)  # 创建目录
     if mode in ["webcam", "img"]:
-        Path(f"{frame_savePath}/raw").mkdir(parents=True, exist_ok=True)  # 创建原始图片目录
-        Path(f"{frame_savePath}/tag").mkdir(parents=True, exist_ok=True)  # 创建标记图片目录
-        Path(f"{frame_savePath}/voc_xml").mkdir(
-            parents=True, exist_ok=True
-        )  # 创建PASCAL VOC XML目录
-        Path(f"{frame_savePath}/coco_json").mkdir(
-            parents=True, exist_ok=True
-        )  # 创建MS COCO JSON目录
-        Path(f"{frame_savePath}/yolo_txt").mkdir(
-            parents=True, exist_ok=True
-        )  # 创建YOLO TXT目录
+        # 创建原始图片目录
+        Path(f"{frame_savePath}/raw").mkdir(parents=True, exist_ok=True)
+        # 创建标记图片目录
+        Path(f"{frame_savePath}/tag").mkdir(parents=True, exist_ok=True)
+        # 创建PASCAL VOC XML目录
+        Path(f"{frame_savePath}/voc_xml").mkdir(parents=True, exist_ok=True)
+        # 创建MS COCO JSON目录
+        Path(f"{frame_savePath}/coco_json").mkdir(parents=True, exist_ok=True)
+        # 创建YOLO TXT目录
+        Path(f"{frame_savePath}/yolo_txt").mkdir(parents=True, exist_ok=True)
 
     face_id = 0  # 人脸ID
     frame_id = 0  # 帧ID
@@ -467,6 +479,8 @@ def face_label(
                     # 退出窗体
                     break
 
+                frame_id += 1  # 帧ID自增
+
                 # 变量回收
                 del frame, img_size
                 gc.collect()
@@ -505,9 +519,18 @@ def face_label(
                 inference_size,
             )
 
+            print(
+                f"帧ID：{frame_id}|({frame_id+1},{len(imgName_list)})|{round((frame_id+1)/len(imgName_list)*100, 2)}%",
+                end="\r",
+            )
+
+            frame_id += 1  # 帧ID自增
+
             # 变量回收
             del frame, img_size
             gc.collect()
+
+        print()
 
         coco_json_main(
             cls_names,
@@ -542,6 +565,27 @@ def face_label(
             frame_id = 0  # 帧ID
 
             if is_capOpened:
+                # 创建原始图片目录
+                Path(f"{frame_savePath}/{video_name}/raw").mkdir(
+                    parents=True, exist_ok=True
+                )
+                # 创建标记图片目录
+                Path(f"{frame_savePath}/{video_name}/tag").mkdir(
+                    parents=True, exist_ok=True
+                )
+                # 创建PASCAL VOC XML目录
+                Path(f"{frame_savePath}/{video_name}/voc_xml").mkdir(
+                    parents=True, exist_ok=True
+                )
+                # 创建MS COCO JSON目录
+                Path(f"{frame_savePath}/{video_name}/coco_json").mkdir(
+                    parents=True, exist_ok=True
+                )
+                # 创建YOLO TXT目录
+                Path(f"{frame_savePath}/{video_name}/yolo_txt").mkdir(
+                    parents=True, exist_ok=True
+                )
+
                 while is_capOpened:
                     wait_key = cv2.waitKey(20) & 0xFF  # 键盘监听
                     ret, frame = input_video.read()
@@ -552,27 +596,6 @@ def face_label(
                     print(
                         f"帧ID：{frame_id}|({frame_id+1},{video_frames})|{round(((frame_id+1)/video_frames)*100, 2)}%",
                         end="\r",
-                    )
-
-                    # 创建原始图片目录
-                    Path(f"{frame_savePath}/{video_name}/raw").mkdir(
-                        parents=True, exist_ok=True
-                    )
-                    # 创建标记图片目录
-                    Path(f"{frame_savePath}/{video_name}/tag").mkdir(
-                        parents=True, exist_ok=True
-                    )
-                    # 创建PASCAL VOC XML目录
-                    Path(f"{frame_savePath}/{video_name}/voc_xml").mkdir(
-                        parents=True, exist_ok=True
-                    )
-                    # 创建MS COCO JSON目录
-                    Path(f"{frame_savePath}/{video_name}/coco_json").mkdir(
-                        parents=True, exist_ok=True
-                    )
-                    # 创建YOLO TXT目录
-                    Path(f"{frame_savePath}/{video_name}/yolo_txt").mkdir(
-                        parents=True, exist_ok=True
                     )
 
                     # 人脸检测与信息提取
@@ -623,10 +646,10 @@ def face_label(
                     f"共计{face_id}个人脸xml文件，保存至{frame_savePath}/{video_name}/voc_xml"
                 )
                 json_save_msg = (
-                    f"共计{face_id}个人脸xml文件，保存至{frame_savePath}/{video_name}/coco_json"
+                    f"共计1个人脸json文件，保存至{frame_savePath}/{video_name}/coco_json"
                 )
                 txt_save_msg = (
-                    f"共计{face_id}个人脸xml文件，保存至{frame_savePath}/{video_name}/yolo_txt"
+                    f"共计{face_id}个人脸txt文件，保存至{frame_savePath}/{video_name}/yolo_txt"
                 )
                 log_management(
                     f"{frame_save_msg}\n{frametag_save_msg}\n{xml_save_msg}\n{json_save_msg}\n{txt_save_msg}\n"
@@ -634,6 +657,8 @@ def face_label(
                 print(
                     f"{frame_save_msg}\n{frametag_save_msg}\n{xml_save_msg}\n{json_save_msg}\n{txt_save_msg}\n"
                 )
+
+                face_id = 0
 
             else:
                 print("连接视频失败，程序退出！")
@@ -656,8 +681,8 @@ def face_label(
         frame_save_msg = f"共计{face_id}张人脸图片，保存至{frame_savePath}/raw"
         frametag_save_msg = f"共计{face_id}张人脸标记图片，保存至{frame_savePath}/tag"
         xml_save_msg = f"共计{face_id}个人脸xml文件，保存至{frame_savePath}/voc_xml"
-        json_save_msg = f"共计{face_id}个人脸xml文件，保存至{frame_savePath}/coco_json"
-        txt_save_msg = f"共计{face_id}个人脸xml文件，保存至{frame_savePath}/yolo_txt"
+        json_save_msg = f"共计1个人脸json文件，保存至{frame_savePath}/coco_json"
+        txt_save_msg = f"共计{face_id}个人脸txt文件，保存至{frame_savePath}/yolo_txt"
 
         log_management(
             f"{frame_save_msg}\n{frametag_save_msg}\n{xml_save_msg}\n{json_save_msg}\n{txt_save_msg}\n"

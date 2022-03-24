@@ -22,7 +22,7 @@ jsmind思维导图多人协作版（可本地安装、可扩展源码）
 
 + 安装依赖
     - 安装python，我本地是Python 3.7.8rc1，版本比这个大就应该可以
-    - 安装依赖，在工程根目录执行 pip install -r reuqirements.txt 将项目的依赖安装到python目录（类似java里的maven），如果相关把依赖安装到其他目录进行分类管理可以采用virtualenvwrapper
+    - 安装依赖，在工程根目录执行 pip install -r reuqirements.txt 将项目的依赖安装到python目录（类似java里的maven），如果想把相关依赖安装到其他目录进行分类管理可以采用virtualenvwrapper
     -    
     - ![](https://img-blog.csdnimg.cn/cce7286ce32c45489c6737cd8432feb6.png)
   

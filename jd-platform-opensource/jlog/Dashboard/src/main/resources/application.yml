@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: false #便于测试
+    prefix: classpath:/templates/
+    encoding: UTF-8 #编码
+    suffix: .html #模板后缀
+    mode: HTML #模板
+
+#clickhouse:
+#  url: jdbc:clickhouse://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:8123}
+#  db: ${DB_NAME:default}
+#  username: ${MYSQL_USER:default}
+#  password: ${MYSQL_PASS:123456}
+#  batchSize: ${BATCH_SIZE:2000}
+#  poolSize: ${POOL_SIZE:5}
+clickhouse:
+  url: jdbc:clickhouse://${MYSQL_HOST:ckpub52.olap.jd.com}:${MYSQL_PORT:2000}
+  db: ${DB_NAME:cart_fangzhou}
+  username: ${MYSQL_USER:cart_fangzhou}
+  password: ${MYSQL_PASS:3V16Ap6Qc9q0LzsSKNjm}
+  batchSize: ${BATCH_SIZE:5000}
+  poolSize: ${POOL_SIZE:5}
+  insertInterval: ${INSERT_INTERVAL:5}
+
+
+
+fake:
+  cpuon: ${FAKE_ON:1}
+  interval: ${FAKE_INTERVAL:125}
+  repeat: ${FAKE_REPEAT:100000}
