@@ -1,16 +1,18 @@
-# 基于YOLOv5的人脸检测模型的构建
+# 🔥 基于YOLOv5的人脸检测模型的构建
 
 ## 创建人：曾逸夫
 
 
 
-### WIDER FACE数据集准备
+### 💡 WIDER FACE数据集准备
 
-- [官网](http://shuoyang1213.me/WIDERFACE/)下载4个文件：`WIDER Face Training Images`|`WIDER Face Validation Images`|`WIDER Face Testing Images`|`Face annotations`
+📌 [官网](http://shuoyang1213.me/WIDERFACE/)下载4个文件：`WIDER Face Training Images`|`WIDER Face Validation Images`|`WIDER Face Testing Images`|`Face annotations`
 
-- 下载后会得到4个压缩文件：`WIDER_train.zip`|`WIDER_val.zip`|`WIDER_test.zip`|`wider_face_split.zip`
-- 其中，`wider_face_split.zip`中存在标签gt文件， `WIDER_train.zip`和`WIDER_val.zip`具有gt标签，`WIDER_test.zip` 无gt标签。解压`wider_face_split.zip`，得到`wider_face_train_bbx_gt.txt`和`wider_face_val_bbx_gt.txt`
-- WIDER FACE标注如下：
+📌 下载后会得到4个压缩文件：`WIDER_train.zip`|`WIDER_val.zip`|`WIDER_test.zip`|`wider_face_split.zip`
+
+📌 其中，`wider_face_split.zip`中存在标签gt文件， `WIDER_train.zip`和`WIDER_val.zip`具有gt标签，`WIDER_test.zip` 无gt标签。解压`wider_face_split.zip`，得到`wider_face_train_bbx_gt.txt`和`wider_face_val_bbx_gt.txt`
+
+📌 WIDER FACE标注如下：
 
 ```
 0--Parade/0_Parade_marchingband_1_849.jpg
@@ -44,7 +46,7 @@
 20 215 12 16 2 0 0 0 2 0 
 ```
 
-- WIDER FACE包含61个人脸场景
+📌 WIDER FACE包含61个人脸场景
 
 ```
 [0, 'Parade']
@@ -110,29 +112,81 @@
 [61, 'Street_Battle']
 ```
 
-- WIDER FACE数据集原始数据分布
+📌 WIDER FACE数据集原始数据分布
 
-| 数据集名称  | 图片数 |
-| :---------: | :----: |
-| WIDER_train | 12880  |
-|  WIDER_val  |  3226  |
-|  总图片数   | 16106  |
+| 数据集名称  | 实例数 | 图片数 | 标记图片数 |
+| :---------: | :----: | :----: | :--------: |
+| WIDER_train | 159416 | 12880  |   12876    |
+|  WIDER_val  | 39706  |  3226  |    3226    |
+|    总数     | 199122 | 16106  |   16102    |
+
+❗ 注意：上表中的**实例数**是经过清洗，去除重复实例后的数据
+
+### 💡 YOLOv5训练集和验证集的制作
+
+#### ⚡ 数据清洗
+
+📌 清除重复的实例
+
+```
+# 21_Festival_Festival_21_604.jpg
+# 219 454 9 15 2 0 0 0 1 0  wider_face_val_bbx_gt.txt
+# 219 454 9 15 2 0 0 0 1 0  wider_face_val_bbx_gt.txt
+
+# 2_Demonstration_Protesters_2_231.jpg
+# 55 463 24 29 2 0 0 0 1 0  wider_face_train_bbx_gt
+# 55 463 24 29 2 0 0 0 1 0  wider_face_train_bbx_gt
+
+# 37_Soccer_Soccer_37_851.jpg
+# 695 671 13 9 2 0 0 0 0 0 wider_face_train_bbx_gt
+# 695 671 13 9 2 0 0 0 2 0  wider_face_train_bbx_gt
+
+# 7_Cheering_Cheering_7_17.jpg
+# 410 314 3 8 0 0 0 1 0 0 wider_face_train_bbx_gt
+# 410 314 3 8 0 0 0 1 0 0 wider_face_train_bbx_gt
+```
+
+📌 清除边框坐标错误的实例
+
+```
+# 39_Ice_Skating_iceskiing_39_583.jpg
+# 1026 474 0 23 2 0 0 0 2 0 wider_face_val_bbx_gt.txt
+
+# 54_Rescue_rescuepeople_54_29.jpg
+# 1050 142 0 50 2 0 0 0 1 0 wider_face_train_bbx_gt
+```
+
+📌 清除无标记图片
+
+```
+# wider_face_val_bbx_gt.txt
+# 0_Parade_Parade_0_452.jpg
+# 2_Demonstration_Political_Rally_2_444.jpg
+# 39_Ice_Skating_iceskiing_39_380.jpg
+# 46_Jockey_Jockey_46_576.jpg
+```
 
 
 
-### YOLOv5训练集和验证集的制作
+#### ⚡ 训练集和验证集分布
+
+❤️ 将原始数据集清洗后重新分布，如下表：
+
+| 数据集名称 | 实例数 | 图片数 | 实例占比（%） | 图片占比（%） |
+| :--------: | :----: | :----: | :-----------: | :-----------: |
+|   训练集   | 160758 | 12937  |     80.73     |     80.34     |
+|   验证集   | 38364  |  3165  |     19.27     |     19.66     |
+|    总数    | 199122 | 16102  |      100      |      100      |
+
+
+
+### 💡 人脸检测模型的构建
 
 
 
 
 
-### 人脸检测模型的构建
-
-
-
-
-
-### 训练结果分析和总结
+### 💡 训练结果分析和总结
 
 
 
