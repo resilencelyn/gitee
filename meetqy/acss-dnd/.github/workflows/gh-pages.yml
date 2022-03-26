@@ -1,0 +1,35 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - main # default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+
+      - name: NPM-Version
+        run: |
+          git config --global user.email "cyou_yang@163.com"
+          git config --global user.name "cuyang"
+          npm version patch -f
+          git add .
+          git commit -m 'release'
+          git push
+          git push --tags
+
+      - name: build
+        run: | 
+          npm run build
+          cp dist/index.html dist/404.html
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

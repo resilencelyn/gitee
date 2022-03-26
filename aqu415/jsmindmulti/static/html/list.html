@@ -71,7 +71,7 @@
                                     <td>${item.update_time}</td>
                                     <td>
                                       <i class="layui-icon layui-icon-edit" style="font-size: 15px; color: #1E9FFF;cursor: pointer;" onclick="window.open('detail?id=${item.id}')">编辑</i>
-                                      <i class="layui-icon layui-icon-share" style="font-size: 15px; color: #1E9FFF;cursor: pointer;margin-left: 10px;">复制分享</i>
+                                      <i class="layui-icon layui-icon-share" style="font-size: 15px; color: #1E9FFF;cursor: pointer;margin-left: 10px;" onclick="copy_url(${item.id})">复制分享</i>
                                       <i class="layui-icon layui-icon-delete" style="font-size: 15px; color: #1E9FFF;cursor: pointer;margin-left: 10px;" onclick="delmind(${item.id})">删除</i>
                                     </td>
                                     </tr>`
@@ -165,25 +165,30 @@
                 view.fetch_data()
             })
             // 创建
-            $('#crt_out').click(function () {
+            $('#create_mind').click(function () {
                 const content_html = `<div style="margin-left: 30px;margin-top: 20px;">
                                         <div class="layui-input-inline">
+                                            <div class="layui-input-inline">思维导图名称：</div>
                                             <div class="layui-input-inline"><input required autocomplete="off" class="layui-input" id="mind_name_crt"></div>
                                         </div>
-                                        <button type="button" class="layui-btn" id="crt_inner">创建</button>
+                                        <button type="button" class="layui-btn" id="create_inner">创建</button>
                                     </div>`
                 layer.open({
+                    title: '新建思维导图',
+                    skin: 'layui-layer-molv',
+                    anim: 5,
                     type: 1,
                     content: content_html, //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
                     area: ['400px', '200px']
                 });
 
                 // 调用后台创建脑图
-                $('#crt_inner').click(crt_inner)
+                $('#create_inner').click(create_inner)
                 //
             })
 
-            function crt_inner() {
+            // 创建mind
+            function create_inner() {
                 const mind_name = $('#mind_name_crt').val()
                 if (mind_name) {
                     const snapshot_data = {
@@ -231,13 +236,17 @@
                         ]
                     }
                     // post start
-                    $.post('create', {'mind_name': mind_name, 'data_format': 'node_tree', 'snapshot_data': view.json2string(snapshot_data)}, function (resp) {
+                    const post_data = {'mind_name': mind_name, 'data_format': 'node_tree', 'snapshot_data': view.json2string(snapshot_data)}
+                    $.post('create', post_data, function (resp) {
                         layer.closeAll()
                         view.fetch_data()
 
+                        layer.msg('创建成功')
                         // 新页面打开
-                        const id = resp.data
-                        window.open('detail?id=' + id)
+                        setTimeout(function () {
+                            const id = resp.data
+                            window.open('detail?id=' + id)
+                        }, 500)
                     })
                     // post end
                 } else {
@@ -251,6 +260,19 @@
         function delmind(id) {
             view.del_mind(id)
         }
+
+        // 复制链接
+        function copy_url(id) {
+            let href = location.href + `detail?id=${id}`;
+            navigator.clipboard.writeText(href)
+                .then(() => {
+                    // Success!
+                    layer.msg('复制成功')
+                })
+                .catch(err => {
+                    console.log('Something went wrong', err);
+                });
+        }
     </script>
 </head>
 <body>
@@ -260,7 +282,7 @@
     </div>
     <button type="button" class="layui-btn" id="search">搜索</button>
     <button type="button" class="layui-btn" id="clear">清空</button>
-    <button type="button" class="layui-btn" id="crt_out">创建导图</button>
+    <button type="button" class="layui-btn" id="create_mind">创建导图</button>
 </div>
 <table class="layui-table" id="layui-table">
     <colgroup>

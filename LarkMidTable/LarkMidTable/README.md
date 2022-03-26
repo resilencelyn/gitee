@@ -62,6 +62,12 @@ LarkMidTable 是一站式开源的数据中台，实现元数据管理，数据�
 
 ![数据服务](./larkmidtable-pic/k.png)
 
+**系统演示地址**：http://124.223.92.186:8080/index.html
+
+**只供 测试 和 商业赞助的客户 使用，服务器流量有限谢谢合作，赞助后加微信 LarkMidTable2021 ，可以领取大数据学习资料 以及 演示地址的用户名和密码 **
+
+# 产品版本
+
 
 
 # **快速开始**
@@ -69,8 +75,6 @@ LarkMidTable 是一站式开源的数据中台，实现元数据管理，数据�
 安装手册      [安装手册](./larkmidtable-doc/userGuid.md)
 
 操作手册  	[操作手册](./larkmidtable-doc/userManual.md)
-
-完成的功能 	[完成的功能](./larkmidtable-doc/function.md)
 
 开发人员和任务分配    [开发人员和任务分配](./larkmidtable-doc/engineer.md)
 
@@ -84,7 +88,7 @@ LarkMidTable 是一站式开源的数据中台，实现元数据管理，数据�
 
 目前创业的初期，开源项目需要资金维护，比如买服务器，以及开源团队的运维，社区的运营，如果你觉得项目不错，可以进行赞助
 
-![插入图片](https://img2022.cnblogs.com/blog/622382/202203/622382-20220308142953632-1324281205.png)
+![插入图片](./larkmidtable-pic/s.png)
 
 项目金额： 1589.67元
 

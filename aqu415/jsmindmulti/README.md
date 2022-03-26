@@ -36,6 +36,15 @@ jsmind思维导图多人协作版（可本地安装、可扩展源码）
     
        python manage.py migrate
       ```
+      
+    - 核心数据主要存在这两个表中：
+      ```
+      -- 思维导图表
+      select * from cooperation_mind  order by id desc;
+      
+      -- 思维导图操作日志表
+      select * from cooperation_mind_log order by id desc;
+      ```
 + 启动程序
     - 开发环境启动可以在项目根路径里直接执行 python manage.py runserver 0.0.0.0:8000 开启本地的服务；如果是生产环境，还需要加入nginx(我理解是提高并发等，参考：https://www.jianshu.com/p/3172566156fe/)
     -
@@ -43,7 +52,7 @@ jsmind思维导图多人协作版（可本地安装、可扩展源码）
 
 #### 效果
 + 通过浏览器 http://localhost:8000/ 访问主页
-+ 
++ 列表展示如下：
 ![](z-pic/list.png)
 
 

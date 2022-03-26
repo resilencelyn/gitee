@@ -1,0 +1,62 @@
+{
+  "name": "acss-dnd",
+  "version": "0.0.6",
+  "description": "acss-dnd是一款基于原子类 css 特性，实现拖拽布局的一个工具。",
+  "keywords": [
+    "tailwindcss",
+    "acss-dnd",
+    "css",
+    "daisyui",
+    "dnd",
+    "drag and drop",
+    "atomic css"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "cross-env NODE_ENV=production vue-tsc --noEmit && vite build",
+    "preview": "vite preview --port 5050",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
+  },
+  "dependencies": {
+    "@highlightjs/vue-plugin": "^2.1.0",
+    "@vueuse/core": "^7.7.0",
+    "daisyui": "^2.6.4",
+    "highlight.js": "^11.5.0",
+    "pinia": "^2.0.11",
+    "uuid": "^8.3.2",
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@tailwindcss/typography": "^0.5.2",
+    "@types/node": "^16.11.25",
+    "@types/uuid": "^8.3.4",
+    "@vitejs/plugin-vue": "^2.2.2",
+    "@vitejs/plugin-vue-jsx": "^1.3.7",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^10.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "autoprefixer": "^10.4.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.5.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "postcss": "^8.4.7",
+    "prettier": "^2.5.1",
+    "tailwindcss": "^3.0.23",
+    "typescript": "~4.5.5",
+    "vite": "^2.8.4",
+    "vue-tsc": "^0.31.4"
+  },
+  "bugs": {
+    "url": "https://github.com/cu-yang/acss-dnd/issues"
+  },
+  "homepage": "https://github.com/cu-yang/acss-dnd#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cu-yang/acss-dnd.git"
+  },
+  "author": "cuyang",
+  "license": "MIT"
+}

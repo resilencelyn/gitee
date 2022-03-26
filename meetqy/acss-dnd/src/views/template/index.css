@@ -1,0 +1,11 @@
+.mask {
+  @apply left-0 absolute top-0 w-full h-full;
+}
+.mask-show {
+  @apply z-10 bg-black;
+}
+
+.component-preview {
+  width: 520px;
+  @apply bg-base-200 h-full absolute transition-all z-20 px-6 pb-6 overflow-y-auto;
+}
