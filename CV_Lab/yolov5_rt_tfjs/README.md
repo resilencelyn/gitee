@@ -20,10 +20,11 @@
 <a href="https://gitee.com/CV_Lab/yolov5_rt_tfjs/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
 <p align="center">
-<a href="./yolov5_rt_tfjs_flask"><img src="https://img.shields.io/badge/flask-v2.0.3+-critical?logo=flask" alt="Flask Version" /></a>
-<a href="./yolov5_rt_tfjs_fastapi"><img src="https://img.shields.io/badge/fastapi-v0.74.1+-green?logo=fastapi" alt="FastAPI Version" /></a>
-<a href="./yolov5_rt_tfjs_bottle"><img src="https://img.shields.io/badge/bottle-v0.12.19%2B-blue" alt="Bottle Version" /></a>
+<a href="./yolov5_rt_tfjs_flask"><img src="https://img.shields.io/badge/Flask-v2.0.3+-critical?logo=flask" alt="Flask Version" /></a>
+<a href="./yolov5_rt_tfjs_fastapi"><img src="https://img.shields.io/badge/FastAPI-v0.74.1+-green?logo=fastapi" alt="FastAPI Version" /></a>
+<a href="./yolov5_rt_tfjs_bottle"><img src="https://img.shields.io/badge/Bottle-v0.12.19%2B-blue" alt="Bottle Version" /></a>
 </p>
+
 
 
 

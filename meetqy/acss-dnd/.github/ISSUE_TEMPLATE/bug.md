@@ -1,11 +1,19 @@
 ---
 name: Bug
 about: 请大家一定要按照该模板填写，以方便我们更快复现
-title: ''
+title: "【Bug】"
 labels: bug
 assignees: ''
 
 ---
+
+## bug大致位置
+
+- [ ] 菜单（Menu）
+- [ ] 模板预览（Template）
+- [ ] 编辑器（Editor）
+- [ ] 属性编辑（SideBar）
+- [ ] 其他（other）
 
 ## bug 描述
 

@@ -46,6 +46,13 @@ yarn dev
 - [tailwind](https://tailwindcss.com/)
 - [daisy ui](https://daisyui.com/)
 
+## 🐼 提 Bug 或建议
+
+- 打开链接 👉🏻 https://github.com/cu-yang/acss-dnd/issues/new/choose
+- 选择对应模板
+
+![](./docs/issues.png)
+
 ## 🦊 近期计划
 
 **Github Project**: [https://github.com/cu-yang/acss-dnd/projects/1](https://github.com/cu-yang/acss-dnd/projects/1)

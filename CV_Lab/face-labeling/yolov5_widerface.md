@@ -251,11 +251,32 @@ copy_paste: 0.0  # segment copy-paste (probability)
 python train.py --data data/widerface.yaml --cfg models/yolov5m.yaml --hyp data/hyps/hyp.scratch-med.yaml --weights weights/yolov5m.pt --batch-size 16 --epochs 200 --name widerface-m
 ```
 
-
+- 将`best.pt`更名为`widerface-m`
 
 ### 💡 训练结果分析和总结
 
+- 训练参数
 
+|   属性名称   |        属性参数         |
+| :----------: | :---------------------: |
+|     层数     |           369           |
+|    params    |        20871318         |
+|    GFLOPs    |          48.0           |
+| GPU 显存占用 |         10.3 G          |
+|     用时     |         7.055 h         |
+|  Batch Size  |           16            |
+|    epoch     |           200           |
+|     hyps     | hyp.scratch-med（默认） |
+
+❗ 注：`其他训练参数`为YOLOv5默认参数
+
+
+
+- 模型训练指标（YOLOv5默认评价标准）
+
+| 类别 |  AP   | AP50  |
+| :--: | :---: | :---: |
+| face | 0.416 | 0.756 |
 
 
 
@@ -270,3 +291,10 @@ python train.py --data data/widerface.yaml --cfg models/yolov5m.yaml --hyp data/
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/widerface_m_train_val.png ">
 </div>
+
+
+- 模型下载
+
+|  模型名称   |                           下载地址                           |
+| :---------: | :----------------------------------------------------------: |
+| widerface-m | [百度云](https://pan.baidu.com/s/19cIqLc05EbyxxEVMX7Lr3g) \| 提取码：5gfs |

@@ -113,7 +113,11 @@ pip install -r requirements.txt -U
 
 本项目使用的**人脸检测模型**是在[WIDER FACE](http://shuoyang1213.me/WIDERFACE/)数据集上，基于[YOLOv5 v6.1](https://github.com/ultralytics/yolov5)训练的，具体训练过程参见[yolov5_widerface.md](./yolov5_widerface.md)
 
-本项目目前提供了一个demo模型，下载地址：[百度云](https://pan.baidu.com/s/1MP8XF5k5TREKns67ip9NBA) | 提取码：d9rs
+本项目提供了以下人脸检测模型：
+
+|  模型名称   |                           下载地址                           |
+| :---------: | :----------------------------------------------------------: |
+| widerface-m | [百度云](https://pan.baidu.com/s/19cIqLc05EbyxxEVMX7Lr3g) \| 提取码：5gfs |
 
 
 
@@ -184,7 +188,11 @@ python face_labeling.py -m video -vd ./video_dir # 指定视频目录
 ❗ 查看检测结果：人脸图片检测结果会保存在`FaceFrame/frame*/tag`中，以`python face_labeling.py -m img`为例运行项目自带检测图片，检测结果如下：
 
 <div align="center" >
-<img src="https://pycver.gitee.io/ows-pics/imgs/face_labeling_detect_test.jpg">
+<img src="https://pycver.gitee.io/ows-pics/imgs/widerface_m_img.jpg">
+</div>
+
+<div align="center" >
+widerface-m检测结果
 </div>
 
 
@@ -192,7 +200,7 @@ python face_labeling.py -m video -vd ./video_dir # 指定视频目录
 ### 💡 自定义人脸模型
 
 ```shell
-# 默认为widerface-s
+# 默认为widerface-m
 python face_labeling.py -mn face_model # 以实时标注为例
 ```
 

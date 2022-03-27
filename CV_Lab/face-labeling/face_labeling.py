@@ -62,7 +62,7 @@ def parse_args(known=False):
         "--video_dir", "-vd", default="./video", type=str, help="video dir"
     )
     parser.add_argument(
-        "--model_name", "-mn", default="widerface-s", type=str, help="model name"
+        "--model_name", "-mn", default="widerface-m", type=str, help="model name"
     )
     parser.add_argument(
         "--imgName", "-in", default="face_test", type=str, help="image name"
@@ -404,7 +404,7 @@ def face_label(
     mode="webcam",
     img_dir="./data/imgs",
     video_dir="./data/videos",
-    model_name="widerface-s.pt",
+    model_name="widerface-m",
     imgName="face_test",
     frame_saveDir="FaceFrame",
     frame_dirName="frame",

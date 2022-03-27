@@ -126,7 +126,7 @@ async function renderPredictions(res) {
 
         // ------------------检测框------------------
         const div_bbox = document.createElement("div");
-        div_bbox.id = `${"div-bbox"+num_box}`;
+        div_bbox.id = `${"div-bbox" + num_box}`;
         div_bbox.className = "div-bbox";
         div_bbox.style.position = "absolute";
         div_video.appendChild(div_bbox);
@@ -143,7 +143,7 @@ async function renderPredictions(res) {
         // ------------------标签------------------
         let content = cls + " " + parseFloat(score).toFixed(2);
         const span_label = document.createElement('span');
-        span_label.id = `${"span-label"+num_box}`;
+        span_label.id = `${"span-label" + num_box}`;
         span_label.className = "span-label";
         span_label.style.backgroundColor = selectColor(color_index);
 

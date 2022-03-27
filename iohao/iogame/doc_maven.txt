@@ -1,0 +1,14 @@
+mvnd clean install -Dmaven.test.skip=true
+
+编译
+mvnd compile
+
+jprotobuf
+mvnd jprotobuf:precompile
+
+生成 html doc
+mvnd clean install -Dmaven.test.skip=true
+
+依赖相关
+mvnd dependency:tree>doc_game.txt
+
