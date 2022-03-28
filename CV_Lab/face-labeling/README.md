@@ -115,9 +115,9 @@ pip install -r requirements.txt -U
 
 本项目提供了以下人脸检测模型：
 
-|  模型名称   |                           下载地址                           |
-| :---------: | :----------------------------------------------------------: |
-| widerface-m | [百度云](https://pan.baidu.com/s/19cIqLc05EbyxxEVMX7Lr3g) \| 提取码：5gfs |
+|  模型名称   |                           下载地址                           | 模型大小 |     适用范围     |
+| :---------: | :----------------------------------------------------------: | :------: | :--------------: |
+| widerface-m | [百度云](https://pan.baidu.com/s/19cIqLc05EbyxxEVMX7Lr3g) \| 提取码：5gfs |  42.1MB  | 实时\|图片\|视频 |
 
 
 
@@ -239,6 +239,19 @@ python face_labeling.py -isz 320
 ```
 
 
+
+### 💡 关闭检测标签
+
+```shell
+python face_labeling.py -lds # 以实时标注为例
+```
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/widerface_m_label_dnt_show.jpg ">
+</div>
+<div align="center" >
+widerface-m检测结果
+</div>
 
 ### 💡 自定义保存目录名称
 

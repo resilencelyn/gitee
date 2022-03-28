@@ -15,7 +15,7 @@
 <a href="./CodeCheck.md"><img src="https://img.shields.io/badge/CodeCheck-passing-success" alt="code check" /></a>
 <a href="https://gitee.com/CV_Lab/yolov5_rt_tfjs/releases/v0.3"><img src="https://img.shields.io/badge/Releases-v0.3-green" alt="Releases Version" /></a>
 <a href="https://github.com/ultralytics/yolov5"><img src="https://img.shields.io/badge/YOLOv5-v6.1-blue" alt="YOLOv5 Version" /></a>
-<a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/TensorFlow.js-v3.13.0+-important?logo=tensorflow" alt="TensorFlow.js Version" /></a>
+<a href="https://github.com/tensorflow/tfjs"><img src="https://img.shields.io/badge/TensorFlow.js-v3.9.0+-important?logo=tensorflow" alt="TensorFlow.js Version" /></a>
 <a href="https://jquery.com/"><img src="https://img.shields.io/badge/jQuery-v3.6.0+-%23436EEE?logo=jquery" alt="jQuery Version" /></a>
 <a href="https://gitee.com/CV_Lab/yolov5_rt_tfjs/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
@@ -24,6 +24,7 @@
 <a href="./yolov5_rt_tfjs_fastapi"><img src="https://img.shields.io/badge/FastAPI-v0.74.1+-green?logo=fastapi" alt="FastAPI Version" /></a>
 <a href="./yolov5_rt_tfjs_bottle"><img src="https://img.shields.io/badge/Bottle-v0.12.19%2B-blue" alt="Bottle Version" /></a>
 </p>
+
 
 
 
@@ -43,8 +44,9 @@
 ### 🔥 自定义目标检测任务
 
 <p align="center" >
-<img src="https://pic.imgdb.cn/item/621abf4a2ab3f51d91af8a3e.gif">
+<img src="https://pycver.gitee.io/ows-pics/imgs/yolov5_rt_tfjs.gif">
 </p>
+
 
 
 ### ❤️ 自定义模型
@@ -75,7 +77,7 @@ const cls_names = ['人', '自行车', '汽车', '摩托车', '飞机', '公交�
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.13.0/dist/tf.min.js"></script>
 ```
 
-❗ 注意：**TensorFlow.js的版本>=3.9.0**，本项目目前使用的版本为`3.13.0`
+❗ 注意：**TensorFlow.js的版本>=3.9.0**，本项目目前使用的版本为**3.15.0**
 
 
 

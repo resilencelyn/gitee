@@ -1,0 +1,16 @@
+
+solon.app:
+  name: testapp
+  group: test
+
+test.esx:
+  url: eshost:32266
+
+
+#test.esx:
+#  url: eshost:30480
+#  username: xxx  #用户名
+#  paasword: xxx  #密码
+
+#test.esx:
+#  url: eshost:30480,eshost:30480 #集群划式

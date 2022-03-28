@@ -23,9 +23,9 @@
 [使用说明](https://gitee.com/jd-platform-opensource/jlog/blob/master/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md)
 
 
-群二维码
+群已满200人，可加我微信备注JLog，邀请入群
+![输入图片说明](imagewechat.png)
 
-![输入图片说明](jlog1.jpeg)
 # 背景
 京东App作为一个巨大量级的请求入口，涉及了诸多系统，为了保证系统的健壮性、和请求溯源，以及出现问题后的问题排查，通常我们保存了用户请求从出入参、系统中途关键节点日志（info、error）、链路日志等，并且会将日志保存一段时间。
 

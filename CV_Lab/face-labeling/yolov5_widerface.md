@@ -182,7 +182,7 @@
 
 ### 💡 人脸检测模型的构建
 
-- widerface.yaml
+📌 widerface.yaml
 
 ```yaml
 path: ../datasets/widerface  # dataset root dir
@@ -195,7 +195,7 @@ nc: 1  # number of classes
 names: ['face']  # class names
 ```
 
-- yolov5m.yaml（部分）
+📌 yolov5m.yaml（部分）
 
 ```yaml
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
@@ -206,7 +206,7 @@ depth_multiple: 0.67  # model depth multiple
 width_multiple: 0.75  # layer channel multiple
 ```
 
-- hyp.scratch-med.yaml （默认配置）
+📌 hyp.scratch-med.yaml （默认配置）
 
 ```yaml
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
@@ -245,17 +245,17 @@ mixup: 0.1  # image mixup (probability)
 copy_paste: 0.0  # segment copy-paste (probability)
 ```
 
-- 执行训练指令
+❤️ 执行训练指令
 
 ```shell
 python train.py --data data/widerface.yaml --cfg models/yolov5m.yaml --hyp data/hyps/hyp.scratch-med.yaml --weights weights/yolov5m.pt --batch-size 16 --epochs 200 --name widerface-m
 ```
 
-- 将`best.pt`更名为`widerface-m`
+📌 将`best.pt`更名为`widerface-m.pt`
 
 ### 💡 训练结果分析和总结
 
-- 训练参数
+📌 训练参数
 
 |   属性名称   |        属性参数         |
 | :----------: | :---------------------: |
@@ -272,29 +272,26 @@ python train.py --data data/widerface.yaml --cfg models/yolov5m.yaml --hyp data/
 
 
 
-- 模型训练指标（YOLOv5默认评价标准）
+📌 模型训练指标（YOLOv5默认评价标准）
 
 | 类别 |  AP   | AP50  |
 | :--: | :---: | :---: |
 | face | 0.416 | 0.756 |
 
-
-
-- W&B训练AP和AP50
+📌 W&B训练AP和AP50
 
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/widerface_m_AP.png">
 </div>
-
-- W&B训练和验证损失
+📌 W&B训练和验证损失
 
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/widerface_m_train_val.png ">
 </div>
 
 
-- 模型下载
+📌 模型下载
 
-|  模型名称   |                           下载地址                           |
-| :---------: | :----------------------------------------------------------: |
-| widerface-m | [百度云](https://pan.baidu.com/s/19cIqLc05EbyxxEVMX7Lr3g) \| 提取码：5gfs |
+|  模型名称   |                           下载地址                           | 模型大小 |     适用范围     |
+| :---------: | :----------------------------------------------------------: | :------: | :--------------: |
+| widerface-m | [百度云](https://pan.baidu.com/s/19cIqLc05EbyxxEVMX7Lr3g) \| 提取码：5gfs |  42.1MB  | 实时\|图片\|视频 |

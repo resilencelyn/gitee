@@ -43,7 +43,7 @@ const WeChatForm: React.FC<AlertInstanceFormProps> = (props) => {
     handleSubmit(buildJSONData(formVals,fieldsValue));
   };
 
-  const renderContent = (formVals) => {
+  const renderContent = (vals) => {
     return (
       <>
         <Divider>微信企业号配置</Divider>
@@ -54,6 +54,51 @@ const WeChatForm: React.FC<AlertInstanceFormProps> = (props) => {
         >
           <Input placeholder="请输入名称"/>
         </Form.Item>
+        <Form.Item
+          name="sendType"
+          label="发送方式"
+          validateTrigger={['onChange', 'onBlur']}
+          rules={[{required: true, message: '请输入发送方式！'}]}
+        >
+          <Radio.Group defaultValue="应用">
+            <Radio value='应用'>应用</Radio>
+            <Radio value='群聊'>群聊</Radio>
+          </Radio.Group>
+        </Form.Item>
+        { (vals.sendType == "群聊")  ?
+          <>
+            <Form.Item
+              name="webhook"
+              label="WebHook地址"
+              rules={[{required: true, message: '请输入WebHook！',}]}
+            >
+              <Input placeholder="请输入WebHook"/>
+            </Form.Item>
+            <Form.Item
+              name="keyword"
+              label="关键字"
+            >
+              <Input placeholder="请输入keyword"/>
+            </Form.Item>
+            <Form.Item
+              name="isAtAll"
+              validateTrigger={['onChange', 'onBlur']}
+              label="@所有人">
+              <Switch checkedChildren="启用" unCheckedChildren="禁用"
+                      defaultChecked={vals.isAtAll}/>
+            </Form.Item>
+            { ( !vals.isAtAll )&&
+              <Form.Item
+                name="users"
+                label="被@用户"
+                rules={[{required: true, message: '请输入被@用户！多个逗号隔开!',}]}
+              >
+                <Input placeholder="请输入被@用户ID(企微用户名全拼),多个逗号隔开!"/>
+              </Form.Item>
+            }
+          </>
+        :
+        <>
         <Form.Item
           name="corpId"
           label="企业Id"
@@ -80,7 +125,7 @@ const WeChatForm: React.FC<AlertInstanceFormProps> = (props) => {
           label="发送信息"
           rules={[{required: true, message: '请输入发送信息！'}]}
         >
-          <Input placeholder="请输入发送信息"/>
+          <Input defaultValue='{"touser":"{toUser}","agentid":{agentId},"msgtype":"{showType}","{showType}":{"content":"{msg}"}}' disabled placeholder="请输入发送信息"/>
         </Form.Item>
         <Form.Item
           name="agentId"
@@ -89,31 +134,41 @@ const WeChatForm: React.FC<AlertInstanceFormProps> = (props) => {
         >
           <Input placeholder="请输入代理ID"/>
         </Form.Item>
-        <Form.Item
-          name="sendType"
-          label="发送方式"
-          rules={[{required: true, message: '请输入发送方式！'}]}
-        >
-          <Radio.Group >
-            <Radio value='应用'>应用</Radio>
-            <Radio value='群聊'>群聊</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item
-          name="showType"
-          label="展示方式"
-          rules={[{required: true, message: '请选择展示方式！'}]}
-        >
-          <Radio.Group >
-            <Radio value='markdown'>MarkDown</Radio>
-            <Radio value='text'>文本</Radio>
-          </Radio.Group>
-        </Form.Item>
+        </>
+        }
+        { (vals.sendType === "群聊")  ?
+          <div hidden>
+            <Form.Item
+              name="showType"
+              label="展示方式"
+              rules={[{required: true, message: '请选择展示方式！'}]}
+            >
+              <Radio.Group >
+                <Radio value='markdown'>MarkDown</Radio>
+                <Radio value='text'>文本</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </div>
+           :
+          <>
+            <Form.Item
+              name="showType"
+              label="展示方式"
+              rules={[{required: true, message: '请选择展示方式！'}]}
+            >
+              <Radio.Group >
+                <Radio value='markdown'>MarkDown</Radio>
+                <Radio value='text'>文本</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </>
+        }
+
         <Form.Item
           name="enabled"
           label="是否启用">
           <Switch checkedChildren="启用" unCheckedChildren="禁用"
-                  defaultChecked={formVals.enabled}/>
+                  defaultChecked={vals.enabled}/>
         </Form.Item>
       </>
     );

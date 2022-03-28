@@ -24,7 +24,7 @@ from util.yolo_txt import create_yolo_txt
 from util.args_yaml import argsYaml
 
 
-# ---------------------图片和视频格式---------------------
+# ---------------------图片和视频输入格式---------------------
 IMG_FORMATS = ["jpg", "jpeg", "png", "bmp", "tif", "webp"]
 VIDEO_FORMATS = [
     "mp4",
@@ -92,6 +92,13 @@ def parse_args(known=False):
     parser.add_argument(
         "--cls_name", "-cls", default="face", type=str, help="class name"
     )
+    parser.add_argument(
+        "--label_dnt_show",
+        "-lds",
+        action="store_true",
+        default=False,
+        help="label show",
+    )
 
     args = parser.parse_known_args()[0] if known else parser.parse_args()
     return args
@@ -109,8 +116,9 @@ def face_detect(
     obj_size_style_list,
     frame_savePath,
     imgName,
-    video_name="vide_name.mp4",
     inference_size=640,
+    label_dnt_show=False,
+    video_name="vide_name.mp4",
 ):
 
     global coco_imgs_list
@@ -166,28 +174,30 @@ def face_detect(
                 conf = float(result[i][4])  # 置信度
                 fps = f"{(1000 / float(results.t[1])):.2f}"  # FPS
 
-                # 标签背景尺寸
-                labelbg_size = cv2.getTextSize(
-                    f"{id}-{obj_cls}:{conf:.2f}", cv2.FONT_HERSHEY_COMPLEX, 0.6, 1
-                )
-                # 标签背景
-                cv2.rectangle(
-                    frame,
-                    (x0, y0),
-                    (x0 + labelbg_size[0][0], y0 + labelbg_size[0][1]),
-                    (0, 255, 0),
-                    thickness=-1,
-                )
-                # 标签
-                cv2.putText(
-                    frame,
-                    f"{id}-{obj_cls}:{conf:.2f}",
-                    (x0, y0 + labelbg_size[0][1]),
-                    cv2.FONT_HERSHEY_COMPLEX,
-                    0.6,
-                    (0, 0, 0),
-                    1,
-                )
+                if not label_dnt_show:
+                    # 标签背景尺寸
+                    labelbg_size = cv2.getTextSize(
+                        f"{id}-{obj_cls}:{conf:.2f}", cv2.FONT_HERSHEY_COMPLEX, 0.6, 1
+                    )
+                    # 标签背景
+                    cv2.rectangle(
+                        frame,
+                        (x0, y0),
+                        (x0 + labelbg_size[0][0], y0 + labelbg_size[0][1]),
+                        (0, 255, 0),
+                        thickness=-1,
+                    )
+
+                    # 标签
+                    cv2.putText(
+                        frame,
+                        f"{id}-{obj_cls}:{conf:.2f}",
+                        (x0, y0 + labelbg_size[0][1]),
+                        cv2.FONT_HERSHEY_COMPLEX,
+                        0.6,
+                        (0, 0, 0),
+                        1,
+                    )
                 # FPS
                 cv2.putText(
                     frame,
@@ -202,7 +212,7 @@ def face_detect(
                 cv2.rectangle(frame, (x0, y0), (x1, y1), (0, 255, 0), 2)
 
                 # 变量回收
-                del id, obj_cls_index, obj_cls, x0, y0, x1, y1, conf, fps, labelbg_size
+                del id, obj_cls_index, obj_cls, x0, y0, x1, y1, conf, fps
 
         # 人脸数量
         cv2.putText(
@@ -296,6 +306,7 @@ def face_detect(
             categories_id += len(xyxy_list)
 
             face_id += 1  # 人脸ID自增
+
         elif mode == "img":
             # 捕获视频帧
             cv2.imwrite(
@@ -342,6 +353,7 @@ def face_detect(
             categories_id += len(xyxy_list)
 
             face_id += 1  # 人脸ID自增
+
         elif mode == "video":
             # 捕获视频帧
             cv2.imwrite(
@@ -412,6 +424,7 @@ def face_label(
     nms_iou=0.45,
     max_detNum=1000,
     inference_size=640,
+    label_dnt_show=False,
     cls_name="face",
 ):
 
@@ -445,7 +458,6 @@ def face_label(
     log_management(f"{logTime}\n")  # 记录日志时间
 
     s_time = time.time()  # 起始时间
-    # print('设备连接成功！')
     print(f"-------------🔥 {FACELABELING_VERISON} 程序开始！-------------")
 
     if mode == "webcam":
@@ -458,7 +470,6 @@ def face_label(
 
             while is_capOpened:
                 _, frame = cap.read()  # 帧读取
-
                 # 人脸检测与信息提取
                 frame, img_size, wait_key, face_id = face_detect(
                     mode,
@@ -472,6 +483,7 @@ def face_label(
                     frame_savePath,
                     imgName,
                     inference_size,
+                    label_dnt_show,
                 )
 
                 cv2.imshow("capture", frame)  # 显示
@@ -517,6 +529,7 @@ def face_label(
                 frame_savePath,
                 imgName,
                 inference_size,
+                label_dnt_show,
             )
 
             print(
@@ -610,8 +623,9 @@ def face_label(
                         obj_size_style_list,
                         frame_savePath,
                         imgName,
-                        video_name,
                         inference_size,
+                        label_dnt_show,
+                        video_name,
                     )
 
                     # cv2.imshow("video", frame)  # 显示
@@ -705,6 +719,7 @@ def main(args):
     max_detNum = args.max_detNum
     inference_size = args.inference_size
     cls_name = args.cls_name
+    label_dnt_show = args.label_dnt_show
 
     argsYaml(args)  # 脚本参数
 
@@ -720,6 +735,7 @@ def main(args):
         nms_iou,
         max_detNum,
         inference_size,
+        label_dnt_show,
         cls_name,
     )
 
