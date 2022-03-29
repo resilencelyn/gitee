@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chongho.inf.flink.mapper.DbSourceMapper">
+
+    <resultMap id="baseMap" type="cn.chongho.inf.flink.model.DbSource">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="provider_type" property="providerType" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="enable_flag" property="enableFlag" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectByPage" resultMap="baseMap">
+        SELECT * FROM db_source
+        WHERE enable_flag = 1
+        <if test="dbSource.name != null and dbSource.name != ''" >
+            AND name like CONCAT('%',#{dbSource.name},'%')
+        </if>
+        <if test="dbSource.url != null and dbSource.url != ''" >
+            AND url like CONCAT('%',#{dbSource.url},'%')
+        </if>
+        <if test="dbSource.remark != null and dbSource.remark != ''" >
+            AND remark like CONCAT('%',#{dbSource.remark},'%')
+        </if>
+        <if test="dbSource.providerType != null and dbSource.providerType != ''" >
+            AND provider_type = #{dbSource.providerType}
+        </if>
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="countByPage" resultType="java.lang.Integer">
+        SELECT count(1) FROM db_source
+        WHERE enable_flag = 1
+        <if test="dbSource.name != null and dbSource.name != ''" >
+            AND name like CONCAT('%',#{dbSource.name},'%')
+        </if>
+        <if test="dbSource.url != null and dbSource.url != ''" >
+            AND url like CONCAT('%',#{dbSource.url},'%')
+        </if>
+        <if test="dbSource.remark != null and dbSource.remark != ''" >
+            AND remark like CONCAT('%',#{dbSource.remark},'%')
+        </if>
+        <if test="dbSource.providerType != null and dbSource.providerType != ''" >
+            AND provider_type = #{dbSource.providerType}
+        </if>
+    </select>
+
+</mapper>

@@ -3,26 +3,27 @@
 # 创建时间：2022-03-13
 
 
+import argparse
 import gc
+import os
+import sys
+import time
+from collections import Counter
+from datetime import datetime
+from pathlib import Path
+
 import cv2
 import torch
-import sys
-import os
-import time
-import argparse
-from pathlib import Path
-from datetime import datetime
-from collections import Counter
-from util.model_opt import yolov5_model_load
-from util.path_opt import increment_path
-from util.voc_xml import create_xml
-from util.log import log_management
-from util.time_format import time_format
-from util.obj_opt import get_obj_size
-from util.coco_json import coco_json_main
-from util.yolo_txt import create_yolo_txt
-from util.args_yaml import argsYaml
 
+from util.args_yaml import argsYaml
+from util.coco_json import coco_json_main
+from util.log import log_management
+from util.model_opt import yolov5_model_load
+from util.obj_opt import get_obj_size
+from util.path_opt import increment_path
+from util.time_format import time_format
+from util.voc_xml import create_xml
+from util.yolo_txt import create_yolo_txt
 
 # ---------------------图片和视频输入格式---------------------
 IMG_FORMATS = ["jpg", "jpeg", "png", "bmp", "tif", "webp"]
@@ -505,7 +506,7 @@ def face_label(
             )
 
         else:
-            print(f"摄像头连接异常！")
+            print("摄像头连接异常！")
 
     elif mode == "img":
         # 筛选图片文件

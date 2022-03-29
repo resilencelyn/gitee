@@ -14,14 +14,22 @@
 <p align="center">
 <a href="./CodeCheck.md"><img src="https://img.shields.io/badge/CodeCheck-passing-success" alt="code check" /></a>
 <a href="https://github.com/ultralytics/yolov5"><img src="https://img.shields.io/badge/YOLOv5-v6.1-blue" alt="YOLOv5 Version" /></a>
+<a href="http://host.robots.ox.ac.uk/pascal/VOC/"><img src="https://img.shields.io/badge/PASCAL%20VOC-XML-blue" alt="PASCAL VOC XML" /></a>
+<a href="https://cocodataset.org/"><img src="https://img.shields.io/badge/MS%20COCO-JSON-brightgreen" alt="MS COCO JSON" /></a>
+<a href="https://pjreddie.com/darknet/"><img src="https://img.shields.io/badge/YOLO-TXT-orange" alt="YOLO TXT" /></a>
 <a href="https://gitee.com/CV_Lab/yolov5_rt_tfjs/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
 <p align="center">
 <a href="#"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?logo=python" alt="Python Version" /></a>
-<a href="http://host.robots.ox.ac.uk/pascal/VOC/"><img src="https://img.shields.io/badge/PASCAL%20VOC-XML-blue" alt="PASCAL VOC XML" /></a>
-<a href="https://cocodataset.org/"><img src="https://img.shields.io/badge/MS%20COCO-JSON-brightgreen" alt="MS COCO JSON" /></a>
-<a href="https://pjreddie.com/darknet/"><img src="https://img.shields.io/badge/YOLO-TXT-orange" alt="YOLO TXT" /></a>
+<a href='https://gitee.com/CV_Lab/face-labeling/stargazers'><img src='https://gitee.com/CV_Lab/face-labeling/badge/star.svg?theme=dark' alt='star'></img></a>
+<a href='https://gitee.com/CV_Lab/face-labeling/members'><img src='https://gitee.com/CV_Lab/face-labeling/badge/fork.svg?theme=dark' alt='fork'></img></a>
+<a href="https://pycqa.github.io/isort/"><img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336" alt="Imports: isort"></a>
+<a href="https://github.com/PyCQA/flake8"><img src="https://img.shields.io/badge/PyCQA-flake8-brightgreen" alt="flake8"></a>
 </p>
+
+
+
+
 
 
 
@@ -113,7 +121,7 @@ pip install -r requirements.txt -U
 
 本项目使用的**人脸检测模型**是在[WIDER FACE](http://shuoyang1213.me/WIDERFACE/)数据集上，基于[YOLOv5 v6.1](https://github.com/ultralytics/yolov5)训练的，具体训练过程参见[yolov5_widerface.md](./yolov5_widerface.md)
 
-本项目提供了以下人脸检测模型：
+❤️ 本项目提供了以下人脸检测模型：
 
 |  模型名称   |                           下载地址                           | 模型大小 |     适用范围     |
 | :---------: | :----------------------------------------------------------: | :------: | :--------------: |

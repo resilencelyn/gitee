@@ -72,7 +72,7 @@ const cls_names = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 
 📌 Modify the [index.html](./yolov5_rt_tfjs_src/index.html) file to customize the version of TensorFlow.js
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.13.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.15.0/dist/tf.min.js"></script>
 ```
 
 ❗ Note: **TensorFlow.js version>=3.9.0**, the current version used in this project is **3.15.0**

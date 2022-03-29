@@ -3,8 +3,9 @@
 # 创建时间：2022-03-20
 
 
-import yaml
 import sys
+
+import yaml
 
 ROOT_PATH = sys.path[0]  # 项目根目录
 

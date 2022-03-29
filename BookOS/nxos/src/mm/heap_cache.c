@@ -7,6 +7,7 @@
  * Change Logs:
  * Date           Author            Notes
  * 2021-10-25     JasonHu           Update code style
+ * 2022-3-29      JasonHu           fix bug on heap alloc
  */
 
 #include <mm/heap_cache.h>
@@ -352,11 +353,13 @@ void *NX_HeapAlloc(NX_Size size)
         else    /* alloc from middle cache */
         {
             cache = &MiddleSizeCache;
+            size = MAX_MIDDLE_OBJECT_SIZE; /* modify size to middle object size */
         }
     }
     else
     {
         cache = SizeToCache(size);
+        size = cache->classSize; /* modify size to class size */
     }
     NX_ASSERT(cache != NX_NULL);
     

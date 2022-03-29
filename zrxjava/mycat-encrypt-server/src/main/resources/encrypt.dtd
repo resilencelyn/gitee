@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!-- make by zrx-->
+        <!ELEMENT mycat:encrypt (server*)>
+        <!ATTLIST mycat:encrypt xmlns:mycat CDATA #FIXED "http://io.mycat/">
+
+        <!ELEMENT server (datasource*)>
+        <!ATTLIST server schema CDATA #REQUIRED>
+
+
+        <!ELEMENT datasource (column*)>
+        <!ATTLIST datasource name CDATA #REQUIRED>
+        <!ATTLIST datasource ip CDATA #REQUIRED>
+        <!ATTLIST datasource port CDATA #REQUIRED>
+        <!ATTLIST datasource username CDATA #REQUIRED>
+        <!ATTLIST datasource password CDATA #REQUIRED>
+        <!ATTLIST datasource auto CDATA #REQUIRED>
+        <!ATTLIST datasource dbType CDATA #REQUIRED>
+
+        <!ELEMENT column (table*)>
+        <!ATTLIST column name CDATA #REQUIRED>
+
+        <!ELEMENT table (property*)>
+        <!ATTLIST table name CDATA #REQUIRED>
+        <!ATTLIST table pk CDATA #REQUIRED>
+
+

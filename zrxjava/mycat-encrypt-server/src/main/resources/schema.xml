@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE mycat:schema SYSTEM "schema.dtd">
+<mycat:schema xmlns:mycat="http://io.mycat/">
+
+    <schema name="test" checkSQLschema="true" sqlMaxLimit="100" dataNode="test">
+        <!-- auto sharding by id (long) -->
+    </schema>
+    <!--<schema name="oracle" checkSQLschema="true" sqlMaxLimit="100" dataNode="oracle">
+    </schema>-->
+	<!-- <dataNode name="dn1$0-743" dataHost="localhost1" database="db$0-743"
+		/> -->
+    <dataNode name="test" dataHost="test" database="test" />
+    <!--<dataNode name="oracle" dataHost="oracle" database="oracle" />-->
+
+    <dataHost name="test" maxCon="1000" minCon="10" balance="0"
+              writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
+        <heartbeat>select user()</heartbeat>
+        <!-- can have multi write hosts -->
+        <writeHost host="hostM1" url="localhost:3307" user="root"
+                   password="root">
+        </writeHost>
+    </dataHost>
+
+    <!--<dataHost name="oracle" maxCon="1000" minCon="10" balance="0"
+              writeType="0" dbType="oracle" dbDriver="jdbc" switchType="1"  slaveThreshold="100">
+        <heartbeat>select 1 from dual</heartbeat>
+        &lt;!&ndash; can have multi write hosts &ndash;&gt;
+        <writeHost host="hostM1" url="jdbc:oracle:thin:@127.0.0.1:1521/orcl" user="oracle"
+                   password="123456">
+        </writeHost>
+    </dataHost>-->
+
+</mycat:schema>

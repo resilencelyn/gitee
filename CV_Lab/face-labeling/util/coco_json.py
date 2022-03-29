@@ -6,7 +6,6 @@
 import json
 import sys
 
-
 ROOT_PATH = sys.path[0]
 
 

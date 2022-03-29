@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chongho.inf.flink.mapper.CdcJobMapper">
+
+    <resultMap id="baseMap" type="cn.chongho.inf.flink.model.CdcJob">
+
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR"/>
+        <result column="job_id" property="jobId" jdbcType="VARCHAR"/>
+        <result column="job_type" property="jobType" jdbcType="INTEGER"/>
+
+        <result column="source_info" property="sourceInfo" jdbcType="VARCHAR"/>
+        <result column="target_db_id" property="targetDbId" jdbcType="INTEGER"/>
+        <result column="targetDbName" property="targetDbName" jdbcType="VARCHAR"/>
+        <result column="target_table_id" property="targetTableId" jdbcType="INTEGER"/>
+        <result column="targetTableName" property="targetTableName" jdbcType="VARCHAR"/>
+
+        <result column="flink_colony_id" property="flinkColonyId" jdbcType="INTEGER"/>
+        <result column="flinkColonyUrl" property="flinkColonyUrl" jdbcType="VARCHAR"/>
+
+        <result column="column_association" property="columnAssociation" jdbcType="VARCHAR"/>
+        <result column="primary_column" property="primaryColumn" jdbcType="VARCHAR"/>
+        <result column="scan_startup_mode" property="scanStartupMode" jdbcType="INTEGER"/>
+        <result column="skipped_operations" property="skippedOperations" jdbcType="VARCHAR"/>
+
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectByPage" resultMap="baseMap">
+        SELECT cj.* ,
+        td.name targetDbName ,tt.table_name targetTableName,
+        fc.name flinkColonyName, fc.url flinkColonyUrl
+        FROM cdc_job cj
+          LEFT JOIN db_source td ON td.id = cj.target_db_id
+          LEFT JOIN db_table tt ON tt.id = cj.target_table_id
+          LEFT JOIN cluster fc ON fc.id = cj.flink_colony_id
+        WHERE cj.enable_flag = 1
+        <if test="cdcJob.jobName != null and cdcJob.jobName != ''" >
+            AND job_name like CONCAT('%',#{cdcJob.jobName},'%')
+        </if>
+        <if test="cdcJob.jobType != null " >
+            AND job_type  = #{cdcJob.jobType}
+        </if>
+        <if test="cdcJob.targetDbId != null " >
+            AND target_db_id  = #{cdcJob.targetDbId}
+        </if>
+        <if test="cdcJob.status != null " >
+            AND status  = #{cdcJob.status}
+        </if>
+        <if test="cdcJob.flinkColonyId != null " >
+            AND flink_colony_id  = #{cdcJob.flinkColonyId}
+        </if>
+        <if test="cdcJob.id != null " >
+            AND cj.id  = #{cdcJob.id}
+        </if>
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="countByPage" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM cdc_job cj
+        WHERE cj.enable_flag = 1
+        <if test="cdcJob.jobName != null and cdcJob.jobName != ''" >
+            AND job_name like CONCAT('%',#{cdcJob.jobName},'%')
+        </if>
+        <if test="cdcJob.jobType != null " >
+            AND job_type  = #{cdcJob.jobType}
+        </if>
+        <if test="cdcJob.targetDbId != null " >
+            AND target_db_id  = #{cdcJob.targetDbId}
+        </if>
+        <if test="cdcJob.status != null " >
+            AND status  = #{cdcJob.status}
+        </if>
+        <if test="cdcJob.id != null " >
+            AND cj.id  = #{cdcJob.id}
+        </if>
+    </select>
+
+    <select id="selectById" resultMap="baseMap">
+        SELECT cj.* ,
+        td.name targetDbName ,tt.table_name targetTableName,
+        fc.url flinkColonyUrl
+        FROM cdc_job cj
+        LEFT JOIN db_source td ON td.id = cj.target_db_id
+        LEFT JOIN db_table tt ON tt.id = cj.target_table_id
+        LEFT JOIN cluster fc ON fc.id = cj.flink_colony_id
+        WHERE cj.enable_flag = 1
+        AND cj.id  = #{jobId}
+    </select>
+
+    <update id="updateCdcJobById">
+        UPDATE cdc_job SET
+                job_type = #{cdcJob.jobType},
+                source_info = #{cdcJob.sourceInfo},
+                target_db_id = #{cdcJob.targetDbId},
+                target_table_id = #{cdcJob.targetTableId},
+                column_association = #{cdcJob.columnAssociation},
+                primary_column = #{cdcJob.primaryColumn},
+                scan_startup_mode = #{cdcJob.scanStartupMode},
+                skipped_operations = #{cdcJob.skippedOperations},
+                flink_colony_id = #{cdcJob.flinkColonyId},
+                job_name = #{cdcJob.jobName},
+                parallelism = #{cdcJob.parallelism},
+                update_time = #{cdcJob.updateTime},
+                update_user_id = #{cdcJob.updateUserId}
+        WHERE id = #{cdcJob.id}
+    </update>
+</mapper>

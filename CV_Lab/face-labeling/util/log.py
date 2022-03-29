@@ -4,7 +4,6 @@
 
 import sys
 
-
 ROOT_PATH = sys.path[0]  # 项目根目录
 
 

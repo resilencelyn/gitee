@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chongho.inf.flink.mapper.JobMapper">
+
+    <resultMap id="baseMap" type="cn.chongho.inf.flink.model.Job">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR"/>
+        <result column="job_key" property="jobKey" jdbcType="VARCHAR"/>
+        <result column="job_id" property="jobId" jdbcType="VARCHAR"/>
+        <result column="jar_id" property="jarId" jdbcType="INTEGER"/>
+        <result column="file_name" property="fileName" jdbcType="VARCHAR"/>
+
+        <result column="entry_class" property="entryClass" jdbcType="VARCHAR"/>
+        <result column="savepoint_path" property="savepointPath" jdbcType="VARCHAR"/>
+
+        <result column="enable_flag" property="enableFlag" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_user_id" property="updateUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectByPage" resultMap="baseMap">
+        SELECT job.*,jar.file_name,jar.job_key,
+        fc.name flinkColonyName, fc.url flinkColonyUrl
+        FROM job
+            LEFT JOIN jar ON job.jar_id = jar.id
+            LEFT JOIN cluster fc ON fc.id = job.flink_colony_id
+        WHERE job.enable_flag = 1
+        <if test="job.jobName != null and job.jobName != ''" >
+            AND job_name like CONCAT('%',#{job.jobName},'%')
+        </if>
+        <if test="job.entryClass != null and job.entryClass != ''" >
+            AND entry_class like CONCAT('%',#{job.entryClass},'%')
+        </if>
+        <if test="job.jarId != null " >
+            AND jar_id  = #{job.jarId}
+        </if>
+        <if test="job.status != null " >
+            AND status  = #{job.status}
+        </if>
+        <if test="job.flinkColonyId != null " >
+            AND flink_colony_id  = #{job.flinkColonyId}
+        </if>
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="countByPage" resultType="java.lang.Integer">
+        SELECT count(1) FROM job
+        WHERE job.enable_flag = 1
+        <if test="job.jobName != null and job.jobName != ''" >
+            AND job_name like CONCAT('%',#{job.jobName},'%')
+        </if>
+        <if test="job.entryClass != null and job.entryClass != ''" >
+            AND entry_class like CONCAT('%',#{job.entryClass},'%')
+        </if>
+        <if test="job.jarId != null " >
+            AND jar_id  = #{job.jarId}
+        </if>
+        <if test="job.status != null " >
+            AND status  = #{job.status}
+        </if>
+    </select>
+
+    <update id="updateJobById">
+        UPDATE job SET
+            job_name = #{job.jobName},
+            jar_id = #{job.jarId},
+            entry_class = #{job.entryClass},
+            args = #{job.args},
+            target_db_id = #{job.targetDbId},
+            parallelism = #{job.parallelism},
+            savepoint_path = #{job.savepointPath},
+            flink_colony_id = #{job.flinkColonyId},
+            update_time = #{job.updateTime},
+            update_user_id = #{job.updateUserId}
+         WHERE id = #{job.id}
+    </update>
+</mapper>

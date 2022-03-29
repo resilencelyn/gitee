@@ -1,5 +1,6 @@
 import os
-from bottle import route, run, template, static_file
+
+from bottle import route, run, static_file, template
 
 
 @route("/")

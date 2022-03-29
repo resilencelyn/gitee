@@ -8,7 +8,7 @@ import sys
 # 判断时间格式
 def is_time(preTime):
     if preTime <= 0:
-        print(f"时间格式不正确！程序结束！")
+        print("时间格式不正确！程序结束！")
         sys.exit()
 
 
@@ -38,5 +38,5 @@ def time_format(preTime):
             time_str = f"{h}时{m}分{s:.3f}秒"
         return time_str
     else:
-        print(f"时间格式化失败！程序结束！")
+        print("时间格式化失败！程序结束！")
         sys.exit()

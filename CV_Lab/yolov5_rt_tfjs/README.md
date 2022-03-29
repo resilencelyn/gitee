@@ -74,7 +74,7 @@ const cls_names = ['人', '自行车', '汽车', '摩托车', '飞机', '公交�
 📌 修改[index.html](./yolov5_rt_tfjs_src/index.html)文件，自定义TensorFlow.js的版本
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.13.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.15.0/dist/tf.min.js"></script>
 ```
 
 ❗ 注意：**TensorFlow.js的版本>=3.9.0**，本项目目前使用的版本为**3.15.0**

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chongho.inf.flink.mapper.CheckPointInfoMapper">
+
+    <resultMap id="baseMap" type="cn.chongho.inf.flink.model.CheckPointInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="job_id" property="jobId" jdbcType="INTEGER"/>
+        <result column="job_form" property="jobForm" jdbcType="INTEGER"/>
+        <result column="point_type" property="pointType" jdbcType="INTEGER"/>
+        <result column="trigger_id" property="triggerId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+    </resultMap>
+
+   <insert id="insertByBatch">
+       INSERT INTO check_point_info (job_id, job_form, point_type, trigger_id, location, create_time, create_user_id)
+       VALUES
+           <foreach collection ="list" item="point" separator =",">
+               (#{point.jobId}, #{point.jobForm}, #{point.pointType} ,#{point.triggerId} ,
+               #{point.location} ,#{point.createTime} ,#{point.createUserId})
+           </foreach >
+   </insert>
+
+    <select id="selectCheckPointInfoByJobId" resultMap="baseMap">
+        SELECT * FROM check_point_info WHERE
+            job_id = #{checkPointInfo.jobId}
+            AND job_form = #{checkPointInfo.jobForm}
+            <if test="checkPointInfo.pointType != null">
+                AND point_type = #{checkPointInfo.pointType}
+            </if>
+            AND location !=''
+            AND location is not null
+            ORDER BY id DESC
+            Limit #{limit}
+    </select>
+
+</mapper>
