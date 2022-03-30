@@ -25,7 +25,7 @@
                         <label class="col-sm-2 control-label no-padding-right" > 运行集群 </label>
                         <div class="col-sm-10">
                             <select id="flinkColonyId" name="flinkColonyId"  class="input-group-lg" <#if job?? && job.status!=0 >disabled="disabled" </#if>>
-                                <#list flinkColonyConfigList as fc>
+                                <#list clusterList as fc>
                                     <option value="${(fc.id)!}" <#if job?? && job.flinkColonyId== fc.id >selected</#if>>${(fc.name)!}</option>
                                 </#list>
                             </select>
@@ -78,7 +78,7 @@
                             <select id="savepointPath" name="savepointPath"  class="input-group-lg" style="max-width: 400px">
                                 <option value="" >请选择保存点</option>
                                 <#list checkPointList as cp>
-                                    <option value="${(cp.location)!}" <#if job?? && cp.location?? && cp.location != '' && job.savepointPath?? && job.savepointPath == cp.location >selected</#if> >
+                                    <option value="${(cp.location)!}" <#if job?? && cp.location?? && cp.location != '' && job.savepointPath?? && job.savepointPath?? && job.savepointPath == cp.location >selected</#if> >
                                         ${(cp.location)!}_${cp.createTime?string("yyyy-MM-dd HH:mm:ss")}
                                     </option>
                                 </#list>
@@ -134,11 +134,10 @@
                     alert("更新成功",function(){
                         location.reload();
                     });
-
                 }
             },
             error: function (response) {
-                alert("操作失败!");
+                alert("链接服务器失败");
             }
         });
     }

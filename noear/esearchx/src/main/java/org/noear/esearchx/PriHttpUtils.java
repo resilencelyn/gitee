@@ -9,19 +9,22 @@ import java.rmi.ServerException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+/**
+ * 内部Http请求工具（外部别用它）
+ * */
 class PriHttpUtils {
-    private final static Supplier<Dispatcher> okhttp_dispatcher = () -> {
+    private final static Supplier<Dispatcher> httpClientDefaultDispatcher = () -> {
         Dispatcher temp = new Dispatcher();
-        temp.setMaxRequests(20000);
-        temp.setMaxRequestsPerHost(10000);
+        temp.setMaxRequests(Constants.HttpMaxRequests);
+        temp.setMaxRequestsPerHost(Constants.HttpMaxRequestsPerHost);
         return temp;
     };
 
-    private final static OkHttpClient httpClient = new OkHttpClient.Builder()
-            .connectTimeout(60 * 5, TimeUnit.SECONDS)
-            .writeTimeout(60 * 5, TimeUnit.SECONDS)
-            .readTimeout(60 * 5, TimeUnit.SECONDS)
-            .dispatcher(okhttp_dispatcher.get())
+    private final static OkHttpClient httpClientDefault = new OkHttpClient.Builder()
+            .connectTimeout(Constants.HttpConnectTimeoutSeconds, TimeUnit.SECONDS)
+            .writeTimeout(Constants.HttpWriteTimeoutSeconds, TimeUnit.SECONDS)
+            .readTimeout(Constants.HttpReadTimeoutSeconds, TimeUnit.SECONDS)
+            .dispatcher(httpClientDefaultDispatcher.get())
             .build();
 
     public static PriHttpUtils http(String url) {
@@ -29,13 +32,18 @@ class PriHttpUtils {
     }
 
 
+    private final OkHttpClient _client;
     private RequestBody _body;
-
     private Request.Builder _builder;
 
 
     public PriHttpUtils(String url) {
+        this(url, httpClientDefault);
+    }
+
+    public PriHttpUtils(String url, OkHttpClient client) {
         _builder = new Request.Builder().url(url);
+        _client = client;
     }
 
 
@@ -98,7 +106,7 @@ class PriHttpUtils {
         }
 
 
-        Call call = httpClient.newCall(_builder.build());
+        Call call = _client.newCall(_builder.build());
         return call.execute();
     }
 

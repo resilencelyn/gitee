@@ -48,7 +48,7 @@ public class CdcJobController {
     private ClusterService clusterService;
 
     @GetMapping("/list")
-    public String list(CdcJobListRequest cdcJobListRequest, ModelMap map){
+    public String list(CdcJobListRequest cdcJobListRequest, ModelMap map, HttpSession httpSession){
         int page = cdcJobListRequest.getPage();
         int pageSize = cdcJobListRequest.getPageSize();
 
@@ -69,8 +69,8 @@ public class CdcJobController {
         if(cdcJobListRequest.getFlinkColonyId() != -1){
             cdcJob.setFlinkColonyId(cdcJobListRequest.getFlinkColonyId());
         }
-
-        List<CdcJob> cdcJobList = cdcJobService.selectByPage(page,  pageSize ,cdcJob);
+        Integer loginUserId = HttpSessionUtils.getLoginUser(httpSession).getId();
+        List<CdcJob> cdcJobList = cdcJobService.selectByPage(page,  pageSize ,cdcJob, loginUserId);
 
         int count = cdcJobService.selectCount(cdcJob);
         map.put("cdcJobList",cdcJobList);
@@ -148,6 +148,19 @@ public class CdcJobController {
     public WebResult savepoint(Integer id ,HttpSession httpSession){
         if (cdcJobService.savepoint(id ,HttpSessionUtils.getLoginUser(httpSession).getId())) {
             return WebResult.success();
+        }
+        return WebResult.unKnown();
+    }
+
+    @RequestMapping("stop")
+    @ResponseBody
+    public WebResult stop(Integer id ,HttpSession httpSession){
+        try {
+            if (cdcJobService.stopJob(id ,HttpSessionUtils.getLoginUser(httpSession).getId())) {
+                return WebResult.success();
+            }
+        }catch (Exception e){
+            return WebResult.error(e.getMessage());
         }
         return WebResult.unKnown();
     }

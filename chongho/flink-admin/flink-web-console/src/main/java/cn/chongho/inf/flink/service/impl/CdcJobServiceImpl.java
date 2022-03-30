@@ -47,6 +47,9 @@ public class CdcJobServiceImpl implements CdcJobService {
     private DbTableService dbTableService;
 
     @Autowired
+    private DataAuthorityService dataAuthorityService;
+
+    @Autowired
     private JarApi jarApi;
 
     @Autowired
@@ -68,9 +71,9 @@ public class CdcJobServiceImpl implements CdcJobService {
     }
 
     @Override
-    public List<CdcJob> selectByPage(int page, int pageSize,CdcJob cdcJob) {
+    public List<CdcJob> selectByPage(int page, int pageSize,CdcJob cdcJob, Integer loginUserId) {
         int offset = (page-1) * pageSize;
-        return cdcJobMapper.selectByPage(offset, pageSize ,cdcJob);
+        return cdcJobMapper.selectByPage(offset, pageSize ,cdcJob, loginUserId);
     }
 
     @Override
@@ -82,6 +85,9 @@ public class CdcJobServiceImpl implements CdcJobService {
     public boolean delete(Integer id , Integer loginUserId) {
 
         CdcJob dbCdcJob = cdcJobMapper.selectById(id);
+
+        dataAuthorityService.checkDataAuthority(dbCdcJob, Constant.DataType.CDCJOB, loginUserId);
+
         if(dbCdcJob.getStatus() != Constant.JobState.CANCELED.ordinal()){
             return false;
         }
@@ -99,6 +105,9 @@ public class CdcJobServiceImpl implements CdcJobService {
         cdcJob.setUpdateTime(new Date());
         cdcJob.setParallelism(cdcJob.getParallelism() == null ? 1 : cdcJob.getParallelism());
         if (cdcJob.getId() != null) {
+            CdcJob dbCdcJob = cdcJobMapper.selectById(cdcJob.getId());
+
+            dataAuthorityService.checkDataAuthority(dbCdcJob, Constant.DataType.CDCJOB, cdcJob.getUpdateUserId());
             return cdcJobMapper.updateCdcJobById(cdcJob);
         } else  {
             cdcJob.setEnableFlag(Constant.EnableFlag.ENABLE.ordinal());
@@ -187,12 +196,16 @@ public class CdcJobServiceImpl implements CdcJobService {
     public boolean runJob(Integer id, Integer loginUserId) {
         CdcJob cdcJob = cdcJobMapper.selectById(id);
 
+        dataAuthorityService.checkDataAuthority(cdcJob, Constant.DataType.CDCJOB, loginUserId);
+
         CdcJobRunConfig cdcJobRunConfig = cdcJobRunConfigService.selectByJobType(Constant.CdcJobType.getTypeByValue(cdcJob.getJobType()).name());
+        log.info("cdcJobRunConfig{}", JSON.toJSONString(cdcJobRunConfig));
         if(cdcJobRunConfig  == null){
             return false;
         }
 
         Jar jar = jarService.getJarOne(new Jar(cdcJobRunConfig.getJarId() ,Constant.EnableFlag.ENABLE.ordinal()));
+        log.info("jar{}", JSON.toJSONString(jar));
         if(jar == null){
             return false;
         }
@@ -262,13 +275,12 @@ public class CdcJobServiceImpl implements CdcJobService {
         return argsArray;
     }
 
-
-
-
     @Override
     public boolean savepoint(Integer id, Integer loginUserId) {
 
         CdcJob cdcJob = cdcJobMapper.selectById(id);
+
+        dataAuthorityService.checkDataAuthority(cdcJob, Constant.DataType.CDCJOB, loginUserId);
 
         String triggerId = jobApi.savepoint(cdcJob.getFlinkColonyUrl(), cdcJob.getJobId());
 
@@ -280,6 +292,28 @@ public class CdcJobServiceImpl implements CdcJobService {
         checkPointInfoService.addCheckPointInfo(checkPointInfo);
 
         SyncSavePointTask syncSavePointTask = new SyncSavePointTask(checkPointInfo.getId() ,cdcJob.getJobId(), triggerId, cdcJob.getFlinkColonyUrl());
+        new Timer().schedule(syncSavePointTask ,Constant.DELAY_TIME);
+        return true;
+    }
+
+    @Override
+    public boolean stopJob(Integer id, Integer loginUserId){
+        CdcJob cdcJob = cdcJobMapper.selectById(id);
+
+        dataAuthorityService.checkDataAuthority(cdcJob, Constant.DataType.CDCJOB, loginUserId);
+
+        String triggerId = jobApi.stopJob(cdcJob.getFlinkColonyUrl(), cdcJob.getJobId());
+
+        CheckPointInfo checkPointInfo = new CheckPointInfo(id ,triggerId);
+        checkPointInfo.setJobForm(Constant.CheckJobForm.CDCJOB.getValue());
+        checkPointInfo.setPointType(Constant.CheckPointType.SAVE.getValue());
+        checkPointInfo.setCreateUserId(loginUserId);
+        checkPointInfo.setLocation("");
+        checkPointInfoService.addCheckPointInfo(checkPointInfo);
+
+        cdcJobMapper.updateJobStatusByJobId(cdcJob.getJobId(), Constant.JobState.CANCELED.ordinal());
+
+        SyncSavePointTask syncSavePointTask = new SyncSavePointTask(checkPointInfo.getId(), cdcJob.getJobId(), triggerId, cdcJob.getFlinkColonyUrl());
         new Timer().schedule(syncSavePointTask ,Constant.DELAY_TIME);
         return true;
     }

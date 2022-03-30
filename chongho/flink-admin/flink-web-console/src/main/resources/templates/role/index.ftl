@@ -51,20 +51,16 @@
         try{ace.settings.loadState('main-container')}catch(e){}
     </script>
 
+    <div class="modal" id="deadAdd" style="display: none">
+    </div>
+
 
     <div class="page-content">
-        <div class="col-xs-12"><a href="/admin/role/edit">
-                <!--
+        <div class="col-xs-12"><a id="addRole" data-toggle="modal" data-remote="/admin/role/edit">
             <button class="btn btn-white btn-info btn-bold">
-
                 <i class="ace-icon fa fa-pencil-square-o bigger-120 blue"></i>
                 新增
             </button></a>
-            <button class="btn btn-white btn-warning btn-bold" onclick="delSelected()">
-                <i class="ace-icon fa fa-trash-o bigger-120 orange"></i>
-                删除
-            </button>
-            -->
             <div class="table-header" style="margin-top: 10px;">
                 角色列表
             </div>
@@ -95,13 +91,7 @@
                     <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
                         <thead>
                         <tr role="row">
-                            <th class="center sorting_disabled" rowspan="1" colspan="1" aria-label="">
-                                <label class="pos-rel">
-                                    <input type="checkbox" class="ace" id="check_all">
-                                    <span class="lbl"></span>
-                                </label>
-                            </th>
-                            <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" >ID</th>
+<#--                            <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" >ID</th>-->
                             <th class="sorting_disabled" tabindex="0"  rowspan="1" colspan="1">角色名</th>
                             <th class="hidden-480 sorting_disabled" tabindex="0" rowspan="1" colspan="1">创建者</th>
                             <th class="sorting_disabled" tabindex="0"  rowspan="1" colspan="1" >描述</th>
@@ -114,18 +104,11 @@
                         <#list roles as role>
 
                         <tr role="row" class="odd">
-                            <td class="center">
-                                <label class="pos-rel">
-                                    <input type="checkbox" name="checkbox" value="${role.id}" class="ace">
-                                    <span class="lbl"></span>
-                                </label>
-                            </td>
-
-                            <td>
+                            <#--<td>
                                 <a href="#">${role.id}</a>
-                            </td>
+                            </td>-->
                             <td>${role.name}</td>
-                            <td class="hidden-480">${role.creator!}</td>
+                            <td class="hidden-480">${role.createuser!}</td>
                             <td>${role.description!}</td>
 
                             <td class="hidden-480">
@@ -134,7 +117,7 @@
 
                             <td>
                                 <div class="hidden-sm hidden-xs action-buttons">
-                                ${authorities?seq_contains("/admin/role/edit")?string('<a class="green" href="/admin/role/edit?id=${role.id}">
+                                ${authorities?seq_contains("/admin/role/edit")?string('<a  id="editrole_${role.id}" class="green" data-toggle="modal"  data-remote="/admin/role/edit?id=${role.id}">
                                         <i class="ace-icon fa fa-pencil bigger-130"></i>
                                     </a>','')}
                                 ${authorities?seq_contains("/admin/role/menu")?string('<a class="green" href="/admin/role/menu/?id=${role.id}">
@@ -260,7 +243,7 @@
                                     }
                                 },
                                 error: function (response) {
-                                    alert("操作失败!");
+                                    alert("链接服务器失败");
                                 }
                             });
                         }
@@ -268,20 +251,32 @@
                 }
         );
     }
-    /**
-     * 批量删除
-     */
-    function delSelected(){
-        var id = "";
-        $("input[name=checkbox]").each(function () {
-            if($(this).is(':checked')){
-               id +=  $(this).val()+",";
-            }
-        });
-        if(id != ""){
-            del(id);
-        }
-    }
+
+
+    $("a[id^='editrole']").click(function (event) {
+        //如果是a链接，阻止其跳转到url页面
+        event.preventDefault();
+        //获取url的值
+        var id = event.currentTarget.id;
+        //获取url的值
+        var url = "/admin/role/edit?id=" + id.split("_")[1];
+        //将id为deadAdd的页面元素作为模态框激活
+        $('#deadAdd').modal();
+        //从url加载数据到模态框
+        $('#deadAdd').load(url);
+    })
+
+    $('#addRole').click(function (event) {
+        //如果是a链接，阻止其跳转到url页面
+        event.preventDefault();
+        //获取url的值
+        var url = $('#addRole').data('remote')||$('#addRole').attr('href');
+        //将id为deadAdd的页面元素作为模态框激活
+        $('#deadAdd').modal();
+        //从url加载数据到模态框
+        $('#deadAdd').load(url);
+    })
+
 </script>
 </body>
 </html>

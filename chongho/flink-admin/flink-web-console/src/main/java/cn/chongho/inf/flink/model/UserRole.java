@@ -19,5 +19,13 @@ public class UserRole {
 
     private Date createtime;
 
+    public UserRole() {
+    }
 
+    public UserRole(Integer userid, Integer roleid, Integer creator) {
+        this.userid = userid;
+        this.roleid = roleid;
+        this.creator = creator;
+        this.createtime = new Date();
+    }
 }

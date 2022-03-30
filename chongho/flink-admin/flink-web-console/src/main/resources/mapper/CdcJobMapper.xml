@@ -32,11 +32,12 @@
     <select id="selectByPage" resultMap="baseMap">
         SELECT cj.* ,
         td.name targetDbName ,tt.table_name targetTableName,
-        fc.name flinkColonyName, fc.url flinkColonyUrl
+        fc.name flinkColonyName, fc.url flinkColonyUrl,IFNULL(da.id, 0) dataAuthority
         FROM cdc_job cj
           LEFT JOIN db_source td ON td.id = cj.target_db_id
           LEFT JOIN db_table tt ON tt.id = cj.target_table_id
           LEFT JOIN cluster fc ON fc.id = cj.flink_colony_id
+          LEFT JOIN data_authority da ON da.data_type = 2 AND da.data_id = cj.id AND da.user_id = #{loginUserId} AND da.enable_flag = 1
         WHERE cj.enable_flag = 1
         <if test="cdcJob.jobName != null and cdcJob.jobName != ''" >
             AND job_name like CONCAT('%',#{cdcJob.jobName},'%')

@@ -22,10 +22,11 @@
 
     <select id="selectByPage" resultMap="baseMap">
         SELECT job.*,jar.file_name,jar.job_key,
-        fc.name flinkColonyName, fc.url flinkColonyUrl
+        fc.name flinkColonyName, fc.url flinkColonyUrl, IFNULL(da.id, 0) dataAuthority
         FROM job
             LEFT JOIN jar ON job.jar_id = jar.id
             LEFT JOIN cluster fc ON fc.id = job.flink_colony_id
+            LEFT JOIN data_authority da ON da.data_type = 1 AND da.data_id = job.id AND da.user_id = #{loginUserId} AND da.enable_flag = 1
         WHERE job.enable_flag = 1
         <if test="job.jobName != null and job.jobName != ''" >
             AND job_name like CONCAT('%',#{job.jobName},'%')

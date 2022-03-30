@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chongho.inf.flink.mapper.DataAuthorityMapper">
+
+    <resultMap id="baseMap" type="cn.chongho.inf.flink.model.UserDataAuthority">
+
+    </resultMap>
+
+    <select id="selectUserAuthority" resultMap="baseMap">
+       SELECT u.*,IFNULL(da.id, 0) authority FROM users u
+        LEFT JOIN data_authority da ON da.user_id = u.id AND da.enable_flag = 1 AND data_type = #{dataType} AND da.data_id = #{dataId}
+    </select>
+
+</mapper>

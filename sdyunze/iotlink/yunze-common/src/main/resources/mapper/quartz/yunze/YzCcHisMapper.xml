@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunze.common.mapper.yunze.YzCcHisMapper">
+
+    <sql id="selwhere">
+        <where>
+
+
+        </where>
+    </sql>
+
+    <select id="selMapCount" parameterType="java.util.HashMap"  resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        yz_automation_cc
+    </select>
+
+    <select id="ListCcHis" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        SELECT id,cc_id,cc_url,cc_email,cc_state,cc_result,remark,cc_parameter,
+               DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time,
+               cc_count,DATE_FORMAT(cc_time,'%Y-%m-%d %H:%i:%S') as cc_time
+        FROM yz_automation_cc_his
+        LIMIT #{StarRow},#{PageSize}
+    </select>
+
+
+
+</mapper>

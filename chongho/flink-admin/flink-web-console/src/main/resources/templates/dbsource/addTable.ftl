@@ -100,10 +100,10 @@
 </div>
 <script>
 
-    /*   function delColumn(){
-           alert(this.innerHTML())
-           $(this).empty();
-       }*/
+ /*   function delColumn(){
+        alert(this.innerHTML())
+        $(this).empty();
+    }*/
 
     $("input[name=type]").click(function () {
         var type = $("input[name=type]:checked").val();
@@ -127,9 +127,9 @@
         // var del = "<a class='red' onclick='delColumn()'><i class='ace-icon fa fa-trash-o bigger-130'></i></a>";
 
         var columns = "<tr class='columnAssociation' ><td><input type='text''  class='col-xs-10 col-sm-10'></td>";
-        columns= columns + "<td>" + columnTypeSelect + "</td>";
-        // columns= columns + "<td><input type='text''  class='col-xs-10 col-sm-10'>"+ del +"</td></tr>";
-        columns= columns + "<td><input type='text''  class='col-xs-10 col-sm-10'></td></tr>";
+            columns= columns + "<td>" + columnTypeSelect + "</td>";
+            // columns= columns + "<td><input type='text''  class='col-xs-10 col-sm-10'>"+ del +"</td></tr>";
+            columns= columns + "<td><input type='text''  class='col-xs-10 col-sm-10'></td></tr>";
         $("#tableColumnInfo").append(columns);
     }
 
@@ -169,7 +169,7 @@
                 }
             },
             error: function (response) {
-                alert("操作失败!");
+                alert("链接服务器失败");
             }
         });
     }
@@ -189,10 +189,10 @@
                 return ""
             }
             var arr = {
-                "columnName" : columnName,
-                "columnType" : columnType,
-                "columnComment" : columnAssociationElement.children[2].firstElementChild.value
-            };
+                    "columnName" : columnName,
+                    "columnType" : columnType,
+                    "columnComment" : columnAssociationElement.children[2].firstElementChild.value
+                };
             jsonColumnAssociation.push(arr);
         }
         return jsonColumnAssociation;
@@ -231,7 +231,7 @@
                     }
                 },
                 error: function (response) {
-                    alert("操作失败!");
+                    alert("链接服务器失败");
                 }
             });
         }

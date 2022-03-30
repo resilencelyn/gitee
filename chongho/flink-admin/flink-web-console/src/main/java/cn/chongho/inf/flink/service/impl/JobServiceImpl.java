@@ -2,12 +2,14 @@ package cn.chongho.inf.flink.service.impl;
 
 import cn.chongho.inf.flink.constants.Constant;
 import cn.chongho.inf.flink.mapper.JobMapper;
+import cn.chongho.inf.flink.model.BaseJob;
 import cn.chongho.inf.flink.model.CheckPointInfo;
 import cn.chongho.inf.flink.model.DbSource;
 import cn.chongho.inf.flink.model.Job;
 import cn.chongho.inf.flink.restapi.JarApi;
 import cn.chongho.inf.flink.restapi.JobApi;
 import cn.chongho.inf.flink.service.CheckPointInfoService;
+import cn.chongho.inf.flink.service.DataAuthorityService;
 import cn.chongho.inf.flink.service.DbSourceService;
 import cn.chongho.inf.flink.service.JobService;
 import cn.chongho.inf.flink.service.tasks.SyncSavePointTask;
@@ -75,6 +77,9 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private DbSourceService dbSourceService;
 
+    @Autowired
+    private DataAuthorityService dataAuthorityService;
+
     @Override
     public List<Job> selectAll(Job job) {
         return jobMapper.select(job);
@@ -91,9 +96,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> selectByPage(int page, int pageSize ,Job job) {
+    public List<Job> selectByPage(int page, int pageSize ,Job job, Integer loginUserId) {
         int offset = (page-1) * pageSize;
-        return jobMapper.selectByPage(offset, pageSize,job);
+        return jobMapper.selectByPage(offset, pageSize, job, loginUserId);
     }
 
     @Override
@@ -105,6 +110,7 @@ public class JobServiceImpl implements JobService {
     public boolean delete(Integer id , Integer loginUserId) {
 
         Job dbJob = jobMapper.selectByPrimaryKey(id);
+        dataAuthorityService.checkDataAuthority(dbJob, Constant.DataType.JOB, loginUserId);
         if(dbJob.getStatus() != Constant.JobState.CANCELED.ordinal()){
             return false;
         }
@@ -126,6 +132,8 @@ public class JobServiceImpl implements JobService {
         }*/
         job.setParallelism(job.getParallelism() == null ? 1 : job.getParallelism());
         if (job.getId() != null) {
+            Job dbJob = jobMapper.selectByPrimaryKey(job.getId());
+            dataAuthorityService.checkDataAuthority(dbJob, Constant.DataType.JOB, job.getUpdateUserId());
             return jobMapper.updateJobById(job);
         } else  {
             job.setEnableFlag(Constant.EnableFlag.ENABLE.ordinal());
@@ -145,7 +153,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public boolean runJob(Integer id, Integer loginUserId) {
         Job job = jobMapper.findJobById(id);
-
+        dataAuthorityService.checkDataAuthority(job, Constant.DataType.JOB, loginUserId);
         List<String> argsArray = getDbParameter(job.getTargetDbId());
         if(!StringUtils.isEmpty(job.getArgs())){
             argsArray.addAll(Arrays.asList(job.getArgs().split(" ")));
@@ -213,7 +221,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public boolean savepoint(Integer id, Integer loginUserId) {
         Job job = jobMapper.findJobById(id);
-
+        dataAuthorityService.checkDataAuthority(job, Constant.DataType.JOB, loginUserId);
         String triggerId = jobApi.savepoint(job.getFlinkColonyUrl(), job.getJobId());
 
         CheckPointInfo checkPointInfo = new CheckPointInfo(id ,triggerId);
@@ -228,4 +236,23 @@ public class JobServiceImpl implements JobService {
         return true;
     }
 
+    @Override
+    public boolean stopJob(Integer id, Integer loginUserId){
+        Job job = jobMapper.findJobById(id);
+        dataAuthorityService.checkDataAuthority(job, Constant.DataType.JOB, loginUserId);
+        String triggerId = jobApi.stopJob(job.getFlinkColonyUrl(), job.getJobId());
+
+        CheckPointInfo checkPointInfo = new CheckPointInfo(id ,triggerId);
+        checkPointInfo.setJobForm(Constant.CheckJobForm.JOB.getValue());
+        checkPointInfo.setPointType(Constant.CheckPointType.SAVE.getValue());
+        checkPointInfo.setCreateUserId(loginUserId);
+        checkPointInfo.setLocation("");
+        checkPointInfoService.addCheckPointInfo(checkPointInfo);
+
+        jobMapper.updateJobStatusByJobId(job.getJobId(), Constant.JobState.CANCELED.ordinal());
+
+        SyncSavePointTask syncSavePointTask = new SyncSavePointTask(checkPointInfo.getId(), job.getJobId(), triggerId, job.getFlinkColonyUrl());
+        new Timer().schedule(syncSavePointTask ,Constant.DELAY_TIME);
+        return true;
+    }
 }

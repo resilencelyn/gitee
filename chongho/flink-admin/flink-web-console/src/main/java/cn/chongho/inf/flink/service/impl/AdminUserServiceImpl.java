@@ -2,22 +2,21 @@ package cn.chongho.inf.flink.service.impl;
 
 import cn.chongho.inf.flink.mapper.AdminUserMapper;
 import cn.chongho.inf.flink.mapper.UserRoleMapper;
-import cn.chongho.inf.flink.model.AdminUser;
-import cn.chongho.inf.flink.model.Role;
-import cn.chongho.inf.flink.model.WebResult;
+import cn.chongho.inf.flink.model.*;
 import cn.chongho.inf.flink.service.AdminUserService;
 import cn.chongho.inf.flink.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * 系统用户相关业务接口实现类
- * Created by Raye on 2017/3/21.
+ * 系统用户
+ * @author feihu.wang
+ * @since 2022-02-14
  */
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
@@ -76,17 +75,41 @@ public class AdminUserServiceImpl implements AdminUserService {
         return roles;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateRoleMenu(String ids, int userid, int creater) {
         if(ids.length() > 0){
             ids = ids.substring(0,ids.length()-1);
         }
-        HashMap<String,Object> map = new HashMap<String, Object>();
-        map.put("roleids",ids);
-        map.put("creator",creater);
-        map.put("userid",userid);
-        userRoleMapper.userRoleUpdate(map);
+
+        List<String> thisUserRoleIds = new ArrayList<>();
+        Collections.addAll(thisUserRoleIds, ids.split(","));
+
+        List<UserRole> userRole = getUserRole(userid);
+        List<Integer> userHadRoleId = userRole.stream().map(UserRole::getRoleid).collect(Collectors.toList());
+
+        thisUserRoleIds.forEach(addRuleId->{
+            if(!userHadRoleId.contains(new Integer(addRuleId))){
+                userRoleMapper.insert(new UserRole(userid, new Integer(addRuleId), creater));
+            }
+        });
+        deleteUserRole(userid, thisUserRoleIds);
         return true;
+    }
+
+    private List<UserRole> getUserRole(Integer userid){
+        Example userRoleExample = new Example(UserRole.class);
+        Example.Criteria userRoleExampleCriteria = userRoleExample.createCriteria();
+        userRoleExampleCriteria.andEqualTo("userid", userid);
+        return userRoleMapper.selectByExample(userRoleExample);
+    }
+
+    private void deleteUserRole(int userid, List<String> thisUserRoleIds){
+        Example userRoleExample = new Example(UserRole.class);
+        Example.Criteria userRoleExampleCriteria = userRoleExample.createCriteria();
+        userRoleExampleCriteria.andEqualTo("userid", userid);
+        userRoleExampleCriteria.andNotIn("roleid", thisUserRoleIds);
+        userRoleMapper.deleteByExample(userRoleExample);
     }
 
     @Override

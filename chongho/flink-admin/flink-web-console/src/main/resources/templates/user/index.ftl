@@ -51,11 +51,13 @@
         try{ace.settings.loadState('main-container')}catch(e){}
     </script>
 
+    <div class="modal" id="deadAdd" style="display: none">
+    </div>
+
 
     <div class="page-content">
-        <div class="col-xs-12"><a href="/admin/user/edit">
+        <div class="col-xs-12"><a id="addUser" data-toggle="modal" data-remote="/admin/user/edit">
             <button class="btn btn-white btn-info btn-bold">
-
                 <i class="ace-icon fa fa-pencil-square-o bigger-120 blue"></i>
                 新增
             </button></a>
@@ -90,13 +92,7 @@
                     <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
                         <thead>
                         <tr role="row">
-                            <th class="center sorting_disabled" rowspan="1" colspan="1" aria-label="">
-                                <label class="pos-rel">
-                                    <input type="checkbox" class="ace" id="check_all">
-                                    <span class="lbl"></span>
-                                </label>
-                            </th>
-                            <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" >ID</th>
+<#--                            <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" >ID</th>-->
                             <th class="sorting_disabled" tabindex="0"  rowspan="1" colspan="1">用户名</th>
                             <th class="sorting_disabled" tabindex="0"  rowspan="1" colspan="1">邮箱</th>
                             <th class="hidden-480 sorting_disabled" tabindex="0" rowspan="1" colspan="1">创建者</th>
@@ -108,42 +104,28 @@
 
                         <tbody>
                         <#list users as user>
-
                         <tr role="row" class="odd">
-                            <td class="center">
-                                <label class="pos-rel">
-                                    <input type="checkbox" name="checkbox" value="${user.id}" class="ace">
-                                    <span class="lbl"></span>
-                                </label>
-                            </td>
-
-                            <td>
+                           <#-- <td>
                                 <a href="#">${user.id}</a>
-                            </td>
+                            </td>-->
                             <td>${user.name}</td>
                             <td>${user.email!}</td>
                             <td class="hidden-480"><#if user.creator==0>系统初始化用户<#else>${user.createUser!}</#if></td>
                             <td><#if user.flag==1><p class="green">启用<#else ><p class="red">禁用</#if></p></td>
                             <td class="hidden-480">
                                 <#if user.lastLoginTime??>${user.lastLoginTime?string("yyyy-MM-dd HH:mm:ss")}<#else >从未登录</#if>
-
                             </td>
-
-                            <!--
-                                     ${authorities?seq_contains("/admin/user/role")?string(' <a class="green" href="/admin/user/role/?id=${user.id}">
-                                        <i class="ace-icon fa fa-cog bigger-130"></i>
-                                    </a>','')}
-                            -->
                             <td>
                                 <div class="hidden-sm hidden-xs action-buttons">
-                        ${authorities?seq_contains("/admin/user/edit")?string('<a class="green" href="/admin/user/edit?id=${user.id}" attr="编辑用户信息">
+                                ${authorities?seq_contains("/admin/user/edit")?string('<a id="edituser_${user.id}" class="green" data-toggle="modal"  data-remote="/admin/user/edit?id=${user.id}" attr="编辑用户信息">
                                         <i class="ace-icon fa fa-pencil bigger-130"></i>
                                     </a>','')}
-
-                        ${authorities?seq_contains("/admin/user/delete")?string('<a class="red" onclick="del(${user.id})">
+                                ${authorities?seq_contains("/admin/user/role")?string(' <a id="editRuleUser_${user.id}" class="green"  data-toggle="modal"  data-remote="/admin/user/role/?id=${user.id}">
+                                    <i class="ace-icon fa fa-cog bigger-130"></i>
+                                </a>','')}
+                                ${authorities?seq_contains("/admin/user/delete")?string('<a class="red" onclick="del(${user.id})">
                                         <i class="ace-icon fa fa-trash-o bigger-130"></i>
                                     </a>','')}
-
                                 </div>
                             </td>
                         </tr>
@@ -268,20 +250,44 @@
                 }
         );
     }
-    /**
-     * 批量删除
-     */
-    function delSelected(){
-        var id = "";
-        $("input[name=checkbox]").each(function () {
-            if($(this).is(':checked')){
-               id +=  $(this).val()+",";
-            }
-        });
-        if(id != ""){
-            del(id);
-        }
-    }
+
+    $("a[id^='edituser']").click(function (event) {
+        //如果是a链接，阻止其跳转到url页面
+        event.preventDefault();
+        //获取url的值
+        var id = event.currentTarget.id;
+        //获取url的值
+        var url = "/admin/user/edit?id=" + id.split("_")[1];
+        //将id为deadAdd的页面元素作为模态框激活
+        $('#deadAdd').modal();
+        //从url加载数据到模态框
+        $('#deadAdd').load(url);
+    })
+
+    $('#addUser').click(function (event) {
+        //如果是a链接，阻止其跳转到url页面
+        event.preventDefault();
+        //获取url的值
+        var url = $('#addUser').data('remote')||$('#addUser').attr('href');
+        //将id为deadAdd的页面元素作为模态框激活
+        $('#deadAdd').modal();
+        //从url加载数据到模态框
+        $('#deadAdd').load(url);
+    })
+
+
+    $("a[id^='editRuleUser']").click(function (event) {
+        //如果是a链接，阻止其跳转到url页面
+        event.preventDefault();
+        //获取url的值
+        var id = event.currentTarget.id;
+        //获取url的值
+        var url = "/admin/user/role/?id=" + id.split("_")[1];
+        //将id为deadAdd的页面元素作为模态框激活
+        $('#deadAdd').modal();
+        //从url加载数据到模态框
+        $('#deadAdd').load(url);
+    })
 </script>
 </body>
 </html>

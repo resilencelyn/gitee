@@ -4,6 +4,7 @@ package cn.chongho.inf.flink.service;
 import cn.chongho.inf.flink.model.Cluster;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ming
@@ -50,4 +51,6 @@ public interface ClusterService {
      * @return
      */
     List<Cluster> getAllCluster();
+
+    List<Map<String, String>> getColonyInfo();
 }

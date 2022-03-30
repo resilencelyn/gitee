@@ -8,8 +8,9 @@ import cn.chongho.inf.flink.model.WebResult;
 import java.util.List;
 
 /**
- * 系统用户相关控制器
- * Created by Raye on 2017/3/21.
+ * 安全认证的aop拦截器
+ * @author feihu.wang
+ * @since 2022-02-14
  */
 public interface AdminUserService {
 

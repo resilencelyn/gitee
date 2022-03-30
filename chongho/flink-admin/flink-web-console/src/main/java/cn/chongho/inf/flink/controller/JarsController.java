@@ -11,6 +11,7 @@
 package cn.chongho.inf.flink.controller;
 
 import cn.chongho.inf.flink.model.Jar;
+import cn.chongho.inf.flink.model.Progress;
 import cn.chongho.inf.flink.model.WebResult;
 import cn.chongho.inf.flink.request.JarListRequest;
 import cn.chongho.inf.flink.restapi.JarApi;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -101,7 +103,7 @@ public class JarsController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public WebResult upload(@RequestParam("jarFile") MultipartFile file ,HttpSession httpSession) {
+    public WebResult upload(@RequestParam("jarFile") MultipartFile file ,HttpSession httpSession, HttpServletRequest request) {
         if (file.isEmpty()) {
             return WebResult.error("文件不能为空");
         }
@@ -109,6 +111,7 @@ public class JarsController {
         String addUUIDfilename = UUID.randomUUID() + "_" + fileName;
         File saveFile = new File(uploadJarPath + addUUIDfilename);
         try {
+
             file.transferTo(saveFile);
             Integer loginUserId = HttpSessionUtils.getLoginUser(httpSession).getId();
             Jar jar = new Jar();

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -25,6 +26,9 @@ public class AdminUser {
     private String email;
 
     private Integer creator;
+
+    @Transient
+    private String createUser;
 
     private Date createtime;
 

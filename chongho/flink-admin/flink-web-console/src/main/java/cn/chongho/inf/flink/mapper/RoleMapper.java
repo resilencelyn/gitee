@@ -28,7 +28,7 @@ public interface RoleMapper extends Mapper<Role> {
 
     @Select({
             "select",
-            "r.id, r.name, r.createtime, r.creator,u.name as creator, r.description",
+            "r.id, r.name, r.createtime, r.creator,u.name as createuser, r.description",
             "from role r LEFT JOIN users u ON r.creator=u.id",
             "where r.name like #{query} LIMIT #{begin},#{pagesize}"
     })
@@ -36,6 +36,7 @@ public interface RoleMapper extends Mapper<Role> {
             @Result(column="id", property="id", jdbcType= JdbcType.INTEGER, id=true),
             @Result(column="name", property="name", jdbcType= JdbcType.VARCHAR),
             @Result(column="creator", property="creator", jdbcType= JdbcType.INTEGER),
+            @Result(column="createuser", property="createuser", jdbcType= JdbcType.VARCHAR),
             @Result(column="description", property="description", jdbcType= JdbcType.VARCHAR)
     })
     List<Role> selectByQuery(@Param("begin") int begin, @Param("pagesize") int pageSize, @Param("query") String query);

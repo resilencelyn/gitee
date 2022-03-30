@@ -29,6 +29,9 @@ public class JobApi {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RestTemplate restTemplateByRequestFactory;
+
 
     private static final String  JOBS_RUL_PREFIX = "/jobs/";
 
@@ -63,6 +66,33 @@ public class JobApi {
         return triggerObj.getString("request-id");
     }
 
+
+    /**
+     *  终止任务
+     * @param flinkUrl
+     * @param jobId
+     */
+    public void cancelJob(String flinkUrl, String jobId) {
+        String url = flinkUrl + JOBS_RUL_PREFIX + jobId;
+        restTemplateByRequestFactory.patchForObject(url, "",String.class);
+    }
+
+    /**
+     * 带保存点停止任务
+     * @param flinkUrl
+     * @param jobId
+     * @return
+     */
+    public String stopJob(String flinkUrl, String jobId) {
+        String url = flinkUrl + JOBS_RUL_PREFIX + jobId + "/stop";
+        Map<String, Object> params = new HashMap();
+        params.put("targetDirectory", savepointPath);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        HttpEntity<String> entity = new HttpEntity<>(JSON.toJSONString(params), headers);
+        JSONObject triggerObj = restTemplate.postForObject(url, entity, JSONObject.class);
+        return triggerObj.getString("request-id");
+    }
 
     /**
      * 查询savepoint的地址

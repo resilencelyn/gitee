@@ -41,6 +41,13 @@
     <script src="/assets/js/html5shiv.min.js"></script>
     <script src="/assets/js/respond.min.js"></script>
     <![endif]-->
+
+    <style type="text/css">
+       /* .modal-dialog{
+            width: auto;
+            max-width: 1300px;
+        }*/
+    </style>
 </head>
 
 <body class="no-skin">
@@ -49,15 +56,25 @@
         try{ace.settings.loadState('main-container')}catch(e){}
     </script>
 
+    <div class="modal fade" id="loadingModal">
+        <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+            <div class="progress progress-striped active" style="margin-bottom: 0;">
+                <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+            <h5>执行中...</h5>
+        </div>
+    </div>
+
+
     <div class="modal" id="deadAdd" style="display: none">
     </div>
 
     <div class="page-content">
         <div class="col-xs-12"><a id="addjob" data-toggle="modal" data-remote="/job/edit">
-                <button class="btn btn-white btn-info btn-bold">
-                    <i class="ace-icon fa fa-pencil-square-o bigger-120 blue"></i>
-                    新增
-                </button></a>
+            <button class="btn btn-white btn-info btn-bold">
+                <i class="ace-icon fa fa-pencil-square-o bigger-120 blue"></i>
+                新增
+            </button></a>
             <div class="table-header" style="margin-top: 10px;">
                 作业列表
             </div>
@@ -68,71 +85,71 @@
             <div>
                 <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
                     <form method="get" action="/job/list" id="sform">
-                        <div class="row">
-                            <div class="col-xs-300" >
-                                <div class="dataTables_length" id="dynamic-table_length">
-                                    <label>每页显示 <select name="pageSize" aria-controls="dynamic-table" class="form-control input-sm">
-                                            <option <#if pageSize==10>selected</#if>  value="10">10</option>
-                                            <option <#if pageSize==25>selected</#if> value="25">25</option>
-                                            <option <#if pageSize==50>selected</#if> value="50">50</option>
-                                            <option <#if pageSize==100>selected</#if> value="100">100</option></select> 条</label>
-                                </div>
-                                <div class="col-xs-300">
-                                    <div id="dynamic-table_filter">
-                                        <label>任务名:
-                                            <input type="search" name="searchJobName" value="${jobListRequest.jobName!}" class="form-control input-sm" placeholder="" aria-controls="dynamic-table">
-                                        </label>
-
-                                        <label style="margin-left: 30px">运行集群:
-                                            <select name="searchFlinkColonyId"  class="input-group-lg">
-                                                <option value=-1 ></option>
-                                                <#list flinkColonyConfigList as fc>
-                                                    <option value="${(fc.id)!}" <#if jobListRequest.flinkColonyId== fc.id >selected</#if>>${(fc.name)!}</option>
-                                                </#list>
-                                            </select>
-                                        </label>
-
-                                        <label style="margin-left: 30px">运行类路径:
-                                            <input type="search" name="searchEntryClass" value="${jobListRequest.entryClass!}" class="form-control input-sm" style="width: 300px" placeholder="" aria-controls="dynamic-table">
-                                        </label>
-                                        <label style="margin-left: 30px">jar包:
-                                            <select name="searchJarId"  class="input-group-lg">
-                                                <option value=-1 ></option>
-                                                <#list jarList as jar>
-                                                    <option value="${(jar.id)!}" <#if jobListRequest.jarId== jar.id >selected</#if>>${(jar.fileName)!}</option>
-                                                </#list>
-                                            </select>
-                                        </label>
-                                        <label style="margin-left: 30px">状态
-                                            <select name="searchStatus"  class="input-group-lg">
-                                                <option value=-1 ></option>
-                                                <option value=0 <#if jobListRequest.status == 0 >selected</#if>>canceled</option>
-                                                <option value=1 <#if jobListRequest.status == 1 >selected</#if>>running</option>
-                                                <option value=2 <#if jobListRequest.status == 2 >selected</#if>>restarting</option>
-                                            </select>
-                                        </label>
-                                        <button type="button" class="btn btn-primary" style="margin-left: 30px" onclick="searchJob()">搜索</button>
-                                    </div>
-                                </div>
+                    <div class="row">
+                        <div class="col-xs-300" >
+                            <div class="dataTables_length" id="dynamic-table_length">
+                                <label>每页显示 <select name="pageSize" aria-controls="dynamic-table" class="form-control input-sm">
+                                        <option <#if pageSize==10>selected</#if>  value="10">10</option>
+                                        <option <#if pageSize==25>selected</#if> value="25">25</option>
+                                        <option <#if pageSize==50>selected</#if> value="50">50</option>
+                                        <option <#if pageSize==100>selected</#if> value="100">100</option></select> 条</label>
                             </div>
+                            <div class="col-xs-300">
+                            <div id="dynamic-table_filter">
+                                <label>任务名:
+                                    <input type="search" name="searchJobName" value="${jobListRequest.jobName!}" class="form-control input-sm" placeholder="" aria-controls="dynamic-table">
+                                </label>
 
-                        </div>
+                                <label style="margin-left: 30px">运行集群:
+                                    <select name="searchFlinkColonyId"  class="input-group-lg">
+                                        <option value=-1 ></option>
+                                        <#list clusterList as fc>
+                                            <option value="${(fc.id)!}" <#if jobListRequest.flinkColonyId== fc.id >selected</#if>>${(fc.name)!}</option>
+                                        </#list>
+                                    </select>
+                                </label>
+
+                                <label style="margin-left: 30px">运行类路径:
+                                    <input type="search" name="searchEntryClass" value="${jobListRequest.entryClass!}" class="form-control input-sm" style="width: 300px" placeholder="" aria-controls="dynamic-table">
+                                </label>
+                                <label style="margin-left: 30px">jar包:
+                                    <select name="searchJarId"  class="input-group-lg">
+                                        <option value=-1 ></option>
+                                        <#list jarList as jar>
+                                            <option value="${(jar.id)!}" <#if jobListRequest.jarId== jar.id >selected</#if>>${(jar.fileName)!}</option>
+                                        </#list>
+                                    </select>
+                                </label>
+                                <label style="margin-left: 30px">状态
+                                    <select name="searchStatus"  class="input-group-lg">
+                                        <option value=-1 ></option>
+                                         <option value=0 <#if jobListRequest.status == 0 >selected</#if>>canceled</option>
+                                         <option value=1 <#if jobListRequest.status == 1 >selected</#if>>running</option>
+                                         <option value=2 <#if jobListRequest.status == 2 >selected</#if>>restarting</option>
+                                    </select>
+                                </label>
+                                <button type="button" class="btn btn-primary" style="margin-left: 30px" onclick="searchJob()">搜索</button>
+                            </div>
+                            </div>
+                    </div>
+
+                    </div>
                     </form>
                     <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
                         <thead>
                         <tr role="row">
-                            <#-- <th class="center sorting_disabled" rowspan="1" colspan="1" aria-label="">
-                                 <label class="pos-rel">
-                                     <input type="checkbox" class="ace" id="check_all">
-                                     <span class="lbl"></span>
-                                 </label>
-                             </th>-->
-                            <#--                            <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" >ID</th>-->
+                           <#-- <th class="center sorting_disabled" rowspan="1" colspan="1" aria-label="">
+                                <label class="pos-rel">
+                                    <input type="checkbox" class="ace" id="check_all">
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>-->
+<#--                            <th class="sorting_disabled" tabindex="0" rowspan="1" colspan="1" >ID</th>-->
                             <th class="sorting_disabled col-xs-2" tabindex="0"  rowspan="1" colspan="1">任务名称</th>
                             <th class="sorting_disabled col-xs-1" tabindex="0"  rowspan="1" colspan="1">运行集群</th>
                             <th class="sorting_disabled col-xs-2" tabindex="0"  rowspan="1" colspan="1">jar包标识</th>
                             <th class="sorting_disabled col-xs-1" tabindex="0"  rowspan="1" colspan="1" >运行类路径</th>
-                            <#--                            <th class="sorting_disabled col-xs-3" tabindex="0"  rowspan="1" colspan="1" >运行参数</th>-->
+<#--                            <th class="sorting_disabled col-xs-3" tabindex="0"  rowspan="1" colspan="1" >运行参数</th>-->
                             <th class="sorting_disabled col-xs-1" tabindex="0"  rowspan="1" colspan="1" style="width: 30px">并行度</th>
                             <th class="sorting_disabled col-xs-1" tabindex="0"  rowspan="1" colspan="1" style="width: 60px">状态</th>
                             <th class="hidden-480 sorting_disabled" tabindex="0"  rowspan="1" colspan="1" >创建时间</th>
@@ -143,59 +160,69 @@
                         <tbody>
                         <#list jobs as job>
 
-                            <tr role="row" class="odd">
-                                <#--  <td class="center">
-                                      <label class="pos-rel">
-                                          <input type="checkbox" name="checkbox" value="${job.id}" class="ace">
-                                          <span class="lbl"></span>
-                                      </label>
-                                  </td>-->
+                        <tr role="row" class="odd">
+                          <#--  <td class="center">
+                                <label class="pos-rel">
+                                    <input type="checkbox" name="checkbox" value="${job.id}" class="ace">
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>-->
 
-                                <#--                            <td>-->
-                                <#--                                <a href="#">${job.id}</a>-->
-                                <#--                            </td>-->
-                                <td>${job.jobName}</td>
-                                <td>${job.flinkColonyName}</td>
-                                <td>${job.jobKey}</td>
-                                <td>${job.entryClass}</td>
-                                <#--                            <td>${job.args}</td>-->
-                                <td>${job.parallelism}</td>
-                                <td>
-                                    <#if job.status==1>
+<#--                            <td>-->
+<#--                                <a href="#">${job.id}</a>-->
+<#--                            </td>-->
+                            <td>${job.jobName}</td>
+                            <td>${job.flinkColonyName}</td>
+                            <td>${job.jobKey}</td>
+                            <td>${job.entryClass}</td>
+<#--                            <td>${job.args}</td>-->
+                            <td>${job.parallelism}</td>
+                            <td>
+                                <#if job.status==1>
                                     <p class="green">RUNNING
-                                        <#elseif job.status==2>
+                                <#elseif job.status==2>
                                     <p style="color: #FF9E08">RESTARTING
-                                        <#else>
+                                <#else>
                                     <p class="red">CANCELED
-                                        </#if>
-                                    </p>
-                                </td>
-                                <td>
-                                    <#if job.createTime??>${job.createTime?string("yyyy-MM-dd HH:mm:ss")}<#else >null</#if>
-                                </td>
-                                <td>
+                                </#if>
+                                </p>
+                            </td>
+                            <td>
+                                <#if job.createTime??>${job.createTime?string("yyyy-MM-dd HH:mm:ss")}<#else >null</#if>
+                            </td>
+                            <td>
+                                <#if loginUserId == job.createUserId || loginUserId == -1 || job.dataAuthority != 0>
                                     <div class="hidden-sm hidden-xs action-buttons">
-                                        ${authorities?seq_contains("/job/edit")?string('<a id="editjob_${job.id}" class="green" data-toggle="modal"  data-remote="/job/edit?id=${job.id}" attr="编辑Job">
+                                        ${authorities?seq_contains("/job/edit")?string('<a id="editjob_${job.id}" class="green" data-toggle="modal"  data-remote="/job/edit?id=${job.id}" title="编辑任务">
                                         <i class="ace-icon fa fa-pencil bigger-130"></i>
                                     </a>','')}
-                                        <#if job.status == 0>
-                                            ${authorities?seq_contains("/job/run")?string(' <a class="green" onclick="run(${job.id})">
-                                        <i class="ace-icon fa fa-paper-plane bigger-130"></i>
-                                    </a>','')}
-                                            ${authorities?seq_contains("/job/delete")?string('<a class="red" onclick="del(${job.id})">
-                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
-                                    </a>','')}
+                                        <#if job.status == 0 || job.status == 3 || job.status == 4>
+                                            ${authorities?seq_contains("/job/run")?string(' <a class="green" onclick="run(${job.id})" title="运行任务">
+                                                <i class="ace-icon fa fa-paper-plane bigger-130"></i>
+                                            </a>','')}
+                                            ${authorities?seq_contains("/job/delete")?string('<a class="red" onclick="del(${job.id})" title="删除任务">
+                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                            </a>','')}
                                         <#else >
-                                            ${authorities?seq_contains("/job/run")?string(' <a class="green" target="_blank" href="${job.flinkColonyUrl}/#/job/${job.jobId}/overview">
-                                        <i class="glyphicon glyphicon-eye-open"></i>
-                                    </a>','')}
-                                            ${authorities?seq_contains("/job/run")?string(' <a class="green" target="_blank" onclick="savepoint(${job.id})">
-                                        <i class="fa fa-camera-retro"></i>
-                                    </a>','')}
+                                            ${authorities?seq_contains("/job/run")?string(' <a class="green" target="_blank" href="${job.flinkColonyUrl}/#/job/${job.jobId}/overview" title="任务运行详情">
+                                                <i class="glyphicon glyphicon-eye-open"></i>
+                                            </a>','')}
+                                            ${authorities?seq_contains("/job/run")?string(' <a class="green" target="_blank" onclick="savepoint(${job.id})" title="新增保存点">
+                                                <i class="fa fa-camera-retro"></i>
+                                            </a>','')}
+                                            ${authorities?seq_contains("/job/stop")?string(' <a class="red" target="_blank" onclick="stop(${job.id})" title="停止任务">
+                                                <i class="glyphicon glyphicon-stop"></i>
+                                            </a>','')}
                                         </#if>
+                                       <#if loginUserId == job.createUserId>
+                                           ${authorities?seq_contains("/job/editUser")?string('<a id="editUser_${job.id}" class="green" data-toggle="modal"  data-remote="/data-authority/listUserDataAuthority?dataType=1&dataId=${job.id}" title="负责人员">
+                                                <i class="glyphicon glyphicon-user"></i>
+                                            </a>','')}
+                                       </#if>
                                     </div>
-                                </td>
-                            </tr>
+                                </#if>
+                            </td>
+                        </tr>
                         </#list>
 
                         </tbody>
@@ -206,8 +233,8 @@
                             </div>
                         </div>
                         <div class="col-xs-6"><div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-                                <ul class="pagination" id="pagination"></ul>
-                            </div>
+                            <ul class="pagination" id="pagination"></ul>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -292,40 +319,40 @@
      */
     function del(id) {
         bootbox.confirm({
-                message: "是否删除?",
-                buttons: {
-                    confirm: {
-                        label: "删除",
-                        className: "btn-sm",
+                    message: "是否删除?",
+                    buttons: {
+                        confirm: {
+                            label: "删除",
+                            className: "btn-sm",
+                        },
+                        cancel: {
+                            label: "取消",
+                            className: "btn-sm btn-primary",
+                        }
                     },
-                    cancel: {
-                        label: "取消",
-                        className: "btn-sm btn-primary",
-                    }
-                },
-                callback: function(result) {
-                    if(result) {
-                        quickAjax({
-                            url: '/job/delete',
-                            method:"POST",
-                            data:{
-                                id:id
-                            },
-                            success: function (response) {
-                                if (response.code == 1){
-                                    alert("删除成功",function(){
-                                        location.reload();
-                                    });
+                    callback: function(result) {
+                        if(result) {
+                            quickAjax({
+                                url: '/job/delete',
+                                method:"POST",
+                                data:{
+                                    id:id
+                                },
+                                success: function (response) {
+                                    if (response.code == 1){
+                                        alert("删除成功",function(){
+                                            location.reload();
+                                        });
 
+                                    }
+                                },
+                                error: function (response) {
+                                    alert("链接服务器失败");
                                 }
-                            },
-                            error: function (response) {
-                                alert("操作失败!");
-                            }
-                        });
+                            });
+                        }
                     }
                 }
-            }
         );
     }
     /**
@@ -335,7 +362,7 @@
         var id = "";
         $("input[name=checkbox]").each(function () {
             if($(this).is(':checked')){
-                id +=  $(this).val()+",";
+               id +=  $(this).val()+",";
             }
         });
         if(id != ""){
@@ -358,21 +385,28 @@
                 },
                 callback: function(result) {
                     if(result) {
-                        quickAjax({
+                        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+                        $("#loadingModal").modal('show');
+                        $.ajax({
                             url: '/job/savepoint',
                             method:"POST",
                             data:{
                                 id:id
                             },
                             success: function (response) {
+                                $("#loadingModal").modal('hide');
                                 if (response.code == 1){
                                     alert("成功",function(){
                                         location.reload();
                                     });
-
+                                }else{
+                                    alert(response.msg,function(){
+                                        location.reload();
+                                    });
                                 }
                             },
                             error: function (response) {
+                                $("#loadingModal").modal('hide');
                                 alert("处理失败");
                             }
                         });
@@ -400,21 +434,31 @@
                 },
                 callback: function(result) {
                     if(result) {
-                        quickAjax({
+                        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+                        $("#loadingModal").modal('show');
+                        $.ajax({
                             url: '/job/run',
                             method:"POST",
                             data:{
                                 id:id
                             },
                             success: function (response) {
+                                $("#loadingModal").modal('hide');
                                 if (response.code == 1){
                                     alert("启动成功",function(){
+                                        location.reload();
+                                    });
+                                }else{
+                                    alert(response.msg,function(){
                                         location.reload();
                                     });
                                 }
                             },
                             error: function (response) {
-                                alert("操作失败!");
+                                $("#loadingModal").modal('hide');
+                                alert("连接服务器失败",function(){
+                                    location.reload();
+                                });
                             }
                         });
                     }
@@ -422,6 +466,59 @@
             }
         );
     }
+
+
+    /**
+     * 停止任务
+     */
+    function stop(id) {
+        bootbox.confirm({
+                message: "是否停止?",
+                buttons: {
+                    confirm: {
+                        label: "停止",
+                        className: "btn-sm",
+                    },
+                    cancel: {
+                        label: "取消",
+                        className: "btn-sm btn-primary",
+                    }
+                },
+                callback: function(result) {
+                    if(result) {
+                        $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+                        $("#loadingModal").modal('show');
+                        $.ajax({
+                            url: '/job/stop',
+                            method:"POST",
+                            data:{
+                                id:id
+                            },
+                            success: function (response) {
+                                $("#loadingModal").modal('hide');
+                                if (response.code == 1){
+                                    alert("停止成功",function(){
+                                        location.reload();
+                                    });
+                                }else{
+                                    alert(response.msg,function(){
+                                        location.reload();
+                                    });
+                                }
+                            },
+                            error: function (response) {
+                                $("#loadingModal").modal('hide');
+                                alert("连接服务器失败",function(){
+                                    location.reload();
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        );
+    }
+
 
     $("a[id^='editjob']").click(function (event) {
         //如果是a链接，阻止其跳转到url页面
@@ -441,6 +538,19 @@
         event.preventDefault();
         //获取url的值
         var url = $('#addjob').data('remote')||$('#addjob').attr('href');
+        //将id为deadAdd的页面元素作为模态框激活
+        $('#deadAdd').modal();
+        //从url加载数据到模态框
+        $('#deadAdd').load(url);
+    })
+
+    $("a[id^='editUser']").click(function (event) {
+        //如果是a链接，阻止其跳转到url页面
+        event.preventDefault();
+        //获取url的值
+        var id = event.currentTarget.id;
+        //获取url的值
+        var url = "/data-authority/listUserDataAuthority?dataType=1&dataId=" + id.split("_")[1];
         //将id为deadAdd的页面元素作为模态框激活
         $('#deadAdd').modal();
         //从url加载数据到模态框

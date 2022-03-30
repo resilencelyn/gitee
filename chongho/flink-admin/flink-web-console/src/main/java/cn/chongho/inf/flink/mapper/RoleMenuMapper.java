@@ -11,8 +11,4 @@ public interface RoleMenuMapper extends Mapper<RoleMenu> {
             "where roleid = #{roleid}"
     })
     int deleteByRoleid(String roleid);
-
-
-
-
 }

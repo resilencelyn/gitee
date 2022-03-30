@@ -14,4 +14,6 @@ public interface CheckPointInfoMapper extends Mapper<CheckPointInfo> {
     List<CheckPointInfo> selectCheckPointInfoByJobId(@Param("checkPointInfo") CheckPointInfo checkPointInfo, @Param("limit") Integer limit);
 
     void insertByBatch(List<CheckPointInfo> checkPointInfos);
+
+    void updateBatch(List<CheckPointInfo> checkPointInfos);
 }

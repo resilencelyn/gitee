@@ -64,7 +64,7 @@ public class TracerLogbackAppender extends AppenderBase<ILoggingEvent> {
         // 放入标签
         logMessage.setTagMap(out.getTagMap());
         // 放入内容 可能已经被压缩了
-        logMessage.setContent(out.getContent());
+        logMessage.setContent(formattedMessage);
         return logMessage;
     }
 

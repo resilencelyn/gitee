@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunze.common.mapper.backup.BackupMapper">
+    <select id="GenTableList" resultType="java.util.HashMap">
+        select table_id,table_name,table_comment,sub_table_name,sub_table_fk_name,class_name,
+               tpl_category,package_name,module_name,business_name,function_name,function_author,
+               gen_type,gen_path,options,create_by,create_time,update_by,update_time,remark from gen_table
+
+    </select>
+
+    <select id="GenTableColumnList" resultType="java.util.HashMap">
+        select column_id,table_id,column_name,column_comment,column_type,java_type,java_field,
+               is_pk,is_increment,is_required,is_insert,is_edit,is_list,is_query,query_type,
+               html_type,dict_type,sort,create_by,create_time,update_by,update_time from gen_table_column
+    </select>
+
+    <select id="QrtzBlobTriggersList" resultType="java.util.HashMap">
+        select sched_name,trigger_name,trigger_group,blob_data from qrtz_blob_triggers
+    </select>
+
+    <select id="QrtzCalendarsList" resultType="java.util.HashMap">
+        select sched_name,calendar_name,calendar from qrtz_calendars
+    </select>
+
+    <select id="QrtzCronTriggersList" resultType="java.util.HashMap">
+        select sched_name,trigger_name,trigger_group,cron_expression,time_zone_id from qrtz_cron_triggers
+    </select>
+
+    <select id="QrtrootiredTriggersList" resultType="java.util.HashMap">
+        select sched_name,entry_id,trigger_name,trigger_group,instance_name,fired_time,sched_time,priority,
+               state,job_name,job_group,is_nonconcurrent,requests_recovery from qrtz_fired_triggers
+    </select>
+
+    <select id="QrtzJobDetailsList" resultType="java.util.HashMap">
+        select sched_name,job_name,job_group,description,job_class_name,is_durable,is_nonconcurrent,
+               is_update_data,requests_recovery,job_data from qrtz_job_details
+    </select>
+
+    <select id="QrtzLocksList" resultType="java.util.HashMap">
+        select sched_name,lock_name from qrtz_locks
+    </select>
+
+    <select id="QrtzPausedTriggerGrpsList" resultType="java.util.HashMap">
+        select sched_name,trigger_group from qrtz_paused_trigger_grps
+    </select>
+
+    <select id="QrtzSchedulerStateList" resultType="java.util.HashMap">
+        select sched_name,instance_name,last_checkin_time,checkin_interval from qrtz_scheduler_state
+    </select>
+
+    <select id="QrtzSimpleTriggersList" resultType="java.util.HashMap">
+        select sched_name,trigger_name,trigger_group,repeat_count,repeat_interval,times_triggered from qrtz_simple_triggers
+    </select>
+
+    <select id="QrtzSimpropTriggersList" resultType="java.util.HashMap">
+        select sched_name,trigger_name,trigger_group,str_prop_1,str_prop_2,str_prop_3,int_prop_1,int_prop_2,
+               long_prop_1,long_prop_2,dec_prop_1,dec_prop_2,bool_prop_1,bool_prop_1 from qrtz_simprop_triggers
+    </select>
+
+    <select id="QrtzTriggersList" resultType="java.util.HashMap">
+        select sched_name,trigger_name,trigger_group,job_name,job_group,description,next_fire_time,
+               prev_fire_time,priority,trigger_state,trigger_type,start_time,end_time,calendar_name,
+               misfire_instr,job_data from qrtz_triggers
+    </select>
+<!--SysConfig-->
+    <select id="SysConfigList" resultType="java.util.HashMap">
+        select config_id,config_name,config_key,config_value,config_type,create_by,create_time,update_by,
+               update_time,remark from sys_config
+    </select>
+
+    <select id="SysDeptList" resultType="java.util.HashMap">
+        select dept_id,parent_id,ancestors,dept_name,order_num,leader,phone,email,status,del_flag,create_by,
+               create_time,update_by,update_time from sys_dept
+    </select>
+
+    <select id="SysDictDataList" resultType="java.util.HashMap">
+        select dict_code,dict_sort,dict_label,dict_value,dict_type,css_class,list_class,is_default,status,
+               create_by,create_time,update_by,update_time,remark from sys_dict_data
+    </select>
+
+    <select id="SysDictTypeList" resultType="java.util.HashMap">
+        select dict_id,dict_name,dict_type,status,create_by,create_time,update_by,update_time,remark from sys_dict_type
+    </select>
+
+    <select id="SysJobList" resultType="java.util.HashMap">
+        select job_id,job_name,job_group,invoke_target,cron_expression,misfire_policy,concurrent,
+               status,create_by,create_time,update_by,update_time,remark from sys_job
+    </select>
+
+    <select id="SysJobLogList" resultType="java.util.HashMap">
+        select job_log_id,job_name,job_group,invoke_target,job_message,status,exception_info,create_time from sys_job_log
+    </select>
+
+    <select id="SysLogininforList" resultType="java.util.HashMap">
+        select info_id,user_name,ipaddr,login_location,browser,os,status,msg,login_time from sys_logininfor
+    </select>
+
+    <select id="SysMenuList" resultType="java.util.HashMap">
+        select menu_id,menu_name,parent_id,order_num,path,component,is_frame,is_cache,menu_type,visible,
+               status,perms,icon,create_by,create_time,update_by,update_time,remark from sys_menu
+    </select>
+
+    <select id="SysNoticeList" resultType="java.util.HashMap">
+        select notice_id,notice_title,notice_type,notice_content,status,create_by,create_time,update_by,
+               update_time,remark from sys_notice
+    </select>
+
+    <select id="SysOperLogList" resultType="java.util.HashMap">
+        select oper_id,title,business_type,method,request_method,operator_type,oper_name,dept_name,oper_url,
+               oper_ip,oper_location,oper_param,json_result,status,error_msg,oper_time from sys_oper_log
+    </select>
+
+    <select id="SysPostList" resultType="java.util.HashMap">
+        select post_id,post_code,post_name,post_sort,status,create_by,create_time,update_by,update_time,remark from sys_post
+    </select>
+
+    <select id="SysRoleList" resultType="java.util.HashMap">
+        select role_id,role_name,role_key,role_sort,data_scope,menu_check_strictly,dept_check_strictly,status,
+               del_flag,create_by,create_time,update_by,update_time,remark from sys_role
+    </select>
+
+    <select id="SysRoleDeptList" resultType="java.util.HashMap">
+        select role_id,dept_id from sys_role_dept
+    </select>
+
+    <select id="SysRoleMenuList" resultType="java.util.HashMap">
+        select role_id,menu_id from sys_role_menu
+    </select>
+
+    <select id="SysUserList" resultType="java.util.HashMap">
+        select user_id,dept_id,user_name,nick_name,user_type,email,phonenumber,sex,avatar,password,status,
+               del_flag,login_ip,login_date,create_by,create_time,update_by,update_time,remark from sys_user
+    </select>
+
+    <select id="SysUserPostList" resultType="java.util.HashMap">
+        select user_id,post_id from sys_user_post
+    </select>
+
+    <select id="SysUserRoleList" resultType="java.util.HashMap">
+        select user_id,role_id from sys_user_role
+    </select>
+
+    <select id="YzAgentAccountList" resultType="java.util.HashMap">
+        select id,app_id,access_key,password,create_time,update_time,agent_name,agent_id,times,openurl,typesys from yz_agent_account
+    </select>
+
+    <select id="YzAgentPackageList" resultType="java.util.HashMap">
+        select id,package_id,package_agentname,package_name,create_time,error_so,dept_id,user_id from yz_agent_package
+    </select>
+
+    <select id="YzAgentPacketList" resultType="java.util.HashMap">
+        select id,package_id,packet_id,packet_name,packet_wx_name,packet_price,packet_flow,base_packet_type,
+               packet_type,is_profit,show_profit,wechat_pay,balance_pay,create_time,error_flow,error_so,
+               packet_valid_time,packet_cost,is_month,date_limit,deduction,in_stock,packet_valid_type,
+               dept_id,user_id,packet_valid_name from yz_agent_packet
+    </select>
+
+    <select id="YzCardFlowList" resultType="java.util.HashMap">
+        select id,package_id,packet_id,ord_no,true_flow,error_flow,start_time,end_time,create_time,ord_type,
+               status,packet_type,use_flow,iccid,error_time,validate_type,validate_time,use_true_flow,
+               use_so_flow from yz_card_flow
+    </select>
+
+    <select id="YzCardFlowHisList" resultType="java.util.HashMap">
+        select id,total_flow,total_flow_now,month,year,day,iccid,create_time,update_time,total_show_flow,
+               total_show_flow_now from yz_card_flow_his
+    </select>
+
+    <select id="YzCardInfoList" resultType="java.util.HashMap">
+        select id,vid,msisdn,iccid,imsi,open_date,activate_date,agent_id,channel_id,is_pool,pool_id,remind_ratio,
+               virtual_ratio,batch_date,syn_Time,create_by,create_date,update_by,update_date,remarks,del_flag,
+               status_id,package_id,used,remaining,imei,type,network_type,is_sms,sms_number,
+               gprs,dept_id,user_id,out_of_stock from yz_card_info
+    </select>
+
+    <select id="YzCardOperatingList" resultType="java.util.HashMap">
+        select id,create_by,create_date,update_by,update_date,remarks,operating,operating_type from yz_card_operating
+    </select>
+
+    <select id="YzCardPackageList" resultType="java.util.HashMap">
+        select id,package_id,package_agentname,package_name,create_time,error_so,dept_id,user_id from yz_card_package
+    </select>
+
+    <select id="YzCardPacketList" resultType="java.util.HashMap">
+        select id,package_id,packet_id,packet_name,packet_wx_name,packet_price,packet_flow,base_packet_type,packet_type,
+               is_profit,show_profit,wechat_pay,balance_pay,create_time,error_flow,error_so,packet_valid_time,packet_cost,
+               is_month,date_limit,deduction,in_stock,packet_valid_type,dept_id,user_id,packet_valid_name from yz_card_packet
+    </select>
+
+    <select id="YzCardRouteList" resultType="java.util.HashMap">
+        select cd_id,cd_code,cd_name,cd_username,cd_pwd,cd_key,cd_url,cd_operator_type,cd_concurrency,cd_lunxun,cd_control_type,
+               cd_max_use,createTime,updateTime,cd_delete,cd_agent_id,cd_status,cd_alias from yz_card_route
+    </select>
+
+    <select id="YzExecutionTaskList" resultType="java.util.HashMap">
+        select id,create_time,update_time,start_time,end_time,task_name,url,auth,agent_id,type from yz_execution_task
+    </select>
+
+    <select id="YzOrderList" resultType="java.util.HashMap">
+        select id,ord_no,ord_type,ord_name,iccid,wx_ord_no,status,price,account,packet_id,pay_type,cre_type,is_profit,
+               add_package,show_status,open_id,agent_id,profit_type,create_time,validate_type,info,add_parameter,
+               add_package_time,del_flag,is_profit_sharing,profit_sharing_time from yz_order
+    </select>
+
+    <select id="YzPassagewayPollingList" resultType="java.util.HashMap">
+        select id,cd_id,create_date,upd_date,cd_count,cd_current,polling_id,syn_date,polling_type from yz_passageway_polling
+    </select>
+
+    <select id="YzWechatUserList" resultType="java.util.HashMap">
+        select id,user_name,openid,head_image,iccid,sex,create_time,city,province,country,app_id,status,bind_status from yz_wechat_user
+    </select>
+
+    <select id="YzWxAutoreplyList" resultType="java.util.HashMap">
+        select id,auto_id,keywords,content,create_time,create_user,app_id from yz_wx_autoreply
+    </select>
+
+    <select id="YzWxConfigList" resultType="java.util.HashMap">
+        select id,app_id,app_secret,app_token,origin_id,mch_id,paterner_key,index_url,back_url,status,create_time,update_time,
+               create_user,company_id,agent_id,native_url,auth_txt from yz_wx_config
+    </select>
+
+    <select id="YzWxMenuList" resultType="java.util.HashMap">
+        select id,menu_id,menu_name,menu_pid,menu_url,menu_status,create_time,update_time,create_user,app_id,menu_type,media_id from yz_wx_menu
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

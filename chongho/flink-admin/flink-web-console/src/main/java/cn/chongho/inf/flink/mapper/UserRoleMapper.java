@@ -20,25 +20,19 @@ public interface UserRoleMapper extends Mapper<UserRole> {
     })
     int deleteByRoleid(String roleid);
 
-
-
-
-    @Select({"SELECT r.id, r.name, r.createtime, r.creator, r.description,u.name creatoruser,u1.userid ",
-            "FROM role r LEFT JOIN admin_user u ON r.creator=u.id",
+    @Select({"SELECT r.id, r.name, r.createtime, r.creator, r.description,u.name createuser,u1.userid ",
+            "FROM role r LEFT JOIN users u ON r.creator=u.id",
             " LEFT JOIN (SELECT roleid,userid FROM user_role WHERE userid=#{userId}) u1 ON r.id=u1.roleid  "})
     @Results({
             @Result(column="id", property="id", jdbcType= JdbcType.INTEGER, id=true),
             @Result(column="name", property="name", jdbcType= JdbcType.VARCHAR),
             @Result(column="creator", property="creator", jdbcType= JdbcType.INTEGER),
+            @Result(column="createuser", property="createuser", jdbcType= JdbcType.VARCHAR),
             @Result(column="description", property="description", jdbcType= JdbcType.VARCHAR),
             @Result(column = "userid",property = "userid",jdbcType = JdbcType.INTEGER)
     })
     List<Role> selectByUserId(int userId);
 
-
-
-    @Select({"CALL user_role_update(#{roleids},#{userid},#{creator})"})
-    void userRoleUpdate(HashMap<String, Object> map);
 
     @Delete({"DELETE FROM user_role WHERE userid=#{id}"})
     int deleteByUserId(int id);

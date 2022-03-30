@@ -21,6 +21,7 @@ public interface AdminUserMapper extends Mapper<AdminUser> {
             @Result(column="psw", property="psw", jdbcType= JdbcType.VARCHAR),
             @Result(column="email", property="email", jdbcType= JdbcType.VARCHAR),
             @Result(column="creator", property="creator", jdbcType= JdbcType.INTEGER),
+            @Result(column="createuser", property="createUser", jdbcType= JdbcType.VARCHAR),
             @Result(column="flag", property="flag", jdbcType= JdbcType.INTEGER)
     })
     List<AdminUser> selectByQuery(@Param("begin") int begin, @Param("pagesize") int pageSize, @Param("query") String query);

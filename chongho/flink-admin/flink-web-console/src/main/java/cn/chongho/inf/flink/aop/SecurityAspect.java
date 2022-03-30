@@ -13,12 +13,13 @@ package cn.chongho.inf.flink.aop;
 import cn.chongho.inf.flink.model.WebResult;
 import cn.chongho.inf.flink.model.AdminUser;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,8 +38,11 @@ import java.util.List;
 @Component
 @Slf4j
 public class SecurityAspect {
+
     private static final String LOGIN_URL = "/admin/login";
+
     private static final String LOGINOUT_URL = "/admin/loginout";
+
     @Pointcut("execution(public * cn.chongho.inf.flink.controller..*.*(..))")
     public void verification() {
     }
@@ -68,7 +72,6 @@ public class SecurityAspect {
                 //返回没有权限的json
                 return WebResult.noLogin();
             }
-
         }
         AdminUser user = (AdminUser) session.getAttribute("loginUser");
         //判断是否有权限
@@ -85,6 +88,26 @@ public class SecurityAspect {
                 return WebResult.noAuthority();
             }
         }
+    }
 
+
+    @Pointcut("execution(public * cn.chongho.inf.flink.controller.*.list(..))")
+    public void setLoginUser() {
+    }
+
+    @AfterReturning("setLoginUser()")
+    public void arounda(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        for(Object object : args){
+            if(object instanceof BindingAwareModelMap){
+                ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+                HttpServletRequest request = attributes.getRequest();
+                HttpSession session = request.getSession();
+                AdminUser user = (AdminUser) session.getAttribute("loginUser");
+                ModelMap modelMap = (ModelMap) object;
+                modelMap.put("loginUserId", user.getId());
+            }
+        }
     }
 }

@@ -52,16 +52,7 @@ public interface MenuMapper extends Mapper<Menu> {
     @Select({"SELECT url FROM menu"})
     List<String> selectAuthoritiesByRoot();
 
-
-
-    @Select({"CALL role_menu_update(#{menuids},#{roleid},#{userid})"})
-    void roleMenuUpdate(HashMap<String, Object> map);
-
-    @Select({"CALL delete_menu(#{menuid})"})
-    void deleteMenuById(HashMap<String, Object> map);
-
     @Select({"SELECT id, name, url, icon, menutype, display, parentid, creator, createtime,",
             " updateuser, updatetime, flag FROM menu WHERE flag='1' AND menutype<>'2'"})
-
     List<Menu> selectAllEnable();
 }

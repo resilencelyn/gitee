@@ -100,7 +100,7 @@ public class MenuServiceImpl implements MenuService {
     public boolean delete(int id) {
         HashMap<String,Object> map = new HashMap<String, Object>();
 		map.put("menuid",id);
-		mapper.deleteMenuById(map);
+//		mapper.deleteMenuById(map);
         return true;
     }
 

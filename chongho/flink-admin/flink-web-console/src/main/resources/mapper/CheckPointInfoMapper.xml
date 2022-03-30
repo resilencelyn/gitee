@@ -21,6 +21,17 @@
            </foreach >
    </insert>
 
+    <update id="updateBatch"  parameterType="java.util.List">
+        <foreach collection="list" item="point" index="index" open="" close="" separator=";">
+            update check_point_info
+            <set>
+                location = #{point.location},
+                create_time = #{point.createTime}
+            </set>
+            where id = #{point.id}
+        </foreach>
+    </update>
+
     <select id="selectCheckPointInfoByJobId" resultMap="baseMap">
         SELECT * FROM check_point_info WHERE
             job_id = #{checkPointInfo.jobId}

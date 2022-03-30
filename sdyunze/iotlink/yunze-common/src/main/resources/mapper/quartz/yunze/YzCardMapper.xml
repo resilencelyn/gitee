@@ -1,0 +1,1469 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunze.common.mapper.yunze.YzCardMapper">
+
+
+
+	<sql id="whereComm" >
+		<if test="related_cd_id!=null  and related_cd_id != ''">
+			and related_cd_id = #{related_cd_id}
+		</if>
+		<if test="status_id!=null and status_id != ''">
+			and status_id = #{status_id}
+		</if>
+		<if test="status_ShowId != null and status_ShowId != '' ">
+			and status_ShowId =#{status_ShowId}
+		</if>
+		<if test="customize_grouping!=null and customize_grouping != ''">
+			and customize_grouping = #{customize_grouping}
+		</if>
+		<if test="package_id!=null and package_id != ''">
+			<choose>
+				<when test="package_id=='IsNull'">
+					and  ISNULL( package_id ) = 1
+				</when>
+				<otherwise>
+					and package_id = #{package_id}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="timetype != null  and timetype != '' and staTime!=null and endTime!=null">
+			and
+			<if test="timetype == 1">
+				DATE_FORMAT( open_date, '%Y-%m-%d' )
+			</if>
+			<if test="timetype == 2">
+				DATE_FORMAT( activate_date, '%Y-%m-%d' )
+			</if>
+			<if test="timetype == 3">
+				DATE_FORMAT( batch_date, '%Y-%m-%d' )
+			</if>
+			<if test="timetype == 4">
+				DATE_FORMAT( deliver_date, '%Y-%m-%d' )
+			</if>
+			<if test="timetype == 5">
+				DATE_FORMAT( due_expire_time, '%Y-%m-%d' )
+			</if>
+			<if test="timetype == 6">
+				DATE_FORMAT( create_date, '%Y-%m-%d' )
+			</if>
+
+			BETWEEN #{staTime} AND #{endTime}
+		</if>
+		<if test="agent_id != null  and agent_id != '' and agent_id.size>0">
+			and  agent_id in
+			<foreach item="agent_id" collection="agent_id" index="agent_id" open="(" separator="," close=")">
+				#{agent_id}
+			</foreach>
+		</if>
+		<if test="channel_id != null and channel_id != '' and channel_id.size>0">
+			<choose>
+				<when test="channel_id.get(0)=='IsNull'">
+					and  ISNULL( channel_id ) = 1
+				</when>
+				<otherwise>
+					and  channel_id IN
+					<foreach item="channel_id" collection="channel_id" index="channel_id" open="(" separator="," close=")">
+						#{channel_id}
+					</foreach>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="is_pool != null   and is_pool != ''">
+			and  is_pool = #{is_pool}
+		</if>
+		<if test="pool_id != null   and pool_id != ''">
+			and  pool_id = #{pool_id}
+		</if>
+		<if test="del_flag != null   and del_flag != ''">
+			and  del_flag = #{del_flag}
+		</if>
+
+		<if test="UpType != null   and UpType != ''   ">
+			and
+			<if test="UpType == 0">
+				vid
+			</if>
+			<if test="UpType == 1">
+				msisdn
+			</if>
+			<if test="UpType == 2">
+				iccid
+			</if>
+			<if test="UpType == 3">
+				imsi
+			</if>
+			IN
+			<if test="UpArr != null and UpArr != '' and UpArr.size>0">
+				<foreach item="UpArr" collection="UpArr" index="UpArr" open="(" separator="," close=")">
+					#{UpArr.cardNumber}
+				</foreach>
+			</if>
+		</if>
+
+		<if test="dimensionField != null   and dimensionField != ''  and dimensionType != null   and dimensionType != ''  and dimensionValue != null   and dimensionValue != ''  ">
+			and
+			<if test="dimensionField == 1">
+				used
+			</if>
+			<if test="dimensionField == 2">
+				remaining
+			</if>
+			<if test="dimensionType == 1">
+				<![CDATA[ >= ]]>
+			</if>
+			<if test="dimensionType == 2">
+				<![CDATA[ > ]]>
+			</if>
+			<if test="dimensionType == 3">
+				<![CDATA[ = ]]>
+			</if>
+			<if test="dimensionType == 4">
+				<![CDATA[ < ]]>
+			</if>
+			<if test="dimensionType == 5">
+				<![CDATA[ <= ]]>
+			</if>
+			<if test="dimensionType == 6">
+				<![CDATA[ != ]]>
+			</if>
+			#{dimensionValue}
+		</if>
+
+		<if test="exceedsThreshold != null   and exceedsThreshold != '' and exceedsThreshold == 1 ">
+			and used <![CDATA[ >= ]]> remind_ratio
+			and ISNULL( remind_ratio ) <![CDATA[ != ]]>  1
+		</if>
+
+
+
+	</sql>
+
+
+
+
+
+
+
+
+	<!--适配联通ICCID切割一位 -->
+	<sql id="selwhereLianTong" >
+		<where>
+			<include refid="whereComm"/>
+			<if test="value!=null and value!=''">
+				<if test="type==1 ">
+					and ( vid = #{value} or
+					msisdn = #{value} or
+					SUBSTRING(iccid,1,19) = #{value} or
+					imsi = #{value})
+				</if>
+				<if test="type==2 ">
+					and remarks LIKE CONCAT(#{value},'%')
+				</if>
+				<if test="type==3 ">
+					and imei LIKE CONCAT(#{value},'%')
+				</if>
+			</if>
+			<if test="StartAndEndtype != null  and StartAndEndtype != '' and StartValue!=null and EndValue!=null">
+				and
+				<if test="StartAndEndtype == 1">
+					vid
+				</if>
+				<if test="StartAndEndtype == 2">
+					msisdn
+				</if>
+				<if test="StartAndEndtype == 3">
+					SUBSTRING(iccid,1,19)
+				</if>
+				<if test="StartAndEndtype == 4">
+					imsi
+				</if>
+				<if test="StartAndEndtype == 5">
+					imei
+				</if>
+				BETWEEN #{StartValue} AND #{EndValue}
+			</if>
+		</where>
+	</sql>
+
+
+
+	<sql id="selwhere" >
+		<where>
+			<include refid="whereComm"/>
+			<if test="value!=null and value!=''">
+				<if test="type==1 ">
+					and ( vid = #{value} or
+					msisdn = #{value} or
+					iccid = #{value} or
+					imsi = #{value})
+				</if>
+				<if test="type==2 ">
+					and remarks LIKE CONCAT(#{value},'%')
+				</if>
+				<if test="type==3 ">
+					and imei LIKE CONCAT(#{value},'%')
+				</if>
+			</if>
+			<if test="StartAndEndtype != null  and StartAndEndtype != '' and StartValue!=null and EndValue!=null">
+				and
+				<if test="StartAndEndtype == 1">
+					vid
+				</if>
+				<if test="StartAndEndtype == 2">
+					msisdn
+				</if>
+				<if test="StartAndEndtype == 3">
+					iccid
+				</if>
+				<if test="StartAndEndtype == 4">
+					imsi
+				</if>
+				<if test="StartAndEndtype == 5">
+					imei
+				</if>
+				BETWEEN #{StartValue} AND #{EndValue}
+			</if>
+		</where>
+	</sql>
+
+
+
+	<sql id="selBody" >
+		SELECT
+		id,
+		vid,
+		msisdn,
+		iccid,
+		imsi,
+		open_date,
+		activate_date,
+		agent_id,
+		channel_id,
+		DATE_FORMAT( batch_date, "%Y-%m-%d"  ) AS batch_date,
+		DATE_FORMAT( syn_Time, "%Y-%m-%d %H:%i:%S"  ) AS syn_Time,
+		remarks,
+		status_id,
+		status_ShowId,
+		package_id,
+		used,
+		customize_grouping,
+		DATE_FORMAT( deliver_date, "%Y-%m-%d"  ) AS deliver_date,
+		DATE_FORMAT( due_expire_time, "%Y-%m-%d"  ) AS due_expire_time
+		<if test="is_Internal==true">
+			,remind_ratio,
+			virtual_ratio,
+			del_flag,
+			connection_status,
+			is_Disconnected
+		</if>
+		FROM
+		yz_card_info
+	</sql>
+
+
+	<!--	<foreach item="agent_id" collection="agent_id" index="agent_id" open="(" separator="," close=")">
+            #{agent_id}
+        </foreach>-->
+
+	<!--获取 vid -->
+	<select id="selVid"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		vid,
+		iccid
+		FROM
+		yz_card_info
+		<include refid="selwhere"/>
+	</select>
+
+
+
+	<!--获取匹配筛选条件下的卡板id-->
+	<select id="selId"  parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+		id
+		FROM
+		yz_card_info
+		<include refid="selwhere"/>
+	</select>
+
+	<!--获取匹配筛选条件下的卡板id-->
+	<select id="selIdLianTong"  parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+		id
+		FROM
+		yz_card_info
+		<include refid="selwhereLianTong"/>
+	</select>
+
+
+	<select id="selMapLianTong"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<include refid="selBody"/>
+		<include refid="selwhereLianTong"/>
+		LIMIT #{StarRow},#{PageSize}
+	</select>
+
+
+	<select id="selMapLianTongCount" parameterType="java.util.HashMap"  resultType="java.lang.Integer">
+		SELECT
+		COUNT(iccid)
+		FROM
+		yz_card_info
+		<include refid="selwhereLianTong"/>
+	</select>
+
+
+
+	<select id="selMap"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<include refid="selBody"/>
+		<include refid="selwhere"/>
+		LIMIT #{StarRow},#{PageSize}
+	</select>
+
+
+	<select id="selMapCount" parameterType="java.util.HashMap"  resultType="java.lang.Integer">
+		SELECT
+		COUNT(iccid)
+		FROM
+		yz_card_info
+		<include refid="selwhere"/>
+	</select>
+
+
+	<!--按当前赛选条件获取导出数据-->
+	<select id="outCard" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		vid,
+		msisdn,
+		iccid,
+		imsi,
+		imei,
+		status_ShowId as 'status_id' ,
+		gprs,
+		type,
+		package_id,
+		out_of_stock,
+		activate_date,
+		used,
+		remaining,
+		a.user_id,
+		d.dept_name,
+		agent_id,
+		channel_id,
+		customize_grouping,
+		remind_ratio,
+		is_Disconnected,
+		connection_status,
+		DATE_FORMAT( deliver_date, "%Y-%m-%d"  ) AS deliver_date,
+		DATE_FORMAT( due_expire_time, "%Y-%m-%d"  ) AS due_expire_time,
+		remarks
+		FROM
+		sys_dept d
+		LEFT JOIN  yz_card_info a ON a.dept_id = d.dept_id
+		<include refid="selwhere"/>
+	</select>
+
+	<!--按当前赛选条件获取导出数据-->
+	<select id="outCardLianTong" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		vid,
+		msisdn,
+		iccid,
+		imsi,
+		imei,
+		status_ShowId as 'status_id',
+		gprs,
+		type,
+		package_id,
+		out_of_stock,
+		activate_date,
+		used,
+		remaining,
+		a.user_id,
+		d.dept_name,
+		agent_id,
+		channel_id,
+		customize_grouping,
+		remind_ratio,
+		is_Disconnected,
+		connection_status,
+		remarks
+		FROM
+		sys_dept d
+		LEFT JOIN  yz_card_info a ON a.dept_id = d.dept_id
+		<include refid="selwhereLianTong"/>
+	</select>
+
+
+	<!--按当前赛选条件获取导出数据 iccid-->
+	<select id="outCardIccid" parameterType="java.util.HashMap"  resultType="java.lang.String">
+		SELECT
+		iccid
+		FROM
+		yz_card_info
+		<include refid="selwhere"/>
+	</select>
+
+
+	<!--按当前赛选条件获取导出数据 iccid-->
+	<select id="outCardIccidLianTong" parameterType="java.util.HashMap"  resultType="java.lang.String">
+		SELECT
+		iccid
+		FROM
+		yz_card_info
+		<include refid="selwhereLianTong"/>
+	</select>
+
+
+
+	<!--查询单条 卡板数据 数据-->
+	<select id="find" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		a.id,
+		a.vid,
+		a.msisdn,
+		a.iccid,
+		a.imsi,
+		a.open_date,
+		a.activate_date,
+		a.agent_id,
+		a.channel_id,
+		a.is_pool,
+		a.pool_id,
+		a.remind_ratio,
+		a.virtual_ratio,
+		DATE_FORMAT( a.batch_date, "%Y-%m-%d"  ) AS batch_date,
+		DATE_FORMAT( a.syn_Time, "%Y-%m-%d %H:%i:%S"  ) AS syn_Time,
+		DATE_FORMAT( a.create_date, "%Y-%m-%d %H:%i:%S"  ) AS create_date,
+		DATE_FORMAT( a.update_date, "%Y-%m-%d %H:%i:%S"  ) AS update_date,
+		a.create_by,
+		a.update_by,
+		a.remarks,
+		a.del_flag,
+		a.status_id,
+		a.status_ShowId ,
+		a.package_id,
+		b.dept_name,
+		c.cd_operator_type,
+		c.cd_name,
+		a.used,
+		a.remaining,
+		a.deliver_date,
+		a.imei,
+		a.type,
+		a.network_type,
+		a.is_sms,
+		a.sms_number,
+		a.gprs,
+		a.out_of_stock
+		FROM
+		yz_card_info a,
+		sys_dept b,
+		yz_card_route c
+		<where>
+			a.iccid = #{iccid}
+			and a.dept_id = b.dept_id
+			and a.channel_id = c.cd_id
+		</where>
+		LIMIT 1
+	</select>
+
+
+
+
+	<!--查询单条 卡板数据 数据 不关联 Route  -->
+	<select id="findNotRoute" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		a.id,
+		a.vid,
+		a.msisdn,
+		a.iccid,
+		a.imsi,
+		a.open_date,
+		a.activate_date,
+		a.agent_id,
+		a.channel_id,
+		a.is_pool,
+		a.pool_id,
+		a.remind_ratio,
+		a.virtual_ratio,
+		DATE_FORMAT( a.batch_date, "%Y-%m-%d"  ) AS batch_date,
+		DATE_FORMAT( a.syn_Time, "%Y-%m-%d %H:%i:%S"  ) AS syn_Time,
+		DATE_FORMAT( a.create_date, "%Y-%m-%d %H:%i:%S"  ) AS create_date,
+		DATE_FORMAT( a.update_date, "%Y-%m-%d %H:%i:%S"  ) AS update_date,
+		a.create_by,
+		a.update_by,
+		a.remarks,
+		a.del_flag,
+		a.status_id,
+		a.status_ShowId,
+		a.package_id,
+		b.dept_name,
+		a.used,
+		a.remaining,
+		a.deliver_date,
+		a.imei,
+		a.type,
+		a.network_type,
+		a.is_sms,
+		a.sms_number,
+		a.gprs,
+		a.out_of_stock
+		FROM
+		yz_card_info a,
+		sys_dept b
+		<where>
+			a.iccid = #{iccid}
+			and a.dept_id = b.dept_id
+		</where>
+		LIMIT 1
+	</select>
+
+
+	<!--批量导入卡板信息-->
+	<insert id="importCard" parameterType="java.util.HashMap"  >
+		insert
+		into
+		yz_card_info
+		(
+		vid,
+		msisdn,
+		iccid,
+		imsi,
+		open_date,
+		activate_date,
+		agent_id,
+		channel_id,
+		is_pool,
+		batch_date,
+		remarks,
+		status_id,
+		package_id,
+		imei,
+		type,
+		network_type,
+		is_sms,
+		sms_number,
+		gprs,
+		dept_id,
+		user_id,
+		create_date,
+		status_ShowId,
+		create_by
+		)
+		value
+		<foreach item="card_arrs" collection="card_arrs" index="index"  separator="," >
+			(#{card_arrs.vid},#{card_arrs.msisdn},#{card_arrs.iccid},#{card_arrs.imsi},#{card_arrs.open_date},#{card_arrs.activate_date},
+			<if test="card_arrs.agent_id!=null">
+				#{card_arrs.agent_id},
+			</if>
+			<if test="card_arrs.agent_id==null">
+				'100',
+			</if>
+			#{card_arrs.channel_id},
+
+			<if test="card_arrs.is_pool!=null">
+				#{card_arrs.is_pool},
+			</if>
+			<if test="card_arrs.is_pool==null">
+				'0',
+			</if>
+			#{card_arrs.batch_date},#{card_arrs.remarks},
+			<if test="card_arrs.status_id!=null">
+				#{card_arrs.status_id},
+			</if>
+			<if test="card_arrs.status_id==null">
+				'8',
+			</if>
+			#{card_arrs.package_id},#{card_arrs.imei},#{card_arrs.type},#{card_arrs.network_type},
+			<if test="card_arrs.is_sms!=null">
+				#{card_arrs.is_sms},
+			</if>
+			<if test="card_arrs.is_sms==null">
+				'0',
+			</if>
+			#{card_arrs.sms_number},
+			<if test="card_arrs.gprs!=null">
+				#{card_arrs.gprs},
+			</if>
+			<if test="card_arrs.gprs==null">
+				'0',
+			</if>
+			<if test="card_arrs.agent_id!=null">
+				#{card_arrs.agent_id},
+			</if>
+			<if test="card_arrs.agent_id==null">
+				'100',
+			</if>
+			<if test="card_arrs.user_id!=null">
+				#{card_arrs.user_id},
+			</if>
+			<if test="card_arrs.user_id==null">
+				'1',
+			</if>
+			now(),'8',#{create_by})
+		</foreach>
+	</insert>
+
+
+	<!--查询卡号是否存在-->
+	<select id="isExistence" parameterType="java.util.HashMap"  resultType="java.lang.String">
+		SELECT
+		<if test="type==1">
+			vid
+		</if>
+		<if test="type==2">
+			msisdn
+		</if>
+		<if test="type==3">
+			iccid
+		</if>
+		<if test="type==4">
+			imsi
+		</if>
+		FROM
+		yz_card_info
+		<where>
+			<if test="type==1">
+				vid
+			</if>
+			<if test="type==2">
+				msisdn
+			</if>
+			<if test="type==3">
+				iccid
+			</if>
+			<if test="type==4">
+				imsi
+			</if>
+			IN
+			<foreach item="card_arrs" collection="card_arrs" index="index"  separator="," open="(" close=")" >
+				<if test="type==1">
+					#{card_arrs.vid}
+				</if>
+				<if test="type==2">
+					#{card_arrs.msisdn}
+				</if>
+				<if test="type==3">
+					#{card_arrs.iccid}
+				</if>
+				<if test="type==4">
+					#{card_arrs.imsi}
+				</if>
+			</foreach>
+			<if test="channel_idType=='notNull'">
+				and channel_id != ''
+			</if>
+			<if test="channel_idArr != null and channel_idArr != '' and channel_idArr.size>0">
+				and  channel_id IN
+				<foreach item="channel_idArr" collection="channel_idArr" index="channel_idArr" open="(" separator="," close=")">
+					#{channel_idArr}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+
+	<!--查询目前最大自定义号码-->
+	<select id="findMaxVid" resultType="java.lang.String">
+		SELECT
+			MAX(vid)
+		FROM
+			yz_card_info
+	</select>
+
+
+	<!--查询 卡号 分配 通道 状态  -->
+	<select id="findRoute" resultType="java.util.HashMap">
+		SELECT
+		b.cd_status,
+		a.iccid,
+		a.msisdn AS card_no,
+		cd_code,
+		cd_username,
+		cd_pwd,
+		cd_key,
+		a.status_ShowId as 'status_id',
+		a.connection_status,
+		a.activate_date ,
+		b.cd_control_type
+		FROM
+		yz_card_info a,
+		yz_card_route b
+		<where>
+			a.channel_id = b.cd_id
+			and a.iccid = #{iccid}
+		</where>
+	</select>
+
+
+	<!--查询 卡号 分配 通道   -->
+	<select id="findRouteArr" resultType="java.util.HashMap">
+		SELECT
+		b.cd_status,
+		a.iccid,
+		a.msisdn AS card_no,
+		cd_code,
+		cd_username,
+		cd_pwd,
+		cd_key,
+		a.status_ShowId as 'Sel_status_ShowId',
+		a.connection_status as 'Sel_connection_status',
+		b.cd_control_type
+		FROM
+		yz_card_info a,
+		yz_card_route b
+		<where>
+			a.channel_id = b.cd_id
+			and a.iccid in
+			<foreach item="card_arrs" collection="card_arrs" index="index"  separator="," open="(" close=")" >
+				<if test="type==1">
+					#{card_arrs.vid}
+				</if>
+				<if test="type==2">
+					#{card_arrs.msisdn}
+				</if>
+				<if test="type==3">
+					#{card_arrs.iccid}
+				</if>
+				<if test="type==4">
+					#{card_arrs.imsi}
+				</if>
+			</foreach>
+		</where>
+		ORDER BY a.channel_id
+	</select>
+
+
+	<!--卡所属划分-->
+	<update id="dividCard" parameterType="java.util.HashMap">
+		update yz_card_info
+		<set>
+			agent_id = #{set_dept_id},
+			dept_id = #{set_dept_id},
+			user_id = #{set_user_id}
+		</set>
+		<where>
+			id in
+			<foreach item="idArr" collection="idArr" index="agent_id" open="(" separator="," close=")">
+				#{idArr}
+			</foreach>
+		</where>
+	</update>
+
+
+
+
+	<!--通道下 已有使用量的卡 且 剩余 用量>0-->
+	<select id="channelCardCommonly" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		msisdn AS card_no,
+		used,
+		remaining,
+		used / remaining AS usedRemaining
+		FROM
+		yz_card_info
+		<where>
+			channel_id = #{channel_id}
+			and remaining > 0
+		</where>
+		ORDER BY
+		usedRemaining desc,
+		used desc,
+		card_no
+	</select>
+
+
+
+	<!--通道下 所属卡-->
+	<select id="findChannelIdCar" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		msisdn AS card_no
+		FROM
+		yz_card_info
+		<where>
+			channel_id = #{channel_id}
+		</where>
+		ORDER BY
+		used desc,
+		syn_Time asc,
+		card_no
+	</select>
+
+
+
+	<!--通道下 所属卡 设置达量停机的卡   and iccid = '8986111924708527178'  -->
+	<select id="findChannelIdCarStop" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		msisdn AS card_no,
+		remind_ratio,
+		used,
+		status_ShowId as 'status_id',
+		DATE_FORMAT( syn_Time, "%Y-%m-%d"  ) AS syn_Time
+		FROM
+		yz_card_info
+		<where>
+			channel_id = #{channel_id}
+			and remind_ratio!=''
+		</where>
+		ORDER BY
+		used desc,
+		syn_Time asc,
+		card_no
+	</select>
+
+
+
+
+
+	<!--通道下 所属卡 设置 未订购资费停机 的卡-->
+	<select id="findChannelIdDisconnected" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		msisdn AS card_no,
+		status_ShowId as 'status_id'
+		FROM
+		yz_card_info
+		<where>
+			channel_id = #{channel_id}
+			and is_Disconnected = 1
+		</where>
+		ORDER BY
+		used desc,
+		syn_Time asc,
+		card_no
+	</select>
+
+
+
+	<!-- 激活时间为空得的 iccid    -->
+	<select id="activate_dateNull" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		msisdn AS card_no
+		FROM
+		yz_card_info
+		<where>
+			iccid  in
+			<foreach item="Arr" collection="Arr" index="Arr" open="(" separator="," close=")">
+				#{Arr.iccid}
+			</foreach>
+			and ISNULL(activate_date)=0
+		</where>
+	</select>
+
+	<!--通道下 超出用量 和 暂未使用用量查询 Serious  超出用量的 ， Slight 没用量的   -->
+	<select id="channelCardSeriousAndSlight" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		msisdn AS card_no,
+		used,
+		remaining
+		FROM
+		yz_card_info
+		<where>
+			channel_id = #{channel_id}
+			<if test="type=='Serious'">
+				AND remaining <![CDATA[ <= ]]>   0
+				AND used > 0
+			</if>
+			<if test="type=='Slight'">
+				and used = 0
+				and remaining = 0
+			</if>
+		</where>
+		ORDER BY
+		used DESC,
+		card_no
+	</select>
+
+	<!--获取某通道下大于百分之多少的 卡信息  percentage 0.8 = 80% -->
+	<select id="findPercentage" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+			iccid,
+			card_no,
+			used,
+			remaining
+		FROM
+			( SELECT iccid, msisdn AS card_no, used, remaining, used /( used + remaining ) AS percentage FROM yz_card_info WHERE
+			channel_id = #{channel_id}  AND used > 0  ) temp
+		WHERE
+		temp.percentage >= #{percentage}
+	</select>
+
+
+	<!-- 修改 卡激活时间 开卡日期-->
+	<update id="updActivate" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			activate_date = #{activate_date},
+			syn_Time =now()
+			<if test="open_date!=null">
+				,open_date =  #{open_date}
+			</if>
+		</set>
+		<where>
+			iccid =#{iccid}
+		</where>
+	</update>
+
+	<!-- 修改 卡状态-->
+	<update id="updStatusId" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			status_id = #{status_id},
+			status_ShowId = #{status_ShowId},
+			syn_Time =now()
+		</set>
+		<where>
+			iccid =#{iccid}
+		</where>
+	</update>
+
+
+	<!-- 修改  批量 卡状态-->
+	<update id="updStatusIdArr" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			status_id = #{status_id},
+			status_ShowId = #{status_ShowId},
+			syn_Time =now()
+		</set>
+		<where>
+			iccid in
+			<foreach item="iccidArr" collection="iccidArr" index="iccidArr" open="(" separator="," close=")">
+				#{iccidArr}
+			</foreach>
+		</where>
+	</update>
+
+	<!-- 修改  批量 卡状态-->
+	<update id="updction" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			connection_status = #{connection_status},
+			syn_Time =now()
+		</set>
+		<where>
+			iccid in
+			<foreach item="iccidArr" collection="iccidArr" index="iccidArr" open="(" separator="," close=")">
+				#{iccidArr}
+			</foreach>
+		</where>
+	</update>
+
+
+
+	<!-- 修改 断开网状态-->
+	<update id="updConnectionStatus" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			connection_status = #{connection_status},
+			syn_Time =now()
+		</set>
+		<where>
+			iccid =#{iccid}
+		</where>
+	</update>
+
+
+	<!-- 修改 卡用量-->
+	<update id="updUsed" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			used = #{used},
+			remaining = #{remaining},
+			syn_Time =now()
+		</set>
+		<where>
+			iccid =#{iccid}
+		</where>
+	</update>
+
+	<!--备份 卡所属关联-->
+	<select id="BackupAssociate" resultType="java.util.HashMap">
+		SELECT
+			id,
+			iccid,
+			dept_id,
+			user_id
+		FROM
+			yz_card_info
+	</select>
+
+	<!-- 连接管理 设置时 备份 卡所属关联-->
+	<select id="SetBackupAssociate"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+		SELECT
+		id,
+		iccid,
+		remind_ratio,
+		channel_id,
+		package_id
+		FROM
+		yz_card_info
+		<where>
+			iccid in
+			<foreach item="card_arrs" collection="card_arrs" index="card_arrs" open="(" separator="," close=")">
+				#{card_arrs.iccid}
+			</foreach>
+		</where>
+	</select>
+
+	<!--查询单卡激活时间-->
+	<select id="findActivateDate" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+		DATE_FORMAT(activate_date, "%Y-%m-%d %H:%i:%S"  )
+		FROM
+		yz_card_info
+		<where>
+			iccid = #{iccid}
+		</where>
+	</select>
+
+
+	<!-- yz_card_info 新增 剩余-->
+	<update id="addInfoRemaining" parameterType="java.util.HashMap">
+		UPDATE
+		yz_card_info
+		<set>
+			remaining = remaining+#{flow}
+		</set>
+		<where>
+			iccid =#{iccid}
+		</where>
+	</update>
+
+
+	<!-- 连接管理设置 修改-->
+	<update id="SetCard" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			<if test="package_id!=null">
+				package_id =  #{package_id},
+			</if>
+			<if test="channel_id!=null">
+				channel_id =  #{channel_id},
+			</if>
+			<if test="Is_remind_ratio == 1">
+				remind_ratio =  #{remind_ratio},
+			</if>
+			<if test="is_Disconnected == 1 or is_Disconnected == 0">
+				is_Disconnected =#{is_Disconnected},
+			</if>
+		</set>
+		<where>
+			iccid in
+			<foreach item="card_arrs" collection="card_arrs" index="card_arrs" open="(" separator="," close=")">
+				#{card_arrs.iccid}
+			</foreach>
+		</where>
+	</update>
+
+	<!-- 修改 imei-->
+	<update id="updimei" parameterType="java.util.HashMap" >
+		update yz_card_info
+		<set>
+			imei = #{used},
+			syn_Time =now()
+		</set>
+		<where>
+			iccid =#{iccid}
+		</where>
+	</update>
+
+
+
+	<!--查询字典信息-->
+	<select id="findDict"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+		SELECT
+			dict_label,
+			dict_value
+		FROM
+			sys_dict_data
+		WHERE
+			dict_type = #{dict_type}
+	</select>
+
+
+	<!--停复机,断开网-->
+	<select id="addsel" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+		select iccid,status_ShowId as 'status_id',connection_status from yz_card_info
+		<where>
+			iccid in
+			<foreach item="card_arrs" collection="card_arrs" index="card_arrs" open="(" separator="," close=")">
+				#{card_arrs.iccid}
+			</foreach>
+		</where>
+	</select>
+
+
+
+
+	<!--代理 所属卡-->
+	<select id="findBelongingCard" parameterType="java.util.HashMap"  resultType="java.lang.String">
+		SELECT
+		iccid
+		FROM
+		yz_card_info
+		<where>
+			agent_id in
+			<foreach item="agent_id" collection="agent_id" index="agent_id" open="(" separator="," close=")">
+				#{agent_id}
+			</foreach>
+		</where>
+	</select>
+
+
+	<!--查询 分组、备注-->
+	<select id="findGroupingAndRemarks" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		customize_grouping,
+		remarks,
+		deliver_date
+		FROM
+		yz_card_info
+		<where>
+			iccid in
+			<foreach item="card_arrs" collection="card_arrs" index="card_arrs" open="(" separator="," close=")">
+				#{card_arrs.iccid}
+			</foreach>
+		</where>
+	</select>
+
+
+	<!--查询 分组、备注-->
+	<update id="updGroupingAndRemarks" parameterType="java.util.HashMap"  >
+		<foreach item="card_arrs" collection="card_arrs" index="card_arrs"  >
+			UPDATE
+			yz_card_info
+			<set>
+				customize_grouping =
+				<if test="card_arrs.customize_grouping!=null ">#{card_arrs.customize_grouping}</if>
+				<if test="card_arrs.customize_grouping==null ">""</if>,
+				remarks =
+				<if test="card_arrs.remarks!=null ">#{card_arrs.remarks}</if>
+				<if test="card_arrs.remarks==null ">""</if>,
+				deliver_date =
+				<if test="card_arrs.deliver_date!=null ">#{card_arrs.deliver_date}</if>
+				<if test="card_arrs.deliver_date==null ">""</if>,
+			</set>
+			<where>
+				iccid = #{card_arrs.iccid}
+			</where>
+			;
+		</foreach>
+	</update>
+
+
+
+	<!--查询 代理下 卡号-->
+	<select id="findAgentIccid" parameterType="java.util.HashMap"  resultType="java.lang.String">
+		SELECT
+		iccid
+		FROM
+		yz_card_info
+		<where>
+			iccid in
+			<foreach item="card_arrs" collection="card_arrs" index="card_arrs" open="(" separator="," close=")">
+				#{card_arrs.iccid}
+			</foreach>
+			and FIND_IN_SET(agent_id,#{FindAgent_id})
+		</where>
+	</select>
+
+
+
+	<!--查询下级代 理商 返回 格式 1,2-->
+	<select id="queryChildrenAreaInfo" parameterType="java.util.HashMap" resultType="java.lang.String">
+        <![CDATA[
+            SELECT queryChildrenAreaInfo(#{agent_id})
+        ]]>
+    </select>
+
+	<!--获取 所属代理下 卡分组-->
+	<select id="getCardGrouping" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+		customize_grouping
+		FROM
+		yz_card_info
+		<where>
+			ISNULL(customize_grouping )= 0
+			AND LENGTH(
+			trim( customize_grouping ))> 0
+			<if test="agent_id!=null and agent_id!=''">
+				AND FIND_IN_SET(agent_id,#{agent_id})
+			</if>
+		</where>
+		GROUP BY
+		customize_grouping
+	</select>
+
+	<!--查询销售 / 合伙人-->
+	<select id="findSalesPartner" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		u.user_id,
+		u.nick_name,
+		u.phonenumber,
+		u.user_name,
+		u.del_flag,
+		u.status,
+		(
+		SELECT
+		GROUP_CONCAT( sm.perms )
+		FROM
+		sys_menu sm
+		WHERE
+		sm.menu_id IN ( SELECT srm.menu_id FROM sys_role_menu srm WHERE srm.role_id IN ( SELECT a.role_id FROM sys_user_role a WHERE a.user_id = u.user_id ) )
+		AND sm.menu_type = 'F'
+		AND sm.parent_id = 0
+		) AS 'Btns'
+		FROM
+		sys_user u
+		<where>
+			<if test="isSales!=null">
+				and u.isSales = #{isSales}
+			</if>
+			<if test="isPartner!=null">
+				and u.isPartner = #{isPartner}
+			</if>
+			<if test="isdept_id!=null">
+				and u.dept_id = #{isdept_id}
+			</if>
+			<if test="user_id!=null">
+				and u.user_id = #{user_id}
+			</if>
+		</where>
+	</select>
+
+	<select id="StatusChange" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+		    a.iccid,
+			a.msisdn AS card_no,
+			c.cd_code,
+			c.cd_username,
+			c.cd_pwd,
+			c.cd_key,
+			a.status_ShowId as 'status_id',
+			c.cd_status
+		FROM
+			yz_card_info a,
+			yz_card_flow b,
+			yz_card_route c
+		WHERE
+			a.iccid = b.iccid
+			and a.status_ShowId = 5
+			and b.start_time <![CDATA[ <= ]]> now()
+			and b.end_time>now()
+			and b.`status` in (1,2)
+			and ISNULL(a.channel_id)!=1
+			and c.cd_id = a.channel_id
+			and c.cd_status = 1
+		GROUP BY a.iccid
+	</select>
+
+	<select id="SleMulti" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		a.iccid,
+		a.msisdn AS card_no,
+		a.remaining,
+		a.status_ShowId as 'status_id',
+		d.pay_type,
+		e.source_type,
+		e.execution_status,
+		c.cd_username,
+		c.cd_pwd,
+		c.cd_key,
+		c.cd_status,
+		c.cd_code,
+		d.ord_no
+		FROM
+		yz_card_route c
+		LEFT JOIN yz_card_info a ON c.cd_id = a.channel_id
+		LEFT JOIN yz_order d ON d.iccid = a.iccid
+		LEFT JOIN  yz_card_flow b ON d.iccid = b.iccid
+		LEFT JOIN yz_card_info_change e ON e.iccid = b.iccid
+		WHERE
+		a.status_id != '1'
+		and b.start_time  <![CDATA[ <= ]]>  now()
+		and b.end_time <![CDATA[ > ]]>  now()
+		and d.pay_type = 'wx'
+		and d.status = '1'
+		and e.execution_status = '2'
+		and e.source_type = '4'
+		and e.remark != '执行成功！'
+		and b.use_so_flow  <![CDATA[ < ]]> b.true_flow
+		<if test="cardArrs != null  and cardArrs != '' and cardArrs.size>0">
+			and d.iccid NOT IN
+			<foreach item="cardArrs" collection="cardArrs" index="cardArrs" open="(" separator="," close=")">
+				#{cardArrs.iccid}
+			</foreach>
+		</if>
+		GROUP BY d.iccid
+	</select>
+
+
+	<!--卡所属划分 回滚 -->
+	<update id="dividCardBk" parameterType="java.util.HashMap">
+		update yz_card_info
+		<set>
+			agent_id = #{dept_id},
+			dept_id = #{dept_id},
+			user_id = #{user_id}
+		</set>
+		<where>
+			id in
+			<foreach item="idArr" collection="idArr" index="idArr" open="(" separator="," close=")">
+				#{idArr.id}
+			</foreach>
+			<if test="error_agent_id!=null and error_agent_id != '' ">
+				and agent_id = #{error_agent_id}
+			</if>
+			<if test="error_user_id!=null  and error_user_id != '' ">
+				and user_id = #{error_user_id}
+			</if>
+		</where>
+	</update>
+
+	<update id="UpdateFill" parameterType="java.util.HashMap">
+		update yz_card_info
+		<set>
+			<if test="customize_grouping != null">
+				customize_grouping =#{customize_grouping},
+			</if>
+			<if test="remarks != null">
+				remarks =#{remarks},
+			</if>
+			<if test="deliver_date != null">
+				deliver_date =#{deliver_date}
+			</if>
+		</set>
+		<where>
+			iccid in
+			<foreach item="iccids" collection="iccids" index="iccids" open="(" separator="," close=")">
+				#{iccids}
+			</foreach>
+		</where>
+	</update>
+
+
+	<update id="updDueExpireTime" parameterType="java.util.HashMap">
+		update yz_card_info
+		<set>
+			due_expire_time =#{due_expire_time}
+		</set>
+		<where>
+			iccid in
+			<foreach item="iccids" collection="iccids" index="iccids" open="(" separator="," close=")">
+				#{iccids.iccid}
+			</foreach>
+		</where>
+	</update>
+
+	<!--用量详情导出 （同步导出 分组 、备注、发货时间）-->
+	<select id="hisList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		iccid,
+		deliver_date,
+		customize_grouping,
+		remarks
+		FROM
+		yz_card_info
+		<where>
+			iccid in
+			<foreach item="iccids" collection="iccids" index="iccids" open="(" separator="," close=")">
+				#{iccids}
+			</foreach>
+		</where>
+	</select>
+
+
+
+	<!--查询已订购用量状态已停机卡号-->
+	<select id="findStatusAbnormal" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		a.iccid,
+		a.msisdn ,
+		a.imsi,
+		a.imei,
+		c.cd_name,
+		a.status_Id ,
+		a.status_ShowId ,
+		c.cd_status,
+		DATE_FORMAT( a.syn_Time, "%Y-%m-%d %H:%i:%S"  ) AS syn_Time,
+		a.used,
+		a.remaining,
+		DATE_FORMAT( a.due_expire_time, "%Y-%m-%d %H:%i:%S"  ) AS due_expire_time,
+		a.remarks,
+		a.customize_grouping,
+		a.activate_date,
+		a.activate_date,
+		a.deliver_date
+		FROM
+		yz_card_info a,
+		yz_card_flow b,
+		yz_card_route c
+		<where>
+			a.iccid = b.iccid
+			AND a.status_ShowId = 5
+			AND b.start_time <![CDATA[ <= ]]>   now() AND b.end_time > now()
+			AND b.`status` IN ( 1, 2 )
+			AND ISNULL( a.channel_id )!= 1
+			AND c.cd_id = a.channel_id
+			AND c.cd_status = 1
+		</where>
+		GROUP BY a.iccid
+	</select>
+
+
+	<!-- 卡状态 分组 统计 -->
+	<select id="status_ShowIdGroup" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		status_ShowId,count(1) as 'cardCount'
+		from yz_card_info
+		<include refid="selwhere"/>
+		GROUP BY status_ShowId
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

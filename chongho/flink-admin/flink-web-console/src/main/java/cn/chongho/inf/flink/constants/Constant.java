@@ -140,4 +140,22 @@ public class Constant {
             return null;
         }
     }
+
+    /**
+     * 数据权限，数据类型
+     */
+    public enum DataType {
+        JOB(1),
+        CDCJOB(2);
+
+        private Integer value;
+
+        public Integer getValue() {
+            return value;
+        }
+
+        DataType(Integer value) {
+            this.value = value;
+        }
+    }
 }

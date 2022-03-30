@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface CdcJobMapper extends Mapper<CdcJob> {
 
-    List<CdcJob> selectByPage(@Param("offset") int offset, @Param("limit") int limit,@Param("cdcJob") CdcJob cdcJob);
+    List<CdcJob> selectByPage(@Param("offset") int offset, @Param("limit") int limit,@Param("cdcJob") CdcJob cdcJob, @Param("loginUserId") Integer loginUserId);
 
     int countByPage(@Param("cdcJob") CdcJob cdcJob);
 

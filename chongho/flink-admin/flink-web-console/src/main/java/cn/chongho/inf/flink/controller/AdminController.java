@@ -10,7 +10,6 @@
  */
 package cn.chongho.inf.flink.controller;
 
-import cn.chongho.inf.flink.restapi.JobApi;
 import cn.chongho.inf.flink.model.*;
 import cn.chongho.inf.flink.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 后台管理主控制器
@@ -42,15 +39,6 @@ public class AdminController {
     private AdminUserService adminUserService;
 
     @Autowired
-    private JobApi jobApi;
-
-    @Autowired
-    private JobService jobService;
-
-    @Autowired
-    private CdcJobService cdcJobService;
-
-    @Autowired
     private ClusterService clusterService;
 
     /**
@@ -61,16 +49,12 @@ public class AdminController {
     @GetMapping(value={"/admin/index","/"})
     public String index(ModelMap map, HttpSession session){
 
-
         AdminUser user = (AdminUser) session.getAttribute("loginUser");
         List<Menu> menus = menuService.selectByUser(user.getId());
         map.put("treeMenu",menus);
 
-        List<Cluster> allCluster = clusterService.getAllCluster();
-
-        List<Map<String, String>> flinkList = new ArrayList<>();
-
-        map.put("flinkList", flinkList);
+        map.put("flinkList", clusterService.getColonyInfo());
+//        map.put("flinkList", flinkList);
         return "index";
     }
 

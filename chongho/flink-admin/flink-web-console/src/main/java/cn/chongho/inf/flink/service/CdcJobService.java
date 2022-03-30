@@ -18,7 +18,7 @@ public interface CdcJobService {
     int selectCount(CdcJob cdcJob);
 
 
-    List<CdcJob> selectByPage(int page, int pageSize ,CdcJob cdcJob);
+    List<CdcJob> selectByPage(int page, int pageSize ,CdcJob cdcJob, Integer loginUserId);
 
     CdcJob selectById(Integer id);
 
@@ -31,4 +31,6 @@ public interface CdcJobService {
     boolean runJob(Integer id, Integer loginUserId);
 
     boolean savepoint(Integer id, Integer loginUserId);
+
+    boolean stopJob(Integer id, Integer loginUserId);
 }

@@ -183,8 +183,7 @@ public class CdcSqlServiceImpl {
 
 
     private String createTableName(Integer jobId, Integer dbId,String dbName ,String tableName){
-        String tempName = dbName + "_" + dbId + "_" + tableName + "_" + jobId;
-        return tempName.replaceAll("-", "_");
+        return "`" + dbName + "_" + dbId + "_" + tableName + "_" + jobId + "`";
     }
 
     private String createTableNameKey(Integer dbId,String dbName ,String tableName){
@@ -207,7 +206,7 @@ public class CdcSqlServiceImpl {
         StringBuilder tableSql = new StringBuilder("CREATE TABLE ").append(tableName).append(" ( ");
 
         columnList.forEach(column -> {
-            tableSql.append(column.getColumnName()).append(" ");
+            tableSql.append("`").append(column.getColumnName()).append("`").append(" ");
             String columnType = column.getColumnType();
 
             String dataType;
@@ -283,10 +282,23 @@ public class CdcSqlServiceImpl {
         String targetTableName = createTableName(cdcJob.getId() , cdcJob.getTargetDbId() ,cdcJob.getTargetDbName(), cdcJob.getTargetTableName());
 
         StringBuilder insertSql = new StringBuilder();
-        String targetColumn = columnAssociationList.stream().map(ColumnAssociation::getTargetColumnName).collect(Collectors.joining(","));
-        String sourceColumn = columnAssociationList.stream().map(ColumnAssociation::getSourceColumnName).collect(Collectors.joining(","));
-        insertSql.append("INSERT  INTO ").append(targetTableName).append(" ( ").append(targetColumn).append(")");
-        insertSql.append(" SELECT ").append(sourceColumn).append(" FROM ").append(sourceTableName);
+
+//        String targetColumn = columnAssociationList.stream().map(ColumnAssociation::getTargetColumnName).collect(Collectors.joining(","));
+//        String sourceColumn = columnAssociationList.stream().map(ColumnAssociation::getSourceColumnName).collect(Collectors.joining(","));
+
+        StringBuilder targetColumnBuilder = new StringBuilder();
+        StringBuilder sourceColumnBuilder = new StringBuilder();
+        for(ColumnAssociation columnAssociation : columnAssociationList){
+
+            targetColumnBuilder.append("`").append(columnAssociation.getTargetColumnName()).append("`").append(",");
+
+            sourceColumnBuilder.append("`").append(columnAssociation.getSourceColumnName()).append("`").append(",");
+        }
+        targetColumnBuilder.deleteCharAt(targetColumnBuilder.length()-1);
+        sourceColumnBuilder.deleteCharAt(sourceColumnBuilder.length()-1);
+
+        insertSql.append("INSERT  INTO ").append(targetTableName).append(" ( ").append(targetColumnBuilder.toString()).append(")");
+        insertSql.append(" SELECT ").append(sourceColumnBuilder.toString()).append(" FROM ").append(sourceTableName);
         return insertSql.toString();
     }
 }

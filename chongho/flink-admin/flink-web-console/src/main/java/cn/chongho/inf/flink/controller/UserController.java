@@ -89,6 +89,7 @@ public class UserController {
 
             success = userService.update(user);
         }else {
+            user.setTenantid(0);
             user.setCreator(loginUser.getId());
             success = userService.insert(user);
         }

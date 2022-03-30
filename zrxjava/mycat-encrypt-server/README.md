@@ -15,7 +15,7 @@
 
 下载 release 压缩包，直接解压即可。
 
-[v1.6.7.7-release下载](https://gitee.com/zrxjava/mycat-encrypt-server/releases/v1.6.7.7-release)
+[v1.6.7.8-release下载](https://gitee.com/zrxjava/mycat-encrypt-server/releases/v1.6.7.8-release)
 
 ## 运行
 ### linux

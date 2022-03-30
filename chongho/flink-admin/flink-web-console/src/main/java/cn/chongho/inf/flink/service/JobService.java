@@ -12,8 +12,7 @@ public interface JobService {
 
     int selectCount(Job job);
 
-
-    List<Job> selectByPage(int page, int pageSize,Job job);
+    List<Job> selectByPage(int page, int pageSize,Job job, Integer loginUserId);
 
     Job selectById(Integer id);
 
@@ -24,4 +23,6 @@ public interface JobService {
     boolean runJob(Integer id, Integer loginUserId);
 
     boolean savepoint(Integer id, Integer loginUserId);
+
+    boolean stopJob(Integer id, Integer loginUserId);
 }

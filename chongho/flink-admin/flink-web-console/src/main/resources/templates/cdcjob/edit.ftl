@@ -71,7 +71,7 @@
                                     </#if>
                                 </select>
 
-                                <label class="priK" style="margin-left: 13px"> 主键：</label>
+                                <label class="priK" style="margin-left: 13px"> primary_key：</label>
                                 <input class="priK" type="text" style="width: 100px" id="sourceTablePriKey_${sd_index}" value="${(sd.tablePriKey)!}">
                             </div>
                         </#list>
@@ -102,7 +102,7 @@
                         <select id="savepointPath" name="savepointPath"  class="input-group-lg" style="margin-left: 13px;max-width: 400px">
                             <option value="" >请选择保存点</option>
                             <#list checkPointList as cp>
-                                <option value="${(cp.location)!}" <#if cdcJob?? && cp.location?? && cp.location != '' && cdcJob.savepointPath == cp.location >selected</#if> >
+                                <option value="${(cp.location)!}" <#if cdcJob?? && cp.location?? && cp.location != '' && cdcJob.savepointPath?? && cdcJob.savepointPath == cp.location >selected</#if> >
                                     ${(cp.location)!}_${cp.createTime?string("yyyy-MM-dd HH:mm:ss")}
                                 </option>
                             </#list>
@@ -115,13 +115,15 @@
                             <option value="latest-offset" <#if cdcJob?? && cdcJob.scanStartupMode == 'latest-offset' >selected</#if>>latest-offset</option>
                         </select>
                         <label  style="margin-left: 13px" > 跳过记录：</label>
-                        <input type="checkbox" id="skipped_c" value="c" <#if cdcJob?? && cdcJob.skippedOperations?contains("c")>checked="checked"</#if> style="margin-left: 13px" > 插入/创建
-                        <input type="checkbox" id="skipped_u" value="u" <#if cdcJob?? && cdcJob.skippedOperations?contains("u")>checked="checked"</#if> style="margin-left: 13px"> 更新
-                        <input type="checkbox" id="skipped_d" value="d" <#if cdcJob?? && cdcJob.skippedOperations?contains("d")>checked="checked"</#if> style="margin-left: 13px"> 删除
+                        <input type="checkbox" id="skipped_c" value="c" <#if cdcJob?? && cdcJob.skippedOperations?? && cdcJob.skippedOperations?contains("c")>checked="checked"</#if> style="margin-left: 13px" > 插入/创建
+                        <input type="checkbox" id="skipped_u" value="u" <#if cdcJob?? && cdcJob.skippedOperations?? && cdcJob.skippedOperations?contains("u")>checked="checked"</#if> style="margin-left: 13px"> 更新
+                        <input type="checkbox" id="skipped_d" value="d" <#if cdcJob?? && cdcJob.skippedOperations?? && cdcJob.skippedOperations?contains("d")>checked="checked"</#if> style="margin-left: 13px"> 删除
                     </div>
                     <div class="form-group" >
-                        <label class="col-sm-2 control-label no-padding-right" > 目标表主键:</label>
-                        <input type="text" id="primaryColumn" name="primaryColumn" value="${(cdcJob.primaryColumn)!}"  class="col-xs-6 col-sm-6" style="margin-left: 13px">
+                        <label class="col-sm-2 control-label no-padding-right" > 目标表primary_key：</label>
+                        <div class="col-sm-6" style="padding-top: 10px">
+                            <input type="text" id="primaryColumn" name="primaryColumn" value="${(cdcJob.primaryColumn)!}"  class="col-xs-6 col-sm-6">
+                        </div>
                     </div>
 
                     <table class="table table-bordered" id="jobType1Insert">
@@ -157,7 +159,7 @@
 
                     <div class="form-group" id="jobType2Insert">
                         <label class="col-sm-2 control-label no-padding-right" > 插入sql语句: </label>
-                        <label id ="insertTips" class="col-sm-30" style="color: red;margin-left: 30px"> 表名规则请遵循: dbName_dbId_tableName? </label>
+                        <label class="col-sm-30" style="color: red;margin-left: 30px"> 表名规则请遵循: dbName_dbId_tableName </label>
                         <div class="col-sm-10">
                             <textarea  id="insertSql" name="insertSql" class="form-control" rows="10">${(cdcJob.columnAssociation)!}</textarea>
                         </div>
@@ -178,22 +180,7 @@
 </div>
 <script>
 
-    var targetColumn = "";
 
-    jQuery(document).ready(function(){
-        var jobType = $("input[name=jobType]:checked").val();
-        changeJobType(jobType);
-        if($("#id").val()!=""){
-            $("input[name=jobType]").attr("disabled",true);
-            $("#addDbFlag").hide();
-            if(jobType == 1){
-                targetColumn = $(".targetColumn").html();
-                targetColumn = targetColumn.replace("selected","");
-            }
-        }else{
-            $("#savepointPathDiv").hide();
-        }
-    });
 
     function addSourceDb() {
         var dbIndex = parseInt($("#sdbList").children(".sourceDbDiv:last-child").attr("dbIndex"));
@@ -215,7 +202,7 @@
         addDb = addDb +  "<option value='-1' >请选择表</option></select>";
 
 
-        addDb = addDb + "<label class='priK' style='margin-left: 13px'> 主键：</label>";
+        addDb = addDb + "<label class='priK' style='margin-left: 13px'> primary_key：</label>";
         addDb = addDb + "<input class='priK' type='text' style='width: 100px' id='sourceTablePriKey_"+dbIndex+"'>";
 
         addDb = addDb + "</div>";
@@ -229,18 +216,25 @@
         })
     }
 
+    var targetColumn = "";
 
+    jQuery(document).ready(function(){
+        var jobType = $("input[name=jobType]:checked").val();
+        changeJobType(jobType);
+        if($("#id").val()!=""){
+            $("input[name=jobType]").attr("disabled",true);
+            $("#addDbFlag").hide();
+            if(jobType == 1){
+                targetColumn = $(".targetColumn").html();
+                targetColumn = targetColumn.replace("selected","");
+            }
+        }else{
+            $("#savepointPathDiv").hide();
+        }
+    });
 
     $("input[name=jobType]").click(function () {
         changeJobType($("input[name=jobType]:checked").val());
-    });
-
-    $("#insertTips").mouseover(function (){
-        $("#insertSql").text(" INSERT  INTO dbName_dbId_tableName ( id,field1,field2,fieldN) SELECT id,field1,field2,fieldN FROM dbName_dbId_tableName");
-    });
-
-    $("#insertTips").mouseout(function (){
-        $("#insertSql").text("");
     });
 
     function changeJobType(jobType) {
@@ -261,22 +255,16 @@
 
 
     function add() {
-        let jobType = $("input[name=jobType]:checked").val();
-        let targetDbId = $("#targetDbId").val();
-        let targetTableId = $("#targetTableId").val();
-        let jsonSourceInfo = buildJsonSoueceInfo();
-        let jobName = $("#jobName").val();
+        var jobType = $("input[name=jobType]:checked").val();
+        var targetDbId = $("#targetDbId").val();
+        var targetTableId = $("#targetTableId").val();
 
-        if (jobName == "" || jobName == null) {
-            alert("请完善任务名称");
-            return;
-        }
+        var jsonSourceInfo = buildJsonSourceInfo();
 
         if(jsonSourceInfo == null){
-            alert("请完善数据源信息");
+            alert("请完善源数据信息");
             return;
         }
-
         if(!checkDb()){
             return;
         }
@@ -331,7 +319,7 @@
                 }
             },
             error: function (response) {
-                alert("操作失败!");
+                alert("链接服务器失败");
             }
         });
     }
@@ -372,11 +360,11 @@
     }
 
 
-    function buildJsonSoueceInfo(){
+    function buildJsonSourceInfo(){
         var sourceInfo = $(".sourceDbDiv");
         var len = sourceInfo.length;
         var thisId;
-        var jsonsoueceInfo = [];
+        var jsonsourceInfo = [];
 
         var dbId;
         var tableId;
@@ -395,9 +383,9 @@
                     "tablePriKey" : $("#sourceTablePriKey_"+thisId).val()
                     // "tableName" : $("#sourceTable_"+thisId).find("option:selected").text()
                 };
-            jsonsoueceInfo.push(arr);
+            jsonsourceInfo.push(arr);
         }
-        return jsonsoueceInfo;
+        return jsonsourceInfo;
     }
 
     /**
@@ -444,7 +432,7 @@
                     }
                 },
                 error: function (response) {
-                    alert("操作失败!");
+                    alert("链接服务器失败");
                 }
             });
         }
@@ -476,7 +464,7 @@
                     }
                 },
                 error: function (response) {
-                    alert("操作失败!");
+                    alert("链接服务器失败");
                 }
             });
         }
@@ -505,7 +493,7 @@
                 }
             },
             error: function (response) {
-                alert("操作失败!");
+                alert("链接服务器失败");
             }
         });
     }

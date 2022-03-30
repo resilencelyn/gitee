@@ -72,4 +72,9 @@ public class CheckPointInfoServiceImpl implements CheckPointInfoService {
     public void addByBatch(List<CheckPointInfo> checkPointInfos) {
         checkPointInfoMapper.insertByBatch(checkPointInfos);
     }
+
+    @Override
+    public void updateByBatch(List<CheckPointInfo> checkPointInfos) {
+        checkPointInfoMapper.updateBatch(checkPointInfos);
+    }
 }

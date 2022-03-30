@@ -23,12 +23,12 @@ jsmind思维导图多人协作版（可本地安装、可扩展源码）
 + 安装依赖
     - 安装 [Python](https://www.python.org/downloads/) ，我本地(win系统)安装的是 [Python 3.7.8rc1](https://www.python.org/downloads/release/python-378rc1/) ，版本比这个大就应该可以
     - 安装依赖，在工程根目录执行 pip install -r reuqirements.txt 将项目的依赖安装到python目录（类似java里的maven），如果想把相关依赖安装到其他目录进行分类管理可以采用virtualenvwrapper
-    -    
+    -
     - ![](https://img-blog.csdnimg.cn/cce7286ce32c45489c6737cd8432feb6.png)
-  
+
 + 数据库
     - 在 jsmindmulti/settings.py 的 DATABASES 进行配置，配置文件里默认用的mysql，可以改成django支持的数据库
-    -  
+    -
     - ![](https://img-blog.csdnimg.cn/0ac873cf2cc448eea6c6480ce985e5a9.png)
     - 初始化数据库脚本，执行以下命令就会将系统运行所需要的表结构创建好
       ```
@@ -36,7 +36,7 @@ jsmind思维导图多人协作版（可本地安装、可扩展源码）
     
        python manage.py migrate
       ```
-      
+
     - 核心数据主要存在这两个表中：
       ```
       -- 思维导图表
@@ -51,11 +51,17 @@ jsmind思维导图多人协作版（可本地安装、可扩展源码）
     - ![](z-pic/start.png)
 
 #### 效果
+
 + 通过浏览器 http://localhost:8000/ 访问主页
 + 列表展示如下：
-![](z-pic/list.png)
+  ![](z-pic/list.png)
 
 
 + 打开多个浏览器点击"编辑"详情进行编辑
 +
+
 ![](z-pic/show.gif)
+
+#### remark
+
++ 如有使用本工具，可在评论区备注留下贵公司名字

@@ -11,7 +11,7 @@ import java.util.Date;
  * @author ming
  */
 @Data
-public class DbSource implements Serializable  {
+public class DbSource implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

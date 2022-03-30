@@ -14,6 +14,7 @@ import { MeshDataSupport } from '../middleware/mesh/MeshDataSupport';
 import { PointsDataSupport } from '../middleware/points/PointsDataSupport';
 import { validate } from 'uuid';
 import { GroupDataSupport } from '../middleware/group/GroupDataSupport';
+import { stringify } from '../convenient/JSONHandler';
 export class DataSupportManager {
     static register = function (module, dataSupport) {
         return DataSupportManager;
@@ -54,9 +55,6 @@ export class DataSupportManager {
             Object.keys(parameters).forEach(key => {
                 if (this[key] !== undefined) {
                     this[key] = parameters[key];
-                    if (parameters[key].IS_OBJECTDATASUPPORT) {
-                        this.objectDataSupportList.push(parameters[key]);
-                    }
                 }
             });
         }
@@ -69,7 +67,16 @@ export class DataSupportManager {
         }
         const dataSupportMap = new Map();
         for (let module in MODULETYPE) {
-            this[`${MODULETYPE[module]}DataSupport`] && dataSupportMap.set(MODULETYPE[module], this[`${MODULETYPE[module]}DataSupport`]);
+            const dataSupport = this[`${MODULETYPE[module]}DataSupport`];
+            if (dataSupport) {
+                dataSupportMap.set(MODULETYPE[module], dataSupport);
+                if (dataSupport.IS_OBJECTDATASUPPORT) {
+                    this.objectDataSupportList.push(dataSupport);
+                }
+            }
+            else {
+                console.warn(`dataSupportManager can not support this module dataSupport: ${module}`);
+            }
         }
         this.dataSupportMap = dataSupportMap;
     }
@@ -103,6 +110,7 @@ export class DataSupportManager {
         }
         return this;
     }
+    // TODO:去掉
     getObjectConfig(vid) {
         if (!validate(vid)) {
             console.warn(`vid is illeage: ${vid}`);
@@ -112,6 +120,34 @@ export class DataSupportManager {
             const config = objectDataSupport.getConfig(vid);
             if (config) {
                 return config;
+            }
+        }
+        return null;
+    }
+    getConfigBySymbol(vid) {
+        const dataSupportList = this.dataSupportMap.values();
+        for (let dataSupport of dataSupportList) {
+            const config = dataSupport.getConfig(vid);
+            if (config) {
+                return config;
+            }
+        }
+        return null;
+    }
+    removeConfigBySymbol(vid) {
+        const dataSupportList = this.dataSupportMap.values();
+        for (let dataSupport of dataSupportList) {
+            if (dataSupport.existSymbol(vid)) {
+                dataSupport.removeConfig(vid);
+                return;
+            }
+        }
+    }
+    getModuleBySymbol(vid) {
+        const dataSupportList = this.dataSupportMap.values();
+        for (let dataSupport of dataSupportList) {
+            if (dataSupport.existSymbol(vid)) {
+                return dataSupport.MODULE;
             }
         }
         return null;
@@ -136,7 +172,7 @@ export class DataSupportManager {
         dataSupportMap.forEach((dataSupport, module) => {
             jsonObject[module] = dataSupport.getData();
         });
-        return JSON.stringify(jsonObject);
+        return JSON.stringify(jsonObject, stringify);
     }
 }
 //# sourceMappingURL=DataSupportManager.js.map

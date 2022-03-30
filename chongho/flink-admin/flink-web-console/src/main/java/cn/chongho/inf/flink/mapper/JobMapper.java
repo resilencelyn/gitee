@@ -17,11 +17,11 @@ public interface JobMapper extends Mapper<Job> {
      * @param limit
      * @return
      */
-    List<Job> selectByPage(@Param("offset") int offset, @Param("limit") int limit,@Param("job") Job job);
+    List<Job> selectByPage(@Param("offset") int offset, @Param("limit") int limit,@Param("job") Job job,@Param("loginUserId") Integer loginUserId);
 
     int countByPage(@Param("job") Job job);
 
-    @Select("SELECT job.id ,job.job_id jobId,job.flink_colony_id flinkColonyId, fc.url flinkColonyUrl, entry_class entryClass, target_db_id targetDbId, savepoint_path savepointPath ,args,parallelism ,jar.job_key jobKey" +
+    @Select("SELECT job.id ,job.job_id jobId,job.create_user_id createUserId,job.flink_colony_id flinkColonyId, fc.url flinkColonyUrl, entry_class entryClass, target_db_id targetDbId, savepoint_path savepointPath ,args,parallelism ,jar.job_key jobKey" +
             " FROM job  LEFT JOIN jar ON job.jar_id = jar.id  LEFT JOIN cluster fc ON fc.id = job.flink_colony_id " +
             "WHERE job.enable_flag = 1 AND job.id = #{ id } ")
     Job findJobById(@Param("id") Integer id);

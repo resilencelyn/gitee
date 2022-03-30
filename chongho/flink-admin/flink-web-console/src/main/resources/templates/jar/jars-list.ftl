@@ -53,7 +53,7 @@
     </script>
 
     <!-- 模态框（Modal） -->
-    <div class="modal fade" id="addJarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addJarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-top: 8%">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -61,13 +61,16 @@
                     <h4 class="modal-title" id="myModalLabel">jar上传</h4>
                 </div>
                 <div class="modal-body">
-                    <form target="uploadForm" method="post" action="/jars/upload" enctype="multipart/form-data" >
+                    <form id="uploadForm">
                         <input type="file" name="jarFile" class="file-loading" accept=".jar" ><br>
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <input type="submit" id="uploadSubmit" value="提交" class="btn btn-primary">
+                        <input type="button" id="uploadSubmit" value="提交" class="btn btn-primary" onclick="upload()">
                     </form>
-                    <iframe name="uploadForm" id="uploadForm" style="display:none"></iframe>
                 </div>
+            </div>
+
+            <div class="progress" style="display:none;height: 40px;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;font-size: 20px"></div>
             </div>
         </div>
     </div>
@@ -274,7 +277,7 @@
                                 }
                             },
                             error: function (response) {
-                                alert("操作失败!");
+                                alert("链接服务器失败");
                             }
                         });
                     }
@@ -302,20 +305,57 @@
      */
     $("#uploadForm").load(function(){
         //获取到的是json的字符串
-        let bodyString = $(this).contents().find("body").text();
+        var bodyString = $(this).contents().find("body").text();
         //json字符串转换成json对象
-        let bodyJson = $.parseJSON(bodyString);
+        var bodyJson = $.parseJSON(bodyString);
         alert(bodyJson.code);
         if (bodyJson.code == 1){
             alert("上传成功",function(){
                 location.reload();
             });
-        } else {
-            alert("上传失败",function(){
-                location.reload();
-            });
         }
     })
+
+    function upload() {
+        var formData = new FormData(document.getElementById("uploadForm"));
+        $.ajax({
+            type: "POST",
+            enctype:'multipart/form-data',
+            url: '/jars/upload',
+            data: formData,
+            cache:false,
+            processData:false,
+            contentType:false,
+            error:function(result){
+            },
+            success: function(result){
+                alert(result.msg);
+                location.reload();
+            },
+            xhr: function () {
+                var xhr = $.ajaxSettings.xhr();
+                if (xhr.upload) {
+                    //处理进度条的事件
+                    xhr.upload.addEventListener("progress", progressHandle, false);
+                    //开始显示进度条
+                    beginUpload();
+                    return xhr;
+                }
+            }
+        });
+    }
+
+    function beginUpload() {
+        $(".modal-content").css("display","none");
+        $(".progress").css("display","block");
+    }
+
+    //进度条更新
+    function progressHandle(e) {
+        var percent = e.loaded / e.total * 100;
+        percent = Math.round(percent);
+        $("div[class=progress-bar]").css("width",percent + "%").text(percent + "%");
+    };
 </script>
 </body>
 </html>

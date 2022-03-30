@@ -23,5 +23,14 @@ public class RoleMenu {
 
     private Date createtime;
 
+    public RoleMenu(Integer menuid, Integer roleid, Integer creator) {
+        this.menuid = menuid;
+        this.roleid = roleid;
+        this.creator = creator;
+        this.flag = 1;
+        this.createtime = new Date();
+    }
 
+    public RoleMenu() {
+    }
 }

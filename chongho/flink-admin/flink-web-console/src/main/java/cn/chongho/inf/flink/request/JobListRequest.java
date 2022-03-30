@@ -6,7 +6,7 @@ import lombok.Data;
  * @author ming
  */
 @Data
-public class JobListRequest extends BaseParameters{
+public class JobListRequest extends BaseParameters {
 
     private String jobName = "";
 

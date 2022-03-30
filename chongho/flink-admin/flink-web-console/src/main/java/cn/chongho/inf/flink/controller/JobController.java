@@ -55,7 +55,7 @@ public class JobController {
     private ClusterService clusterService;
 
     @GetMapping("/list")
-    public String list(JobListRequest jobListRequest, ModelMap map){
+    public String list(JobListRequest jobListRequest, ModelMap map, HttpSession httpSession){
         Job job = new Job();
         if(!StringUtils.isEmpty(jobListRequest.getJobName())){
             job.setJobName(jobListRequest.getJobName());
@@ -72,10 +72,10 @@ public class JobController {
         if(jobListRequest.getFlinkColonyId() != -1){
             job.setFlinkColonyId(jobListRequest.getFlinkColonyId());
         }
-
+        Integer loginUserId = HttpSessionUtils.getLoginUser(httpSession).getId();
         int page = jobListRequest.getPage();
         int pageSize = jobListRequest.getPageSize();
-        List<Job> jobs = jobService.selectByPage(page,  pageSize ,job);
+        List<Job> jobs = jobService.selectByPage(page, pageSize, job, loginUserId);
 
         int count = jobService.selectCount(job);
         map.put("jobs",jobs);
@@ -90,7 +90,7 @@ public class JobController {
         jar.setEnableFlag(Constant.EnableFlag.ENABLE.ordinal());
         map.put("jarList", jarService.getAllJars(jar));
 
-        map.put("flinkColonyConfigList", clusterService.getAllCluster());
+        map.put("clusterList", clusterService.getAllCluster());
 
         map.put("jobListRequest",jobListRequest);
 
@@ -110,7 +110,7 @@ public class JobController {
         dbSource.setEnableFlag(Constant.EnableFlag.ENABLE.ordinal());
         map.put("dbSourceList", dbSourceService.getAllDbSource(dbSource));
 
-        map.put("flinkColonyConfigList", clusterService.getAllCluster());
+        map.put("clusterList", clusterService.getAllCluster());
 
         Jar jar = new Jar();
         jar.setEnableFlag(Constant.EnableFlag.ENABLE.ordinal());
@@ -154,6 +154,19 @@ public class JobController {
     public WebResult savepoint(Integer id ,HttpSession httpSession){
         if (jobService.savepoint(id ,HttpSessionUtils.getLoginUser(httpSession).getId())) {
             return WebResult.success();
+        }
+        return WebResult.unKnown();
+    }
+
+    @RequestMapping("stop")
+    @ResponseBody
+    public WebResult stop(Integer id ,HttpSession httpSession){
+        try {
+            if (jobService.stopJob(id ,HttpSessionUtils.getLoginUser(httpSession).getId())) {
+                return WebResult.success();
+            }
+        }catch (Exception e){
+            return WebResult.error(e.getMessage());
         }
         return WebResult.unKnown();
     }

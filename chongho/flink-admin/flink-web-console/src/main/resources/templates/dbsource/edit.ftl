@@ -119,7 +119,7 @@
                 }
             },
             error: function (response) {
-                alert("操作失败!");
+                alert("链接服务器失败");
             }
         });
     }

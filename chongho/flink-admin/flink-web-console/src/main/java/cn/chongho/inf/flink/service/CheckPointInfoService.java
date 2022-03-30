@@ -59,4 +59,6 @@ public interface CheckPointInfoService {
 
 
     void addByBatch(List<CheckPointInfo> checkPointInfos);
+
+    void updateByBatch(List<CheckPointInfo> checkPointInfos);
 }
