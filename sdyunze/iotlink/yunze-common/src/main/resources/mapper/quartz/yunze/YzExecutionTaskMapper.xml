@@ -6,13 +6,16 @@
         <where>
             <if test="value!=null and value!='' ">
                 <if test="type==1">
-                    AND task_name LIKE CONCAT(#{value},'%')
+                    AND task_name LIKE CONCAT('%',#{value},'%')
                 </if>
                 <if test="type==2">
-                    AND auth LIKE CONCAT(#{value},'%')
+                    AND auth LIKE CONCAT('%',#{value},'%')
                 </if>
                 <if test="type==3">
-                    AND url LIKE CONCAT(#{value},'%')
+                    AND url LIKE CONCAT('%',#{value},'%')
+                </if>
+                <if test="type==4">
+                    AND id = #{value}
                 </if>
             </if>
             <if test="agent_id!=null and agent_id!='' and agent_id.size>0 ">

@@ -1,0 +1,12 @@
+//$themeColor:#096DD9;
+$themeColor: #FA541C;
+/* just override what you need */
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': $themeColor
+    ),
+  )
+);
+
+@import '@/views/common/email-verification-code/index.less';

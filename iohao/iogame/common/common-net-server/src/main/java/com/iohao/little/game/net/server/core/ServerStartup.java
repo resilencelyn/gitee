@@ -27,7 +27,7 @@ import com.iohao.little.game.net.server.GateKit;
  * </pre>
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public interface ServerStartup {
 

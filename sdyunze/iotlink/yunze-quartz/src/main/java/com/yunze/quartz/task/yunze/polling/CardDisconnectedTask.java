@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 定时任务 通道轮序 未订购停机
+ * 定时任务 通道轮询 未订购停机
  *
  * @author root
  */
@@ -53,7 +53,7 @@ public class CardDisconnectedTask {
 
 
     /**
-     * 轮序 卡状态
+     * 轮询 卡状态
      * @param time 多少 分钟 后失效
      */
     public void pollingCardDisconnected(Integer time) {
@@ -62,6 +62,22 @@ public class CardDisconnectedTask {
         findRouteID_Map.put("FindCd_id",null);
         List<Map<String, Object>> channelArr = yzCardRouteMapper.findRouteID(findRouteID_Map);
         if (channelArr != null && channelArr.size() > 0) {
+            String CardDisconnected_routingKey = "";
+           try {
+                ad_exchangeName = "polling_cardCardDisconnected_exchange";
+                ad_queueName = "polling_cardCardDisconnected_queue";
+                CardDisconnected_routingKey = "polling.cardCardDisconnected.routingKey";
+                ad_del_exchangeName = "polling_dlxcardCardDisconnected_exchange";
+                ad_del_queueName = "polling_dlxcardCardDisconnected_queue";
+                ad_del_routingKey = "polling.dlxcardCardDisconnected.routingKey";
+               // rabbitMQConfig.creatExchangeQueue(ad_exchangeName, ad_queueName, CardDisconnected_routingKey, ad_del_exchangeName, ad_del_queueName, ad_del_routingKey,null);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+
+
             //2.获取 通道下卡号
             for (int i = 0; i < channelArr.size(); i++) {
                 Map<String, Object> channel_obj = channelArr.get(i);
@@ -70,20 +86,23 @@ public class CardDisconnectedTask {
                 findMap.put("channel_id", cd_id);
                 List<Map<String, Object>> cardArr = yzCardMapper.findChannelIdDisconnected(findMap);
                 if (cardArr != null && cardArr.size() > 0) {
-                    //插入 通道轮序详情表
+                    //插入 通道轮询详情表
                     Map<String, Object> pollingPublic_Map = new HashMap<>();
                     pollingPublic_Map.put("cd_id", cd_id);
                     pollingPublic_Map.put("cd_current", 0);
 
                     //卡状态 用量 轮询
                     String polling_id_CardDisconnected = VeDate.getNo(4);
-                    //创建 路由 新增轮序详情 生产启动类型消息
+
+                    pollingPublic_Map.put("polling_type", "5");
+                    pollingPublic_Map.put("cd_count", cardArr.size());
+                    pollingPublic_Map.put("polling_id", polling_id_CardDisconnected);
+                    yzPassagewayPollingMapper.add(pollingPublic_Map);//新增 轮询详情表
+                    //创建 路由 新增轮询详情 生产启动类型消息
                     Map<String, Object> start_type = new HashMap<String, Object>();
-                    start_type.put("Listener","polling_cardCardDisconnected_queue_" + cd_id);
+                    start_type.put("Listener","polling_cardCardDisconnected_queue");
                     start_type.put("cd_id", cd_id);
-                    boolean CardDisconnectedBool =  CardDisconnected(time, cardArr.size(), polling_id_CardDisconnected,pollingPublic_Map,start_type);
-                    String CardDisconnected_routingKey = "";
-                    //String CardFlow_routingKey = "";
+
                     //2.卡状态
                     //卡号放入路由
                     for (int j = 0; j < cardArr.size(); j++) {
@@ -93,33 +112,16 @@ public class CardDisconnectedTask {
                         Card.put("iccid", card.get("iccid"));
                         Card.put("card_no", card.get("card_no"));
                         Card.put("status_id", card.get("status_id"));
-                        Card.put("polling_id", polling_id_CardDisconnected);//轮序任务详情编号
+                        Card.put("polling_id", polling_id_CardDisconnected);//轮询任务详情编号
 
                         String msg = JSON.toJSONString(Card);
                         //生产任务
                         try {
-                            if (j == 0) {
-                                //设置任务 路由器 名称 与队列 名称
-                                if(CardDisconnectedBool){ //卡状态
-                                    ad_exchangeName = "polling_cardCardDisconnected_exchange";
-                                    ad_queueName = "polling_cardCardDisconnected_queue_" + cd_id;
-                                    CardDisconnected_routingKey = "polling.cardCardDisconnected.routingKey." + cd_id;
-                                    ad_del_exchangeName = "polling_dlxcardCardDisconnected_exchange";
-                                    ad_del_queueName = "polling_dlxcardCardDisconnected_queue_" + cd_id;
-                                    ad_del_routingKey = "polling.dlxcardCardDisconnected.routingKey." + cd_id;
-                                    rabbitMQConfig.creatExchangeQueue(ad_exchangeName, ad_queueName, CardDisconnected_routingKey, ad_del_exchangeName, ad_del_queueName, ad_del_routingKey,null);
-
-                                    redisCache.setCacheObject("polling-Listener-CardDisconnected-"+cd_id, ad_queueName+","+ad_del_queueName);// 缓存 避免 重复创建 消费 监听
-                                }
-                            }
-                            if(CardDisconnectedBool){ //卡状态
-                                rabbitTemplate.convertAndSend("polling_cardCardDisconnected_exchange", CardDisconnected_routingKey, msg, message -> {
-                                    // 设置消息过期时间 time 分钟 过期
-                                    message.getMessageProperties().setExpiration("" + (time * 1000 * 60));
-                                    return message;
-                                });
-                            }
-                            //rabbitMQConfig.send(exchangeName,queueName,routingKey,"direct",msg);
+                            rabbitTemplate.convertAndSend("polling_cardCardDisconnected_exchange", CardDisconnected_routingKey, msg, message -> {
+                                // 设置消息过期时间 time 分钟 过期
+                                message.getMessageProperties().setExpiration("" + (time * 1000 * 60));
+                                return message;
+                            });
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                         }
@@ -153,11 +155,11 @@ public class CardDisconnectedTask {
             pollingPublic_Map.put("polling_type", "5");
             pollingPublic_Map.put("cd_count", size);
             pollingPublic_Map.put("polling_id", polling_id);
-            yzPassagewayPollingMapper.add(pollingPublic_Map);//新增 轮序详情表
+            yzPassagewayPollingMapper.add(pollingPublic_Map);//新增 轮询详情表
 
         } catch (Exception e) {
             bool = false;
-            System.out.println("生产 轮序 [CardDisconnected] 启动类型 失败 " + e.getMessage().toString());
+            System.out.println("生产 轮询 [CardDisconnected] 启动类型 失败 " + e.getMessage().toString());
         }
         return bool;
     }

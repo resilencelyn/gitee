@@ -7,9 +7,13 @@ import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -22,6 +26,9 @@ import java.util.concurrent.TimeoutException;
 public class RabbitMQConfig {
 
     public Connection connection ;
+
+
+
 
     @Resource
     private RabbitTemplate rabbitTemplate;
@@ -40,9 +47,9 @@ public class RabbitMQConfig {
             queueCount = declareOk.getMessageCount();
             channel.close();
         }catch (Exception e){
-            System.out.println("==================================================================== creatExchangeQueue connection.getCount() [Start] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.getCount() [Start] =====");
             System.out.println(e.getMessage());
-            System.out.println("==================================================================== creatExchangeQueue connection.getCount() [End] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.getCount() [End] =====");
         }
         finally {
             connection.close();
@@ -70,18 +77,18 @@ public class RabbitMQConfig {
             connection = connection!=null ?connection:RabbitMQConnection.getConnection();
             ////connection = RabbitMQConnection.getConnection();
         }catch (Exception e){
-            System.out.println("==================================================================== creatExchangeQueue connection.getConnection() [Start] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.getConnection() [Start] =====");
             System.out.println(e.getMessage());
-            System.out.println("==================================================================== creatExchangeQueue connection.getConnection() [End] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.getConnection() [End] =====");
             connection = RabbitMQConnection.getConnection();
         }
         try {
             channel = connection.createChannel();
             type = type!=null?type:BuiltinExchangeType.DIRECT;
         }catch (Exception e){
-            System.out.println("==================================================================== creatExchangeQueue connection.createChannel() [Start] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.createChannel() [Start] =====");
             System.out.println(e.getMessage());
-            System.out.println("==================================================================== creatExchangeQueue connection.createChannel() [End] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.createChannel() [End] =====");
             connection = RabbitMQConnection.getConnection();
             channel = connection.createChannel();
         }
@@ -187,9 +194,9 @@ public class RabbitMQConfig {
             channel.basicPublish(EXCHANGE_NAME, Key, null, msg.getBytes("utf-8"));
             channel.close();
         } catch (Exception e) {
-            System.out.println("==================================================================== creatExchangeQueue connection.createChannel() [Start] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.createChannel() [Start] =====");
             System.out.println(e.getMessage());
-            System.out.println("==================================================================== creatExchangeQueue connection.createChannel() [End] ====================================================================");
+            System.out.println("===== creatExchangeQueue connection.createChannel() [End] =====");
         } finally {
             connection.close();
             connection = null;

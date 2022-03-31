@@ -32,7 +32,7 @@
 				AND dict_type = #{dictType}
 			</if>
 			<if test="dictLabel != null and dictLabel != ''">
-				AND dict_label like CONCAT( #{dictLabel}, '%')
+				AND dict_label like CONCAT('%', #{dictLabel}, '%')
 			</if>
 			<if test="status != null and status != ''">
 				AND status = #{status}

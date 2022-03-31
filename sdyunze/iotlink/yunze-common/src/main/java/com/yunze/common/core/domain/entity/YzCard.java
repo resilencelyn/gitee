@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用户对象 yz_card_info
+ *  yz_card_info
  * 
  * @author root
  */
@@ -83,5 +83,11 @@ public class YzCard extends BaseEntity
 
     @Excel(name = "user_id", cellType = ColumnType.STRING, prompt = "系统登录账户id ")
     private String user_id ;
+
+    @Excel(name = "test_period_last_time", cellType = ColumnType.STRING, prompt = "测试期最后时间 格式化为 yyyy-MM-dd 如 2022-03-01 ")
+    private String test_period_last_time ;
+
+    @Excel(name = "silent_period_last_time", cellType = ColumnType.STRING, prompt = "沉默期最后时间 格式化为 yyyy-MM-dd 如 2022-03-01 ")
+    private String silent_period_last_time ;
 
 }

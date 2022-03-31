@@ -1,17 +1,32 @@
 <template>
   <div class="navbar">
+
+
+
+
+
+
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" v-if="!topNav"/>
     <top-nav id="topmenu-container" class="topmenu-container" v-if="topNav"  />
 
+
     <div class="right-menu">
+
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
+
+        <my-card-header-search id="my-card-header-search" class="right-menu-item" />
+        <!--<search id="header-search" class="right-menu-item" />-->
+
+
+
+
 
         <!--<el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
         </el-tooltip>-->
+
 
         <el-tooltip content="执行日志" effect="dark" placement="bottom">
           <router-link  :to="'/card/ExecutionTask/'" class="link-type">
@@ -55,21 +70,26 @@ import TopNav from '@/components/TopNav'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
-import Search from '@/components/HeaderSearch'
+/*import Search from '@/components/HeaderSearch'*/
 import YunZeGit from '@/components/RuoYi/Git'
 import YunZeDoc from '@/components/RuoYi/Doc'
+import MyCardHeaderSearch from '@/components/MyCardHeaderSearch'
+
+
 
 export default {
   components: {
+    MyCardHeaderSearch,
     Breadcrumb,
     TopNav,
     Hamburger,
     Screenfull,
     SizeSelect,
-    Search,
+
     YunZeGit,
     YunZeDoc
   },
+  /*Search,*/
   computed: {
     ...mapGetters([
       'sidebar',

@@ -58,4 +58,40 @@ public interface YzUserMapper {
      */
     public List<Map<String, String>> selectLoginCount(Map map);
 
+
+    /**
+     * 授信修改
+     * @param map
+     * @return
+     */
+    public int updCredit(Map map);
+
+    /**
+     *预存修改
+     * @param map
+     * @return
+     */
+    public int updDepositAmount(Map map);
+
+    /**
+     * 利润修改
+     * @param map
+     * @return
+     */
+    public int updProfitAmount(Map map);
+
+
+    /**
+     * 查询企业下 金额数据
+     * @param map
+     * @return
+     */
+    public Map<String, Object> findDeptAmount(Map map);
+
+
+
+
+    public List<Map<String, String>> findPreDepositDeduction(Map map);
+
+
 }

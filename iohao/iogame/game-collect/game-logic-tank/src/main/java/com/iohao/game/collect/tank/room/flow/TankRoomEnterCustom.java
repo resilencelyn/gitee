@@ -16,9 +16,9 @@
  */
 package com.iohao.game.collect.tank.room.flow;
 
-import com.iohao.game.collect.common.room.AbstractRoom;
-import com.iohao.game.collect.common.room.flow.RoomEnterCustom;
-import com.iohao.game.collect.common.room.flow.RoomEnterInfo;
+import com.iohao.little.game.widget.light.room.AbstractRoom;
+import com.iohao.little.game.widget.light.room.flow.RoomEnterCustom;
+import com.iohao.little.game.widget.light.room.flow.RoomEnterInfo;
 
 /**
  * 坦克 进入房间

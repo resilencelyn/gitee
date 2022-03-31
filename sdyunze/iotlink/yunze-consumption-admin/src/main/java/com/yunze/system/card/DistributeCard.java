@@ -83,7 +83,7 @@ public class DistributeCard {
             String DistributeBackupName = UUID.randomUUID().toString().replace("-","")+"_CardDistributeBackup";
             String  agent_id = map.get("TaskAgent_id").toString();
 
-            String task_name = create_by+"-连接管理 [划卡] ";
+            String task_name ="连接管理 [划卡] ";
             String SaveUrl = "/getcsv/"+newName+".csv";
             SaveUrl += ",/getcsv/"+DistributeBackupName+".csv";
             Map<String, Object> task_map = new HashMap<String, Object>();

@@ -6,14 +6,14 @@
 	
     <groupId>com.yunze</groupId>
     <artifactId>yunze</artifactId>
-    <version>0.5.0</version>
+    <version>0.7.0</version>
 
     <name>yunze</name>
     <url>http://www.5iot.com</url>
     <description>IOT综合业务支撑平台</description>
     
     <properties>
-        <yunze.version>0.5.0</yunze.version>
+        <yunze.version>0.7.0</yunze.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -224,7 +224,7 @@
     </dependencyManagement>
 
     <modules>
-       <module>yunze-admin</module>
+        <module>yunze-admin</module>
         <module>yunze-framework</module>
         <module>yunze-system</module>
         <module>yunze-quartz</module>
@@ -237,7 +237,13 @@
         <module>yunze-consumption-car-stop</module>
         <module>yunze-consumption-order</module>
         <module>yunze-consumption-update</module>
+        <module>yunze-C-business</module>
+        <module>yunze-business</module>
+        <module>yunze-web</module>
+        <module>yunze-wechat</module>
         <module>yunze-consumption-car-disconnected</module>
+        <module>yunze-consumption-web-shopping</module>
+        <module>yunze-consumption-web</module>
 
 
     </modules>

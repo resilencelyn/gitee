@@ -25,7 +25,7 @@ import java.util.Objects;
  * 享元工厂
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public final class CmdInfoFlyweightFactory {
     /**

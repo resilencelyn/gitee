@@ -2,7 +2,6 @@
   <el-container class="home">
     <el-main  >
 
-
       <el-row :gutter="10">
         <el-col :xs="24" :sm="24" :md="24" :lg="24">
           <el-card class="update-log">
@@ -24,6 +23,10 @@
               <el-row :gutter="10" class="my_panel-group" >
                 <el-col :xs="24" :sm="8" :md="6" :lg="3" class="card-panel-col"  v-hasPermi="['yunze:index:downCount']">
                     <div class="card-panel">
+
+
+
+
                       <router-link v-if="status_ShowId_show" :to="'/card/card/'+tools.encrypt(JSON.stringify(indexpage.requestMap.Pmap_downCount))"  >
                           <div class="card-panel">
                             <div class="card-panel-icon-wrapper icon-simCard">
@@ -148,7 +151,7 @@
           </div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="8" :lg="6" class="card-panel-col"  v-hasPermi="['yunze:index:currentMonth']">
-          <div class="card-panel" @click="handleSetLineChartData('purchases')">
+          <div class="card-panel" v-if="status_ShowId_show" @click="handleSetLineChartData('purchases')">
               <div class="card-panel-icon-wrapper icon-used">
                 <svg-icon icon-class="used" class-name="card-panel-icon"/>
               </div>
@@ -220,10 +223,10 @@
             </div>
             <div class="body">
               <el-tabs tab-position="right" v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="数据" name="flow"  v-hasPermi="['yunze:index:businessVolumeFlow']">
+                <el-tab-pane label="数据" name="flow"  v-hasPermi="['yunze:index:businessVolumeFlow']" v-if="status_ShowId_show" >
                   <el-row :gutter="5">
                     <el-col :xs="24" :sm="24" :md="16" :lg="16">
-                      <line-chart className="CardFlow" width="100%" height="350px" v-if="CardFlow_show"
+                      <line-chart className="CardFlow" width="92%" height="350px" v-if="CardFlow_show"
                                   :chart-data="CardFlowArr" :P_xAxis="CardFlow_xAxis" :P_ShowLable="CardFlow_ShowLable"
                                   :P_colorArr="CardFlow_colorArr"
                                   :CardFlow_config="CardFlow_config"/>
@@ -275,7 +278,6 @@
         </el-col>
       </el-row>
       <!--生命周期 业务使用情况 END-->
-
       <el-divider/>
 
       <!--业务面板2-->
@@ -425,7 +427,7 @@
         </el-col>
         <el-col :xs="24" :sm="12" :md="8" :lg="6" class="card-panel-col"  v-hasPermi="['yunze:index:onlineCount']">
           <div class="card-panel" @click="handleSetLineChartData('Proportions')">
-            <router-link  :to="'/monitor/online/'">
+            <router-link v-if="status_ShowId_show" :to="'/monitor/online/'">
               <div class="card-panel-icon-wrapper icon-Proportion">
                 <svg-icon icon-class="onlineUser" class-name="card-panel-icon"/>
               </div>
@@ -446,6 +448,9 @@
                 </div>
               </div>
             </router-link>
+
+
+
           </div>
         </el-col>
       </el-row>
@@ -462,13 +467,13 @@
         </div>
         <div class="body">
           <ul class="el-menu">
-            <router-link v-if="status_ShowId_show"  :to="'/card/ExecutionTask/'" class="link-type">
+            <router-link  :to="'/card/ExecutionTask/'" class="link-type">
 
               <li role="menuitem" tabindex="1">
                 <span>执行日志</span>
               </li>
             </router-link>
-            <router-link v-if="status_ShowId_show" v-hasPermi="['yunze:card:list']" :to="'/card/card/'"
+            <router-link  v-hasPermi="['yunze:card:list']" :to="'/card/card/'"
                          class="link-type">
               <li role="menuitem" tabindex="1">
                 <span>物联卡管理</span>
@@ -480,6 +485,42 @@
                 <span>物联卡设置</span>
               </li>
             </router-link>
+            <router-link  v-hasPermi="['yunze:card:diagnosis']" :to="'/card/diagnosis/'"
+                          class="link-type">
+              <li role="menuitem" tabindex="1">
+                <span>智能诊断</span>
+              </li>
+            </router-link>
+
+
+
+            <router-link  v-hasPermi="['yunze:order:addPackage']" :to="'/card/rechargeTariff'"
+                          class="link-type">
+              <li role="menuitem" tabindex="1">
+                <span>资费订购</span>
+              </li>
+            </router-link>
+            <router-link  v-hasPermi="['yunze:tariffGroup:list']" :to="'/card/tariffGroupT/'"
+                          class="link-type">
+              <li role="menuitem" tabindex="1">
+                <span>平台资费</span>
+              </li>
+            </router-link>
+            <router-link  v-hasPermi="['yunze:agentTariffGroup:list']" :to="'/card/agentTariffGroup/'"
+                          class="link-type">
+              <li role="menuitem" tabindex="1">
+                <span>客户资费</span>
+              </li>
+            </router-link>
+
+
+            <!--<router-link v-hasPermi="['tool:apifile:list']" :to="'/system/apifile'"
+                         class="link-type">
+              <li role="menuitem" tabindex="2">
+                <span>API使用</span>
+              </li>
+            </router-link>-->
+
             <router-link v-hasPermi="['system:dept:list']" :to="'/agent/Dept/'"
                          class="link-type">
               <li role="menuitem" tabindex="2">
@@ -492,6 +533,7 @@
                 <span>用户信息</span>
               </li>
             </router-link>
+
             <router-link v-hasPermi="['yunze:order:list']" :to="'/order/ordeAll/'"
                          class="link-type">
               <li role="menuitem" tabindex="2">
@@ -561,7 +603,7 @@
     },
     data() {
       return {
-        tools:tools,
+        loading: true,
         activeName: 'flow',
         allowloading:true,//是否允许加载
         loadingOnelinCount:true,//是否 已经加载在线人数
@@ -708,7 +750,7 @@
 
       //获取在线用户总数
       getOnelinCount(){
-        //console.log("getOnelinCount")
+        console.log("getOnelinCount")
         if(this.loadingOnelinCount==false){
           this.loadingOnelinCount = true;
           list(this.queryParams).then(response => {
@@ -718,7 +760,7 @@
             let _this = this;
             setTimeout(function(){
               _this.loadingOnelinCount = false;
-             // console.log("setloadingOnelinCount")
+              //console.log("setloadingOnelinCount")
             },120*1000);
           });
         }
@@ -727,111 +769,78 @@
 
       loadIndex(){
         //console.log(this.allowloading)
-        if(this.allowloading){
+        if(this.allowloading) {
 
-
-              let Pwd_Str = tools.encrypt(JSON.stringify({}));
-              findToDay(Pwd_Str).then(response => {
-                this.allowloading = false;//禁止重复多次加载
-                let jsonobj = JSON.parse(tools.Decrypt(response));
-               // console.log(jsonobj);
-                if (jsonobj.code == 200) {
-                  let data = jsonobj.Data.data;
-                  // 测试数据结构
-                 /*let data = {
-                   "businessVolumeFlow": "{\"Day_cardFlowList\":[{\"vid\":\"16800158685\",\"iccid\":\"89860620200029393904\",\"used\":1.3,\"cardNumber\":\"89860620200029393904\"},{\"vid\":\"16800193681\",\"iccid\":\"89860620200029182109\",\"used\":1.02,\"cardNumber\":\"89860620200029182109\"},{\"vid\":\"16800738234\",\"iccid\":\"8986112126001429035\",\"used\":0.59,\"cardNumber\":\"8986112126001429035\"},{\"vid\":\"16800811508\",\"iccid\":\"8986112126201766466\",\"used\":0.44,\"cardNumber\":\"8986112126201766466\"},{\"vid\":\"16800736526\",\"iccid\":\"8986112126001427327\",\"used\":0.36,\"cardNumber\":\"8986112126001427327\"}],\"Day_CardFlowMap\":{\"Day_CardFlowArr\":[\"51.89\",\"174.56\",\"3307.27\",\"110.38\",\"103.81\",\"41.55\",\"35.9\"]},\"Month_cardFlowList\":[{\"vid\":\"16800370161\",\"iccid\":\"8986112124701417392\",\"used\":3224.13,\"cardNumber\":\"8986112124701417392\"},{\"vid\":\"16800371542\",\"iccid\":\"8986112124701414843\",\"used\":32.51,\"cardNumber\":\"8986112124701414843\"},{\"vid\":\"16800000715\",\"iccid\":\"8986112028000360144\",\"used\":16.93,\"cardNumber\":\"8986112028000360144\"},{\"vid\":\"16800155624\",\"iccid\":\"89860620200029424519\",\"used\":15.9,\"cardNumber\":\"89860620200029424519\"},{\"vid\":\"16800178517\",\"iccid\":\"89860620200029195580\",\"used\":12.47,\"cardNumber\":\"89860620200029195580\"}],\"Month_CardFlowMap\":{\"Month_CardFlowArr\":[\"15.41\",\"19.06\",\"32.31\",\"7.15\",\"2.36\",\"5.81\",\"7.26\"]},\"Day_CardFlow_xAxis\":[\"1-20\",\"1-21\",\"1-22\",\"1-23\",\"1-24\",\"1-25\",\"1-27\"],\"Month_CardFlow_xAxis\":[\"2021-7\",\"2021-8\",\"2021-9\",\"2021-10\",\"2021-11\",\"2021-12\",\"2022-1\"]}",
-                   "weChatOrderCollection": 0.0,
-                   "logInIp": 0,
-                   "currentMonth": 56.1,
-                   "shipCard": 0,
-                   "orderAmount": 0.0,
-                   "systemCliqueCount": 1,
-                   "activationCardCount": 25,
-                   "id": 32,
-                   "salesContractCount": 0,
-                   "thresholdReachedCount": 0,
-                   "create_date": "2022-01-28 10:15:17",
-                   "salesContractDepositCount": 0.0,
-                   "lifeCycleDistribution": "{\"data\":[{\"name\":\"库存\",\"value\":\"0\"},{\"name\":\"可测试\",\"value\":\"0\"},{\"name\":\"待激活\",\"value\":\"28555\"},{\"name\":\"已激活\",\"value\":\"37336\"},{\"name\":\"已停机\",\"value\":\"5\"},{\"name\":\"预销户\",\"value\":\"0\"},{\"name\":\"已销户\",\"value\":\"5\"},{\"name\":\"未知\",\"value\":\"250\"}]}",
-                   "simCardCount": 66151,
-                   "simActivity": 18.0,
-                   "record_date": "2022-02-10",
-                   "businessVolumeVoice": "{}",
-                   "update_date": "2022-02-11 18:14:17",
-                   "downCount": 5,
-                   "systemUserCount": 2,
-                   "overdoseCount": 1927,
-                   "simCardNewCount": 0,
-                   "businessVolumeMessage": "{}",
-                   "requestMap": "{\"Pmap_getOrderAmount\":{\"staTime\":\"2022-01-01\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"user_id\":[\"108\"],\"timetype\":\"1\",\"endTime\":\"2022-01-27\",\"dept_id\":\"110\",\"status\":\"1\"},\"Pmap_shipCard\":{\"staTime\":\"2022-01-01\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"user_id\":[\"108\"],\"timetype\":\"4\",\"endTime\":\"2022-01-27\",\"dept_id\":\"110\"},\"Pmap_simCardNewCount\":{\"staTime\":\"2022-01-01\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"user_id\":[\"108\"],\"timetype\":\"6\",\"endTime\":\"2022-01-27\",\"dept_id\":\"110\"},\"Pmap_getOrderSum\":{\"staTime\":\"2022-01-01\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"user_id\":[\"108\"],\"pay_type\":\"wx\",\"timetype\":\"1\",\"endTime\":\"2022-01-27\",\"dept_id\":\"110\",\"status\":\"1\"},\"Pmap_activationCardCount\":{\"staTime\":\"2022-01-01\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"user_id\":[\"108\"],\"timetype\":\"2\",\"endTime\":\"2022-01-27\",\"dept_id\":\"110\"},\"Pmap_expiringSoonCount\":{\"staTime\":\"2022-01-27\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"user_id\":[\"108\"],\"timetype\":\"5\",\"endTime\":\"2022-03-13\",\"dept_id\":\"110\"},\"Pmap_thresholdReachedCount\":{\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"dept_id\":\"110\",\"user_id\":[\"108\"],\"exceedsThreshold\":\"1\"},\"Pmap_simActivity\":{\"dimensionType\":\"2\",\"record_date\":\"2022-01-27\",\"dimensionValue\":\"0\",\"agent_id\":[110],\"user_id\":[\"108\"],\"dept_id\":\"110\",\"dimensionField\":\"1\"},\"Pmap_simCardCount\":{\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"dept_id\":\"110\",\"user_id\":[\"108\"]},\"Pmap_downCount\":{\"status_ShowId\":\"5\",\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"dept_id\":\"110\",\"user_id\":[\"108\"]},\"Pmap_overdoseCount\":{\"dimensionType\":\"4\",\"record_date\":\"2022-01-27\",\"dimensionValue\":\"0\",\"agent_id\":[110],\"user_id\":[\"108\"],\"dept_id\":\"110\",\"dimensionField\":\"2\"},\"Pmap_status_ShowIdGroup\":{\"record_date\":\"2022-01-27\",\"agent_id\":[110],\"dept_id\":\"110\",\"user_id\":[\"108\"]}}",
-                   "expiringSoonCount": 0,
-                   "dept_id": 100,
-                   "customerNewCount": 0,
-                   "customerCount": 0
-                 };*/
-
-
-
-                  if(data!=null && data!=undefined){
-                    this.indexpage = data;
-                    this.indexpage.onlineCount = 1;
-                    if(data.businessVolumeFlow!=null){
-                      let businessVolumeFlow = JSON.parse(data.businessVolumeFlow);
-                      this.indexpage.businessVolumeFlow = businessVolumeFlow;
-                    }
-                    if(data.businessVolumeMessage!=null){
-                      let businessVolumeMessage = JSON.parse(data.businessVolumeMessage);
-                      this.indexpage.businessVolumeMessage = businessVolumeMessage;
-                    }
-                    if(data.businessVolumeVoice!=null){
-                      let businessVolumeVoice = JSON.parse(data.businessVolumeVoice);
-                      this.indexpage.businessVolumeVoice = businessVolumeVoice;
-                    }
-                    if(data.lifeCycleDistribution!=null){
-                      let lifeCycleDistribution = JSON.parse(data.lifeCycleDistribution);
-                      this.indexpage.lifeCycleDistribution = lifeCycleDistribution;
-                    }
-                    if(data.requestMap!=null){
-                      let requestMap = JSON.parse(data.requestMap);
-                      this.indexpage.requestMap = requestMap;
-                    }
-                   // console.log( this.indexpage.requestMap)
-                    window['IoTLink-indexData'] = this.indexpage;
-                    this.Myload();
-                  }else{
-                      this.status_ShowId_P_series.data = [
-                        {value: 0, name: '库存'},
-                        {value: 0, name: '可测试'},
-                        {value: 0, name: '待激活'},
-                        {value: 0, name: '已激活'},
-                        {value: 0, name: '已停机'},
-                        {value: 0, name: '预销户'},
-                        {value: 0, name: '已销户'},
-                        {value: 0, name: '未知'},
-                      ];
-                      this.status_ShowId_show = true;
-
-                      this.CardFlowArr = {
-                        expectedData: [0, 0, 0, 0, 0, 0, 0],
-                        /*actualData: [120, 82, 91, 154, 162, 140, 145]*/
-                      };
-                      this.CardFlow_xAxis = ['01-12', '01-13', '01-14', '01-15', '01-16', '01-17', '01-18'];
-                      this.CardFlow_show = true;
-                    }
-
-
-                  this.msgSuccess(jsonobj.Data.Message);
-                }else{
-                  let msg = jsonobj.Data!=null && jsonobj.Data!='' && jsonobj.Data.Message!=null && jsonobj.Data.Message!=''?jsonobj.Data.Message:jsonobj.msg;
-                  this.msgError(msg);
+          let Pwd_Str = tools.encrypt(JSON.stringify({}));
+          findToDay(Pwd_Str).then(response => {
+            this.allowloading = false;//禁止重复多次加载
+            let jsonobj = JSON.parse(tools.Decrypt(response));
+            // console.log(jsonobj);
+            if (jsonobj.code == 200) {
+              let data = jsonobj.Data.data;
+              if (data != null && data != undefined) {
+                this.indexpage = data;
+                this.indexpage.onlineCount = 1;
+                if (data.businessVolumeFlow != null) {
+                  let businessVolumeFlow = JSON.parse(data.businessVolumeFlow);
+                  this.indexpage.businessVolumeFlow = businessVolumeFlow;
                 }
-                let _this = this;
-                setTimeout(function(){
-                  _this.allowloading = true;
-                  //console.log("setAllowloading")
-                },30000);
-              })
+                if (data.businessVolumeMessage != null) {
+                  let businessVolumeMessage = JSON.parse(data.businessVolumeMessage);
+                  this.indexpage.businessVolumeMessage = businessVolumeMessage;
+                }
+                if (data.businessVolumeVoice != null) {
+                  let businessVolumeVoice = JSON.parse(data.businessVolumeVoice);
+                  this.indexpage.businessVolumeVoice = businessVolumeVoice;
+                }
+                if (data.lifeCycleDistribution != null) {
+                  let lifeCycleDistribution = JSON.parse(data.lifeCycleDistribution);
+                  this.indexpage.lifeCycleDistribution = lifeCycleDistribution;
+                }
+                if (data.requestMap != null) {
+                  let requestMap = JSON.parse(data.requestMap);
+                  this.indexpage.requestMap = requestMap;
+                }
+                // console.log( this.indexpage.requestMap)
+                window['IoTLink-indexData'] = this.indexpage;
+                this.Myload();
+              } else {
+                this.status_ShowId_P_series.data = [
+                  {value: 0, name: '库存'},
+                  {value: 0, name: '可测试'},
+                  {value: 0, name: '待激活'},
+                  {value: 0, name: '已激活'},
+                  {value: 0, name: '已停机'},
+                  {value: 0, name: '预销户'},
+                  {value: 0, name: '已销户'},
+                  {value: 0, name: '未知'},
+                ];
+                this.status_ShowId_show = true;
+
+                this.CardFlowArr = {
+                  expectedData: [0, 0, 0, 0, 0, 0, 0],
+                  /*actualData: [120, 82, 91, 154, 162, 140, 145]*/
+                };
+                this.CardFlow_xAxis = ['01-12', '01-13', '01-14', '01-15', '01-16', '01-17', '01-18'];
+                this.CardFlow_show = true;
+              }
+
+
+              this.msgSuccess(jsonobj.Data.Message);
+            } else {
+              let msg = jsonobj.Data != null && jsonobj.Data != '' && jsonobj.Data.Message != null && jsonobj.Data.Message != '' ? jsonobj.Data.Message : jsonobj.msg;
+              this.msgError(msg);
+            }
+            if (jsonobj.deptId == '100'){
               this.loadingOnelinCount = false;//加载 在线用户
+            }
+            let _this = this;
+            setTimeout(function () {
+              _this.allowloading = true;
+              //console.log("setAllowloading")
+            }, 30000);
+          })
+
         }else{
           this.msgError("请30S后再请求刷新！");
         }
@@ -1245,4 +1254,9 @@
   }
 
 
+</style>
+<style>
+  body{
+    background-color:  rgb(255 255 255 / 50%);
+  }
 </style>

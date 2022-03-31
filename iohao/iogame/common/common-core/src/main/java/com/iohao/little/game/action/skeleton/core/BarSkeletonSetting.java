@@ -23,7 +23,7 @@ import lombok.Setter;
  * 业务框架 Setting
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 @Getter
 @Setter

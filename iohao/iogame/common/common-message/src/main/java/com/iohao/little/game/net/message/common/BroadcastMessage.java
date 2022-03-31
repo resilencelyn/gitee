@@ -17,7 +17,9 @@
 package com.iohao.little.game.net.message.common;
 
 import com.iohao.little.game.action.skeleton.protocol.ResponseMessage;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -30,6 +32,7 @@ import java.util.Collection;
  * @date 2022-03-10
  */
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BroadcastMessage implements Serializable {
     @Serial
     private static final long serialVersionUID = -8781053474740658678L;

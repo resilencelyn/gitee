@@ -1,24 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="公告标题" prop="noticeTitle">
-        <el-input
-          v-model="queryParams.noticeTitle"
-          placeholder="请输入公告标题"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="操作人员" prop="createBy">
-        <el-input
-          v-model="queryParams.createBy"
-          placeholder="请输入操作人员"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="类型" prop="noticeType">
         <el-select v-model="queryParams.noticeType" placeholder="公告类型" clearable size="small">
           <el-option
@@ -29,13 +11,38 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
     </el-form>
 
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom:-10px;line-height:35px">
     <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-form-item label="公告标题" prop="noticeTitle" style="margin-bottom:10px;line-height:35px">
+          <el-input
+            v-model="queryParams.noticeTitle"
+            placeholder="请输入公告标题"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="1.5">
+        <el-form-item label="操作人员" prop="createBy" style="margin-bottom:10px;line-height:35px">
+          <el-input
+            v-model="queryParams.createBy"
+            placeholder="请输入操作人员"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="1.5">
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -70,6 +77,7 @@
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
+    </el-form>
 
     <el-table v-loading="loading" :data="noticeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -195,7 +203,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 公告表格数据

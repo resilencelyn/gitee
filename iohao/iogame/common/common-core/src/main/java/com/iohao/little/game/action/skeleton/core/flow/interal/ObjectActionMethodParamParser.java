@@ -25,7 +25,7 @@ import com.iohao.little.game.action.skeleton.core.flow.FlowContext;
  * action 方法参数解析器 actionCommand
  *
  * @author 洛朱
- * @Date 2021-12-17
+ * @date 2021-12-17
  */
 public class ObjectActionMethodParamParser implements ActionMethodParamParser {
     private static final Object[] METHOD_PARAMS = new Object[0];

@@ -69,7 +69,7 @@ public class OutCat {
             //执行前判断 redis 是否存在 执行数据 存在时 不执行
             Object  isExecute = redisCache.getCacheObject(prefix+":"+ create_by);
             if(isExecute==null){
-                redisCache.setCacheObject(prefix+":"+ create_by, msg, 3, TimeUnit.SECONDS);//3 秒缓存 避免 重复消费
+                redisCache.setCacheObject(prefix+":"+ create_by, "", 3, TimeUnit.SECONDS);//3 秒缓存 避免 重复消费
                 OutDataCard( map,User,outCardIccidArr,userArr,stateOptions,card_types,customize_whether, newName,task_map,cardConnection_type);
             }
         } catch (Exception e) {
@@ -314,7 +314,7 @@ public class OutCat {
      * @param userArr 所属用户信息
      * @param customize_whether 自定义是否 - 字典表
      * @param newName 导出文件名
-     * @param task_map 执行任务结束 修改map
+     * @param task_map 执行日志结束 修改map
      * @param cardConnection_type 断开网状态 - 字典表
      * @return
      */
@@ -365,8 +365,7 @@ public class OutCat {
         writeCSV.Write(newName,out_list,Outcolumns,null,keys);
 
         yzExecutionTaskMapper.set_end_time(task_map);//任务结束
-
-        return "已下发执行任务可在【设备管理】》【执行任务管理】查看";
+        return "已下发执行日志可在【系统管理】》【日志管理】》【执行日志】查看";
     }
 
 

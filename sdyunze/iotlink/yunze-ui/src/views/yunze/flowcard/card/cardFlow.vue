@@ -5,43 +5,17 @@
       <!--用户数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
 
-          <el-form-item label="卡状态" prop="status">
+          <el-form-item label="资费状态" prop="status">
             <el-select
               v-model="queryParams.status"
-              placeholder="卡状态"
+              placeholder="资费计划状态"
               clearable
               size="small"
               style="width: 110px"
             >
               <el-option
-                v-for="dict in CardStatus"
+                v-for="dict in cardValidType"
                 :key="dict.dictValue"
                 :label="dict.dictLabel"
                 :value="dict.dictValue"
@@ -69,57 +43,7 @@
 
           </el-form-item>
 
-          <el-form-item label="时间类型" prop="status">
-            <el-select
-              v-model="queryParams.timetype"
-              placeholder="时间类型"
-              clearable
-              size="small"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in flowHisTime"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item >
-            <el-date-picker
-              v-model="selTime"
-              type="daterange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              value-format="yyyy-MM-dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 360px"
-              align="right">
-            </el-date-picker>
-          </el-form-item>
 
-          <el-form-item label="排序类型" prop="status">
-            <el-select
-              v-model="queryParams.ORDER_BY_type"
-              placeholder="请输入类型"
-              clearable
-              size="small"
-              style="width: 100px"
-            >
-              <el-option
-                v-for="dict in Lifting_sequence"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
           <!--资费计划-->
           <el-form-item label="资费计划类别" prop="status" label-width="100px">
             <el-select
@@ -154,8 +78,90 @@
               />
             </el-select>
           </el-form-item>
+        </el-form>
 
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: -10px;line-height:35px">
           <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-input
+                v-model="queryParams.value"
+                placeholder="查询值"
+                clearable
+                size="small"
+                style="width: 350px"
+                @keyup.enter.native="handleQuery"
+              >
+                <el-select
+                  v-model="queryParams.type"
+                  placeholder="查询条件"
+                  clearable
+                  slot="prepend"
+                  style="width: 110px"
+                >
+                  <el-option
+                    v-for="dict in typeOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </el-input>
+            </el-col>
+            <el-col :span="1.5">
+              <el-form-item label="时间类型" prop="status" style="margin-bottom: 10px;line-height:35px">
+                <el-select
+                  v-model="queryParams.timetype"
+                  placeholder="时间类型"
+                  clearable
+                  size="small"
+                  style="width: 110px"
+                >
+                  <el-option
+                    v-for="dict in flowTime"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item >
+                <el-date-picker
+                  v-model="selTime"
+                  type="daterange"
+                  :picker-options="pickerOptions"
+                  range-separator="至"
+                  value-format="yyyy-MM-dd"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  style="width: 360px"
+                  align="right">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="1.5">
+              <el-form-item label="排序类型" prop="status" style="margin-bottom: 10px;line-height:35px">
+                <el-select
+                  v-model="queryParams.ORDER_BY_type"
+                  placeholder="请输入类型"
+                  clearable
+                  size="small"
+                  style="width: 100px"
+                >
+                  <el-option
+                    v-for="dict in Lifting_sequence"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
             <el-col :span="1.5">
               <el-button
                 type="warning"
@@ -164,16 +170,17 @@
                 size="mini"
                 :loading="exportLoading"
                 @click="CardFlowExport"
-                v-hasPermi="['']"
+                v-hasPermi="['yunze:flowhis:exportflowhis']"
               >导出</el-button>
             </el-col>
-            <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['']" @queryTable="getList" :columns="columns"></right-toolbar>
+            <right-toolbar :showSearch.sync="showSearch"    @queryTable="getList" :columns="columns"></right-toolbar>
           </el-row>
         </el-form>
 
-        <el-table v-loading="loading" :data="cardList" >
 
-          <el-table-column   label="id" align="center" prop="id" v-if="columns[0].visible"/> >
+
+        <el-table v-loading="loading" :data="cardList" >
+          <el-table-column   label="id" align="center" prop="id" v-if="columns[0].visible"/>
           <el-table-column   label="资费组" align="center"  prop="package_id" v-if="columns[1].visible" >
             <template slot-scope="scope">
               {{tools.getkeyValue(packageOptions,scope.row.package_id,"package_id","package_agentname")}}
@@ -191,7 +198,7 @@
           <el-table-column   label="创建时间" align="center"  prop="create_time" v-if="columns[7].visible" />
           <el-table-column   label="状态" align="center" prop="status" v-if="columns[9].visible">
             <template slot-scope="scope" >
-              {{tools.getDkeyValue(CardStatus,""+scope.row.status)}}
+              {{tools.getDkeyValue(cardValidType,""+scope.row.status)}}
             </template>
           </el-table-column>
           <el-table-column   label="资费计划类别" align="center" prop="packet_type" v-if="columns[10].visible">
@@ -297,7 +304,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -317,7 +324,7 @@ export default {
       // 状态数据字典
       typeOptions: [],
       // 连接管理时间查询类型 数据字典
-      flowHisTime: [],
+      flowTime: [],
       // 简要套餐名称
       packageOptions: [],
       Lifting_sequence: [],
@@ -334,12 +341,8 @@ export default {
 
       //卡状态
       status_type: "",
-      // 卡状态 字典
-      CardStatus: [
-        {
-          dictLabel:''
-        }
-      ],
+      // 资费计划状态 字典
+      cardValidType: [ ],
       // 资费计划类别
       RatePlan: [],
       // 资费计划生效类别
@@ -453,13 +456,13 @@ export default {
     }
 
 
-    //加载 卡状态
-    if(window['CardStatus']!=undefined &&  window['CardStatus']!=null && window['CardStatus']!=''){
-      this.CardStatus = window['CardStatus'];
+    //加载 资费计划生效中类型
+    if(window['cardValidType']!=undefined &&  window['cardValidType']!=null && window['cardValidType']!=''){
+      this.cardValidType = window['cardValidType'];
     }else{
       this.getDicts("yunze_card_valid_type").then(response => {
-        window['CardStatus'] = response.data;
-        this.CardStatus = window['CardStatus'];
+        window['cardValidType'] = response.data;
+        this.cardValidType = window['cardValidType'];
       });
     }
 
@@ -496,12 +499,12 @@ export default {
 
 
     //加载 时间赛选查询条件
-    if(window['flowHisTime']!=undefined &&  window['flowHisTime']!=null && window['flowHisTime']!=''){
-      this.flowHisTime = window['flowHisTime'];
+    if(window['flowTime']!=undefined &&  window['flowTime']!=null && window['flowTime']!=''){
+      this.flowTime = window['flowTime'];
     }else{
       this.getDicts("yunze_card_flow").then(response => {
-        window['flowHisTime'] = response.data;
-        this.flowHisTime = window['flowHisTime'];
+        window['flowTime'] = response.data;
+        this.flowTime = window['flowTime'];
 
       });
     }

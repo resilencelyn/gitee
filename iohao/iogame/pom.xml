@@ -33,6 +33,9 @@
 
         <module>widget/light-all</module>
 
+        <!-- 游戏部件 : 进一步减少开发实践过程中的工作量 -->
+        <module>widget-game/light-game-room</module>
+
         <!-- 示例  -->
         <module>example/example-parent</module>
         <module>example/example-run-one</module>
@@ -42,7 +45,6 @@
         <!-- 实践案例 - 通用部份  -->
         <module>game-collect/game-common-proto</module>
         <module>game-collect/game-common</module>
-        <module>game-collect/game-common-logic</module>
 
         <!-- 网关服 -->
         <module>game-collect/game-gateway</module>
@@ -61,6 +63,7 @@
         <module>game-collect/game-test</module>
         <!-- java 坦克游戏 fxgl -->
         <module>game-collect/fxgl-tank</module>
+
 
 
     </modules>

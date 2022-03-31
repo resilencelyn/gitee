@@ -56,7 +56,7 @@ public class ActionCommandDocKit {
             try {
                 String packagePath = actionClazz.getPackageName();
                 ClassScanner classScanner = new ClassScanner(packagePath, null);
-                List<URL> resources = classScanner.getResources();
+                List<URL> resources = classScanner.listResource();
 
                 for (URL resource : resources) {
 

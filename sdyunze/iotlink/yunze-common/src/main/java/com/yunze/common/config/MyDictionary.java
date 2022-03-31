@@ -92,7 +92,7 @@ public class MyDictionary {
             } else {
                 dict_dataArr = yzCardMapper.findDict(findDict);
                 if (dict_dataArr != null && dict_dataArr.size() > 0) {
-                    redisUtil.redisTemplate.opsForValue().set(dict_type, dict_dataArr, 60 *  6 , TimeUnit.MINUTES);
+                    redisUtil.redisTemplate.opsForValue().set(dict_type, dict_dataArr, 10 , TimeUnit.MINUTES);
                 }
             }
         } catch (Exception e) {

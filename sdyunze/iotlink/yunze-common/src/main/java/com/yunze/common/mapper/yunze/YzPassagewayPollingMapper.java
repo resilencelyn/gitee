@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 通道轮序详情表
+ * 通道轮询详情表
  */
 public interface YzPassagewayPollingMapper {
 
@@ -28,14 +28,14 @@ public interface YzPassagewayPollingMapper {
 
 
     /**
-     * 新增 轮序详情
+     * 新增 轮询详情
      * @param map
      * @return
      */
     public int add(Map<String, Object> map);
 
     /**
-     * 修改当前轮序 数量
+     * 修改当前轮询 数量
      * @param map
      * @return
      */
@@ -43,11 +43,16 @@ public interface YzPassagewayPollingMapper {
 
 
     /**
-     *查询  近三天 正在执行的轮序任务
+     *查询  一天内 正在执行的轮询任务
      * @return
      */
     public List<Map<String, Object>> find_execute();
 
 
+    /**
+     * 查询  一天内已完成轮询任务
+      * @return
+     */
+    public List<Map<String, Object>> find_completed();
 
 }

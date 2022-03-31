@@ -128,7 +128,7 @@ public class YzCardRouteService_Impl  implements IYzCardRouteService {
         String newName = UUID.randomUUID().toString().replace("-","")+"_ChannelOut";
         String  agent_id = User.getDept().getDeptId().toString();
 
-        String task_name = create_by+"-上游通道 [导出] ";
+        String task_name ="上游通道 [导出] ";
         String SaveUrl = "/getcsv/"+newName+".csv";
 
         Map<String, Object> task_map = new HashMap<String, Object>();
@@ -146,7 +146,7 @@ public class YzCardRouteService_Impl  implements IYzCardRouteService {
             String keys[] = {"cd_id","cd_code","cd_name","cd_username","cd_pwd","cd_key","cd_url","cd_operator_type","cd_concurrency","cd_lunxun","cd_control_type","cd_max_use","createTime","updateTime","cd_delete","cd_agent_id","cd_status","cd_alias"};
             writeCSV.Write(newName,outChannelArr,Outcolumns,null,keys);
             yzExecutionTaskMapper.set_end_time(task_map);//任务结束
-            return "已下发执行任务可在【设备管理】》【执行任务管理】查看";
+            return "已下发执行日志可在【系统管理】》【日志管理】》【执行日志】查看";
         }else{
             return "您当前的筛选的查询条件 未找到数据！导出任务取消！";
         }

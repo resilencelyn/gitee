@@ -1,6 +1,16 @@
-# acss-dnd
+<div align="center">
 
-acss-dnd(atomic css drag and drop) 是一款基于 atomic css 特性，开发的 web 拖拽式网页编辑器。
+<img style="width: 300px" src='https://cdn.cuyang.me/acss-dnd/logo.png?acss-dnd'>
+
+**An web dnd editor on atomic css features**  
+**一款基于原子类 css 特性的 web 拖拽式编辑器**
+
+<p align='center'>
+  🤖
+  <a href='https://meetqy.gitee.io/acss-dnd'>在线体验 Gitee</a> · <span>🎡</span> <a href='https://cuyang.me/acss-dnd'>在线体验 Github</a>
+</p>
+
+</div>
 
 ## 🐶 特点
 
@@ -10,11 +20,6 @@ acss-dnd(atomic css drag and drop) 是一款基于 atomic css 特性，开发的
 - 多种主题随意切换
 - 响应式，生成的页面自动适配多端设备
 - 导出代码的代码易读、符合 html 规范、tree 结构
-
-## 🐱 在线体验
-
-- [Github](https://cuyang.me/acss-dnd/)
-- [Gitee](https://meetqy.gitee.io/acss-dnd)
 
 ## 🐭 安装
 
@@ -27,7 +32,13 @@ yarn dev
 ## 🐹 项目结构
 
 ```
+- classname  # ui库css原子类
 - template   # 存放模板配置
+- contants   # 除了ui库原子类的常量
+- store
+    - base                  # menu、template、sidebar状态管理，编辑器以外的状态
+    - editor                # 编辑器中内容的状态
+    - classes               # classname操作的工具类方法
 - views      # 模块
     - main                  # 编辑器外部的样式
     - editor                # 画布
@@ -38,6 +49,17 @@ yarn dev
         - file-b
         ...
 ```
+
+## 🐻‍❄️ 快捷键
+
+![](https://cdn.cuyang.me/acss-dnd/keyboard.gif)
+
+| 快捷键                | 作用                     |
+| --------------------- | ------------------------ |
+| `Shift` + `BackSpace` | 删除选中元素             |
+| `Shift` + `ArrowUp`   | 向上移动选中元素         |
+| `Shift` + `ArrowDown` | 向下移动选中元素         |
+| `Shift` + `p`         | 查找选中元素的父级并选中 |
 
 ## 🐰 基础库
 
@@ -51,7 +73,7 @@ yarn dev
 - 打开链接 👉🏻 https://github.com/cu-yang/acss-dnd/issues/new/choose
 - 选择对应模板
 
-![](./docs/issues.png)
+![](https://cdn.cuyang.me/acss-dnd/issues.png)
 
 ## 🦊 近期计划
 
@@ -59,5 +81,5 @@ yarn dev
 
 ## 🐻 预览图
 
-<img src='docs/editor.png' />
-<img src='docs/side-bar.png'/>
+<img src='https://cdn.cuyang.me/acss-dnd/editor.png' />
+<img src='https://cdn.cuyang.me/acss-dnd/side-bar.png'/>

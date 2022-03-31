@@ -36,7 +36,7 @@ public class RollbackCardagent {
         //分组 更具 dept_id-user_id
         Map<String, List<Map<String,Object>>> collect = dataList.stream().collect(Collectors.groupingBy(scope->scope.get("dept_id").toString()+'-'+scope.get("user_id").toString()));
         System.out.println(JSON.toJSONString(collect));
-        System.out.println("==========================");
+        System.out.println("=====");
         int UpdCpunt = 0 ;
         for(Map.Entry<String, List<Map<String, Object>>> entry:collect.entrySet()){
             String Keys[] = entry.getKey().split("-");

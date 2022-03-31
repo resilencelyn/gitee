@@ -26,7 +26,7 @@ import java.util.function.Predicate;
  * BootItem 配置项工具
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public class BootItemConfigKit {
     /**

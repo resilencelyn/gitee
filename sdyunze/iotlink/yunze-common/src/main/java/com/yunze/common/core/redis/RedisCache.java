@@ -264,7 +264,9 @@ public class RedisCache
     public void removeAll(String keyPrefix) {
         try {
             Collection<String> keys =  scanKeys(keyPrefix);
-            redisTemplate.delete(keys);
+            if(keys!=null && keys.size()>0){
+                redisTemplate.delete(keys);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }

@@ -34,14 +34,14 @@ import java.io.Serializable;
  * 消息基类
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 @ToString
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PROTECTED)
 @Accessors(chain = true)
-public abstract class BarMessage implements Serializable {
+public abstract sealed class BarMessage implements Serializable permits RequestMessage, ResponseMessage {
     @Serial
     private static final long serialVersionUID = 562068269463876111L;
     /** 目标路由 */

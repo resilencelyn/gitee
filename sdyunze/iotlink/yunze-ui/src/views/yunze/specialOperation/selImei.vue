@@ -76,7 +76,7 @@ export default {
       deptNodeAll: false,
 
       customize_whether: [],//自定义是否
-      ExecutionTask_OutType : [],// 执行任务导出类别
+      ExecutionTask_OutType : [],// 执行日志导出类别
 
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
@@ -144,9 +144,9 @@ export default {
 
       // 运营商类别 字典
       operators_type: [],
-      // 执行任务状态 字典
+      // 执行日志状态 字典
       channelStatusOptions: [],
-      // 执行任务编码 字典
+      // 执行日志编码 字典
       channelCodeOptions: [],
       // 表单参数
       form: {},

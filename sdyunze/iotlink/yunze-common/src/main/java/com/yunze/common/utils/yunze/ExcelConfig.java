@@ -265,20 +265,22 @@ public class ExcelConfig {
                     }
                     map.put(columns[j], cellData);
                 }
-                maxVid++;
-                map.put("vid", ""+maxVid);//增长 vid
+
                 list.add(map);
                 //System.out.println(list);
             }
         }
-        //遍历解析出来的list
-        /*for (Map<String,String> map : list) {
-            for (Map.Entry<String,String> entry : map.entrySet()) {
-                System.out.print(entry.getKey()+":"+entry.getValue()+",");
-            }
-            System.out.println();
-        }*/
-        return list;
+
+        // 排序 iccid+msisdn asc
+        list = MyListMapSort.listMapSort(list,"asc","iccid","msisdn");
+        List<Map<String,String>> rList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String,String> card = list.get(i);
+            maxVid++;
+            card.put("vid", ""+maxVid);//增长 vid
+            rList.add(card);
+        }
+        return rList;
     }
 
 
@@ -308,7 +310,7 @@ public class ExcelConfig {
             AddMap = new HashMap<>();
 
 
-            //=============[主表信息获取]========================
+            //======[主表信息获取]===
                 //获取sheet
                 sheet = wb.getSheetAt(0);
                 //获取最大行数
@@ -342,7 +344,7 @@ public class ExcelConfig {
                 }
 
 
-            //=============[账号信息获取]========================
+            //======[账号信息获取]===
             //获取sheet
             sheet2 = wb.getSheetAt(1);
             //获取最大行数
@@ -371,7 +373,7 @@ public class ExcelConfig {
                 //System.out.println(list);
             }
 
-            //=============[联系人 信息获取]========================
+            //======[联系人 信息获取]===
             //获取sheet
             sheet3 = wb.getSheetAt(2);
             //获取最大行数

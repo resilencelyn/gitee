@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * 订单 数据层
- *
+ * 
  * @author yunze
  */
 public interface YzOrderMapper {
@@ -114,7 +114,28 @@ public interface YzOrderMapper {
      */
     public String getOrderSum(Map<String, Object> map);
 
+    /**
+     * 获取交易总金额
+     * @param map
+     * @return
+     */
+    public String getSumPrice(Map<String, Object> map);
 
+
+    /**
+     * 修改 微信订单号订单支付状态
+     * @param map
+     * @return
+     */
+    public int updStatus(Map<String, Object> map);
+
+
+    /**
+     * 获取 订单简要 信息
+     * @param map
+     * @return
+     */
+    public Map<String,Object> getOrderBriefly(Map<String, Object> map);
 
 }
 

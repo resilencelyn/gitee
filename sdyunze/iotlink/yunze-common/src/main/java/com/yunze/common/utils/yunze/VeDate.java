@@ -854,13 +854,13 @@ public static String getLastDayOfMonth(int year,int month)
   System.out.println(TimeComparison_yyyy_MM_dd("2021-05-31",yyyy_MM_dd));*/
 
   System.out.println(getStringDateShort().substring(0,7));
-  /*System.out.println(getFirstDayOfGivenMonth(getMonthDate(getStringDateSSS(),1),"yyyy-MM-dd"));*/
+ System.out.println(getFirstDayOfGivenMonth(getMonthDate(getStringDateSSS(),-6),"yyyy-MM-dd"));
 
   //System.out.println(getNo(4));
 
-  String package_id = "YZ202106230408082666";
-  package_id = package_id.substring(package_id.length()-4,package_id.length());
-  System.out.println(package_id);
+  //String package_id = "YZ202106230408082666";
+  //package_id = package_id.substring(package_id.length()-4,package_id.length());
+  //System.out.println(package_id);
 
   //System.out.println(getStringDateShort());// new Date()为获取当前系统时间
 
@@ -868,14 +868,15 @@ public static String getLastDayOfMonth(int year,int month)
   //System.out.println(getEndDateOfMonth("202102"));
   //System.out.println(getNowDateShortNuber());
 
-  //String yyyy_MM_dd_HH_mm_ss = VeDate.getStringDate();
+  String yyyy_MM_dd_HH_mm_ss = VeDate.getStringDate();
   //System.out.println(yyyy_MM_dd_HH_mm_ss);
-  //System.out.println(VeDate.getNextDay(yyyy_MM_dd_HH_mm_ss.split(" ")[0],"7"));
+  System.out.println(VeDate.getNextDay(yyyy_MM_dd_HH_mm_ss.split(" ")[0],"-90"));
   //System.out.println(getEndDateOfMonth_yyyy_MM_DD(getStringDateShort()));
   //System.out.println(Integer.parseInt(getHour()));
-  System.out.println(getNextSecond("2021-08-31 11:02:51",1));
+  //System.out.println(getNextSecond("2021-08-31 11:02:51",1));
 
-  System.out.println(dateToStrLong(strToDate("2019-6-12")));
+  // System.out.println("2021-05-17".substring(0,8)+"01");
+  //System.out.println(dateToStrLong(strToDate("2019-6-12")));
 	 //System.out.println(getTwoHour("18:41:00","16:41:00"));
 	// System.out.println(getLastDayOfMonth(2019,4).split("-")[2]);
 	 //System.out.println(v.GetHH_MM_SS();

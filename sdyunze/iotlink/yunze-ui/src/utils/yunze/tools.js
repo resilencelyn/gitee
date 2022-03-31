@@ -10,75 +10,63 @@ import "crypto-js/pad-zeropadding"
 import $ from "jquery";
 
 
-
-
 let tools = {}
 
 
-
-
 //-----[Element 表格编辑(<td class="MyEl_edit"></td>)] 2021-10-13
-tools.Element_edit = function (){
+tools.Element_edit = function () {
   //数据可编辑
-  $(".cell .MyEl_edit").on("toggle",function(){
+  $(".cell .MyEl_edit").on("toggle", function () {
       console.log(text);
-      var text=$(this).html();
-      $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="'+text+'">');
+      var text = $(this).html();
+      $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="' + text + '">');
       $(this).children("input").val("").focus().val(text);
-  },function(){
+    }, function () {
       $(this).html($(this).children("input").val());
     }
   )
-  $(".cell .MyEl_edit").on("click",function(){
-    console.log("click"+text);
-    var text=$(this).html();
-    $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="'+text+'">');
+  $(".cell .MyEl_edit").on("click", function () {
+    console.log("click" + text);
+    var text = $(this).html();
+    $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="' + text + '">');
     $(this).children("input").val("").focus().val(text);
-  } )
-  $(".cell .MyEl_edit").click(function(){
-    console.log("click"+text);
-    var text=$(this).html();
-    $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="'+text+'">');
+  })
+  $(".cell .MyEl_edit").click(function () {
+    console.log("click" + text);
+    var text = $(this).html();
+    $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="' + text + '">');
     $(this).children("input").val("").focus().val(text);
-  } )
+  })
 
 
-   $(".cell .MyEl_edit").toggle(function(){
-     var text=$(this).html();
-     console.log(text);
-     $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="'+text+'">');
-     $(this).children("input").val("").focus().val(text);
-   },function(){
-     $(this).html($(this).children("input").val());
-   })
+  $(".cell .MyEl_edit").toggle(function () {
+    var text = $(this).html();
+    console.log(text);
+    $(this).html('<input type="text" class="el-input__inner Myel-table-edit" value="' + text + '">');
+    $(this).children("input").val("").focus().val(text);
+  }, function () {
+    $(this).html($(this).children("input").val());
+  })
   //数据编辑失去焦点失效
-  $(".Myel-table-edit").on("blur",function(){
-    var text=$(this).val();
+  $(".Myel-table-edit").on("blur", function () {
+    var text = $(this).val();
     $(this).parent().html(text);
   })
 }
 //-----[Element 表格编辑END]
 
 
-
-
-
-
-
-
-
-
 /**
  * 查询当前用户是否有操作权限
  */
-tools.hasResource=function(id){
-  let _this=this
-  let requests =JSON.parse(sessionStorage.getItem("loginUser"))
-  if(requests.account===null){
+tools.hasResource = function (id) {
+  let _this = this
+  let requests = JSON.parse(sessionStorage.getItem("loginUser"))
+  if (requests.account === null) {
     return false
   }
-  for(let i=0;i<requests.functionList.length;i++){
-    if(id===requests.functionList[i].id){
+  for (let i = 0; i < requests.functionList.length; i++) {
+    if (id === requests.functionList[i].id) {
       return true
     }
   }
@@ -102,7 +90,11 @@ tools.encrypt = function (data, key, iv) {
    }).toString();
 */
   // console.log(key+"  =  "+iv);
-  return CryptoJS.AES.encrypt(data, key, {iv:iv,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.ZeroPadding}).toString();
+  return CryptoJS.AES.encrypt(data, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.ZeroPadding
+  }).toString();
 }
 
 tools.install = function (Vue, options) {
@@ -112,7 +104,7 @@ tools.install = function (Vue, options) {
 
 
 // 解密
-tools.Decrypt = function(text, key, iv) {
+tools.Decrypt = function (text, key, iv) {
   key = tools.Is_null(key) ? key : "YunZeIot@5iot.cn";
   iv = tools.Is_null(iv) ? iv : "www_5iot_cn@2022";
   //console.log(key+"  = = =   "+iv);
@@ -155,7 +147,7 @@ tools.VerificationsText_wx = function (_this, _val, Message) {
 
 //-----[验证数组并提示]
 tools.VerificationsArr = function (_this, _arr, Message) {
-  let bool = _arr.length>0;
+  let bool = _arr.length > 0;
   if (bool == false) {
     tools.open(_this, Message)
   }
@@ -169,12 +161,12 @@ tools.VerificationsArr = function (_this, _arr, Message) {
 tools.Is_null = function (val) {
   //console.log(val)
   //console.log(Object.is(val, NaN))
-  if(Object.is(val, NaN)){
+  if (Object.is(val, NaN)) {
     //console.log("fffffff")
-    return  false;
-  }else{
-    val = tools.isNumber(val) == true ? val + "" : val;//如果是一个数字类型过滤成字符串 && isNaN(val)==false
-    return val != undefined && val != null  && val != "" && val.trim() != "" && val != "undefined" && val != "null" && val != 'NaN'  ? true : false;//
+    return false;
+  } else {
+    val = tools.isNumber(val) == true ? val + "" : val;//如果是一个数字类型过滤成字符串 && isNaN(val)==false  && val.trim() != ""
+    return val != undefined && val != null && val != "" && val != "undefined" && val != "null" && val != 'NaN' ? true : false;//
   }
 }
 
@@ -186,7 +178,7 @@ tools.Is_null = function (val) {
  * @param key
  * @returns {string}
  */
-tools.getSign = function (_this,map, key) {
+tools.getSign = function (_this, map, key) {
   // console.log("getSign====")
   let signstr = "";
   let key_arr = [];
@@ -216,8 +208,6 @@ tools.isNumber = function (obj) {
 }
 
 
-
-
 /**
  * 询问对话框
  * @param: _this = this
@@ -228,8 +218,8 @@ tools.isNumber = function (obj) {
  * @param: FalseFun = 取消时 执行 函数 例【this.add】 前提是 add 必须有
  * @param: FalsePar = 取消时 执行 函数 参数
  */
-tools.openAsk = function (_this,_type, Message, TrueFun, TrunPar, FalseFun, FalsePar) {
-  _type = tools.Is_null(_type)?_type:"info";
+tools.openAsk = function (_this, _type, Message, TrueFun, TrunPar, FalseFun, FalsePar) {
+  _type = tools.Is_null(_type) ? _type : "info";
   _this.$confirm(Message, {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -237,20 +227,11 @@ tools.openAsk = function (_this,_type, Message, TrueFun, TrunPar, FalseFun, Fals
   }).then(() => {
     TrueFun(TrunPar)
   }).catch(() => {
-    if(FalseFun!=null){
+    if (FalseFun != null) {
       FalseFun(FalsePar);
     }
   });
 }
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -259,23 +240,22 @@ tools.openAsk = function (_this,_type, Message, TrueFun, TrunPar, FalseFun, Fals
  * @param De_val 【默认值】选参
  * @returns
  */
-tools.set_double = function(val,De_val){
+tools.set_double = function (val, De_val) {
   //console.log(val);
   //console.log(De_val);
-  De_val=tools.Is_null(De_val)==true?De_val:1;//默认值为空时给 1
+  De_val = tools.Is_null(De_val) == true ? De_val : 1;//默认值为空时给 1
   let reg_Tow = /^(?!0{2,})(?:\d{1,9}(\.\d+)?|10{9})$/;
-  let map={};
-  if(val!=undefined && val!=null && val.trim()!=""){
-    val=parseFloat(val);
-    val=tools.toFixed(val,2);//保留两位小数数据格式化
-    val = reg_Tow.test(val)?val:De_val;//单价
-    val  = val =="0.00"? De_val:val;
-  }else{//默认单价
-    val=De_val;
+  let map = {};
+  if (val != undefined && val != null && val.trim() != "") {
+    val = parseFloat(val);
+    val = tools.toFixed(val, 2);//保留两位小数数据格式化
+    val = reg_Tow.test(val) ? val : De_val;//单价
+    val = val == "0.00" ? De_val : val;
+  } else {//默认单价
+    val = De_val;
   }
   return val;
 }
-
 
 
 /**
@@ -334,18 +314,19 @@ tools.toFixed = function (number, decimal) {
  * 针对文本域 换行符切割 过滤前后空格获取数组
  * @param lets
  */
-tools.textareaGet = function (vars){
+tools.textareaGet = function (vars) {
   vars = vars.split(/[\s\n]/);
   //console.log(vars);
-  vars =  $.grep(vars, function (x) { return $.trim(x).length > 0; });
+  vars = $.grep(vars, function (x) {
+    return $.trim(x).length > 0;
+  });
   //console.log(vars);
   return vars;
 }
 
 
-
 //-----[获取当前时间]
-tools.getTime =function () {
+tools.getTime = function () {
   let myDate = new Date();
   let h = myDate.getHours(); //获取当前小时数(0-23)
   let m = myDate.getMinutes(); //获取当前分钟数(0-59)
@@ -356,7 +337,7 @@ tools.getTime =function () {
 
 
 //-----[获取当前时间]
-tools.getdatetime =function () {
+tools.getdatetime = function () {
   let myDate = new Date();
   //获取当前年
   let year = myDate.getFullYear();
@@ -367,25 +348,25 @@ tools.getdatetime =function () {
   let h = myDate.getHours(); //获取当前小时数(0-23)
   let m = myDate.getMinutes(); //获取当前分钟数(0-59)
   let s = myDate.getSeconds();
-  let now = year + '-' +tools.p(month) + "-" + tools.p(date) + " " + tools.p(h) + ':' + tools.p(m) + ":" + tools.p(s);
+  let now = year + '-' + tools.p(month) + "-" + tools.p(date) + " " + tools.p(h) + ':' + tools.p(m) + ":" + tools.p(s);
 
   return now;
 }
 
-tools.p =function (s) {
+tools.p = function (s) {
   return s < 10 ? '0' + s : s;
 }
 
 
 //-----[获取前n天的日期]
-tools.getBeforeDate =function (n) {
+tools.getBeforeDate = function (n) {
 
   let d = new Date();
   let year = d.getFullYear();
   let mon = d.getMonth() + 1;
   let day = d.getDate();
-  if(day <= n) {
-    if(mon > 1) {
+  if (day <= n) {
+    if (mon > 1) {
       mon = mon - 1;
     } else {
       year = year - 1;
@@ -401,19 +382,18 @@ tools.getBeforeDate =function (n) {
 }
 
 
-
 //-- 获取两个日期之间所有日期
-Date.prototype.format = function() {
+Date.prototype.format = function () {
   let s = '';
   let mouth = (this.getMonth() + 1) >= 10 ? (this.getMonth() + 1) : ('0' + (this.getMonth() + 1));
   let day = this.getDate() >= 10 ? this.getDate() : ('0' + this.getDate());
   s += this.getFullYear() + '-'; // 获取年份。
   s += mouth + "-"; // 获取月份。
   s += day; // 获取日。
-  return(s); // 返回日期。
+  return (s); // 返回日期。
 };
 
-tools.getdateAll =function (begin, end) {
+tools.getdateAll = function (begin, end) {
   let $resdata = [];
   let ab = begin.split("-");
   let ae = end.split("-");
@@ -423,7 +403,7 @@ tools.getdateAll =function (begin, end) {
   de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);
   let unixDb = db.getTime();
   let unixDe = de.getTime();
-  for(let k = unixDb; k <= unixDe;) {
+  for (let k = unixDb; k <= unixDe;) {
     $resdata.push(new Date(parseInt(k)).format());
     k = k + 24 * 60 * 60 * 1000;
   }
@@ -431,12 +411,12 @@ tools.getdateAll =function (begin, end) {
 }
 
 
-
-//----[获取当前日期]
-tools.gitData =function () {
+//----[获取当前日期 年 月 日 时 分 秒]
+tools.gitData = function () {
   function p(s) {
     return s < 10 ? '0' + s : s;
   }
+
   let myDate = new Date();
   //获取当前年
   let year = myDate.getFullYear();
@@ -444,19 +424,35 @@ tools.gitData =function () {
   let month = myDate.getMonth() + 1;
   //获取当前日
   let date = myDate.getDate();
-  return(year + '-' + p(month) + "-" + p(date));
+
+  let Hours = myDate.getHours();
+
+  let Minutes = myDate.getMinutes();
+
+  let Seconds = myDate.getSeconds();
+
+
+  return (year + '-' + p(month) + "-" + p(date) + "-" + p(Hours) + "-" + p(Minutes) + "-" + p(Seconds));
 }
-
-
+//----[获取当前日期 年 月 日 ]
+tools.gitDataCurrent = function () {
+  let nowDate = new Date();
+  let year = nowDate.getFullYear();
+  let month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1)
+    : nowDate.getMonth() + 1;
+  let day = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate
+    .getDate();
+  return (year + "-" + month + "-" + day);
+}
 /**
  * 格式化 数字每三位加逗号的方法（包含小数）
  * @param str
  * @returns {string}
  */
-tools.formatNum =function (str) {
+tools.formatNum = function (str) {
   let newStr = "";
   let count = 0;
-  str = str+"";
+  str = str + "";
   //console.log(str)
   // 当数字是整数
   if (str.indexOf(".") == -1) {
@@ -468,7 +464,7 @@ tools.formatNum =function (str) {
       }
       count++;
     }
-    str = newStr ; //自动补小数点后两位
+    str = newStr; //自动补小数点后两位
     return str;
   }
   // 当数字带有小数
@@ -493,29 +489,29 @@ tools.formatNum =function (str) {
  * @param val2
  * @returns {{}}
  */
-tools.getPercentage =function (val1,val2) {
-  let map ={};
+tools.getPercentage = function (val1, val2) {
+  let map = {};
 
   //let percentage = tools.NumberMul(tools.NumberSub((val1/val2),'1'),'100');
   //let percentage = tools.NumberMul(((val1/val2)-1),'100');
   //let percentage = ((val1/val2)-1)*100;
 
-  let percentage = tools.NumberMul(tools.NumberSub(tools.NumberDiv(val1,val2,4),'1'),'100');
+  let percentage = tools.NumberMul(tools.NumberSub(tools.NumberDiv(val1, val2, 4), '1'), '100');
   //console.log("percentage   = "+percentage);
   //let percentage = ((180/80)-1)*100;
   //console.log(percentage>0);
   // console.log(parseFloat(percentage)>0);
-  percentage =parseFloat(percentage);
+  percentage = parseFloat(percentage);
   // console.log(percentage>0);
   // console.log(percentage);
 
-  if(percentage>0){
-    map.type="up";
-    map.percentage = percentage+"%";
-  }else {
-    percentage = tools.Is_null(percentage)?percentage:0;
-    map.type="down";
-    map.percentage = Math.abs(percentage)+"%";
+  if (percentage > 0) {
+    map.type = "up";
+    map.percentage = percentage + "%";
+  } else {
+    percentage = tools.Is_null(percentage) ? percentage : 0;
+    map.type = "down";
+    map.percentage = Math.abs(percentage) + "%";
   }
   return map;
 }
@@ -527,16 +523,18 @@ tools.getPercentage =function (val1,val2) {
  * @returns {number}
  * @constructor
  */
-tools.NumberMul = function(arg1, arg2) {
+tools.NumberMul = function (arg1, arg2) {
   var m = 0;
   var s1 = arg1.toString();
   var s2 = arg2.toString();
   try {
     m += s1.split(".")[1].length;
-  } catch (e) {}
+  } catch (e) {
+  }
   try {
     m += s2.split(".")[1].length;
-  } catch (e) {}
+  } catch (e) {
+  }
 
   return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
 }
@@ -548,10 +546,10 @@ tools.NumberMul = function(arg1, arg2) {
  * @returns {string}
  * @constructor
  */
-tools.NumberAdd = function(arg1, arg2) {
+tools.NumberAdd = function (arg1, arg2) {
   var r1, r2, m, n;
-  arg1 = arg1+"";
-  arg2 = arg2+"";
+  arg1 = arg1 + "";
+  arg2 = arg2 + "";
   try {
     r1 = arg1.toString().split(".")[1].length
   } catch (e) {
@@ -575,10 +573,10 @@ tools.NumberAdd = function(arg1, arg2) {
  * @returns {string}
  * @constructor
  */
-tools.NumberSub = function(arg1, arg2) {
+tools.NumberSub = function (arg1, arg2) {
   var re1, re2, m, n;
-  arg1 = arg1+"";
-  arg2 = arg2+"";
+  arg1 = arg1 + "";
+  arg2 = arg2 + "";
   try {
     re1 = arg1.toString().split(".")[1].length;
   } catch (e) {
@@ -603,21 +601,27 @@ tools.NumberSub = function(arg1, arg2) {
  * @returns {number}
  * @constructor
  */
-tools.NumberDiv = function (arg1,arg2,digit){
-  arg1 = arg1+"";
-  arg2 = arg2+"";
-  var t1=0,t2=0,r1,r2;
-  try{t1=arg1.toString().split(".")[1].length}catch(e){}
-  try{t2=arg2.toString().split(".")[1].length}catch(e){}
-  r1=Number(arg1.toString().replace(".",""))
-  r2=Number(arg2.toString().replace(".",""))
+tools.NumberDiv = function (arg1, arg2, digit) {
+  arg1 = arg1 + "";
+  arg2 = arg2 + "";
+  var t1 = 0, t2 = 0, r1, r2;
+  try {
+    t1 = arg1.toString().split(".")[1].length
+  } catch (e) {
+  }
+  try {
+    t2 = arg2.toString().split(".")[1].length
+  } catch (e) {
+  }
+  r1 = Number(arg1.toString().replace(".", ""))
+  r2 = Number(arg2.toString().replace(".", ""))
   //获取小数点后的计算值
-  var result= ((r1/r2)*Math.pow(10,t2-t1)).toString()
-  var result2=result.split(".")[1];
-  result2 = result2+"";
-  result2=result2.substring(0,digit>result2.length?result2.length:digit);
+  var result = ((r1 / r2) * Math.pow(10, t2 - t1)).toString()
+  var result2 = result.split(".")[1];
+  result2 = result2 + "";
+  result2 = result2.substring(0, digit > result2.length ? result2.length : digit);
 
-  return Number(result.split(".")[0]+"."+result2);
+  return Number(result.split(".")[0] + "." + result2);
 }
 
 
@@ -628,11 +632,11 @@ tools.NumberDiv = function (arg1,arg2,digit){
  * @param _type
  * @constructor
  */
-tools.MessageShow = function (_this,_message,_type){
-  _type = tools.Is_null(_type)?_type:"";
-  if(_type !='error'){
+tools.MessageShow = function (_this, _message, _type) {
+  _type = tools.Is_null(_type) ? _type : "";
+  if (_type != 'error') {
     _this.$notify.warning(_message)
-  }else {
+  } else {
     _this.$notify.error(_message)
   }
 }
@@ -655,31 +659,29 @@ tools.set_double = function (val,Defaults_val){
 }*/
 
 
-
 /**
  * 获取一个整数值
  * @param P_number 传入值【任意字符】
  * @param Defaults_val 【默认值】选参
  * @returns
  */
-tools.set_number = function (P_number,Defaults_val){
-  Defaults_val=tools.Is_null(Defaults_val)==true?Defaults_val:1;//默认值为空时给 1
+tools.set_number = function (P_number, Defaults_val) {
+  Defaults_val = tools.Is_null(Defaults_val) == true ? Defaults_val : 1;//默认值为空时给 1
   let reg_Tow = /^(?!0{2,})(?:\d{1,9}(\.\d+)?|10{9})$/;
-  if(P_number!=undefined && P_number!=null && P_number.trim()!=""){
-    P_number =parseInt(P_number);
-    P_number  = reg_Tow.test(P_number)?P_number:Defaults_val;//数量
-    P_number  = P_number =="0"? Defaults_val:P_number;
-  }else{//默认 值 赋值
-    P_number=Defaults_val;
+  if (P_number != undefined && P_number != null && P_number.trim() != "") {
+    P_number = parseInt(P_number);
+    P_number = reg_Tow.test(P_number) ? P_number : Defaults_val;//数量
+    P_number = P_number == "0" ? Defaults_val : P_number;
+  } else {//默认 值 赋值
+    P_number = Defaults_val;
   }
   return P_number;
 }
 
 
-
 //----[多少毫秒后刷新界面]
 tools.loadSX = function (s) {
-  setTimeout(function() {
+  setTimeout(function () {
     window.location.reload();
   }, s);
 }
@@ -737,26 +739,40 @@ tools.numDiv = function (num1, num2) {
 };
 
 //-----[加法函数，用来得到精确的加法结果]2018-12-23
-tools.accAdd = function (arg1,arg2){
+tools.accAdd = function (arg1, arg2) {
 
-  var r1,r2,m;
+  var r1, r2, m;
 
-  try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+  try {
+    r1 = arg1.toString().split(".")[1].length
+  } catch (e) {
+    r1 = 0
+  }
 
-  try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+  try {
+    r2 = arg2.toString().split(".")[1].length
+  } catch (e) {
+    r2 = 0
+  }
 
-  m=Math.pow(10,Math.max(r1,r2));
+  m = Math.pow(10, Math.max(r1, r2));
 
-  return (tools.accMul(arg1,m)+tools.accMul(arg2,m))/m;
+  return (tools.accMul(arg1, m) + tools.accMul(arg2, m)) / m;
 
 }
 //-----[加法函数，用来得到精确的加法结果END]
 //-----[乘法]2018-12-23
-tools.accMul = function (arg1,arg2){
-  var m=0,s1=arg1.toString(),s2=arg2.toString();
-  try{m+=s1.split(".")[1].length}catch(e){}
-  try{m+=s2.split(".")[1].length}catch(e){}
-  return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
+tools.accMul = function (arg1, arg2) {
+  var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+  try {
+    m += s1.split(".")[1].length
+  } catch (e) {
+  }
+  try {
+    m += s2.split(".")[1].length
+  } catch (e) {
+  }
+  return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
 //-----[乘法end]
 
@@ -766,10 +782,9 @@ tools.accMul = function (arg1,arg2){
  * @param val
  * @returns
  */
-tools.not_null_Get_value = function (val){
-  return val!=undefined && val!=null && val!=""?val:null;
+tools.not_null_Get_value = function (val) {
+  return val != undefined && val != null && val != "" ? val : null;
 }
-
 
 
 /**
@@ -777,8 +792,8 @@ tools.not_null_Get_value = function (val){
  * @param obj
  * @returns
  */
-tools.isNumber = function   (obj){
-  return   typeof obj === 'number' && !isNaN(obj);
+tools.isNumber = function (obj) {
+  return typeof obj === 'number' && !isNaN(obj);
 }
 
 //-----[计算时间差]
@@ -794,7 +809,7 @@ tools.GetDateDiff = function (startTime, endTime, diffType) {
   var eTime = new Date(endTime); //结束时间
   //作为除数的数字
   var timeType = 1;
-  switch(diffType) {
+  switch (diffType) {
     case "second":
       timeType = 1000;
       break;
@@ -815,22 +830,21 @@ tools.GetDateDiff = function (startTime, endTime, diffType) {
 //-----[END][计算时间差]
 
 
-
-
 //-----[清除特殊字符并提示element: 元素，df_val:默认值,MaxLeng 最大长度]2019-01-04
-tools.KeyUP_Cler = function (_this,$val,df_val,MaxLeng,Msg) {
+tools.KeyUP_Cler = function (_this, $val, df_val, MaxLeng, Msg) {
   var $bool = tools.RegeMatch($val) ? false : true;
-  MaxLeng = tools.Is_null(MaxLeng)?MaxLeng:50;
+  MaxLeng = tools.Is_null(MaxLeng) ? MaxLeng : 50;
   //console.log($bool)
-  if(!$bool){
-    Msg = tools.Is_null(Msg)?Msg:"不能有特殊字符哦~";
+  if (!$bool) {
+    Msg = tools.Is_null(Msg) ? Msg : "不能有特殊字符哦~";
     _this.msgError(Msg);
     $val = window["df_val"];
-  }
-  else{window["df_val"]=$val;}//赋值默认val
-  if(tools.Is_null($val)  &&  $val.length>MaxLeng ){
-    _this.msgError("最大长度为["+MaxLeng+"] !");
-    $val = $val.substring(0,MaxLeng);
+  } else {
+    window["df_val"] = $val;
+  }//赋值默认val
+  if (tools.Is_null($val) && $val.length > MaxLeng) {
+    _this.msgError("最大长度为[" + MaxLeng + "] !");
+    $val = $val.substring(0, MaxLeng);
   }
   return $bool;
 }
@@ -839,8 +853,8 @@ tools.KeyUP_Cler = function (_this,$val,df_val,MaxLeng,Msg) {
 //-----[过滤特殊字符]
 tools.RegeMatch = function ($name) {
   var pattern = new RegExp("[-` ~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）—+|{}【】‘；：”“’。，、？《》]");
-  if($name != undefined && $name != null  && $name != "" && $name.length > 0) {
-    if(pattern.test($name)) {
+  if ($name != undefined && $name != null && $name != "" && $name.length > 0) {
+    if (pattern.test($name)) {
       return true;
     } else {
       return false;
@@ -850,19 +864,17 @@ tools.RegeMatch = function ($name) {
 //-----[END][过滤特殊字符]
 
 
-
 //-----[过滤特殊字符]
-tools.Textfilter = function(element,df_val){
+tools.Textfilter = function (element, df_val) {
   // 键盘按下过滤
-  element.on("keyup",function(){
-    tools.KeyUP_Cler(element,df_val);
+  element.on("keyup", function () {
+    tools.KeyUP_Cler(element, df_val);
   })
   // 编辑文本框 失焦过滤
-  element.on("blur",function(){
-    tools.KeyUP_Cler(element,df_val);
+  element.on("blur", function () {
+    tools.KeyUP_Cler(element, df_val);
   })
 }
-
 
 
 /**
@@ -873,33 +885,33 @@ tools.Textfilter = function(element,df_val){
  * @param maxlength 最大长度
  * @returns
  */
-tools.val_number = function (element,type,Defaults_val,maxlength){
+tools.val_number = function (element, type, Defaults_val, maxlength) {
   //焦时获取元素 当前行,当前td
-  element.live("focus",function(data){
-    window["_parent"]=$(this).parent().parent();
-    window["_e"]=$(this).parent();
+  element.live("focus", function (data) {
+    window["_parent"] = $(this).parent().parent();
+    window["_e"] = $(this).parent();
   })
 
   // 键盘按下过滤
-  element.live("keyup",function(data){
-    $(this).attr("maxlength",maxlength);
-    var value=num_value($(this).val());//只能输入两位数小数和整数
+  element.live("keyup", function (data) {
+    $(this).attr("maxlength", maxlength);
+    var value = num_value($(this).val());//只能输入两位数小数和整数
     $(this).val(value);
   })
   // 编辑文本框 失焦过滤
-  element.live("blur",function(data){
-    var _parent=window["_parent"];
-    var _this=window["_e"];
-    var val=_this.html();
-    if("int"==type.toLowerCase()){
-      val=set_number(val,Defaults_val)
-    }else if("double"==type.toLowerCase()){
-      val=set_double(val,Defaults_val)
+  element.live("blur", function (data) {
+    var _parent = window["_parent"];
+    var _this = window["_e"];
+    var val = _this.html();
+    if ("int" == type.toLowerCase()) {
+      val = set_number(val, Defaults_val)
+    } else if ("double" == type.toLowerCase()) {
+      val = set_double(val, Defaults_val)
     }
     //延迟赋值 【解决动态编辑赋值的bug】
-    setTimeout(function(){
+    setTimeout(function () {
       _this.html(val);
-    },10);
+    }, 10);
   })
 
 }
@@ -912,14 +924,14 @@ tools.handleInput2 = function (e) {
 
 
 //获取cookie
-  tools.getCookie = function (cname){
+  tools.getCookie = function (cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
     //console.log("获取cookie,现在循环")
     for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
       while (c.charAt(0) == ' ') c = c.substring(1);
-      if (c.indexOf(name) != -1){
+      if (c.indexOf(name) != -1) {
         return c.substring(name.length, c.length);
       }
     }
@@ -928,7 +940,7 @@ tools.handleInput2 = function (e) {
 
 
 /*获取字典数据中的匹对key value*/
-tools.getDkeyValue = function(arr,key){
+tools.getDkeyValue = function (arr, key) {
   /*let value = '';
   key = ""+key+"";
   for (let i = 0; i < arr.length; i++) {
@@ -939,12 +951,12 @@ tools.getDkeyValue = function(arr,key){
     }
   }
   return value;*/
-  return tools.getkeyValue(arr,key,"dictValue","dictLabel");
+  return tools.getkeyValue(arr, key, "dictValue", "dictLabel");
 }
 
 
 /*获取字典数据中的匹对key value 部门数据*/
-tools.getDeptNamekeyValue = function (arr,key){
+tools.getDeptNamekeyValue = function (arr, key) {
   /*let value = '';
   key = ""+key+"";
   for (let i = 0; i < arr.length; i++) {
@@ -955,12 +967,12 @@ tools.getDeptNamekeyValue = function (arr,key){
     }
   }
   return value;*/
-  return tools.getkeyValue(arr,key,"dept_id","dept_name");
+  return tools.getkeyValue(arr, key, "dept_id", "dept_name");
 }
 
 
 /*获取字典数据中的匹对key value 用户数据*/
-tools.getUserNamekeyValue = function (arr,key){
+tools.getUserNamekeyValue = function (arr, key) {
   /* let value = '';
    key = ""+key+"";
    for (let i = 0; i < arr.length; i++) {
@@ -971,12 +983,12 @@ tools.getUserNamekeyValue = function (arr,key){
      }
    }*/
   //return value;
-  return tools.getkeyValue(arr,key,"user_id","nick_name");
+  return tools.getkeyValue(arr, key, "user_id", "nick_name");
 }
 
 
 /*获取 资费组 中的匹对key value 用户数据*/
-tools.getPackageNNamekeyValue = function (arr,key){
+tools.getPackageNNamekeyValue = function (arr, key) {
   /*let value = '';
   key = ""+key+"";
   for (let i = 0; i < arr.length; i++) {
@@ -986,19 +998,17 @@ tools.getPackageNNamekeyValue = function (arr,key){
       break;
     }
   }*/
-  return tools.getkeyValue(arr,key,"package_id","package_agentname");
+  return tools.getkeyValue(arr, key, "package_id", "package_agentname");
 }
 
 
-
-
 /*获取 arr 中的匹对 keyVlue Rvalue 数据*/
-tools.getkeyValue = function (arr,key,keyVlue,Rvalue){
+tools.getkeyValue = function (arr, key, keyVlue, Rvalue) {
   let value = '';
-  key = ""+key+"";
+  key = "" + key + "";
   for (let i = 0; i < arr.length; i++) {
-    let map =  arr[i];
-    if(map[keyVlue]==key){
+    let map = arr[i];
+    if (map[keyVlue] == key) {
       value = map[Rvalue];
       break;
     }
@@ -1007,14 +1017,13 @@ tools.getkeyValue = function (arr,key,keyVlue,Rvalue){
 }
 
 
-
 /*获取 判断 key 是否在 arr 中*/
-tools.IsArrInside = function (arr,key,keyVlue){
+tools.IsArrInside = function (arr, key, keyVlue) {
   let bool = false;
-  key = ""+key+"";
+  key = "" + key + "";
   for (let i = 0; i < arr.length; i++) {
-    let map =  arr[i];
-    if(map[key]==keyVlue){
+    let map = arr[i];
+    if (map[key] == keyVlue) {
       bool = true;
       break;
     }
@@ -1023,10 +1032,9 @@ tools.IsArrInside = function (arr,key,keyVlue){
 }
 
 
-
 // 格式方法
 // 公共方法
-tools.transitionJsonToString = function(jsonObj, callback) {
+tools.transitionJsonToString = function (jsonObj, callback) {
   // 转换后的jsonObj受体对象
   var _jsonObj = null;
   // 判断传入的jsonObj对象是不是字符串，如果是字符串需要先转换为对象，再转换为字符串，这样做是为了保证转换后的字符串为双引号
@@ -1051,7 +1059,7 @@ tools.transitionJsonToString = function(jsonObj, callback) {
   return _jsonObj;
 }
 // callback为数据格式化错误的时候处理函数
-tools.formatJson = function  (jsonObj, callback) {
+tools.formatJson = function (jsonObj, callback) {
   // 正则表达式匹配规则变量
   var reg = null;
   // 转换后的字符串变量
@@ -1166,8 +1174,10 @@ tools.dateFormat = function (fmt, date) {
     ret = new RegExp("(" + k + ")").exec(fmt);
     if (ret) {
       fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "1")))
-    };
-  };
+    }
+    ;
+  }
+  ;
   return fmt;
 }
 
@@ -1177,15 +1187,15 @@ tools.dateFormat = function (fmt, date) {
  * @param mothSize 推算月日期 如 获取 近三个月 日期 传入 3
  * @returns {string}
  */
-tools.getDateMonth =  function (mothSize) {
+tools.getDateMonth = function (mothSize) {
   var date1 = new Date();
-  date1.setMonth(date1.getMonth()- mothSize);
-  var year1=date1.getFullYear();
-  var month1=date1.getMonth()+1;
-  var day1=date1.getDay();
-  month1 =(month1<10 ? '0'+month1:month1);
-  day1 =(day1<10 ? '0'+day1:day1);
-  var sDate = (year1.toString()+'-'+month1.toString()+'-'+day1);
+  date1.setMonth(date1.getMonth() - mothSize);
+  var year1 = date1.getFullYear();
+  var month1 = date1.getMonth() + 1;
+  var day1 = date1.getDay();
+  month1 = (month1 < 10 ? '0' + month1 : month1);
+  day1 = (day1 < 10 ? '0' + day1 : day1);
+  var sDate = (year1.toString() + '-' + month1.toString() + '-' + day1);
   return sDate;
 }
 
@@ -1193,7 +1203,7 @@ tools.getDateMonth =  function (mothSize) {
  * 创建唯一的字符串
  * @return {string} ojgdvbvaua40
  */
-tools.createUniqueString =  function  () {
+tools.createUniqueString = function () {
   const timestamp = +new Date() + ''
   const randomNum = parseInt((1 + Math.random()) * 65536) + ''
   return (+(randomNum + timestamp)).toString(32)
@@ -1205,19 +1215,19 @@ tools.createUniqueString =  function  () {
  * @param {number} digits 保留几位小数
  * @return {string} 2MB
  */
-tools.toStorage =  function  (num, digits) {
+tools.toStorage = function (num, digits) {
   digits = digits || 2
   if (num < 1024) {
     return num + 'B'
   }
   num = (num * 1000 / 1024)
   const si = [
-    { value: 1E18, symbol: 'E' },
-    { value: 1E15, symbol: 'P' },
-    { value: 1E12, symbol: 'T' },
-    { value: 1E9, symbol: 'G' },
-    { value: 1E6, symbol: 'M' },
-    { value: 1E3, symbol: 'K' }
+    {value: 1E18, symbol: 'E'},
+    {value: 1E15, symbol: 'P'},
+    {value: 1E12, symbol: 'T'},
+    {value: 1E9, symbol: 'G'},
+    {value: 1E6, symbol: 'M'},
+    {value: 1E3, symbol: 'K'}
   ]
   for (let i = 0; i < si.length; i++) {
     if (num >= si[i].value) {
@@ -1228,8 +1238,7 @@ tools.toStorage =  function  (num, digits) {
 }
 
 
-
-tools.validImgUpload =  function(file, size){
+tools.validImgUpload = function (file, size) {
   size = +size || 10240;
   const isSizeOut = file.size / 1024 > size;
   if (isSizeOut) {
@@ -1237,12 +1246,6 @@ tools.validImgUpload =  function(file, size){
   }
   return !isSizeOut
 }
-
-
-
-
-
-
 
 
 /*
@@ -1258,14 +1261,14 @@ tools.validImgUpload =  function(file, size){
  * @author zf
  * @date 2018-12-23
  * */
-tools.OpenView = function (_this,map,$URL,title,R_fn,area,btn,btnAlign,getParameter){
-  area=area!=undefined && area!=null && area!=""?area:[''+$(window).width()+'px',''+$(window).height()+'px'];//默认宽高
-  btn=area!=undefined && area!=null && area!=""?btn:[];//按钮默认无
-  btnAlign=btnAlign!=undefined && btnAlign!=null && btnAlign!=""?btnAlign:"r";//按钮排列 l c r:左 中 右
-  var Rmap={};
+tools.OpenView = function (_this, map, $URL, title, R_fn, area, btn, btnAlign, getParameter) {
+  area = area != undefined && area != null && area != "" ? area : ['' + $(window).width() + 'px', '' + $(window).height() + 'px'];//默认宽高
+  btn = area != undefined && area != null && area != "" ? btn : [];//按钮默认无
+  btnAlign = btnAlign != undefined && btnAlign != null && btnAlign != "" ? btnAlign : "r";//按钮排列 l c r:左 中 右
+  var Rmap = {};
   _this.$layer.open({
     type: 2, //此处以iframe举例
-    title: ''+title,
+    title: '' + title,
     area: area,
     shade: 0,
     maxmin: true,
@@ -1273,14 +1276,14 @@ tools.OpenView = function (_this,map,$URL,title,R_fn,area,btn,btnAlign,getParame
     btn: btn,
     btnAlign: btnAlign,
     zIndex: _this.$layer.zIndex,//重点1
-    success: function(layero, index){
+    success: function (layero, index) {
       console.log($URL)
       console.log(layero)
       console.log(index)
       // 获取子页面的iframe
       var iframe = window['layui-layer-iframe' + index];
       // 向子页面的全局函数child传参
-      Rmap=iframe.child(map);
+      Rmap = iframe.child(map);
     }/*,cancel: function(){ //右上角关闭回调
 	    	console.log("关闭")
 	       //如果父窗体等待子界面传递参数，执行函数名R_fn不为空的请款下，执行函数并传递参数
@@ -1300,9 +1303,9 @@ tools.OpenView = function (_this,map,$URL,title,R_fn,area,btn,btnAlign,getParame
 	    	}
 	    	layer.closeAll();//关闭窗口
         }*/, end: function () {
-      if(R_fn!=undefined && R_fn!=null && R_fn!=""){
-        if(getParameter!=undefined && getParameter!=null ){//父界面调函数时获取参数定义时，执行父界面执行函数参数获取
-          Rmap = Is_null(Rmap)==true?Rmap:getParameter();
+      if (R_fn != undefined && R_fn != null && R_fn != "") {
+        if (getParameter != undefined && getParameter != null) {//父界面调函数时获取参数定义时，执行父界面执行函数参数获取
+          Rmap = Is_null(Rmap) == true ? Rmap : getParameter();
         }
         R_fn(Rmap);//执行父界面等待参数函数
       }
@@ -1313,21 +1316,18 @@ tools.OpenView = function (_this,map,$URL,title,R_fn,area,btn,btnAlign,getParame
 //-----[打开子窗体(map:传递数据;$URL:打开界面;title:标题;)END]2018-12-13
 
 
-
 //-----[传入数组，值判断这个值是否在这个数组中true:在False:不在][2018-12-14]
 tools.VerificationValIsArray = function (arr, val) {
   var bool = false;
-  for(let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     bool = arr[i] == val ? true : false;
-    if(bool) {
+    if (bool) {
       break;
     }
   }
   return bool;
 }
 //-----[END][传入数组，值判断这个值是否在这个数组中]
-
-
 
 
 /**
@@ -1343,16 +1343,14 @@ tools.DateBiJiao = function (firstDate, lastDate) {
   var firsttimes = firsttime.getTime();
 
   var arrs = lastDate.split("-");
-  var  lasttime = new Date(arrs[0], arrs[1], arrs[2]);
-  var  lasttimes =  lasttime.getTime();
+  var lasttime = new Date(arrs[0], arrs[1], arrs[2]);
+  var lasttimes = lasttime.getTime();
 
-  if (firsttimes> lasttimes) {
+  if (firsttimes > lasttimes) {
     return false;
-  }
-  else
+  } else
     return true;
 }
-
 
 
 /**
@@ -1361,7 +1359,7 @@ tools.DateBiJiao = function (firstDate, lastDate) {
  * @param lastDate
  * @returns {string}
  */
-tools.comptime = function (firstDate,lastDate) {
+tools.comptime = function (firstDate, lastDate) {
   var beginTime = firstDate;
   var endTime = lastDate;
   var beginTimes = beginTime.substring(0, 10).split('-');
@@ -1371,22 +1369,21 @@ tools.comptime = function (firstDate,lastDate) {
   endTime = endTimes[1] + '-' + endTimes[2] + '-' + endTimes[0] + ' ' + endTime.substring(10, 19);
 
   var a = (Date.parse(endTime) - Date.parse(beginTime)) / 3600 / 1000;
-  let Rval= '';
+  let Rval = '';
   if (a < 0) {
     //alert("endTime小!");
-    Rval= 'xiao';
+    Rval = 'xiao';
   } else if (a > 0) {
     //alert("endTime大!");
-    Rval= 'da';
+    Rval = 'da';
   } else if (a == 0) {
     //alert("时间相等!");
-    Rval= 'deng';
+    Rval = 'deng';
   } else {
     Rval = 'exception'
   }
   return Rval;
 }
-
 
 
 export default tools

@@ -16,8 +16,8 @@
  */
 package com.iohao.game.collect.tank.action;
 
-import com.iohao.game.collect.common.room.GameFlowService;
-import com.iohao.game.collect.common.room.RoomService;
+import com.iohao.little.game.widget.light.room.GameFlow;
+import com.iohao.little.game.widget.light.room.RoomService;
 import com.iohao.game.collect.proto.tank.TankBullet;
 import com.iohao.game.collect.proto.tank.TankEnterRoom;
 import com.iohao.game.collect.proto.tank.TankLocation;
@@ -45,23 +45,24 @@ import java.util.concurrent.atomic.LongAdder;
 @ActionController(TankCmd.cmd)
 public class TankAction {
     /** 游戏流程 */
-    static GameFlowService gameFlowService = GameFlowService.me();
+    static GameFlow gameFlow = GameFlow.me();
     RoomService roomService = RoomService.me();
     /** 开发阶段，只用一个房间 */
     public static long tempRoomId = 10000;
     LongAdder shootAdder = new LongAdder();
 
     static {
-        // 游戏规则
-        gameFlowService.setRoomRuleInfoCustom(new TankRoomRuleInfoCustom());
-        // 游戏开始
-        gameFlowService.setRoomGameStartCustom(new TankRoomGameStartCustom());
-        // 创建玩家
-        gameFlowService.setRoomPlayerCreateCustom(new TankRoomPlayerCreateCustom());
-        // 房间创建
-        gameFlowService.setRoomCreateCustom(new TankRoomCreateCustom());
-        // 进入房间
-        gameFlowService.setRoomEnterCustom(new TankRoomEnterCustom());
+        gameFlow
+                // 游戏规则
+                .setRoomRuleInfoCustom(new TankRoomRuleInfoCustom())
+                // 游戏开始
+                .setRoomGameStartCustom(new TankRoomGameStartCustom())
+                // 创建玩家
+                .setRoomPlayerCreateCustom(new TankRoomPlayerCreateCustom())
+                // 房间创建
+                .setRoomCreateCustom(new TankRoomCreateCustom())
+                // 进入房间
+                .setRoomEnterCustom(new TankRoomEnterCustom());
     }
 
     /**
@@ -129,7 +130,7 @@ public class TankAction {
 
         // 房间不存在，创建一个房间
         if (Objects.isNull(room)) {
-            room = gameFlowService.getRoomCreateCustom().createRoom(null);
+            room = gameFlow.createRoom(null);
             // TODO: 2022/1/14 开发阶段，只用一个房间
             room.setRoomId(tempRoomId);
 
@@ -142,7 +143,7 @@ public class TankAction {
         // 如果检查是否在房间内
         if (Objects.isNull(player)) {
             // 如果不在房间内先加入房间
-            player = gameFlowService.getRoomPlayerCreateCustom().createPlayer();
+            player = gameFlow.createPlayer();
             player.setId(userId);
             player.setRoomId(roomId);
 

@@ -3,7 +3,6 @@ package com.yunze.web.controller.yunze;
 import com.alibaba.fastjson.JSON;
 import com.yunze.common.annotation.Log;
 import com.yunze.common.constant.UserConstants;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.core.domain.AjaxResult;
 import com.yunze.common.core.domain.entity.SysUser;
 import com.yunze.common.core.domain.model.LoginUser;
@@ -20,6 +19,7 @@ import com.yunze.system.service.ISysPostService;
 import com.yunze.system.service.ISysRoleService;
 import com.yunze.system.service.ISysUserService;
 import com.yunze.system.service.yunze.IYzUserService;
+import com.yunze.web.core.config.MyBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -30,13 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 执行任务信息
+ * 执行日志信息
  *  2021-06-21
  * @author root
  */
 @RestController
 @RequestMapping("/yunze/agent")
-public class YzUserController extends BaseController
+public class YzUserController extends MyBaseController
 {
 
     @Autowired
@@ -75,7 +75,7 @@ public class YzUserController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:ExecutionTask:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取用户信息列表 异常！");
+        return Myerr("获取用户信息列表 操作失败！");
     }
 
 

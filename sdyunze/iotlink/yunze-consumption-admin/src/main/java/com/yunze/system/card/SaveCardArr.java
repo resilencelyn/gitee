@@ -3,6 +3,7 @@ package com.yunze.system.card;
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.*;
 import com.yunze.common.core.redis.RedisCache;
+import com.yunze.common.mapper.yunze.YzCardInfoExpandMapper;
 import com.yunze.common.mapper.yunze.YzCardMapper;
 import com.yunze.apiCommon.mapper.YzCardRouteMapper;
 import com.yunze.common.mapper.yunze.YzExecutionTaskMapper;
@@ -36,6 +37,8 @@ public class SaveCardArr {
     private YzExecutionTaskMapper yzExecutionTaskMapper;
     @Resource
     private WriteCSV writeCSV;
+    @Resource
+    private YzCardInfoExpandMapper yzCardInfoExpandMapper;
 
 
 
@@ -82,7 +85,7 @@ public class SaveCardArr {
     public void ImportCar(String filePath, String ReadName,Map<String,Object> User,String newName){
         String path = filePath + "/upload/uploadCard/" + ReadName;
         ExcelConfig excelConfig = new ExcelConfig();
-        String columns[] = {"msisdn","iccid","imsi","open_date","activate_date","agent_id","channel_id","is_pool","batch_date","remarks","status_id","package_id","imei","type","network_type","is_sms","sms_number","gprs","user_id"};
+        String columns[] = {"msisdn","iccid","imsi","open_date","activate_date","agent_id","channel_id","is_pool","batch_date","remarks","status_id","package_id","imei","type","network_type","is_sms","sms_number","gprs","user_id","test_period_last_time","silent_period_last_time"};
         String maxVid  = yzCardMapper.findMaxVid();
         maxVid = maxVid!=null?maxVid:"16800000000";
         Long maxVidInt = Long.parseLong(maxVid);
@@ -102,7 +105,7 @@ public class SaveCardArr {
             List<String>  iccidarr = yzCardMapper.isExistence(map);
 
             String SaveUrl = "/getcsv/"+newName+".csv";
-            String task_name = create_by+"-连接管理上传 [导入] ";
+            String task_name ="连接管理上传 [导入] ";
             Map<String, Object> task_map = new HashMap<String, Object>();
             task_map.put("auth",create_by);
             task_map.put("task_name",task_name);
@@ -128,11 +131,11 @@ public class SaveCardArr {
             map.put("create_by",create_by);
             try {
                 if(list.size()>0){
-                    int  sInt = 2000;
+                    int  sInt = 0;
                     //导入批量处理 2k 条
                     List<Map<String, String>> listnew = new ArrayList<>();
                     Map<Integer, List<Map<String, String>>> lMap=new HashMap<>();
-                    int MaxAdd = 5;
+                    int MaxAdd = 2000;
                     for(int i=0;i<list.size();i++) {
                         if(i==0 ||i%MaxAdd==0) {
                             listnew=new ArrayList<>();
@@ -144,10 +147,38 @@ public class SaveCardArr {
                         }
                     }
                     for(Integer key : lMap.keySet()){
-                        map.put("card_arrs",lMap.get(key));//更新 list
+                        List<Map<String, String>> card_arrs = lMap.get(key);
+                        map.put("card_arrs",card_arrs);//更新 list
                         map.put("create_by",create_by);
                         sInt +=   yzCardMapper.importCard(map);
+                        try {//有 测试期最后时间 或 沉默期最后时间 存入 卡列表拓展表
+                            List<Map<String, String>> addExpandArr = new ArrayList<>();
+
+                            for (int i = 0; i < card_arrs.size(); i++) {
+                                Map<String, String> card = card_arrs.get(i);
+                                boolean addBool = false;
+                                if(card.get("test_period_last_time")!=null && card.get("test_period_last_time")!="" && card.get("test_period_last_time").length()>0){
+                                    addBool = true;
+                                }
+                                if(card.get("silent_period_last_time")!=null && card.get("silent_period_last_time")!="" && card.get("silent_period_last_time").length()>0){
+                                    addBool = true;
+                                }
+                                if(addBool){
+                                    addExpandArr.add(card);
+                                }
+                            }
+                            if(addExpandArr.size()>0){
+                                cardExpandSyn(addExpandArr);//同步卡拓展信息表数据
+                            }
+                        }catch (Exception e){
+                            System.out.println("卡列表拓展表存入异常 "+e.getMessage());
+                        }
                     }
+
+
+
+
+
 
                     if(sInt>0){
                         writeCSV.OutCSV(list,newName,"成功导入卡列表数据 ["+sInt+"] 条",create_by,"导入成功",Outcolumns,keys);
@@ -158,7 +189,7 @@ public class SaveCardArr {
                     log.error(">> admin-消费者- 上传数据已全部在数据库，无需上传卡信息！ :{}<<");
                 }
             }catch (DuplicateKeyException e){
-                System.out.println("=================="+e.getCause().toString());
+                System.out.println("===="+e.getCause().toString());
                 String[] solit=e.getCause().toString().split("'");
                 writeCSV.OutCSV(list,newName,e.getCause().toString(),create_by,"导入失败",Outcolumns,keys);
                 yzExecutionTaskMapper.set_end_time(task_map);//任务结束
@@ -173,6 +204,55 @@ public class SaveCardArr {
         }
     }
 
+
+    /**
+     * 同步卡拓展信息表数据
+     * @param addExpandArr
+     */
+    public void cardExpandSyn( List<Map<String, String>> addExpandArr){
+        Map<String, Object> findExpandMap = new HashMap<>();
+        findExpandMap.put("card_arrs",addExpandArr);
+        //查询是否存在 拓展信息
+        List<String> exExpandArr =  yzCardInfoExpandMapper.findInfoExpandArr(findExpandMap);
+        List<Map<String, String>> addEArr = new ArrayList<>();
+        List<Map<String, String>> updEArr = new ArrayList<>();
+        Map<String, Object> addExpandMap = new HashMap<>();
+        if(exExpandArr!=null && exExpandArr.size()>0){
+
+            //匹对出以存在拓展信息 加入修改数组 否则 加入 新增数组
+            for (int i = 0; i < addExpandArr.size(); i++) {
+                Map<String, String> cObj = addExpandArr.get(i);
+                String iccid = cObj.get("iccid");
+                boolean ex = false;
+                for (int j = 0; j < exExpandArr.size(); j++) {
+                    String exIccid = exExpandArr.get(j);
+                    if(iccid.equals(exIccid)){
+                        ex = true;
+                        break;
+                    }
+                }
+                if(ex){
+                    updEArr.add(cObj);
+                }else {
+                    addEArr.add(cObj);
+                }
+            }
+        }else{
+            addEArr = addExpandArr;
+        }
+        int addExpanCount = 0;
+        int updExpanCount = 0;
+        if(addEArr!=null && addEArr.size()>0){
+            addExpandMap.put("card_arrs",addEArr);
+            addExpanCount = yzCardInfoExpandMapper.saveInfoExpand(addExpandMap);
+        }
+        if(updEArr!=null && updEArr.size()>0){
+            for (int i = 0; i < updEArr.size(); i++) {
+                updExpanCount += yzCardInfoExpandMapper.updInfoExpand(updEArr.get(i));
+            }
+        }
+        System.out.println("卡信息拓展表需 同步 ："+addExpandArr.size()+" 实际新增 ："+addExpanCount+" 实际修改 "+ updExpanCount);
+    }
 
 
 
@@ -226,6 +306,8 @@ public class SaveCardArr {
         }
         return  map;
     }
+
+
 
 
 

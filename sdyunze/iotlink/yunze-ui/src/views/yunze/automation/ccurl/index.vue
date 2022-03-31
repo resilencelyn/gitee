@@ -1,26 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="推送 API" prop="url">
-        <el-input
-          v-model="queryParams.PushAPI"
-          placeholder="请输入 API"
-          clearable
-          size="small"
-          style="width: 240px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="推送邮件" prop="email">
-        <el-input
-          v-model="queryParams.mail"
-          placeholder="请输入邮件"
-          clearable
-          size="small"
-          style="width: 240px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <!--  时间类型-->
       <el-form-item label="时间类型" prop="status">
         <el-select
@@ -52,20 +32,48 @@
         </el-date-picker>
 
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
+    </el-form>
+
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: 10px;line-height:35px" >
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+            <el-input
+              v-model="queryParams.value"
+              placeholder="查询值"
+              clearable
+              size="small"
+              style="width: 350px"
+              @keyup.enter.native="handleQuery"
+            >
+              <el-select
+                v-model="queryParams.type"
+                placeholder="查询条件"
+                clearable
+                slot="prepend"
+                style="width: 110px;background-color: transparent;color: black;"
+              >
+                <el-option
+                  v-for="dict in typeOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+                />
+              </el-select>
+            </el-input>
+          </el-col>
+        <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-col>
+        <right-toolbar :showSearch.sync="showSearch"  @queryTable="getList"></right-toolbar>
+      </el-row>
     </el-form>
 
     <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column   label="id" align="center"  prop="id" />
-      <el-table-column   label="对应自动化规则表" align="center" key="cc_id" prop="cc_id">
-      <template slot-scope="scope">
-        {{tools.getkeyValue(NameAddCcUrl,scope.row.cc_id,"id","cc_name")}}
-      </template>
-      </el-table-column>
+      <el-table-column   label="抄送名称" align="center" prop="cc_name"/>
       <el-table-column   label="推送API" align="center"  prop="url" />
       <el-table-column   label="推送邮件" align="center"  prop="email" />
       <el-table-column   label="创建时间" align="center"  prop="create_time" />
@@ -164,7 +172,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       ccurltimetypeOptions: [],
       NameAddCcUrl: [],
@@ -183,7 +191,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
-
+      typeOptions:[],
       // 表单参数
       form: {
         cc_name: null,
@@ -194,10 +202,22 @@ export default {
     };
   },
   created() {
-    this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
-    });
+    const cc_id = this.$route.params.id;
+    if(tools.Is_null(cc_id)){
+      this.queryParams.value = cc_id;
+      this.queryParams.type = '1';
+    }
+
+
+    //加载 条件选择
+    if(window['typeOptions_Turl']!=undefined &&  window['typeOptions_Turl']!=null && window['typeOptions_Turl']!=''){
+      this.typeOptions = window['typeOptions_Turl'];
+    }else{
+      this.getDicts("yunze_ccurl_typeOptions").then(response => {
+        window['typeOptions_Turl'] = response.data;
+        this.typeOptions = window['typeOptions_Turl'];
+      });
+    }
 
     //加载 时间赛选查询条件
     if(window['ccurltimetypeOptions']!=undefined &&  window['ccurltimetypeOptions']!=null && window['ccurltimetypeOptions']!=''){
@@ -211,7 +231,7 @@ export default {
 
 
 
-    //加载 执行任务导出类别
+    //加载 执行日志导出类别
     if(window['ExecutionTask_OutType']!=undefined &&  window['ExecutionTask_OutType']!=null && window['ExecutionTask_OutType']!=''){
       this.ExecutionTask_OutType = window['ExecutionTask_OutType'];
     }else{
@@ -232,7 +252,12 @@ export default {
       });
     }
 
+    this.getList();
 
+
+    // this.getDicts("sys_normal_disable").then(response => {
+    //   this.statusOptions = response.data;
+    // });
 
   },
   methods: {
@@ -255,7 +280,7 @@ export default {
 
     },
 
-    /** 查询执行任务列表 */
+    /** 查询执行日志列表 */
     getList() {
       this.loading = true;
       this.getParams();
@@ -303,6 +328,10 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams = {};
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 10;
+      this.selTime = null;
       this.handleQuery();
     },
     /** 修改按钮操作 */

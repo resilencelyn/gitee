@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+opencla:
+  agreement:
+    version: 1.0.0
+  gitee:
+    emails: https://gitee.com/api/v5/emails
+    response-type: code
+    token-url: https://gitee.com/oauth/token
+    code-url: https://gitee.com/oauth/authorize
+    user-info-url: https://gitee.com/api/v5/user

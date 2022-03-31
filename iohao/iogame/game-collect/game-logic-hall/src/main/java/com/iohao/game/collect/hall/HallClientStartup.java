@@ -19,7 +19,7 @@ package com.iohao.game.collect.hall;
 import com.iohao.game.collect.common.GameBarSkeletonConfig;
 import com.iohao.game.collect.common.ModuleKeyCont;
 import com.iohao.game.collect.hall.action.LoginAction;
-import com.iohao.game.collect.logic.GameLogicCommonInit;
+import com.iohao.game.collect.common.GameLogicCommonInit;
 import com.iohao.little.game.action.skeleton.core.BarSkeleton;
 import com.iohao.little.game.action.skeleton.core.BarSkeletonBuilder;
 import com.iohao.little.game.action.skeleton.core.BarSkeletonBuilderParamConfig;

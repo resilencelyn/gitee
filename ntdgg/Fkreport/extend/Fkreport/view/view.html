@@ -1,0 +1,28 @@
+<html lang="zh-cn">
+<head>
+<link rel="stylesheet" type="text/css" href="/static/fk/fk1.0.css?v1.0"/>
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+    <title>{$data.data.title}</title>
+</head>
+<body>
+<div id="fkreport" style="transform-origin: 0 0;width: {$data.data.width}px;height: {$data.data.height}px;border:0;z-index:1;background-image: url(/storage/{:addslashes($data.data.file)});background-repeat:no-repeat ; background-size:100% 100%; background-attachment: inherit;">
+</div>
+</body>
+</html>
+<script type="text/javascript" src="/static/fk/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="/static/fk/fk1.0.js"></script>
+<script type="text/javascript" src="/static/fk/g2plot.min.js"></script>
+<script type="text/javascript" src="/static/fk/fk.g2.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript">
+    const sfun_url = "{$url_api}";
+    $(function(){
+        Fkreport.int_data({$data.data.data|raw},'{$id}','show');
+        /*调整页面布局，自适应*/
+        var dw = '{$data.data.width}';
+        var dh = '{$data.data.height}';
+        var w = $(window).width();//获取页面可视宽度
+        var h = $(window).height();//获取页面可视高度
+        $('#fkreport').css('transform', 'scale('+w/dw+','+(h/dh)+')');
+    });
+</script>

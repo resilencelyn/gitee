@@ -9,7 +9,7 @@ export default {
   name: 'YunZeDoc',
   data() {
     return {
-      url: 'http://doc.yunze.cn'
+      url: 'http://doc.yunze.vip/yunze-vue'
     }
   },
   methods: {

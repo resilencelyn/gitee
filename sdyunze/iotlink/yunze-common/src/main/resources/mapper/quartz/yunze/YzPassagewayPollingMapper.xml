@@ -36,7 +36,7 @@
 
     </insert>
 
-    <!-- 查询 轮序数据 -->
+    <!-- 查询 轮询数据 -->
     <select id="find_route" parameterType="java.util.HashMap" resultType="java.util.HashMap">
        SELECT
             id,
@@ -106,7 +106,7 @@
         <include refid="selwhere"/>
     </select>
 
-    <!--    修改 轮序数量 -->
+    <!--    修改 轮询数量 -->
     <update id="update_cd_current" parameterType="java.util.HashMap">
         UPDATE
             yz_passageway_polling
@@ -121,16 +121,33 @@
     </update>
 
 
-    <!-- 查询  近三天 正在执行的轮序任务 -->
+    <!-- 查询  一天内 正在执行的轮询任务 -->
     <select id="find_execute"  resultType="java.util.HashMap">
         SELECT
             polling_id,
-            cd_current
+            cd_current,
+            cd_count
         FROM
             yz_passageway_polling
         <where>
             cd_count > cd_current
-            AND datediff( NOW(), create_date ) <![CDATA[ <= ]]>   2
+            AND datediff( NOW(), create_date ) <![CDATA[ < ]]>   1
+        </where>
+    </select>
+
+
+
+    <!-- 查询  一天内已完成轮询任务 -->
+    <select id="find_completed"  resultType="java.util.HashMap">
+        SELECT
+            polling_id
+        FROM
+            yz_passageway_polling
+        <where>
+            (cd_count-cd_current)<![CDATA[ < ]]>  500
+            and cd_count <![CDATA[ > ]]> 1000
+            <![CDATA[ AND round((UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(create_date))/60)  >  20 ]]>
+            <![CDATA[AND datediff( NOW(), create_date)   <   1 ]]>
         </where>
     </select>
 

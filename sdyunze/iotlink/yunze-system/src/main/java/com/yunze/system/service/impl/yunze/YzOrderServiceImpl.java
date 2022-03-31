@@ -173,7 +173,7 @@ public class YzOrderServiceImpl implements IYzOrderService
             System.out.println(e);
             return "上传excel异常";
         }
-        return "资费订购 平台导入充值指令 已发送，充值详细信息请在 【执行任务管理】查询！";
+        return "资费订购 平台导入充值指令 已发送，充值详细信息请在 【执行日志管理】查询！";
     }
 
     @Override
@@ -203,7 +203,7 @@ public class YzOrderServiceImpl implements IYzOrderService
             String newName = UUID.randomUUID().toString().replace("-","")+"_Exportallorders";
 
             String  agent_id = User.getDept().getDeptId().toString();
-            String task_name = create_by+"-订单管理 [导出] ";
+            String task_name ="订单管理 [导出] ";
             String SaveUrl = "/getcsv/"+newName+".csv";
 
             Map<String, Object> task_map = new HashMap<String, Object>();
@@ -229,7 +229,7 @@ public class YzOrderServiceImpl implements IYzOrderService
             String polling_routingKey = "admin.Exportallorders.queue";
             String polling_exchangeName = "admin_exchange";//路由
             try {
-                rabbitMQConfig.creatExchangeQueue(polling_exchangeName, polling_queueName, polling_routingKey, null, null, null, BuiltinExchangeType.DIRECT);
+                //rabbitMQConfig.creatExchangeQueue(polling_exchangeName, polling_queueName, polling_routingKey, null, null, null, BuiltinExchangeType.DIRECT);
                 Map<String, Object> start_type = new HashMap<>();
                 start_type.put("type", "importCardData");//启动类型
                 start_type.put("newName", newName);//输出文件名
@@ -257,7 +257,7 @@ public class YzOrderServiceImpl implements IYzOrderService
         }else {
             return "您当前的筛选的查询条件 未找到数据！导出任务取消！";
         }
-        return "已下发执行任务可在【设备管理】》【执行任务管理】查看";
+        return "已下发执行日志可在【系统管理】》【日志管理】》【执行日志】查看";
     }
 
 

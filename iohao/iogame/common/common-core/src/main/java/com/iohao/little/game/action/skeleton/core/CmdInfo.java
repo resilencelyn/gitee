@@ -26,7 +26,7 @@ import lombok.Getter;
  * </pre>
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 @Getter
 public final class CmdInfo {

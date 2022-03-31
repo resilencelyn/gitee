@@ -2,12 +2,12 @@
 
 ```bash
 # 克隆项目
-git clone https://gitee.com/sdyunze/iotlink
+git clone https://gitee.com/y_project/YunZe-Vue
 
 # 进入项目目录
 cd yunze-ui
 
-# 安装依赖
+# 安装依赖0.
  
 .
 npm install

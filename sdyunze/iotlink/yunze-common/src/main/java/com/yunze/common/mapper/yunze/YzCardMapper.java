@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * 卡板信息 数据层
- *
+ * 
  * @author root
  */
 public interface YzCardMapper
@@ -433,6 +433,70 @@ public interface YzCardMapper
      * @return
      */
     public List<Map<String,Object>> selVid (Map map);
+
+
+    /**
+     *智能匹对卡号数量
+     * @param map
+     * @return
+     */
+    public Integer cardMatchCount (Map map);
+
+    /**
+     * 智能匹对卡号获取其中一条
+     * @param map
+     * @return
+     */
+    public Map<String,Object> cardMatchOne (Map map);
+
+
+
+    /**
+     * 通道下 所属卡 已到沉默期 无激活时间 无发货日期
+     * @param map
+     * @return
+     */
+    public List<Map<String,Object>> findChannelIdCarSilencePeriod(Map<String, Object> map);
+
+
+    /**
+     * 状态未知 或 无状态 卡号
+     * @param map
+     * @return
+     */
+    public List<Map<String,Object>> findChannelIdCarStatusShowId(Map<String, Object> map);
+
+
+    /**
+     * 通道下 所属卡 当天没有用量记录的
+     * @param map
+     * @return
+     */
+    public List<Map<String,Object>> findChannelIdCarNotRecord(Map<String, Object> map);
+
+
+    /**
+     * 查询批量更新 前 字段
+     * @param map
+     * @return
+     */
+    public List<Map<String,Object>> findReplaceBk(Map<String, Object> map);
+
+
+    /**
+     * 批量更新卡信息
+     * @param map
+     * @return
+     */
+    public int updCardReplace(Map<String, Object> map);
+
+
+    /**
+     * 查询icci 通过 不同卡类型 获取 iccid
+     * @param map
+     * @return
+     */
+    public List<Map<String, Object>> findCardIccid(Map<String, Object> map);
 
 
 }

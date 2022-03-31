@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.iohao.game</groupId>
-            <artifactId>game-common-logic</artifactId>
+            <artifactId>game-common</artifactId>
             <version>${project-revision.version}</version>
         </dependency>
 

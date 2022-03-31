@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>方块报表</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <a onClick='add_fun()' class="layui-btn layui-btn-danger">创建</a><a onclick="location.reload();" class="layui-btn ">刷新</a><hr/>
+        <table class="layui-table">
+            <tr class="text-c"><th width="150">编码</th><th width="150">标题</th><th width="100">函数名</th><th width="80">发布时间</th><th width="50">添加人</th><th width="200">操作</th>
+            </tr>
+            {volist name='data' id='k'}
+            <tr class="text-c"><td>{$k.id}</td><th >{$k.title}</th><th>{$k.fun_name}</th><th>{$k.add_time|date='Y-m-d'}</th><th >{$k.add_user}</th><th >
+                <input id="fun_{$k.fun_name}" value="{$k.function}" type=hidden><a class="layui-btn layui-btn-sm layui-btn-danger" onClick=add_fun("{$k.title}","{$k.fun_name}","{$k.id}")	class="button">编辑</a>
+            </th>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript" src="/static/fk/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/static/fk/fk1.0.js"></script>
+<script>
+    function add_fun(title='',name='',id=''){
+        var fun = $('#fun_'+name).val() ?? '';
+        var html ='<form action="" method="post" name="form" id="form">'+
+            '<table class=layui-table id="table_view"><tr><td>函数标题</td><td style="text-align:left"><input type="text" class="layui-input" id="title" value="'+title+'"></td></tr>'+
+            '<tr><td>函数名称</td><td style="text-align:left"><input type="text" id="name" value="'+name+'" class="layui-input"></td></tr>'+
+            '<tr><td>填写函数</td><td><textarea placeholder="请填写SQL代码！" id="fun" type="text/plain" style="width:100%;height:280px;" class="layui-input">'+fun+'</textarea></td></tr><tr><td colspan=2><a class="layui-btn layui-btn-danger" onclick="save_fun('+id+')">提交</a></td></tr></table></form>';
+        layer.open({
+            type: 1,
+            area: ['620px', '540px'], //宽高
+            content: html
+        });
+    }
+    function save_fun(id){
+        var NameExp = /^(?!_)(?!.*?_$)[a-z_]+$/;
+        var title = $('#title').val();
+        var name = $('#name').val();
+        if(!NameExp.test(name)){
+            sfdp.ShowTip('函数名称只能为英文小写字母加下划线组合！');
+            return;
+        }
+        var fun = $('#fun').val();
+        var url = "{:url('fk/fun')}?act=add&id="+id;
+        Fkreport.sAjax(url,{title:title,name:name,fun:fun,id:id});
+    }
+</script>

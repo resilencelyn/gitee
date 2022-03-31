@@ -209,7 +209,7 @@ public class UserSessions {
 
     /**
      * 全员消息广播
-     * 消息类型 response
+     * 消息类型 ExternalMessage
      *
      * @param msg 消息
      */

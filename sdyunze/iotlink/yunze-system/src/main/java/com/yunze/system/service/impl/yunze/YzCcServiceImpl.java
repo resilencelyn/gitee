@@ -17,7 +17,6 @@ public class YzCcServiceImpl implements YzCcService {
 
     @Override
     public Map<String, Object> ListCc(Map map) {
-        //System.out.println("CardRouteServiceImpl > sel_Map = ");
         Map<String, Object> omp=new HashMap<String, Object>();
         Integer currenPage=map.get("pageNum")!=null?Integer.parseInt(map.get("pageNum").toString()):0;
         Integer pageSize=map.get("pageSize")!=null?Integer.parseInt(map.get("pageSize").toString()):10;

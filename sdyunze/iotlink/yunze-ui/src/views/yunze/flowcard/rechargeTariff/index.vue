@@ -4,7 +4,178 @@
 
       <el-main style="padding-top: 2%;padding-left: 3%">
         <el-row >
+         <!-- <el-col :span="12">
+            <el-form :model="queryParams" ref="queryForm"   label-width="68px">
+              <el-form-item  prop="status">
+                <label >
+                  多号段充值(适合小于100条/次操作)
+                  物联网号码：卡号之间以换行隔开</label>
+              </el-form-item>
+              <el-form-item label="资费选择" prop="status">
+                <el-select
+                  v-hasPermi="['yunze:cardFlow:queryPackageSimple']"
+                  v-model="queryParams.package_id"
+                  placeholder="资费组"
+                  clearable
+                  ref="packageSel"
+                  @change="packageSelChange"
+                  size="small"
+                  style="width: 210px"
+                >
+                  <el-option
+                    v-for="dict in packageOptions"
+                    :key="dict.package_id"
+                    :label="dict.package_agentname"
+                    :value="dict.package_id"
+                  />
+                </el-select>
 
+                <el-select
+                  v-hasPermi="['yunze:cardFlow:queryPackageSimple']"
+                  v-model="queryParams.packet_id"
+                  placeholder="资费计划"
+                  clearable
+                  size="small"
+                  style="width: 210px"
+                >
+                  <el-option
+                    v-for="dict in PacketSelOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+
+              </el-form-item>
+              <el-form-item label="生效类型" prop="status">
+                <el-select
+                  v-model="queryParams.package_id"
+                  placeholder="生效类型"
+                  clearable
+                  ref="packageSel"
+                  @change="packageSelChange"
+                  size="small"
+                  style="width: 210px"
+                >
+                  <el-option
+                    v-for="dict in packageOptions"
+                    :key="dict.package_id"
+                    :label="dict.package_agentname"
+                    :value="dict.package_id"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-descriptions >
+                  <el-descriptions-item label="资费周期">kooriookami</el-descriptions-item>
+                  <el-descriptions-item label="周期单位">18100000000</el-descriptions-item>
+                  <el-descriptions-item label="周期用量MB">苏州市</el-descriptions-item>
+                  <el-descriptions-item label="备注">
+                    <el-tag size="small">学校</el-tag>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
+                </el-descriptions>
+              </el-form-item>
+              <el-form-item >
+                <el-button type="primary"  v-hasPermi="['yunze:order:addPackage']" icon="el-icon-goods" size="mini" @click="handleQuery">批量充值</el-button>
+              </el-form-item>
+            </el-form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div slot="" class="" style="width: 700px">
+              <div>
+                <h4>多号段适用充值(适合小于100条/次操作)</h4>
+                <label style="font-size:15px;font-family:verdana;color:red">物联网号码：卡号之间以换行隔开</label>
+                <div class="text-area">
+                           <textarea name="content" id="content" cols="36" rows="8" v-model="iccids" placeholder="请输入号码"
+                                     style="width: 500px;height:300px;font-size:9pt;font-family:verdana;color:#333333" @change="getPacketName()">
+
+                          </textarea>
+                </div>
+
+              </div>
+              <div class="packageSl">
+                <label style="margin-left: 2%;display: inline;margin-top: 3%" id="dd">
+                  <el-select id="s1"
+                             style="width:70%;"
+                             @change="selectPacket()"
+                             filterable
+                             allow-create
+                             default-first-option
+                             v-model="packetId" placeholder="请选择资费组">
+                    <el-option
+                      v-for="i in packets"
+                      :key="i.id"
+                      :label="i.packetWxName"
+                      :value="i.packetId">
+                    </el-option>
+                  </el-select>
+                </label>
+              </div>
+              <div v-if="packetInfo" style="font-size: 5%;">
+                <br>
+                <el-col ><span>已选择资费组：{{AgentPacket.packetWxName}}</span></el-col>
+                <el-col><span>资费组流量：{{AgentPacket.packetFlow}}</span></el-col>
+                <el-col ><span >资费组价格：{{AgentPacket.packetCost}}</span></el-col>
+                <el-col ><span>资费组有效期：{{AgentPacket.packetValidTime}}{{AgentPacket.packetValidName}}</span></el-col>
+                <div v-if="month">
+
+                  <label style="padding-left: 3px">
+                    <br>
+                    <el-select v-model="nextStatus" placeholder="生效时间">
+                      <el-option :value="0" label="当月生效"/>
+                      <el-option :value="1" label="次月生效"/>
+                    </el-select>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <el-button style="margin-top: 2%" type="primary" size="large" @click.native="validatePassword()">批量加包</el-button>
+              </div>
+              <el-dialog
+                v-if="diavalidatePassword"
+                :close-on-click-modal="false" data-height="700" title="批量加包" :visible.sync="diavalidatePassword">
+                <el-row>
+                  <el-col ><span>资费组名称：{{AgentPacket.packetWxName}}</span></el-col>
+                  <el-col ><span>生效类型：本月订单(立即到账，此操作不可逆，到账之后即无法退款，请务必仔细核对)</span></el-col>
+                  <el-col ><span>批量充值总条数：{{packets[packets.length-1].number}} 条</span></el-col>
+                  <el-col ><span>批量充值总金额：{{packets[packets.length-1].number}}*{{AgentPacket.packetCost}} 元</span></el-col>
+                  <el-col ><span>余额支付：（账户余额：{{packets[packets.length-1].prestorePrice}} 元）</span></el-col>
+                  <div class="pl" style="width: 20%;padding-top: 15%;">
+                    <el-col ><span><el-input  v-model="password" placeholder="请输入账户密码"/></span></el-col>
+                    <br/>
+                    <el-button style="margin-top:15%" type="primary" @click.native="recharge()">确定加包</el-button>
+                  </div>
+                </el-row>
+              </el-dialog>
+            </div>
+            <div class="tishi" style="padding-top: 3%;margin-bottom: 1%">
+              <label style="color:red">操作须知</label><br/>
+              <label>批量充值号码为所属企业号码</label><br/>
+              <label>充值号码为相同的资费计划</label><br/>
+              <label>确保当前账户有足够余额可以批量充值操作</label><br/>
+            </div>
+          </el-col>-->
 
           <el-col :span="12">
             <el-form :model="queryParams" ref="queryForm"   label-width="87px">
@@ -167,7 +338,7 @@ export default {
       deptNodeAll: false,
 
       customize_whether: [],//自定义是否
-      ExecutionTask_OutType : [],// 执行任务导出类别
+      ExecutionTask_OutType : [],// 执行日志导出类别
 
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
@@ -235,9 +406,9 @@ export default {
 
       // 运营商类别 字典
       operators_type: [],
-      // 执行任务状态 字典
+      // 执行日志状态 字典
       channelStatusOptions: [],
-      // 执行任务编码 字典
+      // 执行日志编码 字典
       channelCodeOptions: [],
       // 表单参数
       form: {},

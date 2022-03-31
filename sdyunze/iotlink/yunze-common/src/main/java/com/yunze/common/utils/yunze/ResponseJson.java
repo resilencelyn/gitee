@@ -13,12 +13,6 @@ public class ResponseJson extends JSONObject {
         this.code = code;
         this.msg = msg;
         this.data = data;
-      /*  try {
-            this.data = AesEncryptUtil.desEncrypt(data.toString(),"Api@iotyunze00","2020_12_10163622");
-        }catch (Exception e){
-            this.data = "返回数据加密失败";
-            //System.out.println(e);
-        }*/
 
     }
 
@@ -57,12 +51,7 @@ public class ResponseJson extends JSONObject {
     public ResponseJson success(Object data){
         this.put("code","0");
         this.put("msg","success");
-      /*  try {
-            data = AesEncryptUtil.desEncrypt(data.toString(),"Api@iotyunze00","2020_12_10163622");
-        }catch (Exception e){
-            data = "返回数据加密失败";
-            //System.out.println(e);
-        }*/
+
         this.put("data",data);
         return this;
     }

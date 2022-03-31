@@ -16,9 +16,9 @@
  */
 package com.iohao.game.collect.tank.room.flow;
 
-import com.iohao.game.collect.common.room.CommonRuleInfo;
-import com.iohao.game.collect.common.room.RuleInfo;
-import com.iohao.game.collect.common.room.flow.RoomRuleInfoCustom;
+import com.iohao.little.game.widget.light.room.CommonRuleInfo;
+import com.iohao.little.game.widget.light.room.RuleInfo;
+import com.iohao.little.game.widget.light.room.flow.RoomRuleInfoCustom;
 import com.iohao.little.game.action.skeleton.core.exception.MsgException;
 
 /**

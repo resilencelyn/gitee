@@ -1,7 +1,10 @@
 package com.yunze.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.yunze.common.utils.spring.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -98,19 +101,63 @@ public class SysUserController extends BaseController
     /**
      * 根据用户编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:user:query')")
+    @PreAuthorize("@ss.hasPermi('yunze:agent:query')")
     @GetMapping(value = { "/", "/{userId}" })
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId)
     {
+
+        LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+        SysUser currentUser = loginUser.getUser();
+        Long dept_id = currentUser.getDeptId();
+        List<SysRole> c_roles = currentUser.getRoles();
+
         AjaxResult ajax = AjaxResult.success();
         List<SysRole> roles = roleService.selectRoleAll();
-        ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+        roles = SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList());
+        if(dept_id != 100){
+            c_roles = currentUser.getRoles();
+            boolean isAgent  =  false;
+            List<SysRole> userRoles = new ArrayList<>();
+            for (int i = 0; i <c_roles.size() ; i++) {
+                SysRole sr =  c_roles.get(i);
+                Long rid = sr.getRoleId();
+                if(rid==2){
+                    isAgent = true;
+                }else if(rid==4){
+                    userRoles.add(sr);
+                }
+            }
+            //如果角色中有 rid = 2 （集团客户）只允许选择  ‘用户’ 角色
+            if(isAgent){
+                roles = userRoles;
+            }
+        }
+        ajax.put("roles", roles);
         ajax.put("posts", postService.selectPostAll());
         if (StringUtils.isNotNull(userId))
         {
             ajax.put(AjaxResult.DATA_TAG, userService.selectUserById(userId));
+            List<Integer> roleIds = roleService.selectRoleListByUserId(userId);
+            if(dept_id != 100){
+                c_roles = currentUser.getRoles();
+                boolean isAgent  =  false;
+                List<Integer> userRoles = new ArrayList<>();
+                for (int i = 0; i <c_roles.size() ; i++) {
+                    SysRole sr =  c_roles.get(i);
+                    Long rid = sr.getRoleId();
+                    if(rid==2){
+                        isAgent = true;
+                    }else if(rid==4){
+                        userRoles.add(Integer.parseInt(rid.toString()));
+                    }
+                }
+                //如果角色中有 rid = 2 （集团客户）只允许选择  ‘用户’ 角色
+                if(isAgent){
+                    roleIds = userRoles;
+                }
+            }
             ajax.put("postIds", postService.selectPostListByUserId(userId));
-            ajax.put("roleIds", roleService.selectRoleListByUserId(userId));
+            ajax.put("roleIds", roleIds);
         }
         return ajax;
     }

@@ -16,6 +16,7 @@
  */
 package com.iohao.little.game.common.kit;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
 import lombok.Data;
 
 import java.io.File;
@@ -34,14 +35,14 @@ import java.util.jar.JarFile;
  * class 扫描
  *
  * @author 洛朱
- * @Date 2021-12-12
+ * @date 2021-12-12
  */
 @Data
 public class ClassScanner {
     // 需要扫描的包名
     final String packagePath;
     // 存放扫描过的 clazz
-    final Set<Class<?>> clazzSet = new HashSet<>();
+    final Set<Class<?>> clazzSet = new ConcurrentHashSet<>();
 
     /**
      * true 保留符合条件的class
@@ -69,8 +70,22 @@ public class ClassScanner {
         try {
             this.initClassLoad();
 
-            List<URL> urlList = getResources();
-            scanResources(urlList);
+            List<URL> urlList = listResource();
+
+            urlList.parallelStream().forEach(url -> {
+                String protocol = url.getProtocol();
+                try {
+                    if ("jar".equals(protocol)) {
+                        scanJar(url);
+
+                    } else if ("file".equals(protocol)) {
+                        scanFile(url);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -88,28 +103,19 @@ public class ClassScanner {
 
     }
 
-    public List<URL> getResources() throws IOException {
+    public List<URL> listResource() throws IOException {
         this.initClassLoad();
 
         Enumeration<URL> urlEnumeration = classLoader.getResources(packagePath);
 
         Set<URL> urlSet = new HashSet<>();
+
         while (urlEnumeration.hasMoreElements()) {
             URL url = urlEnumeration.nextElement();
             urlSet.add(url);
         }
 
         return new ArrayList<>(urlSet);
-    }
-
-    private void scanResources(List<URL> urlList) throws IOException {
-        for (URL url : urlList) {
-            String protocol = url.getProtocol();
-            switch (protocol) {
-                case "jar" -> scanJar(url);
-                case "file" -> scanFile(url);
-            }
-        }
     }
 
     private void scanJar(URL url) throws IOException {
@@ -119,17 +125,15 @@ public class ClassScanner {
                 Enumeration<JarEntry> jarEntryEnumeration = jarFile.entries();
                 while (jarEntryEnumeration.hasMoreElements()) {
                     JarEntry jarEntry = jarEntryEnumeration.nextElement();
-                    String en = jarEntry.getName();
+                    String jarEntryName = jarEntry.getName();
                     // 扫描 packagePath 下的类
-                    if (en.endsWith(".class") && en.startsWith(packagePath)) {
-                        en = en.substring(0, en.length() - 6).replace('/', '.');
-                        scanClazz(en);
+                    if (jarEntryName.endsWith(".class") && jarEntryName.startsWith(packagePath)) {
+                        jarEntryName = jarEntryName.substring(0, jarEntryName.length() - 6).replace('/', '.');
+                        scanClazz(jarEntryName);
                     }
                 }
             }
         }
-
-
     }
 
     private void scanFile(URL url) {
@@ -142,38 +146,54 @@ public class ClassScanner {
 
     private void scanFile(File file, String classPath) {
         if (file.isDirectory()) {
+
             File[] files = file.listFiles();
-            if (files != null) {
-                for (File fi : files) {
-                    scanFile(fi, classPath);
-                }
+
+            if (Objects.isNull(files)) {
+                return;
             }
+
+            for (File value : files) {
+                scanFile(value, classPath);
+            }
+
         } else if (file.isFile()) {
-            String fullName = file.getAbsolutePath();
-            if (fullName.endsWith(".class")) {
-                String className = fullName.substring(classPath.length(), fullName.length() - 6).replace(File.separatorChar, '.');
+
+            String absolutePath = file.getAbsolutePath();
+
+            if (absolutePath.endsWith(".class")) {
+
+                String className = absolutePath
+                        .substring(classPath.length(), absolutePath.length() - 6)
+                        .replace(File.separatorChar, '.');
+
                 scanClazz(className);
+
             }
         }
     }
 
     private String getClassPath(File file) {
-        String ret = file.getAbsolutePath();
-        if (!ret.endsWith(File.separator)) {
-            ret = ret + File.separator;
+        String absolutePath = file.getAbsolutePath();
+
+        if (!absolutePath.endsWith(File.separator)) {
+            absolutePath = absolutePath + File.separator;
         }
 
-        String bp = packagePath.replace('/', File.separatorChar);
-        int index = ret.lastIndexOf(bp);
+        String ret = packagePath.replace('/', File.separatorChar);
+
+        int index = absolutePath.lastIndexOf(ret);
+
         if (index != -1) {
-            ret = ret.substring(0, index);
+            absolutePath = absolutePath.substring(0, index);
         }
 
-        return ret;
+        return absolutePath;
     }
 
     private void scanClazz(String className) {
         Class<?> clazz = null;
+
         try {
             clazz = classLoader.loadClass(className);
         } catch (Throwable e) {

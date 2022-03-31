@@ -12,6 +12,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.YzCardFlowHisService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +33,7 @@ import java.util.Map;
 @Api("用量详情")
 @RestController
 @RequestMapping("/yunze/flowhis")
-public class YzCardFlowHisController extends BaseController {
+public class YzCardFlowHisController extends MyBaseController {
     @Autowired
     private YzCardFlowHisService yrootlowHisService;
 
@@ -67,7 +68,7 @@ public class YzCardFlowHisController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> system:flowhis:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("获取卡板信息列表 异常！");
+        return Myerr("获取卡板信息列表 操作失败！");
     }
 
     /**
@@ -86,9 +87,9 @@ public class YzCardFlowHisController extends BaseController {
             return MyRetunSuccess(yrootlowHisService.getById(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-            logger.error("<br/> yunze:flowhis:YrootlowHisController.java  <br/>   ip =  " + ip + " <br/> ", e.getCause().toString());
+            logger.error("<br/> yunze:flowhis:D:\\YUNZE\\yun-ze-iot\\YunZeIot\\yunze-admin\\src\\main\\java\\com\\yunze\\web\\controller\\yunze\\YrootlowHisController.java  <br/>   ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("查询 【订单详情】  异常！");
+        return Myerr("查询 【订单详情】  操作失败！");
     }
 
 
@@ -119,7 +120,7 @@ public class YzCardFlowHisController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:flowhis:exportflowhis  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("用量详情导出 异常！");
+        return Myerr("用量详情导出 操作失败！");
     }
 
 

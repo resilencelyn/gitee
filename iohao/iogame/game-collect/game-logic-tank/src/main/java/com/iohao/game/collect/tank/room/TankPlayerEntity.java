@@ -16,7 +16,7 @@
  */
 package com.iohao.game.collect.tank.room;
 
-import com.iohao.game.collect.common.room.AbstractPlayer;
+import com.iohao.little.game.widget.light.room.AbstractPlayer;
 import com.iohao.game.collect.proto.tank.TankLocation;
 import lombok.AccessLevel;
 import lombok.Getter;

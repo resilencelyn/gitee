@@ -2,7 +2,6 @@ package com.yunze.web.controller.yunze;
 
 import com.alibaba.fastjson.JSON;
 import com.yunze.common.annotation.Log;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.core.domain.entity.SysUser;
 import com.yunze.common.core.domain.model.LoginUser;
 import com.yunze.common.enums.BusinessType;
@@ -13,6 +12,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzCardPacketService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 @Api("平台资费计划管理")
 @RestController
 @RequestMapping("/yunze/tariffPlan")
-public class YzCardPacketController extends BaseController
+public class YzCardPacketController extends MyBaseController
 {
 
     @Autowired

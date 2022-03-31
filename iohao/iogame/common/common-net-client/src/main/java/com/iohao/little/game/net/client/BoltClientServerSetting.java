@@ -30,7 +30,7 @@ import lombok.experimental.Accessors;
  * 客户端服务器构建配置项
  *
  * @author 洛朱
- * @Date 2021-12-17
+ * @date 2021-12-17
  */
 @Getter
 @Setter

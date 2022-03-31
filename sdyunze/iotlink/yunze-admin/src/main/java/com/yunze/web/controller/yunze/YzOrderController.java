@@ -2,7 +2,6 @@ package com.yunze.web.controller.yunze;
 
 import com.alibaba.fastjson.JSON;
 import com.yunze.common.annotation.Log;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.core.domain.AjaxResult;
 import com.yunze.common.core.domain.entity.SysUser;
 import com.yunze.common.core.domain.model.LoginUser;
@@ -14,6 +13,7 @@ import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzCardFlowService;
 import com.yunze.system.service.yunze.IYzOrderService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ import java.util.Map;
 @Api("订单管理")
 @RestController
 @RequestMapping("/yunze/order")
-public class YzOrderController extends BaseController
+public class YzOrderController extends MyBaseController
 {
 
     @Resource
@@ -73,7 +73,7 @@ public class YzOrderController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:order:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取订单 列表信息列表 异常！");
+        return Myerr("获取订单 列表信息列表 操作失败！");
     }
 
 
@@ -102,7 +102,7 @@ public class YzOrderController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:order:list  <br/>   ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取 【订单】 查询 资费计划 异常！");
+        return Myerr("获取 【订单】 查询 资费计划 操作失败！");
     }
 
 
@@ -125,7 +125,7 @@ public class YzOrderController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:order:findOrder  <br/>   ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询 【订单详情】  异常！");
+        return Myerr("查询 【订单详情】  操作失败！");
     }
 
 
@@ -157,7 +157,7 @@ public class YzOrderController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:order:importRecharge  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("平台导入充值 异常！");
+        return AjaxResult.error("平台导入充值 操作失败！");
     }
 
     /**
@@ -187,7 +187,7 @@ public class YzOrderController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:order:outOrder  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("全部订单导出 异常！");
+        return Myerr("全部订单导出 操作失败！");
     }
 
 

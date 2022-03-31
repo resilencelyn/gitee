@@ -90,6 +90,18 @@ public class InitMQ {
         Map<String,Object> Obj_58 = new HashMap<String,Object>();
         Map<String,Object> Obj_59 = new HashMap<String,Object>();
         Map<String,Object> Obj_60 = new HashMap<String,Object>();
+        Map<String,Object> Obj_61 = new HashMap<String,Object>();
+        Map<String,Object> Obj_62 = new HashMap<String,Object>();
+        Map<String,Object> Obj_63 = new HashMap<String,Object>();
+        Map<String,Object> Obj_64 = new HashMap<String,Object>();
+        Map<String,Object> Obj_65 = new HashMap<String,Object>();
+        Map<String,Object> Obj_66 = new HashMap<String,Object>();
+        Map<String,Object> Obj_67 = new HashMap<String,Object>();
+        Map<String,Object> Obj_68 = new HashMap<String,Object>();
+        Map<String,Object> Obj_69 = new HashMap<String,Object>();
+        Map<String,Object> Obj_70 = new HashMap<String,Object>();
+        Map<String,Object> Obj_71 = new HashMap<String,Object>();
+        Map<String,Object> Obj_72 = new HashMap<String,Object>();
 
 
 
@@ -218,7 +230,7 @@ public class InitMQ {
 
 
 
-        Obj_26.put("card_exchangeName","polling_cardCardFlow_exchange");
+/*        Obj_26.put("card_exchangeName","polling_cardCardFlow_exchange");
         Obj_26.put("card_queueName","polling_card_flow_one");
         Obj_26.put("card_routingKey","admin.CardFlow.queue.One");
 
@@ -261,7 +273,7 @@ public class InitMQ {
 
         Obj_35.put("card_exchangeName","polling_cardCardDisconnected_exchange");
         Obj_35.put("card_queueName","polling_card_Disconnected_tow");
-        Obj_35.put("card_routingKey","admin.CardDisconnected.queue.Tow");
+        Obj_35.put("card_routingKey","admin.CardDisconnected.queue.Tow");*/
 
 
         Obj_36.put("card_exchangeName","admin_exchange");
@@ -364,6 +376,102 @@ public class InitMQ {
         Obj_56.put("card_routingKey","admin.ApiSynUpdCardConnectionStatus.queue");
 
 
+        Obj_57.put("card_exchangeName","admin_exchange");
+        Obj_57.put("card_queueName","admin_ExportDetails_queue");
+        Obj_57.put("card_routingKey","admin.ExportDetails.queue");
+
+        Obj_58.put("card_exchangeName","admin_exchange");
+        Obj_58.put("card_queueName","admin_CardCancelrealname_queue");
+        Obj_58.put("card_routingKey","admin.CardCancelrealname.queue");
+
+        Obj_60.put("card_exchangeName","admin_exchange");
+        Obj_60.put("card_queueName","admin_ExportRemittance_queue");
+        Obj_60.put("card_routingKey","admin.ExportRemittance.queue");
+
+
+
+
+
+
+        Obj_61.put("card_exchangeName","polling_cardCardStatus_exchange");
+        Obj_61.put("card_queueName","polling_cardCardStatus_queue");
+        Obj_61.put("card_routingKey","polling.cardCardStatus.routingKey");
+        Obj_61.put("card_del_exchangeName","polling_dlxcardCardStatus_exchange");
+        Obj_61.put("card_del_queueName","polling_dlxcardCardStatus_queue");
+        Obj_61.put("card_del_routingKey","polling.dlxcardCardStatus.routingKey");
+
+
+
+
+        Obj_62.put("card_exchangeName","polling_cardCardStop_exchange");
+        Obj_62.put("card_queueName","polling_cardCardStop_queue");
+        Obj_62.put("card_routingKey","polling.cardCardStop.routingKey");
+        Obj_62.put("card_del_exchangeName","polling_dlxcardCardStop_exchange");
+        Obj_62.put("card_del_queueName","polling_dlxcardCardStop_queue");
+        Obj_62.put("card_del_routingKey","polling.dlxcardCardStop.routingKey");
+
+
+
+        Obj_63.put("card_exchangeName","polling_cardCardDisconnected_exchange");
+        Obj_63.put("card_queueName","polling_cardCardDisconnected_queue");
+        Obj_63.put("card_routingKey","polling.cardCardDisconnected.routingKey");
+        Obj_63.put("card_del_exchangeName","polling_dlxcardCardDisconnected_exchange");
+        Obj_63.put("card_del_queueName","polling_dlxcardCardDisconnected_queue");
+        Obj_63.put("card_del_routingKey","polling.dlxcardCardDisconnected.routingKey");
+
+
+
+        Obj_64.put("card_exchangeName","polling_cardActivateDate_exchange");
+        Obj_64.put("card_queueName","polling_cardActivateDate_queue");
+        Obj_64.put("card_routingKey","polling.cardActivateDate.routingKey");
+        Obj_64.put("card_del_exchangeName","polling_dlxcardActivateDate_exchange");
+        Obj_64.put("card_del_queueName","polling_dlxcardActivateDate_queue");
+        Obj_64.put("card_del_routingKey","polling.dlxcardActivateDate.routingKey");
+
+
+        Obj_65.put("card_exchangeName","admin_exchange");
+        Obj_65.put("card_queueName","admin_ExportIncome_queue");
+        Obj_65.put("card_routingKey","admin.ExportIncome.queue");
+
+
+        Obj_66.put("card_exchangeName","admin_exchange");
+        Obj_66.put("card_queueName","admin_updDeptAmount_queue");
+        Obj_66.put("card_routingKey","admin.updDeptAmount.queue");
+
+
+        Obj_67.put("card_exchangeName","admin_exchange");
+        Obj_67.put("card_queueName","admin_insertMoneyChangeRecord_queue");
+        Obj_67.put("card_routingKey","admin.insertMoneyChangeRecord.queue");
+
+
+        Obj_68.put("card_exchangeName","admin_exchange");
+        Obj_68.put("card_queueName","admin_UpdDepositAmount_queue");
+        Obj_68.put("card_routingKey","admin.UpdDepositAmount.queue");
+
+
+
+        Obj_69.put("card_exchangeName","polling_cardCardFlow_exchange");
+        Obj_69.put("card_queueName","polling_cardCardFlow_queue");
+        Obj_69.put("card_routingKey","polling.cardCardFlow.routingKey");
+        Obj_69.put("card_del_exchangeName","polling_dlxcardCardFlow_exchange");
+        Obj_69.put("card_del_queueName","polling_dlxcardCardFlow_queue");
+        Obj_69.put("card_del_routingKey","polling.dlxcardCardFlow.routingKey");
+
+
+
+
+
+        Obj_70.put("card_exchangeName","admin_exchange");
+        Obj_70.put("card_queueName","admin_CardImportReplace_queue");
+        Obj_70.put("card_routingKey","admin.CardImportReplace.queue");
+
+        Obj_71.put("card_exchangeName","admin_exchange");
+        Obj_71.put("card_queueName","admin_uploadDetails_queue");
+        Obj_71.put("card_routingKey","admin.uploadDetails.queue");
+
+
+
+
         MqinitArr.add(Obj_1);
         MqinitArr.add(Obj_2);
         MqinitArr.add(Obj_3);
@@ -390,7 +498,7 @@ public class InitMQ {
         MqinitArr.add(Obj_23);
         MqinitArr.add(Obj_24);
         MqinitArr.add(Obj_25);
-        MqinitArr.add(Obj_26);
+       /* MqinitArr.add(Obj_26);
         MqinitArr.add(Obj_27);
         MqinitArr.add(Obj_28);
         MqinitArr.add(Obj_29);
@@ -400,7 +508,7 @@ public class InitMQ {
         MqinitArr.add(Obj_32);
         MqinitArr.add(Obj_33);
         MqinitArr.add(Obj_34);
-        MqinitArr.add(Obj_35);
+        MqinitArr.add(Obj_35);*/
 
 
         MqinitArr.add(Obj_36);
@@ -431,6 +539,34 @@ public class InitMQ {
         MqinitArr.add(Obj_55);
         MqinitArr.add(Obj_56);
 
+        MqinitArr.add(Obj_57);
+        MqinitArr.add(Obj_58);
+        MqinitArr.add(Obj_60);
+
+        MqinitArr.add(Obj_65);
+        MqinitArr.add(Obj_66);
+        MqinitArr.add(Obj_67);
+        MqinitArr.add(Obj_68);
+
+
+
+        MqinitArr.add(Obj_70);
+        MqinitArr.add(Obj_71);
+
+
+
+
+        List<Map<String,Object>> MqinitOhthArr = new ArrayList<Map<String,Object>>();
+
+
+        MqinitOhthArr.add(Obj_61);
+        MqinitOhthArr.add(Obj_62);
+        MqinitOhthArr.add(Obj_63);
+        MqinitOhthArr.add(Obj_64);
+        MqinitOhthArr.add(Obj_69);
+
+
+
 
         for (int i = 0; i < MqinitArr.size(); i++) {
             Map<String,Object> Obj = MqinitArr.get(i);
@@ -449,6 +585,26 @@ public class InitMQ {
                 System.out.println("exchangeName "+card_exchangeName+" Mqinit 初始化失败 ……"+e.getMessage());
             }
         }
+
+
+        for (int i = 0; i < MqinitOhthArr.size(); i++) {
+            Map<String,Object> Obj = MqinitOhthArr.get(i);
+            String card_exchangeName = Obj.get("card_exchangeName").toString();
+            String card_queueName = Obj.get("card_queueName").toString();
+            String card_routingKey = Obj.get("card_routingKey").toString();
+            String card_del_exchangeName = Obj.get("card_del_exchangeName").toString();
+            String card_del_queueName = Obj.get("card_del_queueName").toString();
+            String card_del_routingKey = Obj.get("card_del_routingKey").toString();
+
+            try {
+               rabbitMQConfig.creatExchangeQueue(card_exchangeName, card_queueName, card_routingKey, card_del_exchangeName, card_del_queueName, card_del_routingKey,null);
+            }catch (Exception e){
+                System.out.println("exchangeName "+card_exchangeName+" Mqinit 初始化失败 ……"+e.getMessage());
+            }
+        }
+
+
+
 
 
     }

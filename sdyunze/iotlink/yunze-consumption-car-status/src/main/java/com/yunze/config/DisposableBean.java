@@ -30,7 +30,7 @@ public class DisposableBean {
     public void exit(){
         //防止程序意外终止后 redis 还有记录正在监听 记录 下次程序启动不在创建 消费者
         System.out.println("cardStatus 程序结束 执行删除redis Listener 记录key ");
-        //获取现在数据库中 开启轮序 状态正常的通道进行监听
+        //获取现在数据库中 开启轮询 状态正常的通道进行监听
         List<String> IDArr =  yzCardRouteMapper.findIDArr();
         if(IDArr!=null && IDArr.size()>0) {
             //获取redis 中 记录的 已经在监听中的通道名称 避免重复监听

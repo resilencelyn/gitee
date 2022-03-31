@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 执行任务 业务层
+ * 执行日志 业务层
  */
 public interface IYzExecutionTaskService {
 

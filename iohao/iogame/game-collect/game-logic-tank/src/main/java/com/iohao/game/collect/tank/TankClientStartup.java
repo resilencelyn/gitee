@@ -18,8 +18,8 @@ package com.iohao.game.collect.tank;
 
 import com.iohao.game.collect.common.GameBarSkeletonConfig;
 import com.iohao.game.collect.common.ModuleKeyCont;
-import com.iohao.game.collect.common.exception.GameCodeEnum;
-import com.iohao.game.collect.logic.GameLogicCommonInit;
+import com.iohao.game.collect.common.GameCodeEnum;
+import com.iohao.game.collect.common.GameLogicCommonInit;
 import com.iohao.game.collect.tank.action.TankAction;
 import com.iohao.game.collect.tank.config.TankKit;
 import com.iohao.game.collect.tank.send.TankSend;

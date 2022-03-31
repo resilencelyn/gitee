@@ -24,6 +24,8 @@ import com.iohao.little.game.net.common.BoltServer;
 import com.iohao.little.game.net.message.common.ModuleMessage;
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * 模块信息代理
  * <pre>
@@ -31,7 +33,7 @@ import lombok.Getter;
  * </pre>
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public class ModuleInfoProxy {
 
@@ -47,10 +49,7 @@ public class ModuleInfoProxy {
     }
 
     public Object invokeSync(RequestMessage requestMessage) throws RemotingException, InterruptedException {
-
-        Object result = rpcServer.invokeSync(address, requestMessage, 1000);
-
-        return result;
+        return rpcServer.invokeSync(address, requestMessage, 1000);
     }
 
     public void oneway(Object request) throws RemotingException, InterruptedException {
@@ -58,14 +57,29 @@ public class ModuleInfoProxy {
     }
 
     public Object invokeSync(ResponseMessage responseMessage) throws RemotingException, InterruptedException {
-        Object result;
-        result = rpcServer.invokeSync(address, responseMessage, 1000);
-
-        return result;
+        return rpcServer.invokeSync(address, responseMessage, 1000);
     }
 
     public void setBoltServer(BoltServer boltServer) {
         this.boltServer = boltServer;
         this.rpcServer = boltServer.getRpcServer();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof ModuleInfoProxy that)) {
+            return false;
+        }
+
+        return Objects.equals(getModuleMessage(), that.getModuleMessage());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getModuleMessage());
     }
 }

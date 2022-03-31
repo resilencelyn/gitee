@@ -1,6 +1,7 @@
 package com.yunze.quartz.task.yunze.sys;
 
 import com.alibaba.fastjson.JSON;
+import com.rabbitmq.client.BuiltinExchangeType;
 import com.yunze.apiCommon.utils.VeDate;
 import com.yunze.common.config.RabbitMQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -32,7 +33,7 @@ public class IndexpageGenerateTask {
             //rabbitMQConfig.creatExchangeQueue(polling_exchangeName, polling_queueName, polling_routingKey, null, null, null, BuiltinExchangeType.DIRECT);
             Map<String, Object> start_Map = new HashMap<>();
             start_Map.put("dept_id", dept_id);//生成企业ID
-            start_Map.put("record_date", VeDate.getNextDay(VeDate.getStringDateShort(),"-1") );//获取前一天的数据
+            start_Map.put("record_date",VeDate.getNextDay(VeDate.getStringDateShort(),"-1") );//获取前一天的数据
             rabbitTemplate.convertAndSend(polling_exchangeName, polling_routingKey, JSON.toJSONString(start_Map), message -> {
                 // 设置消息过期时间 30 分钟 过期
                 message.getMessageProperties().setExpiration("" + (Time * 1000 * 60));

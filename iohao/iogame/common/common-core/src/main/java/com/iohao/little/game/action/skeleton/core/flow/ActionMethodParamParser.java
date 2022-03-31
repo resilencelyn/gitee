@@ -20,7 +20,7 @@ package com.iohao.little.game.action.skeleton.core.flow;
  * action 方法参数解析器 actionCommand
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public interface ActionMethodParamParser {
     /** 方法空参数 */

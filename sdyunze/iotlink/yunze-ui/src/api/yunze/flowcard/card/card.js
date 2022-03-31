@@ -242,12 +242,75 @@ export function ConsumptionAndStateArr(map) {
 
 
 
+// 获取iccid
+export function getIccid(map) {
+  return request({
+    url: '/yunze/card/getIccid',
+    method: 'post',
+    data: map
+  })
+}
 
 
 
 
 
+// 智能匹对
+export function cardMatch(map) {
+  return request({
+    url: '/yunze/card/cardMatch',
+    method: 'post',
+    data: map
+  })
+}
 
+
+
+
+// 单卡停机原因查询
+export function simStopReason(map) {
+  return request({
+    url: '/yunze/card/simStopReason',
+    method: 'post',
+    data: map
+  })
+}
+
+// 单卡开关机状态实时查询
+export function onOffStatus(map) {
+  return request({
+    url: '/yunze/card/onOffStatus',
+    method: 'post',
+    data: map
+  })
+}
+
+// 单卡已开通APN信息查询
+export function apnInfo(map) {
+  return request({
+    url: '/yunze/card/apnInfo',
+    method: 'post',
+    data: map
+  })
+}
+
+// 物联卡机卡分离状态查询
+export function cardBindStatus(map) {
+  return request({
+    url: '/yunze/card/cardBindStatus',
+    method: 'post',
+    data: map
+  })
+}
+
+// 单卡状态变更历史查询
+export function simChangeHistory(map) {
+  return request({
+    url: '/yunze/card/simChangeHistory',
+    method: 'post',
+    data: map
+  })
+}
 
 
 

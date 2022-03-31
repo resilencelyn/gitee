@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>方块报表</title>
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-container" style="padding: 30px">
+  <form class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+      <label class="layui-form-label">报表名称</label>
+      <div class="layui-input-block">
+        <input type="text" name="title" value="{$data.title  ?? ''}" autocomplete="off" placeholder="请输入标题" class="layui-input" lay-verify="required">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">大屏宽度</label>
+      <div class="layui-input-block">
+        <input type="text" name="width"  value="{$data.width  ?? ''}" autocomplete="off" placeholder="请输入大屏宽度" class="layui-input" lay-verify="required">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">大屏高度</label>
+      <div class="layui-input-block">
+        <input type="text" name="height"  value="{$data.height  ?? ''}" autocomplete="off" placeholder="请输入大屏高度" class="layui-input" lay-verify="required">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">报表类型</label>
+      <div class="layui-input-block">
+        <select name="type"  >
+          <option value=""></option>
+          <option value="0" selected>大屏报表</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">背景图上传</label>
+      <div class="layui-input-block">
+        <div class="layui-upload">
+          <button type="button" class="layui-btn" id="test1">上传图片</button>
+          <div class="layui-upload-list" style="width: 95px;">
+            {if condition='isset($data.file)'}
+              <img class="layui-upload-img" id="demo1"  src='/storage/{$data.file}'style="width: 505px;">
+              {else/}
+            <img class="layui-upload-img" id="demo1"  style="width: 505px;">
+            {/if}
+            <p id="demoText"></p>
+          </div>
+          <div style="width: 100%;">
+            <div class="layui-progress layui-progress-big" lay-showpercent="yes" lay-filter="demo">
+              <div class="layui-progress-bar" lay-percent=""></div>
+            </div>
+          </div>
+        </div>
+        <a name="list-progress"> </a>
+        <input name="file" value="{$data.file ?? ''}"  id="file" type="hidden" lay-verify="required" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <button type="submit" class="layui-btn" lay-submit="" lay-filter="data">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </form>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript" src="/static/fk/jquery-3.4.1.min.js"></script>
+<script>
+  layui.use(['upload', 'element', 'layer'], function(){
+    var $ = layui.jquery,
+            form = layui.form
+            ,upload = layui.upload
+            ,element = layui.element
+            ,layer = layui.layer;
+    form.on('submit(data)', function(data){
+      $.ajax({
+        type: "post",
+        url: "{$url|raw}",
+        data: data.field,
+        dataType: "json",
+        success: function (data) {
+          if(data.code == 0) {
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+              parent.layer.msg('设置成功！');
+              setTimeout(function(){
+                parent.location.reload();
+              },1000);
+          }else{
+            layer.alert(data.msg);
+          }
+        },
+        error: function (xhr) {
+          console.log(xhr)
+        }
+      });
+      return false;
+    });
+    //常规使用 - 普通图片上传
+    var uploadInst = upload.render({
+      elem: '#test1'
+      ,url: '{:url('index/upload')}' //改成您自己的上传接口
+      ,before: function(obj){
+        //预读本地文件示例，不支持ie8
+        obj.preview(function(index, file, result){
+          $('#demo1').attr('src', result); //图片链接（base64）
+        });
+        element.progress('demo', '0%'); //进度条复位
+        layer.msg('上传中', {icon: 16, time: 0});
+      }
+      ,done: function(res){
+        //如果上传失败
+        if(res.code > 0){
+          return layer.msg('上传失败');
+        }
+        $('#file').val(res.data); //置空上传失败的状态
+        $('#demoText').html(''); //置空上传失败的状态
+      }
+      ,error: function(){
+        var demoText = $('#demoText');
+        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+        demoText.find('.demo-reload').on('click', function(){
+          uploadInst.upload();
+        });
+      }
+      ,progress: function(n, elem, e){
+        element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
+        if(n == 100){
+          layer.msg('上传完毕', {icon: 1});
+        }
+      }
+    });
+
+
+  });
+</script>
+</body>
+</html>
+

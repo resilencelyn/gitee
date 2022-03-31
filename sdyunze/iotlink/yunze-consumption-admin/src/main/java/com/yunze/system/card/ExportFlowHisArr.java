@@ -137,7 +137,7 @@ public class ExportFlowHisArr {
 
         writeCSV.Write(newName, out_list, Outcolumns, null, keys);
         yzExecutionTaskMapper.set_end_time(task_map);//任务结束
-        return "已下发执行任务可在【设备管理】》【执行任务管理】查看";
+        return "已下发执行日志可在【系统管理】》【日志管理】》【执行日志】查看";
     }
 
 }

@@ -12,7 +12,7 @@ public interface IYzIndexpageService {
      * @param map
      * @return
      */
-    public Map <String,Object> findToDay(Map<String, Object> map);
+    public Map <String,Object> findToDay(Map<String,Object> map);
 
 
 }

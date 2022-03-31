@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        #piclist {
+            width: 100%;
+            overflow: scroll;
+        }
+
+        #pagerBottom {
+            width: 100%;
+            text-align: right;
+        }
+
+        div.empty-data {
+            margin: 0 auto;
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            display: block;
+        }
+
+        div.cell-pic {
+            width: calc(23% - 4px);
+            display: inline-block;
+            position: relative;
+            padding: 10px;
+        }
+
+        div.cell-pic:hover {
+            box-shadow: 1px 0px 5px 0px #858585;
+        }
+
+        .cell-pic .pic-check, .cell-pic .pic-size, .cell-pic .pic-action {
+            display: inline-block;
+            position: absolute;
+            top: 5px;
+            z-index: 1;
+            color: gray;
+            font-size: 12px;
+            line-height: 12px;
+            padding: 2px;
+        }
+
+        .cell-pic .pic-check {
+            left: 4px;
+            z-index: 2;
+        }
+
+        .cell-pic .pic-size {
+            left: 22px;
+            background-color: lightpink;
+        }
+
+        .cell-pic .pic-action {
+            right: 5px;
+            top: 3px;
+            padding: 4px;
+            z-index: 2;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            display: none;
+        }
+
+        div.cell-pic:hover .pic-action {
+            display: inline-block;
+        }
+
+        .pic-desc {
+            color: gray;
+            font-size: 12px;
+        }
+
+        .pic-desc-input {
+            width: calc(100% - 14px);
+            padding: 4px 6px;
+            outline: none;
+            border: 1px solid whitesmoke;
+        }
+
+        .pic-spec-item {
+            border: 2px solid whitesmoke;
+            border-radius: 17px;
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            line-height: 30px;
+            overflow: hidden;
+        }
+
+        .pic-spec-item img {
+            width: calc(100% - 4px);
+            height: calc(100% - 4px);
+        }
+
+        .pic-spec-item.active {
+            border-color: red;
+        }
+
+        div.cell-pic > a {
+            display: inline-block;
+            text-align: center;
+        }
+
+        div.cell-pic .showimg {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-row" id="pic-search">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form">
+                <div class="layui-input-inline layui-col-md3">
+                    <button type="button" id="btnUpload" class="layui-btn">上传图片</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="pic-list" style="margin:10px 10px 0px;">
+    <div id="piclist"></div>
+    <div id="pagerBottom"></div>
+</div>
+<script src="/static/fk/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="/static/fk/jquery-ui-1.9.2-min.js?"></script>
+<script type="text/javascript" src="/static/fk/fk1.0.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    const pageSize = 16;
+    _search(1);
+    function renderPager(t, p) {
+        layui.laypage.render({
+            elem: 'pagerBottom'
+            , count: t
+            , limit: pageSize
+            , curr: p
+            , jump: function (obj, first) {
+                if (!first) {
+                    _search(obj.curr, obj.limit);
+                }
+            }
+        });
+    }
+    function _search(p, s) {
+        if (!s) {
+            s = pageSize;
+        }
+        let index = layui.layer.load();
+        $.post("{:url('fk/data')}", {
+            pictype: $("#pictype").val(),
+            keyword: $("#keyword").val(),
+            page: p,
+            rows: s
+        }, function (data) {
+            layui.layer.close(index);
+            if (data.code == 0) {
+                renderPager(data.total, p);
+                layui.laytpl($("#piclistTpl").html()).render(data, function (html) {
+                    $("#piclist").html(html);
+                });
+            } else {
+                layui.layer.alert(data.message);
+            }
+        });
+    }
+    layui.use(["form", "layer", "laypage", "laytpl", "upload"], function () {
+        window.uploader = layui.upload.render({
+            elem: '#btnUpload'
+            , url: '{$upload}'
+            , auto: true
+            , accept: "images"
+            , exts: "jpg|png|gif|bmp|jpeg"
+            , size: 10240//10M
+            , number: 1
+            , before: function (obj) {
+                layui.layer.load();
+                this.data = {
+                    pictype: $("#pictype").val()
+                };
+            }
+            , done: function (res) {
+                layui.layer.closeAll("loading");
+                if (res.code == 0) {
+                    _search(1);
+                } else {
+                    layui.layer.alert(res.message);
+                }
+            }
+        });
+        $(function () {
+            let listHeight = $(window).height() - $("#pic-search").height() - 10;
+            $("#pic-list").height(listHeight);
+            $("#piclist").height(listHeight - 55);
+        });
+    });
+    function img(url) {
+        parent.$("#f_title").val(url).trigger('input', url);
+    }
+</script>
+<script id="piclistTpl" type="text/html">
+    {{#  layui.each(d.data, function(index, item){ }}
+    <div class="cell-pic">
+        <div class="pic-spec">
+            <img src="/storage/{{item.src}}" onclick='img("/storage/{{item.src}}")' width="100%" height="100px"/>
+        </div>
+    </div>
+    {{# }); }}
+    {{#  if(d.count === 0){ }}
+    <div class="empty-data">没有数据</div>
+    {{#  } }}
+</script>
+</body>
+</html>

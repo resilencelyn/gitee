@@ -7,9 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.yunze.common.core.domain.entity.SysUser;
+import com.yunze.common.core.domain.model.LoginUser;
+import com.yunze.common.utils.ServletUtils;
+import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
@@ -69,12 +74,14 @@ public class BaseController
      * my 成功返回函数
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected String MyRetunSuccess(Object obj,String msg)
+   /* protected String MyRetunSuccess(Object obj,String msg,String deptId)
     {
         msg = msg!=null?msg:"操作成功";
         Map<String, Object> Rmap =  new HashMap<String, Object>();
         Rmap.put("code",HttpStatus.SUCCESS);
+        msg = deptId.equals("100")?msg:"操作成功!";
         Rmap.put("msg",msg);
+        Rmap.put("deptId",deptId);
         Rmap.put("Data",obj);
         try {
             return AesEncryptUtil.encrypt(JSON.toJSONString(Rmap));
@@ -85,11 +92,14 @@ public class BaseController
     }
 
 
-    protected String Myerr(String Msg)
+    protected String Myerr(String Msg,String deptId)
     {
+
         Map<String ,Object> map = new HashMap<>();
+        Msg = deptId.equals("100")?Msg:"执行失败!";
         map.put("code",HttpStatus.ERROR);
         map.put("msg",Msg);
+        map.put("deptId",deptId);
         try {
             return AesEncryptUtil.encrypt(JSON.toJSONString(map));
             //return JSON.toJSONString(map);
@@ -97,7 +107,7 @@ public class BaseController
             System.err.println(e);
             return "数据返回加密失败……";
         }
-    }
+    }*/
 
     /**
      * 设置请求排序数据

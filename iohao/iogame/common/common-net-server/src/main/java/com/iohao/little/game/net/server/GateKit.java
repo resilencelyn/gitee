@@ -28,7 +28,7 @@ import lombok.experimental.UtilityClass;
  * 网关工具
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 @UtilityClass
 public class GateKit {

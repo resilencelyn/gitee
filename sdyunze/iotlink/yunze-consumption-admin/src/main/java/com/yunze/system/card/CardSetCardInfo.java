@@ -47,7 +47,7 @@ public class CardSetCardInfo {
      */
     @RabbitHandler
     @RabbitListener(queues = "admin_importSetCardInfo_queue")
-    public void CardSelImie(String msg, Channel channel) throws IOException {
+    public void SetCardInfo(String msg, Channel channel) throws IOException {
         try {
             if (StringUtils.isEmpty(msg)) {
                 return;
@@ -86,7 +86,7 @@ public class CardSetCardInfo {
         String newName = UUID.randomUUID().toString().replace("-","")+"_CardSetCardInfo";
         String UpdBackupName = UUID.randomUUID().toString().replace("-","")+"_CardSetCardInfoBackup";//设置分组备注前信息备份名称
         String deptId  = User.get("deptId").toString();
-        String task_name = create_by+"-特殊操作 [特殊操作 变更卡分组、备注] ";
+        String task_name ="特殊操作 [特殊操作 变更卡分组、备注] ";
         String SaveUrl = "/getcsv/"+newName+".csv";
         SaveUrl += ",/getcsv/"+UpdBackupName+".csv";
 

@@ -16,7 +16,7 @@
  */
 package com.iohao.game.collect.tank.room.flow;
 
-import com.iohao.game.collect.common.room.flow.RoomPlayerCreateCustom;
+import com.iohao.little.game.widget.light.room.flow.RoomPlayerCreateCustom;
 import com.iohao.game.collect.tank.room.TankPlayerEntity;
 
 /**

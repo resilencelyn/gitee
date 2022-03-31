@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * 定时任务 通道轮序 达量停机
+ * 定时任务 通道轮询 达量停机
  *
  * @author root
  */

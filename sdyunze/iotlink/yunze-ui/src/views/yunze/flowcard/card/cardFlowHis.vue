@@ -5,89 +5,120 @@
       <!--用户数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
-          <!--  时间类型-->
-          <el-form-item label="时间类型" prop="status">
-            <el-select
-              v-model="queryParams.timetype"
-              placeholder="时间类型"
-              clearable
-              size="small"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in flowHisTime"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item >
-            <el-date-picker
-              v-model="selTime"
-              type="daterange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              value-format="yyyy-MM-dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 360px"
-              align="right">
-            </el-date-picker>
 
-          </el-form-item>
-
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-
-          <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-              <el-button
-                type="warning"
-                plain
-                icon="el-icon-download"
-                size="mini"
-                :loading="exportLoading"
-                @click="CardFlowHisExport"
-                v-hasPermi="['yunze:flowhis:exportflowhis']"
-              >导出</el-button>
-            </el-col>
-          </el-row>
 
         </el-form>
 
+          <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: -10px;line-height:35px">
+            <el-row :gutter="10" class="mb8">
+              <el-col :span="1.5">
+                <el-input
+                  v-model="queryParams.value"
+                  placeholder="查询值"
+                  clearable
+                  size="small"
+                  style="width: 350px"
+                  @keyup.enter.native="handleQuery"
+                >
+                  <el-select
+                    v-model="queryParams.type"
+                    placeholder="查询条件"
+                    clearable
+                    slot="prepend"
+                    style="width: 110px"
+                  >
+                    <el-option
+                      v-for="dict in typeOptions"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+                    />
+                  </el-select>
+                </el-input>
+              </el-col>
+              <el-col :span="1.5">
+                <!--  时间类型-->
+                <el-form-item label="时间类型" prop="status" style="margin-bottom: -10px;line-height:35px">
+                  <el-select
+                    v-model="queryParams.timetype"
+                    placeholder="时间类型"
+                    clearable
+                    size="small"
+                    style="width: 110px"
+                  >
+                    <el-option
+                      v-for="dict in flowHisTime"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item >
+                  <el-date-picker
+                    v-model="selTime"
+                    type="daterange"
+                    :picker-options="pickerOptions"
+                    range-separator="至"
+                    value-format="yyyy-MM-dd"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    style="width: 360px"
+                    align="right">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="1.5">
+                  <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="warning"
+                  plain
+                  icon="el-icon-download"
+                  size="mini"
+                  :loading="exportLoading"
+                  @click="CardFlowHisExport"
+                  v-hasPermi="['yunze:flowhis:exportflowhis']"
+                >导出</el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="danger"
+                  plain
+                  icon="el-icon-warning"
+                  size="mini"
+                  @click="illustrateDialogVisible = true"
+                >必读说明</el-button>
+              </el-col>
 
-        <el-row :gutter="10" class="mb8">
-          <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:flowhis:list']" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+
+
+                <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:flowhis:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+            </el-row>
+          </el-form>
+
+
+
+
+
+        <el-dialog
+            title="用量详情说明"
+            :visible.sync="illustrateDialogVisible"
+            width="30%"
+            :before-close="illustrateHandleClose">
+          <ul style="font-size: 25px;line-height: 50px;">
+            <li>来源于当天轮询或手动同步 【上游接口】返回</li>
+            <li>日用量 = 本月内上一记录用量推演计算而来， <span style="color: red">数据仅供参考！</span></li>
+          </ul>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="illustrateDialogVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
+
 
         <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
 
@@ -169,6 +200,7 @@ export default {
       executionTaskDis: false,
       Urls:[],
       cardLists:[],
+      illustrateDialogVisible:false,//说明 显示
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -197,13 +229,13 @@ export default {
         }]
       },
 
-
+      tools:tools,
       customize_whether: [],//自定义是否
       ExecutionTask_OutType : [],// 执行日志导出类别
 
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
-      selTime:[],//时间选择
+      selTime: [],//时间选择
       mainwidth:24,//宽度
       // 遮罩层
       loading: true,
@@ -347,18 +379,21 @@ export default {
       });
     }
 
-
-
-
-    this.selTime.push(tools.gitData());
-    this.selTime.push(tools.gitData());
-    console.log(this.selTime)
-    this.queryParams.timetype = '2';
+    this.queryParams.staTime = this.selTime.push(tools.gitDataCurrent())[0];//获取当前时间 年 月 日
+    this.queryParams.endTime = this.selTime.push(tools.gitDataCurrent())[1];
+    // console.log(tools.gitDataCurrent())
+    this.queryParams.timetype = '1';
     this.queryParams.type = '1';
     this.getList();
 
   },
   methods: {
+
+
+    //说明关闭
+    illustrateHandleClose(){
+      this.illustrateDialogVisible = false;
+    },
 
 
     /*获取查询参数*/
@@ -372,11 +407,8 @@ export default {
       }
       if(tools.Is_null(this.queryParams.timetype) && this.selTime !=null){
         //console.log(this.selTime);
-        this.queryParams.staTime = this.selTime[0];
-        this.queryParams.endTime = this.selTime[1];
-      }else{
-        this.queryParams.staTime = null;
-        this.queryParams.endTime = null;
+          this.queryParams.staTime = this.selTime[0];
+          this.queryParams.endTime = this.selTime[1];
       }
       // console.log(this.queryParams)
 

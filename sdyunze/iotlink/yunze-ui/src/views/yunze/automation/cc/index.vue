@@ -4,32 +4,7 @@
       <!--用户数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
+
           <!--触发类型   -->
           <el-form-item label="触发类型" prop="status" >
             <el-select
@@ -48,7 +23,8 @@
             </el-select>
           </el-form-item>
           <!--运营商类型-->
-          <el-form-item label="运营商类型" prop="status" label-width="100px">
+
+          <el-form-item label="运营商类型" prop="status" label-width="100px" >
             <!--  多选属性   multiple-->
             <el-select
               v-model="queryParams.operation_type"
@@ -65,6 +41,7 @@
               />
             </el-select>
           </el-form-item>
+
           <!--执行模板-->
           <el-form-item label="执行模板" prop="status">
             <el-select
@@ -98,10 +75,6 @@
                 :value="dict.dictValue"
               />
             </el-select>
-          </el-form-item>
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
 
           <!--自动化状态-->
@@ -170,9 +143,41 @@
             </el-date-picker>
           </el-form-item>
         </el-form>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-dropdown-item>
+
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: 10px">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-input
+                v-model="queryParams.value"
+                placeholder="查询值"
+                clearable
+                size="small"
+                style="width: 350px"
+                @keyup.enter.native="handleQuery"
+              >
+                <el-select
+                  v-model="queryParams.type"
+                  placeholder="查询条件"
+                  clearable
+                  slot="prepend"
+                  style="width: 110px"
+                >
+                  <el-option
+                    v-for="dict in typeOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </el-input>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
+            <el-col :span="1.5">
               <el-button
                 type="primary"
                 plain
@@ -180,9 +185,10 @@
                 size="mini"
                 @click="AddCc1"
               >新增</el-button>
-            </el-dropdown-item>
-          </el-col>
-        </el-row>
+            </el-col>
+            <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:card:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </el-form>
 
         <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
 
@@ -205,7 +211,7 @@
             </template>
           </el-table-column>
           <el-table-column   label="自动化抄送名称" align="center"  prop="cc_name" v-if="columns[1].visible" />
-          <el-table-column   label="触发类型" align="center" key="trigger_type" v-if="columns[2].visible" :show-overflow-tooltip="true" width="100">
+          <el-table-column   label="触发类型" align="center" key="trigger_type" v-if="columns[2].visible" :show-overflow-tooltip="true" >
             <template slot-scope="scope" >
               {{tools.getDkeyValue(TaskOptions,scope.row.trigger_type)}}
             </template>
@@ -264,29 +270,20 @@
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
 
-                  <template>
-                    <el-dropdown-item>
-                      <el-button type="text" @click="UpdateCc(scope.row)">修改</el-button>
-                    </el-dropdown-item>
-                  </template>
+                  <el-dropdown-item    @click.native="UpdateCc(scope.row)">修改</el-dropdown-item>
 
                   <el-dropdown-item >
-                    <router-link :to="'/ccurl/type/index/'+ scope.row.channel_id" class="link-type">
+                    <router-link :to="'/ccurl/type/index/'+ scope.row.id" class="link-type">
                       <span>配置跳转</span>
                     </router-link>
                   </el-dropdown-item>
 
                   <el-dropdown-item   v-hasPermi="['yunze:cchis:list']">
-                    <router-link :to="'/cchis/type/index/'+ scope.row.channel_id" class="link-type">
+                    <router-link :to="'/cchis/type/index/'+ scope.row.id" class="link-type">
                       <span>推送记录</span>
                     </router-link>
                   </el-dropdown-item>
-
-                  <template>
-                    <el-dropdown-item>
-                      <el-button type="text"  @click="handleAdd(scope.row)">新增配置</el-button>
-                    </el-dropdown-item>
-                  </template>
+                  <el-dropdown-item    @click.native="handleAdd(scope.row)">新增配置</el-dropdown-item>
 
                 </el-dropdown-menu>
               </el-dropdown>
@@ -326,7 +323,6 @@
     <el-dialog :visible.sync="automation" width="75%" append-to-body @close="automationClose">
 
       <el-row :gutter="20">
-
         <!-- 树型展示 -->
         <el-col :span="8"  v-show="Tree_type">
           <div class="head-container">
@@ -350,7 +346,7 @@
                                    show-checkbox
                                    :filter-node-method="DeptNode"
                                    default-expand-all
-                                   node-key="cd_id"
+                                   node-key="id"
                                    ref="dept"
                                    highlight-current
                                    @node-click="handleNodeClick"
@@ -392,11 +388,13 @@
             <el-form-item label="抄送名称" prop="cc_name" label-width="100px" >
               <el-input v-model="forArr.cc_name" placeholder="请输入抄送名称" />
             </el-form-item>
+            <div  v-if="trigger_typeShow" >
             <el-form-item  prop="status" label-width="100px">
                <span slot="label">
                 触发类型
                </span>
               <el-select
+                @change="TaskArr"
                 v-model="forArr.trigger_type"
                 placeholder="请选择触发类型"
                 clearable
@@ -412,7 +410,9 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item  prop="status" label-width="100px">
+            </div>
+            <div v-if="operation_typeShow" >
+            <el-form-item  prop="status" label-width="100px" v-if="showPrise">
                <span slot="label">
                 运营商类型
                </span>
@@ -433,6 +433,7 @@
                 />
               </el-select>
             </el-form-item>
+            </div>
             <el-form-item  prop="status" label-width="100px">
                <span slot="label">
                 执行动作类型
@@ -548,6 +549,8 @@ export default {
       centerDialogVisible: false,
       cardAdd: false,
       cardEdie: false,
+      trigger_typeShow:true,
+      operation_typeShow: true,
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -586,9 +589,9 @@ export default {
       treeCheckStrictly: true,
       treeExpand: true,
       treeNodeAll: false,
-
+      showPrise: false,
       customize_whether: [],//自定义是否
-      ExecutionTask_OutType : [],// 执行任务导出类别
+      ExecutionTask_OutType : [],// 执行日志导出类别
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
       selTime:'',//时间选择
@@ -596,7 +599,6 @@ export default {
 
       option_show:false, //公司所属查询
       Tree_type: false, //树型展示
-
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -608,7 +610,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -618,7 +620,7 @@ export default {
       // 弹出层标题
       title: "",
       // 部门树选项
-      passageway_id: undefined,
+      passageway_id: [],
       // 是否显示弹出层
       open: false,
       automation: false,
@@ -658,9 +660,9 @@ export default {
       AutomationStatus: [],
       // 运营商类别 字典
       operators_type: [],
-      // 执行任务状态 字典
+      // 执行日志状态 字典
       channelStatusOptions: [],
-      // 执行任务编码 字典
+      // 执行日志编码 字典
       channelCodeOptions: [],
       //条件类型、
       ConditionType: [],
@@ -689,8 +691,8 @@ export default {
         label: "label"
       },
       trigger_type: '',
-      TaskOptions: [
-      ],
+      TaskOptions: [],
+
       //当前查询参数
       sel:{
         iccid:'',
@@ -781,13 +783,12 @@ export default {
     }
 
     //加载 触发类型
-    if(window['TaskOptions']!=undefined &&  window['TaskOptions']!=null && window['TaskOptions']!=''){
-      this.TaskOptions = window['TaskOptions'];
+    if(window['cc_trigger_typeOptions']!=undefined &&  window['cc_trigger_typeOptions']!=null && window['cc_trigger_typeOptions']!=''){
+      this.TaskOptions = window['cc_trigger_typeOptions'];
     }else{
       this.getDicts("yz_cc_trigger_type").then(response => {
-
-        window['TaskOptions'] = response.data;
-        this.TaskOptions = window['TaskOptions'];
+        window['cc_trigger_typeOptions'] = response.data;
+        this.TaskOptions = window['cc_trigger_typeOptions'];
       });
     }
 
@@ -869,7 +870,7 @@ export default {
       });
     }
 
-    //加载 执行任务导出类别
+    //加载 执行日志导出类别
     if(window['ExecutionTask_OutType']!=undefined &&  window['ExecutionTask_OutType']!=null && window['ExecutionTask_OutType']!=''){
       this.ExecutionTask_OutType = window['ExecutionTask_OutType'];
     }else{
@@ -899,6 +900,19 @@ export default {
 
   },
   methods: {
+
+    /**触发类型 选择*/
+    TaskArr(){
+      if(tools.Is_null(this.forArr.trigger_type)){ //判断不能为空
+        if(this.forArr.trigger_type == '6'){
+          this.trigger_typeShow =true;
+          this.operation_typeShow =false;
+        }else {
+          this.trigger_typeShow =true;
+          this.operation_typeShow =true;
+        }
+      }
+    },
 
     // tree单选getNode(data) {
 
@@ -1054,7 +1068,7 @@ export default {
 
 
     },
-    /*下载执行任务*/
+    /*下载执行日志*/
     getDownloadExecutionTask(row){
       let map = {};
       map.path = row.value;
@@ -1079,7 +1093,7 @@ export default {
 
 
 
-    /** 查询执行任务列表 */
+    /** 查询执行日志列表 */
     getList() {
       this.loading = true;
       this.getParams();
@@ -1089,7 +1103,7 @@ export default {
       //console.log(Pwd_Str);
       listCc(Pwd_Str).then(response => {
           let jsonobj =  JSON.parse(tools.Decrypt(response));
-          //console.log(jsonobj);
+          // console.log(jsonobj);
           if(jsonobj.code==200){
             this.cardList = jsonobj.Data.Data;
             this.total = jsonobj.Data.Pu.rowCount;
@@ -1129,8 +1143,8 @@ export default {
     },
     // 节点单击事件
     handleNodeClick(data) {
-      // console.log(data);
-      this.queryParams.agent_id = [data.id];
+      console.log(data);
+     this.queryParams.agent_id = [data.id];
       this.getList();
     },
 
@@ -1151,25 +1165,25 @@ export default {
       ///在这里做数据校验
       if(this.$refs.tree.getCheckedKeys().length>0){
         let arr = this.$refs.tree.getCheckedKeys();
-        console.log(arr)
+        // console.log(arr)
         let Str ="";
         for (let i = 0; i < arr.length; i++) {
           Str+=arr[i]+",";
         }
-        console.log(Str)
+        // console.log(Str)
         Str = Str.substring(0,Str.length-1);
         this.forArr.dep_id =Str;
       }
-      // 通道 id
 
+      // 通道 id
       if(this.$refs.dept.getCheckedKeys().length>0){
         let arr = this.$refs.dept.getCheckedKeys();
-        console.log(arr)
+        // console.log(arr)
         let Str ="";
         for (let i = 0; i < arr.length; i++) {
           Str+=arr[i]+",";
         }
-        console.log(Str)
+        //console.log(Str)
         Str = Str.substring(0,Str.length-1);
         this.forArr.channel_id = Str;
       }else {
@@ -1193,13 +1207,14 @@ export default {
       ){
         this.forArr.operation_type = this.forArr.operation_type.join(',') //把数组转换成字符串 插入数据
         let Pwd_Str = tools.encrypt(JSON.stringify(this.forArr));
-        console.log(Pwd_Str)
+        //console.log(Pwd_Str)
         AddCc(Pwd_Str).then(response => {
           let jsonobj =  JSON.parse(tools.Decrypt(response));
-          console.log(jsonobj);
+          //console.log(jsonobj);
           if(jsonobj.code==200){
             this.msgSuccess(jsonobj.msg);
             this.automation = false;
+            this.handleQuery();
           }else{
             this.msgError("获取数据异常，请联系管理员！");
           }
@@ -1239,6 +1254,7 @@ export default {
           if(jsonobj.code==200){
             this.msgSuccess(jsonobj.msg);
             this.automation = false;
+            this.handleQuery();
           }else{
             this.msgError("获取数据异常，请联系管理员！");
           }
@@ -1286,15 +1302,19 @@ export default {
       //初始化 新增 数据
       this.form.cc_id= row.id;
     },
+
+
     //新增按钮
     AddCc1(){
+
+      this.showPrise = true;
+
       this.automation = true;
       this.cardAdd = true;
       this.cardEdie = false;
       this.option_show = false;
       this.Tree_type = false;
       this.forArr = {};//清空数据
-
     },
 
     //关闭 自动化修改 清除 terr 选中
@@ -1306,10 +1326,10 @@ export default {
 
     /**修改自动化按钮*/
     UpdateCc(row){
-      //console.log(row)
+      this.AddCc1();
+      // console.log(row)
       this.Tree_type = true;
       this.option_show = true;
-
 
 
       //this.getList();
@@ -1353,7 +1373,6 @@ export default {
           row.operation_type = Arr;
         }
       }
-
       row.trigger_type = ""+row.trigger_type;
       row.conditions_type = ""+row.conditions_type;
       row.execution_type = ""+row.execution_type;

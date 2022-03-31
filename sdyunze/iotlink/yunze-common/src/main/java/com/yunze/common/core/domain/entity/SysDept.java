@@ -53,7 +53,16 @@ public class SysDept extends BaseEntity
     /** 部门简称 */
     private String dname;
 
-
+    /** 预存金额 */
+    private String depositAmount;
+    /** 授信额度 */
+    private String lineOfCredit;
+    /** 利润金额 */
+    private String profitAmount;
+    /** 利润金额 */
+    private String usedLineOfCredit;
+    /** 利润金额 */
+    private String beUsableLineOfCredit;
 
     /** 子部门 */
     private List<SysDept> children = new ArrayList<SysDept>();
@@ -186,6 +195,58 @@ public class SysDept extends BaseEntity
     }
 
 
+    public String getDepositAmount()
+    {
+        return depositAmount;
+    }
+
+    public void setDepositAmount(String depositAmount)
+    {
+        this.depositAmount = depositAmount;
+    }
+
+    public String getLineOfCredit()
+    {
+        return lineOfCredit;
+    }
+
+    public void setLineOfCredit(String lineOfCredit)
+    {
+        this.lineOfCredit = lineOfCredit;
+    }
+
+    public String getProfitAmount()
+    {
+        return profitAmount;
+    }
+
+    public void setProfitAmount(String profitAmount)
+    {
+        this.profitAmount = profitAmount;
+    }
+
+    public String getUsedLineOfCredit()
+    {
+        return usedLineOfCredit;
+    }
+
+    public void setUsedLineOfCredit(String usedLineOfCredit)
+    {
+        this.usedLineOfCredit = usedLineOfCredit;
+    }
+
+    public String getBeUsableLineOfCredit()
+    {
+        return beUsableLineOfCredit;
+    }
+
+    public void setBeUsableLineOfCredit(String beUsableLineOfCredit)
+    {
+        this.beUsableLineOfCredit = beUsableLineOfCredit;
+    }
+
+
+
 
     public List<SysDept> getChildren()
     {
@@ -215,6 +276,11 @@ public class SysDept extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("dname", getDname())
+            .append("depositAmount", getDepositAmount())
+            .append("lineOfCredit", getLineOfCredit())
+            .append("profitAmount", getProfitAmount())
+            .append("usedLineOfCredit", getUsedLineOfCredit())
+            .append("beUsableLineOfCredit", getBeUsableLineOfCredit())
             .toString();
     }
 }

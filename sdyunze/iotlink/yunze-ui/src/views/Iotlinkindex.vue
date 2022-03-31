@@ -113,6 +113,23 @@
           </div>
 
           <el-collapse accordion v-model="activeName">
+            <el-collapse-item title="v0.7.0 - 2022-03-31"  name="3">
+              <ol>
+                <li>新增 智能诊断、卡号匹对</li>
+                <li>新增 通道-轮询算法类型 高频轮询、智能轮询</li>
+                <li>新增 批量取消实名 批量更新卡信息</li>
+                <li>新增 定时任务[未划分通道-邮件抄送通知]</li>
+                <li>新增 定时任务[未划分资费组-邮件抄送通知]</li>
+                <li>新增 定时任务[归属为总平台-有用量-邮件抄送通知]</li>
+                <li>新增 定时任务[清除大于X天用量记录(默认为开启状态清除100之前用量记录)]</li>
+                <li>优化 界面操作 高级查询默认隐藏</li>
+                <li>优化 登录界面样式</li>
+                <li>优化 执行日志导出csv文件转换换EXCLE</li>
+                <li>优化 轮询同步消费者、轮询算法类型实现</li>
+                <li>整合 用户信息、企业列表、内部管理</li>
+                <li>开放 微信Web端用量查询 充值续费 商品购买</li>
+              </ol>
+            </el-collapse-item>
             <el-collapse-item title="v0.6.0 - 2022-02-14"  name="2">
               <ol>
                 <li>新增首页看板、看板选项点击快速跳转查询</li>
@@ -152,8 +169,8 @@ export default {
   data() {
     return {
       // 版本号
-      version: "0.6.0",
-      activeName:'2',
+      version: "0.7.0",
+      activeName:'3',
     };
   },
   methods: {

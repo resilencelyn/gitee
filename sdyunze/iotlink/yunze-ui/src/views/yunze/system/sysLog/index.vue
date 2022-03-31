@@ -5,32 +5,6 @@
       <!--用户数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
           <!--模块类别   -->
           <el-form-item label="模块类别" prop="status">
             <el-select
@@ -79,17 +53,44 @@
             </el-date-picker>
 
           </el-form-item>
-
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
         </el-form>
 
-
-        <el-row :gutter="10" class="mb8">
-          <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:sysLog:list']" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+        <el-form :model="queryParams" ref="queryForm" :inline="true"  label-width="68px" style="margin-bottom: 10px">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+                <el-input
+                  v-model="queryParams.value"
+                  placeholder="查询值"
+                  clearable
+                  size="small"
+                  style="width: 350px"
+                  @keyup.enter.native="handleQuery"
+                >
+                  <el-select
+                    v-model="queryParams.type"
+                    placeholder="查询条件"
+                    clearable
+                    slot="prepend"
+                    style="width: 110px"
+                  >
+                    <el-option
+                      v-for="dict in typeOptions"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+                    />
+                  </el-select>
+                </el-input>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
+              <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:sysLog:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </el-form>
 
         <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
 
@@ -144,7 +145,7 @@
 
 
     <el-dialog :close-on-click-modal="false"
-               title="下载执行任务结果" :visible.sync="executionTaskDis">
+               title="下载执行日志结果" :visible.sync="executionTaskDis">
       <hr style="color:green"/>
       <el-row :gutter="20">
         <ul class="list-group" v-for="(item,index) in Urls">
@@ -198,7 +199,7 @@ export default {
 
 
       customize_whether: [],//自定义是否
-      ExecutionTask_OutType : [],// 执行任务导出类别
+      ExecutionTask_OutType : [],// 执行日志导出类别
 
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
@@ -215,7 +216,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -259,9 +260,9 @@ export default {
 
       // 运营商类别 字典
       operators_type: [],
-      // 执行任务状态 字典
+      // 执行日志状态 字典
       channelStatusOptions: [],
-      // 执行任务编码 字典
+      // 执行日志编码 字典
       channelCodeOptions: [],
       // 表单参数
       form: {},
@@ -344,7 +345,7 @@ export default {
 
 
 
-    //加载 执行任务导出类别
+    //加载 执行日志导出类别
     if(window['ExecutionTask_OutType']!=undefined &&  window['ExecutionTask_OutType']!=null && window['ExecutionTask_OutType']!=''){
       this.ExecutionTask_OutType = window['ExecutionTask_OutType'];
     }else{
@@ -393,7 +394,7 @@ export default {
 
 
     },
-    /*下载执行任务*/
+    /*下载执行日志*/
     getDownloadExecutionTask(row){
       let map = {};
       map.path = row.value;
@@ -418,7 +419,7 @@ export default {
 
 
 
-    /** 查询执行任务列表 */
+    /** 查询执行日志列表 */
     getList() {
       this.loading = true;
       this.getParams();
@@ -439,7 +440,7 @@ export default {
         }
       );
     },
-    /** 查询执行任务列表 */
+    /** 查询执行日志列表 */
     findSys() {
       this.loading = true;
       this.getParams();

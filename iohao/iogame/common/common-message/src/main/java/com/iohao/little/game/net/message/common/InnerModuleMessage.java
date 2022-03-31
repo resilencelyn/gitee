@@ -28,7 +28,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 @Data
 public class InnerModuleMessage implements Serializable {

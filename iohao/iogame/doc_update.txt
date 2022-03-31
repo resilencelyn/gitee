@@ -1,3 +1,22 @@
+2022-03-31
+添加游戏部件抽象模块
+    用于游戏实践的开发，进一步减少开发实践过程中的工作量
+    只提供抽象骨架, 具体的逻辑实现由子游戏自定义
+
+    提供抽象流程的有：
+        游戏规则接口 RoomRuleInfoCustom
+        创建玩家接口 RoomPlayerCreateCustom
+        房间创建接口 RoomCreateCustom
+        进入房间接口 RoomEnterCustom
+        游戏开始接口 RoomGameStartCustom
+
+    提供抽象类的有：
+        抽象房间 AbstractRoom
+        抽象玩家 AbstractPlayer
+        业务操作接口 OperationHandler
+
+    玩法操作的处理对象, 享元工厂 OperationFlyweightFactory
+
 2022-03-27
 新增 spring 集成 (#I4Z2HS)
 

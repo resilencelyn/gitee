@@ -27,7 +27,7 @@ import java.util.Objects;
  * 模块信息管理
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public class ModuleInfoManager {
     /**

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/yunze-C-business/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-business/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-business/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-activatedate/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-activatedate/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-disconnected/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-disconnected/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-flow/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-flow/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-status/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-status/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-stop/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-car-stop/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-order/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-order/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-update/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-update/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-consumption-web/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-eureka/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-framework/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-gateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-generator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-quartz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-quartz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-system/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-web/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-wechat/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/yunze-wechat/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

@@ -16,7 +16,7 @@
  */
 package com.iohao.game.collect.tank.send;
 
-import com.iohao.game.collect.common.send.AbstractFlowContextSend;
+import com.iohao.little.game.widget.light.room.AbstractFlowContextSend;
 import com.iohao.game.collect.proto.common.UserInfo;
 import com.iohao.game.collect.proto.tank.TankBullet;
 import com.iohao.game.collect.proto.tank.TankLocation;

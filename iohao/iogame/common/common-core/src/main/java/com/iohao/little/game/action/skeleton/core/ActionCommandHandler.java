@@ -23,7 +23,7 @@ import com.iohao.little.game.action.skeleton.protocol.RequestMessage;
  * 该handler用于执行 {@link ActionCommand} 对象
  *
  * @author 洛朱
- * @Date 2021-12-12
+ * @date 2021-12-12
  */
 public final class ActionCommandHandler implements Handler {
 

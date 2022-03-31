@@ -10,6 +10,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.sysgl.IYzIndexpageService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 @Api("首页数据加载")
 @RestController
 @RequestMapping("/yunze/index")
-public class YzIndexpageController extends BaseController {
+public class YzIndexpageController extends MyBaseController {
 
     @Resource
     private IYzIndexpageService iYzIndexpageService;
@@ -53,7 +54,7 @@ public class YzIndexpageController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> system:polling:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("首页数据加载 异常！");
+        return Myerr("首页数据加载 操作失败！");
     }
 }
 

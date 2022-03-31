@@ -1,0 +1,16 @@
+/**
+ * 第三方类型枚举
+ */
+export enum ThirdPartyTypeEnum {
+  GITEE = 'GITEE',
+}
+
+/**
+ * 其他邮箱签署errorCode
+ */
+export enum OtherEmailErrorCodeEnum {
+  CODE_EXCEED_SENDING_MAXIMUM = 'CODE_EXCEED_SENDING_MAXIMUM',
+  IMAGE_CODE_NOT_EMPTY = 'IMAGE_CODE_NOT_EMPTY',
+  IMAGE_CODE_REFRESH_FAILED = 'IMAGE_CODE_REFRESH_FAILED',
+  VALIDATION_EMAIL_CODE_FAILED = 'VALIDATION_EMAIL_CODE_FAILED'
+}

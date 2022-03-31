@@ -21,11 +21,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateBy"   column="update_by"   />
 		<result property="updateTime" column="update_time" />
 		<result property="dname" column="dname" />
+		<result property="depositAmount"    column="deposit_amount"    />
+		<result property="lineOfCredit"    column="line_of_credit"    />
+		<result property="profitAmount"    column="profit_amount"    />
+		<result property="usedLineOfCredit"    column="used_line_of_credit"    />
+		<result property="beUsableLineOfCredit"    column="be_usable_line_of_credit"    />
 
 	</resultMap>
 	
 	<sql id="selectDeptVo">
-        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time,d.dname
+        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time,d.dname,
+        d.deposit_amount,d.line_of_credit,d.profit_amount,d.used_line_of_credit,d.be_usable_line_of_credit
         from sys_dept d
     </sql>
     
@@ -36,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND parent_id = #{parentId}
 		</if>
 		<if test="deptName != null and deptName != ''">
-			AND dept_name like CONCAT( #{deptName}, '%')
+			AND dept_name like CONCAT( '%',#{deptName}, '%')
 		</if>
 		<if test="status != null and status != ''">
 			AND status = #{status}
@@ -97,6 +103,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
 			<if test="dname != null and dname != ''">dname,</if>
+
+			<if test="lineOfCredit != null and lineOfCredit != ''">line_of_credit,</if>
+
  			create_time
  		)values(
  			<if test="deptId != null and deptId != 0">#{deptId},</if>
@@ -110,6 +119,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
 			<if test="dname != null and dname != ''">#{dname},</if>
+
+			<if test="lineOfCredit != null and lineOfCredit != ''">#{line_of_credit},</if>
  			sysdate()
  		)
 	</insert>
@@ -127,6 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status = #{status},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
 			<if test="dname != null and dname != ''">dname = #{dname},</if>
+			<if test="lineOfCredit != null and lineOfCredit != ''">line_of_credit = #{line_of_credit},</if>
  			update_time = sysdate()
  		</set>
  		where dept_id = #{deptId}

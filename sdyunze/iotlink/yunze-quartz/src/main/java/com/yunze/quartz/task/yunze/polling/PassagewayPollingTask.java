@@ -1,7 +1,5 @@
 package com.yunze.quartz.task.yunze.polling;
 
-import com.alibaba.fastjson.JSON;
-import com.yunze.common.config.RabbitMQConfig;
 import com.yunze.common.core.redis.RedisCache;
 
 import com.yunze.common.mapper.yunze.YzPassagewayPollingMapper;
@@ -12,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * 定时任务 通道轮序进度同步任务
+ * 定时任务 通道轮询进度同步任务
  * @author root
  */
 @Component("passagewayPollingTask")
@@ -24,16 +22,14 @@ public class PassagewayPollingTask
     @Resource
     private RedisCache redisCache;
 
-    @Resource
-    private RabbitMQConfig rabbitMQConfig;
 
 
     /**
-     * 获取正在执行的轮序任务进度获取  通过 redis 模糊key 查询 获取 轮序任务编号下的卡号
+     * 获取正在执行的轮询任务进度获取  通过 redis 模糊key 查询 获取 轮询任务编号下的卡号
      */
     public void SynChannel()
     {
-        //1. 查询  近三天 正在执行的轮序任务 并且 当前执行任务数 小于 任务总数 （三天以上的可能读取数据误差或其他原因不在同步数据了）
+        //1. 查询  一天内 正在执行的轮询任务 并且 当前执行日志数 小于 任务总数 （三天以上的可能读取数据误差或其他原因不在同步数据了）
         List<Map<String, Object>> channelArr = yzPassagewayPollingMapper.find_execute();
         if(channelArr!=null && channelArr.size()>0){
 
@@ -41,6 +37,7 @@ public class PassagewayPollingTask
                 Map<String, Object> obj = channelArr.get(i);
                 String polling_id = obj.get("polling_id").toString();
                 Integer cd_current = Integer.parseInt(obj.get("cd_current").toString());
+                Integer cd_count = Integer.parseInt(obj.get("cd_count").toString());
 
                 Collection<String> keys =  redisCache.scanKeys(polling_id);
                  if(keys!=null && keys.size()>0){
@@ -51,6 +48,14 @@ public class PassagewayPollingTask
                         updMap.put("cd_current",keys.size());
                         yzPassagewayPollingMapper.update_cd_current(updMap);
                     }
+                     if(keys.size()==cd_count){
+                         try {
+                             redisCache.deleteObject(keys);
+                             System.out.println("删除redis 记录成功！");
+                         }catch (Exception e){
+                             System.out.println("删除redis 记录异常");
+                         }
+                     }
                 }
             }
 
@@ -58,6 +63,39 @@ public class PassagewayPollingTask
     }
 
 
+    /**
+     * 清除 今天 已经完成的 通道进度
+     */
+    public void cleanRedisChannel()
+    {
+        //1. 查询  一天内 正在执行的轮询任务 并且 当前执行日志数 小于 任务总数 （三天以上的可能读取数据误差或其他原因不在同步数据了）
+        List<Map<String, Object>> channelArr = yzPassagewayPollingMapper.find_completed();
+        if(channelArr!=null && channelArr.size()>0){
+
+            for (int i = 0; i < channelArr.size(); i++) {
+                Map<String, Object> obj = channelArr.get(i);
+                String polling_id = obj.get("polling_id").toString();
+
+                Collection<String> keys =  redisCache.scanKeys(polling_id);
+                if(keys!=null && keys.size()>0) {
+                    int delCount = 0;
+                    Object [] Objkey = keys.toArray();
+                    for (int j = 0; j < Objkey.length; j++) {
+                        try {
+                            boolean del = redisCache.deleteObject(Objkey[j].toString());
+                            if(del){
+                                delCount+=1;
+                            }
+                        } catch (Exception e) {
+                            System.out.println("删除redis 记录异常");
+                        }
+                    }
+                    System.out.println("polling_id "+polling_id+" delCount "+delCount);
+                }
+            }
+
+        }
+    }
 
 
 

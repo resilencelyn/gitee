@@ -18,9 +18,9 @@ package com.iohao.game.collect.tank.room.flow;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import com.iohao.game.collect.common.room.AbstractRoom;
-import com.iohao.game.collect.common.room.CreateRoomInfo;
-import com.iohao.game.collect.common.room.flow.RoomCreateCustom;
+import com.iohao.little.game.widget.light.room.AbstractRoom;
+import com.iohao.little.game.widget.light.room.CreateRoomInfo;
+import com.iohao.little.game.widget.light.room.flow.RoomCreateCustom;
 import com.iohao.game.collect.tank.room.TankRoomEntity;
 
 /**

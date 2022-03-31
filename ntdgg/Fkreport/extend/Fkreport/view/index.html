@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>方块报表</title>
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-container">
+<fieldset class="layui-elem-field" style="margin-top: 50px">
+  <legend>方块报表</legend>
+  <div class="layui-field-box">
+    让你像构建报表像玩俄罗斯方块那样，简单·便捷·高效
+  </div>
+</fieldset>
+  <div class="layui-card">
+    <div class="layui-card-body">
+      <a onclick="Fkreport.layer_open('{:url('fk/api')}?act=add')" class="layui-btn">创建报表</a>
+      <a onclick="Fkreport.layer_open('{:url('fk/data')}')" class="layui-btn">资源库</a>
+      <a onclick="Fkreport.layer_open('{:url('fk/fun')}')" class="layui-btn">元数库</a>
+    </div>
+  </div>
+  <div class="layui-form">
+    <div class="layui-row layui-col-space30">
+      {volist name='data' id='k'}
+      <div class="layui-col-xs6 layui-col-sm4 layui-col-md3">
+        <div class="addon_item">
+            <img src="/storage/{$k.file}" style="width: 100%;height: 160px">
+            <h3 style="line-height: 30px;margin-top: 10px;padding: 0 10px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{$k.title} - {$k.add_time}</h3>
+            <div class="layui-clear">
+              <a class="layui-btn layui-btn-sm" href="{:url('fk/api')}?act=desc&id={$k.id}" target="_blank">编辑</a>
+              <a class="layui-btn layui-btn-sm" href="{:url('fk/api')}?act=view&id={$k.id}" target="_blank">查看</a>
+            </div>
+        </div>
+      </div>
+      {/volist}
+    </div>
+  </div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script type="text/javascript" src="/static/fk/fk1.0.js"></script>
+</body>
+</html>
+

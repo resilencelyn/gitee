@@ -17,9 +17,8 @@ import com.yunze.common.utils.yunze.*;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.ISysUserService;
 import com.yunze.system.service.impl.yunze.YzCardServiceImpl;
-import com.yunze.system.service.yunze.IYzCardService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,16 +38,12 @@ import java.util.Map;
 @Api("卡信息")
 @RestController
 @RequestMapping("/yunze/card")
-public class YzCardController extends BaseController
+public class YzCardController extends MyBaseController
 {
     @Resource
     private YzCardServiceImpl yzCardServiceImpl;
-    @Resource
-    private ApiParamMap apiParamMap;
     @Autowired
     private ISysUserService userService;
-    @Resource
-    private TokenService tokenService;
     @Resource
     private CardFlowSyn cardFlowSyn;
     @Resource
@@ -90,7 +85,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取卡板信息列表 异常！");
+        return Myerr("获取卡板信息列表 操作失败！");
     }
 
 
@@ -134,7 +129,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> /yunze/card/getCardGrouping  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取 所属代理下 卡分组 异常！");
+        return Myerr("获取 所属代理下 卡分组 操作失败！");
     }
 
 
@@ -166,7 +161,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:find  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询卡板详情 异常！");
+        return Myerr("查询卡板详情 操作失败！");
     }
 
 
@@ -189,7 +184,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:import  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("导入卡列表 异常！");
+        return AjaxResult.error("导入卡列表 操作失败！");
     }
 
 
@@ -220,7 +215,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:list  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("连接管理获取部门名称 异常！");
+        return Myerr("连接管理获取部门名称 操作失败！");
     }
 
 
@@ -255,7 +250,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:exportData  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("导出卡列表 异常！");
+        return Myerr("导出卡列表 操作失败！");
     }
 
 
@@ -285,7 +280,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:findDeptUser  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询 企业下所属人员 异常！");
+        return Myerr("查询 企业下所属人员 操作失败！");
     }
 
 
@@ -339,7 +334,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:divide  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("划分卡信息 异常！");
+        return Myerr("划分卡信息 操作失败！");
     }
 
 
@@ -388,7 +383,7 @@ public class YzCardController extends BaseController
                     }
                 }else{
                     String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
-                    return Myerr("同步用量 异常！"+" 通道 ["+statusVal+"]");
+                    return Myerr("同步用量 操作失败！"+" 通道 ["+statusVal+"]");
                 }
             }else{
                 return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
@@ -397,7 +392,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:SynFlow  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("同步用量 异常！");
+        return Myerr("同步用量 操作失败！");
     }
 
 
@@ -440,10 +435,10 @@ public class YzCardController extends BaseController
                                     if(bool){
                                         return MyRetunSuccess("","已成功同步卡状态！");
                                     }else{
-                                        return Myerr("保存状态异常:False！");
+                                        return Myerr("保存状态操作失败:False！");
                                     }
                                 }catch (Exception e){
-                                    return Myerr("DB保存状态异常！"+e.getMessage().toString());
+                                    return Myerr("DB保存状态操作失败！"+e.getMessage().toString());
                                 }
                             }else{
                                 return Myerr("接口超频返回暂无数据返回，请稍后重试！");
@@ -455,7 +450,7 @@ public class YzCardController extends BaseController
 
                 }else{
                     String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
-                    return Myerr("同步卡状态 异常！"+" 通道 ["+statusVal+"]");
+                    return Myerr("同步卡状态 操作失败！"+" 通道 ["+statusVal+"]");
                 }
             }else{
                 return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
@@ -464,7 +459,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:SynStatus  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("同步卡状态 异常！");
+        return Myerr("同步卡状态 操作失败！");
     }
 
 
@@ -507,21 +502,21 @@ public class YzCardController extends BaseController
                                     if(bool){
                                         return MyRetunSuccess("","已成功同步激活时间！");
                                     }else{
-                                        return Myerr("保存激活时间异常:False！");
+                                        return Myerr("保存激活时间操作失败:False！");
                                     }
                                 }catch (Exception e){
-                                    return Myerr("DB保存状态异常！"+e.getMessage().toString());
+                                    return Myerr("DB保存状态操作失败！"+e.getMessage().toString());
                                 }
                         }else{
                             System.out.println(Rmap);
-                            return Myerr("上游接口返回数据异常,稍后重试！");
+                            return Myerr("上游接口返回数据操作失败,稍后重试！");
                         }
                     }else{
                         return Myerr("网络繁忙稍后重试！"+Rmap.get("Message").toString());
                     }
                 }else{
                     String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
-                    return Myerr("同步激活时间 异常！"+" 通道 ["+statusVal+"]");
+                    return Myerr("同步激活时间 操作失败！"+" 通道 ["+statusVal+"]");
                 }
             }else{
                 return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
@@ -530,7 +525,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> SynActivateDate  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("同步激活时间 异常！");
+        return Myerr("同步激活时间 操作失败！");
     }
 
 
@@ -542,7 +537,6 @@ public class YzCardController extends BaseController
      * @param Pstr
      * @return
      */
-    @ApiOperation("查询在线信息")
     @PreAuthorize("@ss.hasPermi('yunze:card:queryOnlineStatus')")
     @PostMapping(value = "/queryOnlineStatus", produces = { "application/json;charset=utf-8" })
     public String queryOnlineStatus(@RequestBody String Pstr)
@@ -568,7 +562,7 @@ public class YzCardController extends BaseController
                     }
                 }else{
                     String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
-                    return Myerr("查询在线信息 异常！"+" 通道 ["+statusVal+"]");
+                    return Myerr("查询在线信息 操作失败！"+" 通道 ["+statusVal+"]");
                 }
             }else{
                 return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
@@ -577,7 +571,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:queryOnlineStatus  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询在线信息 异常！");
+        return Myerr("查询在线信息 操作失败！");
     }
 
 
@@ -587,7 +581,6 @@ public class YzCardController extends BaseController
      * @param Pstr
      * @return
      */
-    @ApiOperation("机卡重绑")
     @PreAuthorize("@ss.hasPermi('yunze:card:CardBinding')")
     @PostMapping(value = "/CardBinding", produces = { "application/json;charset=utf-8" })
     public String CardBinding(@RequestBody String Pstr)
@@ -613,7 +606,7 @@ public class YzCardController extends BaseController
                     }
                 }else{
                     String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
-                    return Myerr("机卡重绑 异常！"+" 通道 ["+statusVal+"]");
+                    return Myerr("机卡重绑 操作失败！"+" 通道 ["+statusVal+"]");
                 }
             }else{
                 return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
@@ -622,7 +615,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:CardBinding  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("机卡重绑 异常！");
+        return Myerr("机卡重绑 操作失败！");
     }
 
 
@@ -654,7 +647,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:import  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("连接管理设置 异常！");
+        return AjaxResult.error("连接管理设置 操作失败！");
     }
 
 
@@ -680,7 +673,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:importSelImei  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("特殊操作查询IMEI 异常！");
+        return AjaxResult.error("特殊操作查询IMEI 操作失败！");
     }
 
 
@@ -706,7 +699,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:importSetCardInfo  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("特殊操作 变更卡分组、备注 异常！");
+        return AjaxResult.error("特殊操作 变更卡分组、备注 操作失败！");
     }
 
 
@@ -745,13 +738,13 @@ public class YzCardController extends BaseController
             try {
                 return AjaxResult.success(AesEncryptUtil.encrypt(JSON.toJSONString(yzCardServiceImpl.CardNumberImport(file,Parammap))));
             }catch (Exception e){
-                return AjaxResult.error(AesEncryptUtil.encrypt(JSON.toJSONString("返回数据加密异常")));
+                return AjaxResult.error(AesEncryptUtil.encrypt(JSON.toJSONString("返回数据加密操作失败")));
             }
         }catch (Exception e){
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:ImportQuery  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("卡号导入查询 异常！");
+        return AjaxResult.error("卡号导入查询 操作失败！");
     }
 
 
@@ -785,7 +778,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:ApiUpdBatch  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return AjaxResult.error("批量停复机、断开网  异常！");
+        return AjaxResult.error("批量停复机、断开网  操作失败！");
     }
 
     /**修改 备注 分组*/
@@ -806,7 +799,7 @@ public class YzCardController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:updatefill  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("修改 备注 分组 异常！");
+        return Myerr("修改 备注 分组 操作失败！");
     }
 
     /**
@@ -823,12 +816,15 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.stoppedarr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:Stopped  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【停机】 异常！");
+        return Myerr("批量 【停机】 操作失败！");
     }
 
     /**复机*/
@@ -842,12 +838,15 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.machinearr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:machine  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【复机】 异常！");
+        return Myerr("批量 【复机】 操作失败！");
     }
 
     /**断网*/
@@ -861,12 +860,15 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.disconnectNetworkarr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:disconnectNetwork  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【断网】 异常！");
+        return Myerr("批量 【断网】 操作失败！");
     }
 
     /**开网*/
@@ -880,12 +882,15 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.openNetworkarr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:OpenNetworkArr  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【开网】 异常！");
+        return Myerr("批量 【开网】 操作失败！");
     }
 
     /**同步流量*/
@@ -899,12 +904,15 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.consumptionarr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:ConsumptionArr  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【同步流量】 异常！");
+        return Myerr("批量 【同步流量】 操作失败！");
     }
 
     /**同步状态*/
@@ -918,12 +926,15 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.publicmethodarr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:PublicMethodArr  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【同步状态】 异常！");
+        return Myerr("批量 【同步状态】 操作失败！");
     }
 
     /**同步状态和用量*/
@@ -937,13 +948,392 @@ public class YzCardController extends BaseController
         try {
             Pstr = AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject(Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
             return MyRetunSuccess(yzCardServiceImpl.consumptionandstatearr(Parammap), null);
         } catch (Exception e) {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:card:ConsumptionAndStateArr  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("批量 【同步状态和用量】 异常！");
+        return Myerr("批量 【同步状态和用量】 操作失败！");
     }
+
+
+    /**
+     * 获取iccid
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:list')")
+    @PostMapping(value = "/getIccid", produces = {"application/json;charset=UTF-8"})
+    public String getIccid(@RequestBody String Pstr) {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if (Pstr != null) {
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr = AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject(Pstr));
+
+
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser currentUser = loginUser.getUser();
+            List<Integer> agent_id = new ArrayList<>();
+            if(currentUser.getDeptId()!=100){
+                if(Parammap.get("agent_id")!=null){
+                    List<Integer> P_agent_id = (List<Integer>) Parammap.get("agent_id");
+                    agent_id.addAll(P_agent_id);
+                }else{
+                    agent_id.add(Integer.parseInt(currentUser.getDeptId().toString()));
+                    Parammap.put("agent_id",agent_id);
+                }
+            }
+
+            Map<String, Object> Rmap = yzCardServiceImpl.getIccid(Parammap);
+            if(Rmap!=null){
+                return MyRetunSuccess(Rmap, null);
+            }
+            return Myerr("未匹配到相应的数据，请重新输入！");
+        } catch (Exception e) {
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:getIccid  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
+        }
+        return Myerr("批量 【同步状态和用量】 操作失败！");
+    }
+
+
+    /**
+     * 批量取消实名
+     * @param file
+     * @return
+     */
+    @Log(title = "批量取消实名", businessType = BusinessType.IMPORT)
+    @PreAuthorize("@ss.hasPermi('yunze:card:cancelrealname')")
+    @PostMapping(value = "/cancelrealname", produces = { "application/json;charset=utf-8" })
+    public AjaxResult AjaxName (MultipartFile file)
+    {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        try {
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
+            Parammap.put("agent_id",User.getDeptId());
+            return AjaxResult.success(yzCardServiceImpl.cancelrealname(file,Parammap));
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:cancelrealname  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return AjaxResult.error("批量取消实名 操作失败！");
+    }
+
+
+
+
+    /**
+     * 智能匹对
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:cardMatch')")
+    @PostMapping(value = "/cardMatch", produces = {"application/json;charset=UTF-8"})
+    public String cardMatch(@RequestBody String Pstr) {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if (Pstr != null) {
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr = AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject(Pstr));
+
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser currentUser = loginUser.getUser();
+            List<Integer> agent_id = new ArrayList<>();
+            if(currentUser.getDeptId()!=100){
+                if(Parammap.get("agent_id")!=null){
+                    List<Integer> P_agent_id = (List<Integer>) Parammap.get("agent_id");
+                    agent_id.addAll(P_agent_id);
+                }else{
+                    agent_id.add(Integer.parseInt(currentUser.getDeptId().toString()));
+                    Parammap.put("agent_id",agent_id);
+                }
+            }
+
+            Map<String, Object> Rmap = yzCardServiceImpl.cardMatch(Parammap);
+            if(Rmap!=null){
+                return MyRetunSuccess(Rmap, null);
+            }
+            return Myerr("未匹配到相应的数据，请重新输入！");
+        } catch (Exception e) {
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze/card/cardMatch  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
+        }
+        return Myerr("智能匹对 操作失败！");
+    }
+
+
+
+
+
+
+    /**
+     * 单卡停机原因查询
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:simStopReason')")
+    @PostMapping(value = "/simStopReason", produces = { "application/json;charset=utf-8" })
+    public String simStopReason(@RequestBody String Pstr)
+    {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if(Pstr!=null){
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr =  AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject((String) Pstr));
+            Map<String, Object> Route  = yzCardServiceImpl.findRoute(Parammap);
+            if(Route!=null ){
+                String cd_status = Route.get("cd_status").toString();
+                if(cd_status!=null && cd_status!="" && cd_status.equals("1")){
+                    Map<String, Object> Rmap = internalApiRequest.simStopReason(Parammap,Route);
+                    String code = Rmap.get("code")!=null?Rmap.get("code").toString():"500";
+                    if(code.equals("200")){
+                        return MyRetunSuccess(Rmap,"操作成功！");
+                    }else{
+                        return Myerr("暂未查询到单卡停机原因！");
+                    }
+                }else{
+                    String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
+                    return Myerr("查询单卡停机原因 操作失败！"+" 通道 ["+statusVal+"]");
+                }
+            }else{
+                return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
+            }
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:simStopReason  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return Myerr("单卡停机原因查询 操作失败！");
+    }
+
+
+
+
+
+    /**
+     * 单卡开关机状态实时查询
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:onOffStatus')")
+    @PostMapping(value = "/onOffStatus", produces = { "application/json;charset=utf-8" })
+    public String onOffStatus(@RequestBody String Pstr)
+    {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if(Pstr!=null){
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr =  AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject((String) Pstr));
+            Map<String, Object> Route  = yzCardServiceImpl.findRoute(Parammap);
+            if(Route!=null ){
+                String cd_status = Route.get("cd_status").toString();
+                if(cd_status!=null && cd_status!="" && cd_status.equals("1")){
+                    Map<String, Object> Rmap = internalApiRequest.onOffStatus(Parammap,Route);
+                    String code = Rmap.get("code")!=null?Rmap.get("code").toString():"500";
+                    if(code.equals("200")){
+                        return MyRetunSuccess(Rmap,"操作成功！");
+                    }else{
+                        System.out.println(Rmap);
+                        return Myerr("暂未查询到 单卡开关机状态！");
+                    }
+                }else{
+                    String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
+                    return Myerr("单卡开关机状态实时查询 操作失败！"+" 通道 ["+statusVal+"]");
+                }
+            }else{
+                return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
+            }
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:onOffStatus  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return Myerr("单卡开关机状态实时查询 操作失败！");
+    }
+
+
+
+
+
+    /**
+     * 单卡已开通APN信息查询
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:apnInfo')")
+    @PostMapping(value = "/apnInfo", produces = { "application/json;charset=utf-8" })
+    public String apnInfo(@RequestBody String Pstr)
+    {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if(Pstr!=null){
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr =  AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject((String) Pstr));
+            Map<String, Object> Route  = yzCardServiceImpl.findRoute(Parammap);
+            if(Route!=null ){
+                String cd_status = Route.get("cd_status").toString();
+                if(cd_status!=null && cd_status!="" && cd_status.equals("1")){
+                    Map<String, Object> Rmap = internalApiRequest.apnInfo(Parammap,Route);
+                    String code = Rmap.get("code")!=null?Rmap.get("code").toString():"500";
+                    if(code.equals("200")){
+                        return MyRetunSuccess(Rmap,"操作成功！");
+                    }else{
+                        System.out.println(Rmap);
+                        return Myerr("暂未查询到 单卡已开通APN信息查询！");
+                    }
+                }else{
+                    String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
+                    return Myerr("单卡已开通APN信息查询 操作失败！"+" 通道 ["+statusVal+"]");
+                }
+            }else{
+                return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
+            }
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:apnInfo  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return Myerr("单卡已开通APN信息查询 操作失败！");
+    }
+
+
+
+    /**
+     * 物联卡机卡分离状态查询
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:cardBindStatus')")
+    @PostMapping(value = "/cardBindStatus", produces = { "application/json;charset=utf-8" })
+    public String cardBindStatus(@RequestBody String Pstr)
+    {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if(Pstr!=null){
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr =  AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject((String) Pstr));
+            Map<String, Object> Route  = yzCardServiceImpl.findRoute(Parammap);
+            if(Route!=null ){
+                String cd_status = Route.get("cd_status").toString();
+                if(cd_status!=null && cd_status!="" && cd_status.equals("1")){
+                    Map<String, Object> Rmap = internalApiRequest.cardBindStatus(Parammap,Route);
+                    String code = Rmap.get("code")!=null?Rmap.get("code").toString():"500";
+                    if(code.equals("200")){
+                        return MyRetunSuccess(Rmap,"操作成功！");
+                    }else{
+                        System.out.println(Rmap);
+                        String msg = Rmap.get("Message")!=null && Rmap.get("Message").toString().length()>0?Rmap.get("Message").toString():"暂未查询到 物联卡机卡分离状态！";
+                        return Myerr(msg);
+                    }
+                }else{
+                    String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
+                    return Myerr("物联卡机卡分离状态查询 操作失败！"+" 通道 ["+statusVal+"]");
+                }
+            }else{
+                return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
+            }
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:cardBindStatus  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return Myerr("物联卡机卡分离状态查询 操作失败！");
+    }
+
+
+
+
+    /**
+     * 单卡状态变更历史查询
+     * @param Pstr
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('yunze:card:simChangeHistory')")
+    @PostMapping(value = "/simChangeHistory", produces = { "application/json;charset=utf-8" })
+    public String simChangeHistory(@RequestBody String Pstr)
+    {
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        if(Pstr!=null){
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        try {
+            Pstr =  AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject((String) Pstr));
+            Map<String, Object> Route  = yzCardServiceImpl.findRoute(Parammap);
+            if(Route!=null ){
+                String cd_status = Route.get("cd_status").toString();
+                if(cd_status!=null && cd_status!="" && cd_status.equals("1")){
+                    Map<String, Object> Rmap = internalApiRequest.simChangeHistory(Parammap,Route);
+                    String code = Rmap.get("code")!=null?Rmap.get("code").toString():"500";
+                    if(code.equals("200")){
+                        return MyRetunSuccess(Rmap,"操作成功！");
+                    }else{
+                        System.out.println(Rmap);
+                        return Myerr("暂未查询到 单卡状态变更历史！");
+                    }
+                }else{
+                    String statusVal = cd_status.equals("2")?"已停用":cd_status.equals("3")?"已删除":"状态未知";
+                    return Myerr("单卡状态变更历史查询 操作失败！"+" 通道 ["+statusVal+"]");
+                }
+            }else{
+                return Myerr(" iccid ["+Parammap.get("iccid")+"] 未划分 API通道 ！请划分通道后重试！");
+            }
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:simChangeHistory  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return Myerr("单卡状态变更历史查询 操作失败！");
+    }
+
+
+
+
+
+    /**
+     * 批量更新卡信息
+     * @param file
+     * @return
+     */
+    @Log(title = "批量更新卡信息", businessType = BusinessType.IMPORT)
+    @PreAuthorize("@ss.hasPermi('yunze:card:replace')")
+    @PostMapping(value = "/importCardReplace", produces = { "application/json;charset=utf-8" })
+    public AjaxResult importCardReplace(MultipartFile file,@RequestParam Map<String,String> map)
+    {
+        String Pstr = map.get("Pstr").toString();
+        if(Pstr!=null){
+            Pstr = Pstr.replace("%2F", "/");//转义 /
+        }
+        HashMap<String, Object> Parammap = new HashMap<String, Object>();
+        try {
+            Pstr =  AesEncryptUtil.desEncrypt(Pstr);
+            Parammap.putAll(JSON.parseObject((String) Pstr));
+            LoginUser loginUser = SpringUtils.getBean(TokenService.class).getLoginUser(ServletUtils.getRequest());
+            SysUser User = loginUser.getUser();
+            Parammap.put("User",User);
+            Parammap.put("agent_id",User.getDeptId());
+            return AjaxResult.success(yzCardServiceImpl.importCardReplace(file,Parammap));
+        }catch (Exception e){
+            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+            logger.error("<br/> yunze:card:importSelImei  <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
+        }
+        return AjaxResult.error("批量更新卡信息 操作失败！");
+    }
+
+
 
 
 }

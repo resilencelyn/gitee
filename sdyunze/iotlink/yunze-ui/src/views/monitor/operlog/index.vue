@@ -1,26 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="系统模块" prop="title">
-        <el-input
-          v-model="queryParams.title"
-          placeholder="请输入系统模块"
-          clearable
-          style="width: 240px;"
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="操作人员" prop="operName">
-        <el-input
-          v-model="queryParams.operName"
-          placeholder="请输入操作人员"
-          clearable
-          style="width: 240px;"
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="类型" prop="businessType">
         <el-select
           v-model="queryParams.businessType"
@@ -65,47 +45,75 @@
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['monitor:operlog:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          @click="handleClean"
-          v-hasPermi="['monitor:operlog:remove']"
-        >清空</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          :loading="exportLoading"
-          @click="handleExport"
-          v-hasPermi="['monitor:operlog:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom:-10px;line-height:35px">
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <el-form-item label="系统模块" prop="title" style="margin-bottom:10px;line-height:35px">
+            <el-input
+              v-model="queryParams.title"
+              placeholder="请输入系统模块"
+              clearable
+              style="width: 240px;"
+              size="small"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="1.5">
+          <el-form-item label="操作人员" prop="operName" style="margin-bottom:10px;line-height:35px">
+            <el-input
+              v-model="queryParams.operName"
+              placeholder="请输入操作人员"
+              clearable
+              style="width: 240px;"
+              size="small"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['monitor:operlog:remove']"
+          >删除</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            @click="handleClean"
+            v-hasPermi="['monitor:operlog:remove']"
+          >清空</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            :loading="exportLoading"
+            @click="handleExport"
+            v-hasPermi="['monitor:operlog:export']"
+          >导出</el-button>
+        </el-col>
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      </el-row>
+    </el-form>
 
     <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -203,7 +211,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 表格数据

@@ -15,6 +15,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzCardRouteService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,7 @@ import java.util.Map;
 @Api("上游通道管理")
 @RestController
 @RequestMapping("/yunze/cardRoute")
-public class YzCardRouteController extends BaseController
+public class YzCardRouteController extends MyBaseController
 {
 
     @Resource
@@ -57,7 +58,7 @@ public class YzCardRouteController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:findSp  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询简要 通道信息 异常！");
+        return Myerr("查询简要 通道信息 操作失败！");
     }
 
 
@@ -75,7 +76,7 @@ public class YzCardRouteController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:findSp  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询 通道简要信息  状态为 正常 划分通道用  异常！");
+        return Myerr("查询 通道简要信息  状态为 正常 划分通道用  操作失败！");
     }
 
 
@@ -98,7 +99,7 @@ public class YzCardRouteController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取API通道信息列表 异常！");
+        return Myerr("获取API通道信息列表 操作失败！");
     }
 
 
@@ -122,7 +123,7 @@ public class YzCardRouteController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:find  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询API通道详情 异常！");
+        return Myerr("查询API通道详情 操作失败！");
     }
 
 
@@ -146,13 +147,13 @@ public class YzCardRouteController extends BaseController
             SysUser User = loginUser.getUser();
             Parammap.put("cd_agent_id",User.getDeptId());
             boolean bool = iYzCardRouteService.add(Parammap);
-            String msg = bool?"新增 上游通道成功！":"网络异常请稍后重试！！！";
+            String msg = bool?"新增 上游通道成功！":"网络操作失败请稍后重试！！！";
             return MyRetunSuccess(bool,msg);
         }catch (Exception e){
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:add  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("新增 API通道信息 异常！");
+        return Myerr("新增 API通道信息 操作失败！");
     }
 
 
@@ -175,13 +176,13 @@ public class YzCardRouteController extends BaseController
             SysUser User = loginUser.getUser();
             Parammap.put("cd_agent_id",User.getDeptId());
             boolean bool = iYzCardRouteService.update(Parammap);
-            String msg = bool?"编辑 上游通道成功！":"网络异常请稍后重试！！！";
+            String msg = bool?"编辑 上游通道成功！":"网络操作失败请稍后重试！！！";
             return MyRetunSuccess(bool,msg);
         }catch (Exception e){
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:edit  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("编辑 API通道信息 异常！");
+        return Myerr("编辑 API通道信息 操作失败！");
     }
 
 
@@ -204,13 +205,13 @@ public class YzCardRouteController extends BaseController
             SysUser User = loginUser.getUser();
             Parammap.put("cd_agent_id",User.getDeptId());
             boolean bool = iYzCardRouteService.update_cd_status(Parammap);
-            String msg = bool?"删除 上游通道成功！":"网络异常请稍后重试！！！";
+            String msg = bool?"删除 上游通道成功！":"网络操作失败请稍后重试！！！";
             return MyRetunSuccess(bool,msg);
         }catch (Exception e){
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:delRoute  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("删除 API通道信息 异常！");
+        return Myerr("删除 API通道信息 操作失败！");
     }
 
 
@@ -239,7 +240,7 @@ public class YzCardRouteController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardRoute:exportData  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("导出上游通道 异常！");
+        return Myerr("导出上游通道 操作失败！");
     }
 
 

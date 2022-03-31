@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 定时任务 重新启动 》大于系统参数 多少条数据的  轮序通道队列
+ * 定时任务 重新启动 》大于系统参数 多少条数据的  轮询通道队列
  *
  * @author root
  */
@@ -36,7 +36,7 @@ public class RebootTask {
     private YzWxByProductAgentMapper yzWxByProductAgentMapper;
 
     /**
-     * 轮序 用量 指定单个通道创建 消费者 【用来补救 消费者灵活监听时 没有创建 成功 消费者 进行 手动 补救创建 消费者】
+     * 轮询 用量 指定单个通道创建 消费者 【用来补救 消费者灵活监听时 没有创建 成功 消费者 进行 手动 补救创建 消费者】
      *
      * @param time 多少 分钟 后失效
      */
@@ -198,7 +198,7 @@ public class RebootTask {
      * @param Type
      */
     public void RebootCardStop(String cd_id,Integer time,Integer rebootStandardint,Map<String, Object> msg_Map,String Type){
-        String QFlowName = "polling_cardCardStop_queue_" + cd_id ;
+        String QFlowName = "polling_cardCardStop_queue" ;
         String dlxQFlowName = QFlowName;//死信 redis
 
         String card_exchangeName = "polling_cardCardStop_exchange";
@@ -207,8 +207,8 @@ public class RebootTask {
         String OneKey = "admin.CardStop.queue.One";
 
         String card_del_exchangeName = "polling_dlxcardCardStop_exchange";
-        String card_del_queueName = "polling_dlxcardCardStop_queue_" + cd_id;
-        String card_del_routingKey = "polling.dlxcardCardStop.routingKey." + cd_id;
+        String card_del_queueName = "polling_dlxcardCardStop_queue";
+        String card_del_routingKey = "polling.dlxcardCardStop.routingKey";
         String TowKey = "admin.CardStop.queue.Tow";
         msg_Map.put("Listener",QFlowName);
         RebootCommon( time, rebootStandardint, msg_Map, Type, QFlowName, dlxQFlowName,
@@ -228,17 +228,17 @@ public class RebootTask {
      * @param Type
      */
     public void RebootCardDisconnected(String cd_id,Integer time,Integer rebootStandardint,Map<String, Object> msg_Map,String Type){
-        String QFlowName = "polling_cardCardDisconnected_queue_" + cd_id ;
+        String QFlowName = "polling_cardCardDisconnected_queue" ;
         String dlxQFlowName = QFlowName;//死信 redis
 
         String card_exchangeName = "polling_cardCardDisconnected_exchange";
-        String card_queueName = "polling_cardCardDisconnected_queue_" + cd_id;
-        String card_routingKey = "polling.cardCardDisconnected.routingKey." + cd_id;
+        String card_queueName = "polling_cardCardDisconnected_queue";
+        String card_routingKey = "polling.cardCardDisconnected.routingKey";
         String OneKey = "admin.CardDisconnected.queue.One";
 
         String card_del_exchangeName = "polling_dlxcardCardDisconnected_exchange";
-        String card_del_queueName = "polling_dlxcardCardDisconnected_queue_" + cd_id;
-        String card_del_routingKey = "polling.dlxcardCardDisconnected.routingKey." + cd_id;
+        String card_del_queueName = "polling_dlxcardCardDisconnected_queue";
+        String card_del_routingKey = "polling.dlxcardCardDisconnected.routingKey";
         String TowKey = "admin.CardDisconnected.queue.Tow";
 
         msg_Map.put("Listener",QFlowName);
@@ -265,13 +265,13 @@ public class RebootTask {
             String dlxQFlowName = "polling-dex-Listener-CardFlow-" + cd_id;//死信 redis
 
             String card_exchangeName = "polling_cardCardFlow_exchange";
-            String card_queueName = "polling_cardCardFlow_queue_" + cd_id;
-            String card_routingKey = "polling.cardCardFlow.routingKey." + cd_id;
+            String card_queueName = "polling_cardCardFlow_queue";
+            String card_routingKey = "polling.cardCardFlow.routingKey";
             String OneKey = "admin.CardFlow.queue.One";
 
             String card_del_exchangeName = "polling_dlxcardCardFlow_exchange";
-            String card_del_queueName = "polling_dlxcardCardFlow_queue_" + cd_id;
-            String card_del_routingKey = "polling.dlxcardCardFlow.routingKey." + cd_id;
+            String card_del_queueName = "polling_dlxcardCardFlow_queue";
+            String card_del_routingKey = "polling.dlxcardCardFlow.routingKey";
             String TowKey = "admin.CardFlow.queue.Tow";
 
             RebootCommon( time, rebootStandardint, msg_Map, Type, QFlowName, dlxQFlowName,
@@ -295,13 +295,13 @@ public class RebootTask {
         String dlxQFlowName = "polling-dxl-Listener-CardStatus-" + cd_id;//死信队列 名称
 
         String  card_exchangeName = "polling_cardCardStatus_exchange";
-        String  card_queueName = "polling_cardCardStatus_queue_" + cd_id;
-        String  card_routingKey = "polling.cardCardStatus.routingKey." + cd_id;
+        String  card_queueName = "polling_cardCardStatus_queue" ;
+        String  card_routingKey = "polling.cardCardStatus.routingKey";
         String OneKey = "admin.CardStatus.queue.One";
 
         String card_del_exchangeName = "polling_dlxcardCardStatus_exchange";
-        String card_del_queueName = "polling_dlxcardCardStatus_queue_" + cd_id;
-        String card_del_routingKey = "polling.dlxcardCardStatus.routingKey." + cd_id;
+        String card_del_queueName = "polling_dlxcardCardStatus_queue";
+        String card_del_routingKey = "polling.dlxcardCardStatus.routingKey";
         String TowKey = "admin.CardStatus.queue.Tow";
 
         RebootCommon( time, rebootStandardint, msg_Map, Type, QFlowName, dlxQFlowName,
@@ -330,8 +330,8 @@ public class RebootTask {
         String OneKey = "admin.CardActivateDate.queue.One";
 
         String card_del_exchangeName = "polling_dlxcardActivateDate_exchange";
-        String card_del_queueName = "polling_dlxcardActivateDate_queue_"+cd_id;
-        String card_del_routingKey = "polling.dlxcardActivateDate.routingKey."+cd_id;
+        String card_del_queueName = "polling_dlxcardActivateDate_queue";
+        String card_del_routingKey = "polling.dlxcardActivateDate.routingKey";
 
         String TowKey = "admin.CardActivateDate.queue.Tow";
 

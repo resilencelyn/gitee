@@ -1,0 +1,82 @@
+.sms-verification-code-dialog {
+  .el-form {
+    margin-bottom: 0;
+
+    .el-form-item {
+      .code-image {
+        width: 100px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .refresh-btn {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        margin-left: 10px;
+        border: none;
+        background-color: transparent;
+        background-image: url('./images/refresh.svg');
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        &.disabled {
+          cursor: not-allowed;
+          opacity: 0.3;
+          animation: rotating 2s linear infinite;
+        }
+      }
+
+      .el-form-item__content {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+    }
+  }
+
+  .el-dialog__header {
+    border-bottom: 1px solid #cad6ee;
+    padding-bottom: 15px;
+    text-align: left;
+  }
+
+  .el-dialog__body {
+    padding: 0px;
+  }
+
+  .dialog-content {
+    margin: 35px 30px 55px;
+  }
+
+  .dialog-bottom {
+    height: 55px;
+    background: #eff4f9;
+    border-radius: 0px 0px 4px 4px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .operation {
+      display: flex;
+      align-items: center;
+      margin-right: 30px;
+
+      .el-button {
+        width: 96px;
+        height: 36px;
+
+        &.el-button--primary {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

@@ -1,12 +1,12 @@
 package com.yunze.web.controller.yunze;
 
 import com.alibaba.fastjson.JSON;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.utils.ServletUtils;
 import com.yunze.common.utils.ip.IpUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.system.service.yunze.YzCcHisService;
 import com.yunze.system.service.yunze.YzCcService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 @Api("自动化配置")
 @RestController
 @RequestMapping("/yunze/cchis")
-public class YzCcHisController extends BaseController {
+public class YzCcHisController extends MyBaseController {
 
     @Autowired
     private YzCcHisService yzCcHisService;
@@ -47,6 +47,6 @@ public class YzCcHisController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cchis:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("自动化配置 异常！");
+        return Myerr("自动化配置 操作失败！");
     }
 }

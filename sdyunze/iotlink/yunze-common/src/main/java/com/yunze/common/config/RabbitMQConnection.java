@@ -26,7 +26,7 @@ public class RabbitMQConnection {
                 return con;
             }else{
                 for (int i = 0; i < Reconnection; i++) {
-                    System.out.println("======================= RabbitMQConnection getConnection [重连次数（"+current+"）] ======================= ");
+                    System.out.println("== RabbitMQConnection getConnection [重连次数（"+current+"）] == ");
                     con = CreateConnection();
                     current +=1;
                     if(con!=null){
@@ -39,14 +39,15 @@ public class RabbitMQConnection {
             }
             return con;
         }catch (Exception e){
-            System.out.println("=============================[Connection getConnection() Exception 【Start】 ]==========================================");
+            System.out.println("=[Connection getConnection() Exception 【Start】 ]");
             System.out.println(e.getMessage());
-            System.out.println("=============================[Connection getConnection() Exception 【End】 ]==========================================");
+            System.out.println("=[Connection getConnection() Exception 【End】 ]");
             return  null;
         }
     }
 
     /**
+     *
      * 创建连接
      * @return
      */
@@ -62,13 +63,14 @@ public class RabbitMQConnection {
             //4.设置账户和密码
             connectionFactory.setUsername("YunZeIotRabbitMq");
             connectionFactory.setPassword("20220107@yzIot");
+
             //5.设置VirtualHost
             connectionFactory.setVirtualHost("/VirtualHosts");
             return connectionFactory.newConnection();
         }catch (Exception e){
-            System.out.println("=============================[Connection CreateConnection() Exception 【Start】 ]==========================================");
+            System.out.println("=[Connection CreateConnection() Exception 【Start】 ]");
             System.out.println(e.getMessage());
-            System.out.println("=============================[Connection CreateConnection() Exception 【End】 ]==========================================");
+            System.out.println("=[Connection CreateConnection() Exception 【End】 ]");
             return  null;
         }
     }

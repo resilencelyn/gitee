@@ -1,0 +1,70 @@
+version: '3'
+services:
+  db:
+    image: mysql:8
+    command: --init-connect='SET NAMES utf8' --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=1200 --max-user-connections=1000
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: "opencla"
+      TZ: "Asia/Shanghai"
+  cla:
+    image: jianmudev/opencla:v0.1.11
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/opencla?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456
+
+      # 协议配置
+      # 项目名称
+      OPENCLA_AGREEMENT_PROJECT-NAME: 建木
+      # 社区名称
+      OPENCLA_AGREEMENT_COMMUNITY-NAME: 建木
+      # 社区归属，公司/组织/团体等名称
+      OPENCLA_AGREEMENT_COMMUNITY-OWNERSHIP: xxxx
+      # 代码托管平台，如，Gitee/Github等
+      OPENCLA_AGREEMENT_CODE-HOSTING-PLATFORM: Gitee
+      # 代码托管平台URL
+      OPENCLA_AGREEMENT_CODE-HOSTING-PLATFORM-URL: https://gitee.com/jianmu-dev
+
+      # gitee配置
+      # 第三方应用，https://gitee.com/oauth/applications
+      # 第三方应用Client ID
+      OPENCLA_GITEE_CLIENT-ID: xxxx
+      # 第三方应用Client Secret
+      OPENCLA_GITEE_CLIENT-SECRET: xxxx
+
+      # 邮箱配置
+      # 发送者邮箱
+      OPENCLA_EMAIL_SENDER: cla@jianmu.dev
+      # 邮箱服务器的smtp主机
+      OPENCLA_EMAIL_HOST: smtp.ym.163.com
+      # 邮箱服务器的smtp端口，默认为465
+      OPENCLA_EMAIL_PORT: 994
+      # 是否使用ssl与smtp服务器进行通信，默认为true
+      OPENCLA_EMAIL_USE-SSL: "true"
+      # 邮箱服务器的授权码
+      OPENCLA_EMAIL_AUTHORIZATIONCODE: xxxx
+      # 邮箱签名
+      OPENCLA_EMAIL_SIGNATURE: 建木CLA
+      # 邮箱主题
+      OPENCLA_EMAIL_SUBJECT: 签署建木CLA
+      # 邮件中的团队名称
+      OPENCLA_EMAIL_TEAM: 建木团队
+      # 提供支持的邮箱
+      OPENCLA_EMAIL_SUPPORT-EMAIL: support@jianmu.dev
+    depends_on:
+      - db
+    entrypoint: [ "/wait-for-it.sh", "db:3306", "-t", "0", "--", "java", "-Duser.timezone=Asia/Shanghai", "-cp", "/app/resources:/app/classes:/app/libs/*", "org.opencla.WebApplication" ]
+  web:
+    image: jianmudev/opencla-ui:v0.1.11
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - db
+      - cla

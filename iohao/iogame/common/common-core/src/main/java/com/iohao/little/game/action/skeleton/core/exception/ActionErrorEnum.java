@@ -43,6 +43,8 @@ public enum ActionErrorEnum implements MsgExceptionInfo {
     idleErrorCode(-1003, "心跳超时相关"),
     /** 需要登录后才能掉用业务方法 */
     verifyIdentity(-1004, "请先登录"),
+    /** class 不存在 */
+    classNotExist(-1004, "class 不存在"),
     ;
 
     /** 消息码 */

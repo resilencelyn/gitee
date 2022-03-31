@@ -16,7 +16,7 @@ public class YunZeApplication
     {
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(YunZeApplication.class, args);
-        System.out.println("     IOT综合业务支撑平台 启动成功    \n" +
+        System.out.println("   IoTLink  IOT综合业务支撑平台 启动成功    \n" +
                 "                         ..,].                \n" +
                 "                      .,@\\`.]@@@@.               \n" +
                 "                    ./@@@@@@@@@@@^               \n" +

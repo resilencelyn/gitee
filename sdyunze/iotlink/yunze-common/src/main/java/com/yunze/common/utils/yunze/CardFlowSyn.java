@@ -142,6 +142,11 @@ public class CardFlowSyn {
         Double cl_Used = Arith.sub(ApiUsed,DseFlow);
         //2.获取 有效资费计划 计算
         Double xiShu = 1.0;//默认
+
+
+
+
+
         List<Map<String,Object>> InEffectArr =  yzCardFlowMapper.findInEffect(findMap);
         if(InEffectArr!=null && InEffectArr.size()>0){
             Double UdF = cl_Used+0;
@@ -222,13 +227,21 @@ public class CardFlowSyn {
                 Double true_flow = Double.parseDouble(Pobj.get("true_flow").toString());
                 SumFlow = Arith.add(SumFlow,true_flow);
             }
+
+        }else{
+            //未订购过资费计划  但是接口有用量 返回时   主表 账期 已用 += 接口用量 * 系数
+            if(ApiUsed>0.0){
+                DseFlow = Arith.add(DseFlow,Arith.mul(ApiUsed,xiShu));
+            }
         }
-        //总量 * 系数
-        SumFlow = Arith.mul(SumFlow,xiShu);
+
+
+
         //返回数据
         Rmap.put("SumFlow",SumFlow);
-        Rmap.put("total_show_flow",total_show_flow);
-        Rmap.put("used",total_show_flow);
+        Rmap.put("total_show_flow",DseFlow);
+        Rmap.put("used",DseFlow);
+
         Rmap.put("bool_info",bool_info);
         Rmap.put("bool_flowHis",bool_flowHis);
         Rmap.put("bool_flow",bool_flow);

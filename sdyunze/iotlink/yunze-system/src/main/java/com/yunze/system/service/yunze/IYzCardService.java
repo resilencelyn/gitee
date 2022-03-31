@@ -207,11 +207,44 @@ public interface IYzCardService
     public  String consumptionandstatearr(Map<String, Object> map);
 
 
+    /**
+     * 获取iccid
+     * @param map
+     * @return
+     */
+    public Map<String, Object> getIccid(Map<String, Object> map);
+
+
+
+    /**
+     * 批量取消实名
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public String cancelrealname(MultipartFile file, Map<String, Object> map) throws IOException ;
 
 
 
 
 
+
+    /**
+     * 智能匹对
+     * @param map
+     * @return
+     */
+    public Map<String, Object> cardMatch(Map<String, Object> map);
+
+
+    /**
+     *
+     * @param file
+     * @param map
+     * @return
+     * @throws IOException
+     */
+    public String importCardReplace(MultipartFile file, Map<String, Object> map);
 
 
 

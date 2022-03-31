@@ -66,48 +66,52 @@
               />
             </el-select>
           </el-form-item>
-          <!--  时间类型-->
-          <el-form-item label="时间类型" prop="year">
-            <el-select
-              v-model="queryParams.timetype"
-              placeholder="时间类型"
-              clearable
-              size="small"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in flowHisTime"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item >
-            <el-date-picker
-              v-model="selTime"
-              type="datetimerange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              value-format="yyyy-MM-dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 360px"
-              align="right">
-            </el-date-picker>
 
-          </el-form-item>
-
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
         </el-form>
 
-
-        <el-row :gutter="10" class="mb8">
-          <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:flowhis:list']" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: -10px;line-height:35px">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <!--  时间类型-->
+              <el-form-item label="时间类型" prop="year" style="margin-bottom: 10px;line-height:35px">
+                <el-select
+                  v-model="queryParams.timetype"
+                  placeholder="时间类型"
+                  clearable
+                  size="small"
+                  style="width: 110px"
+                >
+                  <el-option
+                    v-for="dict in flowHisTime"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item >
+                <el-date-picker
+                  v-model="selTime"
+                  type="datetimerange"
+                  :picker-options="pickerOptions"
+                  range-separator="至"
+                  value-format="yyyy-MM-dd"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  style="width: 360px"
+                  align="right">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
+              <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:flowhis:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </el-form>
 
         <el-table v-loading="loading" :data="cardList" >
           <el-table-column   label="通道编号" align="center" prop="cd_id" v-if="columns[0].visible" >
@@ -116,14 +120,14 @@
           </template>
           </el-table-column>
 
-          <el-table-column   label="轮序批次编码" align="center"  prop="polling_id" v-if="columns[1].visible"/>
+          <el-table-column   label="轮询批次编码" align="center"  prop="polling_id" v-if="columns[1].visible"/>
           <el-table-column   label="轮询类型" align="center"  prop="polling_id" v-if="columns[2].visible">
             <template slot-scope="scope">
               {{tools.getDkeyValue(yunze_polling_type,scope.row.polling_type)}}
             </template>
           </el-table-column>
-          <el-table-column   label="轮序总数" align="center"  prop="cd_count" v-if="columns[3].visible" />
-          <el-table-column   label="当前轮序数量" align="center"  prop="cd_current" v-if="columns[4].visible" />
+          <el-table-column   label="轮询总数" align="center"  prop="cd_count" v-if="columns[3].visible" />
+          <el-table-column   label="当前轮询数量" align="center"  prop="cd_current" v-if="columns[4].visible" />
           <el-table-column   label="创建时间" align="center"  prop="create_date" v-if="columns[5].visible" />
           <el-table-column   label="修改时间" align="center"  prop="upd_date" v-if="columns[6].visible" />
           <el-table-column   label="最近一次同步时间" align="center"  prop="syn_date" v-if="columns[7].visible" />
@@ -145,7 +149,7 @@
     <!-- 详情查看 -->
 
     <el-dialog :close-on-click-modal="false"
-               title="下载执行任务结果" :visible.sync="executionTaskDis">
+               title="下载执行日志结果" :visible.sync="executionTaskDis">
       <hr style="color:green"/>
       <el-row :gutter="20">
         <ul class="list-group" v-for="(item,index) in Urls">
@@ -201,7 +205,7 @@ export default {
 
 
       customize_whether: [],//自定义是否
-      ExecutionTask_OutType : [],// 执行任务导出类别
+      ExecutionTask_OutType : [],// 执行日志导出类别
 
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
@@ -218,7 +222,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -265,9 +269,9 @@ export default {
 
       // 运营商类别 字典
       operators_type: [],
-      // 执行任务状态 字典
+      // 执行日志状态 字典
       channelStatusOptions: [],
-      // 执行任务编码 字典
+      // 执行日志编码 字典
       channelCodeOptions: [],
       // 表单参数
       form: {},
@@ -298,10 +302,10 @@ export default {
       // 列信息
       columns: [
         { key: 0, label: `通道编号`, visible: true },
-        { key: 1, label: `轮序批次编码`, visible: true },
+        { key: 1, label: `轮询批次编码`, visible: true },
         { key: 2, label: `轮询类型`, visible: true },
-        { key: 3, label: `轮序总数`, visible: true },
-        { key: 4, label: `当前轮序数量`, visible: true },
+        { key: 3, label: `轮询总数`, visible: true },
+        { key: 4, label: `当前轮询数量`, visible: true },
         { key: 5, label: `创建时间`, visible: true },
         { key: 6, label: `修改时间`, visible: true },
         { key: 7, label: `最近一次同步时间`, visible: true },
@@ -316,7 +320,7 @@ export default {
 
   created() {
 
-    //加载 执行任务导出类别
+    //加载 执行日志导出类别
     if(window['yunze_polling_type']!=undefined &&  window['yunze_polling_type']!=null && window['yunze_polling_type']!=''){
       this.yunze_polling_type = window['yunze_polling_type'];
     }else{
@@ -397,7 +401,7 @@ export default {
 
     },
 
-    /*下载执行任务*/
+    /*下载执行日志*/
     getDownloadExecutionTask(row){
       let map = {};
       map.path = row.value;
@@ -422,7 +426,7 @@ export default {
 
 
 
-    /** 查询执行任务列表 */
+    /** 查询执行日志列表 */
     getList() {
       this.loading = true;
       this.getParams();

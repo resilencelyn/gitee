@@ -91,7 +91,7 @@ public class DlxCardImportSet {
 
         String newName = UUID.randomUUID().toString().replace("-","")+"_CardImportSet";
         String DistributeBackupName = UUID.randomUUID().toString().replace("-","")+"_CardImportSetBackup";
-        String task_name = create_by+"-设备管理 [连接设置] ";
+        String task_name ="设备管理 [连接设置] ";
         String SaveUrl = "/getcsv/"+newName+".csv";
         SaveUrl = "/getcsv/"+newName+".csv";
         SaveUrl += ",/getcsv/"+DistributeBackupName+".csv";

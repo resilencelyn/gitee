@@ -193,7 +193,7 @@ export default {
       deptNodeAll: false,
       // radio: '1',
 
-      ExecutionTask_OutType : [],// 执行任务导出类别
+      ExecutionTask_OutType : [],// 执行日志导出类别
 
       SetMealImport:false, //详情查询 套餐信息
       show_ds:false, //详情查询
@@ -261,9 +261,9 @@ export default {
 
       // 运营商类别 字典
       operators_type: [],
-      // 执行任务状态 字典
+      // 执行日志状态 字典
       channelStatusOptions: [],
-      // 执行任务编码 字典
+      // 执行日志编码 字典
       channelCodeOptions: [],
       // 表单参数
       form: {},
@@ -315,15 +315,6 @@ export default {
 
     };
   },
-  watch: {
-    // 根据名称筛选部门树
-    deptName(val) {
-      //console.log(val);
-      this.$refs.dept.filter(val);
-
-    }
-  },
-
   created() {
     //加载 API通道名称
     if(window['findCr_RouteOptions']!=undefined &&  window['RouteOptions']!=null && window['findCr_RouteOptions']!=''){

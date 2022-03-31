@@ -82,11 +82,11 @@ public class WriteCSV {
                 csvPrinter.flush();
                 csvPrinter.close();
             }else{
-                System.err.println("============== [FileOutputStream = null !!!] ==============");
+                System.err.println(" [FileOutputStream = null !!!] ");
             }
 
         } catch (Exception e) {
-            System.err.println("==============WriteCSV导出CVS数据异常！==============");
+            System.err.println("WriteCSV导出CVS数据异常！");
             System.out.println(e);
         }
 
@@ -156,11 +156,11 @@ public class WriteCSV {
                 csvPrinter.flush();
                 csvPrinter.close();
             }else{
-                System.err.println("============== [FileOutputStream = null !!!] ==============");
+                System.err.println(" [FileOutputStream = null !!!] ");
             }
 
         } catch (Exception e) {
-            System.err.println("==============WriteCSV导出CVS数据异常！==============");
+            System.err.println("WriteCSV导出CVS数据异常！");
             System.out.println(e);
         }
 
@@ -497,6 +497,36 @@ public class WriteCSV {
 
 
 
+    /**
+     * 字典获取
+     * @param CarMap 写入Map
+     * @param DictDataArr 字典 list
+     * @param basis 获取依据 字段 与 dictValue 判断
+     * @param fieldName 返回字段名称
+     * @return
+     */
+    public static Map<String,Object> WriteDic (Map<String,Object> CarMap,List<Map<String, Object>> DictDataArr,String basis,String fieldName){
+
+        Map<String,Object> Rmap = new HashMap<String,Object>();
+        String status_id = CarMap.get(basis)!=null?CarMap.get(basis).toString():null;
+        boolean bool = false;
+        if(status_id!=null){
+            for (int i = 0; i < DictDataArr.size(); i++) {
+                Map<String, Object>  dictData =  DictDataArr.get(i);
+                String dictValue = dictData.get("dictValue").toString();
+                if(dictValue.equals(status_id)){
+                    CarMap.put(fieldName,dictData.get("dictLabel"));
+                    bool = true;
+                    break;
+                }
+            }
+        }
+        //字段 默认值
+        if(!bool){
+            CarMap.put(fieldName,"");
+        }
+        return CarMap;
+    }
 
 
 

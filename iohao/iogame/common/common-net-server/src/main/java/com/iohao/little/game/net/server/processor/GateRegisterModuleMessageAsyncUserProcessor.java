@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
  * 模块注册
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 @Slf4j
 public class GateRegisterModuleMessageAsyncUserProcessor extends AsyncUserProcessor<ModuleMessage> {

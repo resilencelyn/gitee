@@ -12,6 +12,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzCardFlowService;
+import com.yunze.web.core.config.MyBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/yunze/cardFlow")
-public class YzCardFlowController extends BaseController
+public class YzCardFlowController extends MyBaseController
 {
 
     @Autowired
@@ -41,7 +42,7 @@ public class YzCardFlowController extends BaseController
     /**
      * 查询套餐信息
      */
-    @PreAuthorize("@ss.hasPermi('yunze:cardFlow:queryflow')")
+    @PreAuthorize("@ss.hasPermi('yunze:card:diagnosis')")
     @PostMapping(value = "/queryflow", produces = { "application/json;charset=utf-8" })
     public String queryflow(@RequestBody String Pstr)
     {
@@ -58,7 +59,7 @@ public class YzCardFlowController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             System.err.println(e);
         }
-        return Myerr("查询套餐信息 异常！");
+        return Myerr("查询套餐信息 操作失败！");
     }
 
 
@@ -86,7 +87,7 @@ public class YzCardFlowController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardFlow:queryflowSimple  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询当前套餐简要信息 异常！");
+        return Myerr("查询当前套餐简要信息 操作失败！");
     }
 
 
@@ -108,7 +109,7 @@ public class YzCardFlowController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardFlow:queryPackageSimple  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询套餐信息 异常！");
+        return Myerr("查询套餐信息 操作失败！");
     }
 
 
@@ -135,7 +136,7 @@ public class YzCardFlowController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:cardFlow:FindPacket  " + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询单条 资费计划  简要 异常！");
+        return Myerr("查询单条 资费计划  简要 操作失败！");
     }
 
     /**
@@ -171,7 +172,7 @@ public class YzCardFlowController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> system:flow:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("订购资费查询 异常！");
+        return Myerr("订购资费查询 操作失败！");
     }
 
     /**
@@ -200,7 +201,7 @@ public class YzCardFlowController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:flow:exportflow  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("订购资费导出 异常！");
+        return Myerr("订购资费导出 操作失败！");
     }
 
 

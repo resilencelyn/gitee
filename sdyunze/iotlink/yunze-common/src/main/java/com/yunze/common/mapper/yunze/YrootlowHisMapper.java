@@ -63,4 +63,21 @@ public interface YrootlowHisMapper {
      */
     public List<Map<String,Object>> monthGetTop5(Map<String, Object> map);
 
+
+    /**
+     * 删除 id IN ()
+     * @param map
+     * @return
+     */
+    public int delFlow(Map<String, Object> map);
+
+
+    /**
+     * 获取 创建时间 小于指定日期时间的用量记录 一千条
+     * @param map
+     * @return
+     */
+    public List<String> getOneThousand(Map<String, Object> map);
+
+
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Queue;
 
 /**
- * 定时任务 通道轮序 达量停机
+ * 定时任务 通道轮询 达量停机
  *
  * @author root
  */

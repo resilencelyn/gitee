@@ -6,16 +6,25 @@
 
     <sql id="selwhere">
         <where>
-            <if test="PushAPI != null and PushAPI != '' ">
-                and url  LIKE CONCAT(#{PushAPI},'%')
-            </if>
-            <if test="mail != null and mail != '' ">
-                and email  LIKE CONCAT(#{mail},'%')
+            a.cc_id = b.id
+            <if test="value != null and value != ''">
+                <if test="type == 1">
+                    and a.cc_id LIKE CONCAT(#{value},'%')
+                </if>
+                <if test="type == 2">
+                    and b.cc_name LIKE CONCAT(#{value},'%')
+                </if>
+                <if test="type == 3">
+                    and a.url LIKE CONCAT(#{value},'%')
+                </if>
+                <if test="type == 4">
+                    and a.email LIKE CONCAT(#{value},'%')
+                </if>
             </if>
             <if test="timetype != null  and timetype != '' and staTime!=null and endTime!=null">
                 AND
                 <if test="timetype == 1">
-                    DATE_FORMAT( create_time , '%Y-%m-%d' )
+                    DATE_FORMAT( a.create_time , '%Y-%m-%d' )
                 </if>
                 BETWEEN #{staTime} AND #{endTime}
             </if>
@@ -26,14 +35,22 @@
         SELECT
             COUNT(1)
         FROM
-            yz_automation_cc_url
+            yz_automation_cc_url a,
+            yz_automation_cc b
         <include refid="selwhere"/>
     </select>
 
     <select id="ListCcUrl" parameterType="java.util.HashMap" resultType="java.util.HashMap">
-        SELECT id,cc_id,url,email,
-               DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time
-        FROM   yz_automation_cc_url
+        SELECT
+            a.id,
+            a.cc_id,
+            a.url,
+            a.email,
+            DATE_FORMAT( a.create_time, '%Y-%m-%d %H:%i:%S' ) AS create_time,
+            b.cc_name
+        FROM
+            yz_automation_cc_url a,
+            yz_automation_cc b
         <include refid="selwhere"/>
                LIMIT #{StarRow},#{PageSize}
     </select>

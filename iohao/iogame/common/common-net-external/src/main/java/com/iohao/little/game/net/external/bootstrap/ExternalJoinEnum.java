@@ -20,6 +20,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
+ * 对外服的连接方式
+ *
  * @author 洛朱
  * @date 2022-01-13
  */

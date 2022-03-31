@@ -37,34 +37,8 @@
       <!--用户数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
           <el-form-item  v-hasPermi="['yunze:cardRoute:remove']"  >
-            <el-radio-group >
+           <!-- <el-radio-group >
               <label class="radio " v-for="(item,index) in channelStatusOptions">
                                     <span class="el-radio__inner my_radio__inner">
                                     <input type="radio" v-model="queryParams.cd_status"
@@ -72,41 +46,75 @@
                                      </span>
                 <span class="el-radio__label my_radio__label">{{item.dictLabel}}</span>
               </label>
-            </el-radio-group>
+            </el-radio-group>-->
 
           </el-form-item>
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-            <el-button size="mini" v-hasPermi="['yunze:card:listAgent']"  @click="agentShow" >公司所属</el-button>
-          </el-form-item>
+
+        </el-form>
+
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: 10px">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+                <el-input
+                  v-model="queryParams.value"
+                  placeholder="查询值"
+                  clearable
+                  size="small"
+                  style="width: 350px"
+                  @keyup.enter.native="handleQuery"
+                >
+                  <el-select
+                    v-model="queryParams.type"
+                    placeholder="查询条件"
+                    clearable
+                    slot="prepend"
+                    style="width: 110px"
+                  >
+                    <el-option
+                      v-for="dict in typeOptions"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+                    />
+                  </el-select>
+                </el-input>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button size="mini" v-hasPermi="['yunze:card:listAgent']"  @click="agentShow" >公司所属</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+                v-hasPermi="['yunze:cardRoute:add']"
+              >新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="warning"
+                plain
+                icon="el-icon-download"
+                size="mini"
+                :loading="exportLoading"
+                @click="handleExport"
+                v-hasPermi="['yunze:cardRoute:exportData']"
+              >导出</el-button>
+            </el-col>
+            <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:cardRoute:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
         </el-form>
 
 
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-              v-hasPermi="['yunze:cardRoute:add']"
-            >新增</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              :loading="exportLoading"
-              @click="handleExport"
-              v-hasPermi="['yunze:cardRoute:exportData']"
-            >导出</el-button>
-          </el-col>
-          <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:cardRoute:list']" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+
         <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
           <el-table-column label="cd_id" align="center" key="cd_id" prop="cd_id"  v-if="columns[0].visible"   />
           <el-table-column label="通道编号" align="center" key="cd_code" prop="cd_code"  v-if="columns[0].visible"   >
@@ -251,6 +259,26 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="8">
+            <el-form-item label="通道算法" prop="cd_code" >
+              <el-select v-model="form.cd_algorithm"   placeholder="请选择">
+                <el-option
+                  v-for="item in route_algorithm"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+
+          </el-col>
+          <el-col :span="8">
+
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="用户名" >
               <el-input v-model="form.cd_username" placeholder="请输入用户名" />
@@ -308,7 +336,7 @@ export default {
       table_Online: [],//在线状态信息
       DeptOptions: [],// 公司信息
       customize_whether: [],//自定义是否
-
+      route_algorithm: [],//通道算法类型
       mainwidth:24,//宽度
       option_show:false, //公司所属查询
       // 遮罩层
@@ -322,7 +350,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -454,6 +482,17 @@ export default {
     }
 
 
+    //加载 通道轮询算法
+    if (window['route_algorithm'] != undefined && window['route_algorithm'] != null && window['route_algorithm'] != '') {
+      this.route_algorithm = window['route_algorithm'];
+    } else {
+      this.getDicts("yz_route_algorithm").then(response => {
+        window['route_algorithm'] = response.data;
+        this.route_algorithm = window['route_algorithm'];
+      });
+    }
+
+
     //加载 通道状态
     if(window['channelStatusOptions']!=undefined &&  window['channelStatusOptions']!=null && window['channelStatusOptions']!=''){
       this.channelStatusOptions = window['channelStatusOptions'];
@@ -543,7 +582,11 @@ export default {
             this.cardList = jsonobj.Data.Data;
             this.total = jsonobj.Data.Pu.rowCount;
           }else{
-            this.msgError("获取数据异常，请联系管理员！");
+             if(jsonobj.deptId=="100"){
+            this.msgError(jsonobj.msg);
+          }else{
+            this.msgError("网络异常");
+          }
           }
           this.loading = false;
         }
@@ -631,10 +674,17 @@ export default {
           let jsonobj =  JSON.parse(tools.Decrypt(response));
           //console.log(jsonobj);
           if(jsonobj.code==200){
+
+            jsonobj.Data.cd_algorithm = ''+jsonobj.Data.cd_algorithm;
             this.form = jsonobj.Data;
+
             this.show_ds = true;
           }else{
-            this.msgError("获取数据异常，请联系管理员！");
+             if(jsonobj.deptId=="100"){
+            this.msgError(jsonobj.msg);
+          }else{
+            this.msgError("网络异常");
+          }
           }
           this.loading = false;
 
@@ -654,6 +704,8 @@ export default {
         tools.VerificationsText(_this, _this.form.cd_key, "通道key不能为空！") == true &&
         tools.VerificationsText(_this, _this.form.cd_operator_type, "请选择运营商类型！") == true &&
         tools.VerificationsText(_this, _this.form.cd_lunxun, "请选择是否轮训！") == true &&
+        tools.VerificationsText(_this, _this.form.cd_algorithm, "请选择 算法类型！") == true &&
+
         tools.VerificationsText(_this, _this.form.cd_status, "请选择通道状态！") == true ) {
         let Pwd_Str = tools.encrypt(JSON.stringify(this.form));
         addCardRoute(Pwd_Str).then(response => {
@@ -685,6 +737,8 @@ export default {
         tools.VerificationsText(_this, _this.form.cd_operator_type, "请选择运营商类型！") == true &&
         tools.VerificationsText(_this, _this.form.cd_lunxun, "请选择是否轮训！") == true &&
         tools.VerificationsText(_this, _this.form.cd_id, "操作参数缺失刷新后重试！") == true &&
+        tools.VerificationsText(_this, _this.form.cd_algorithm, "请选择 算法类型！") == true &&
+
         tools.VerificationsText(_this, _this.form.cd_status, "请选择通道状态！") == true ) {
         let Pwd_Str = tools.encrypt(JSON.stringify(this.form));
         editCardRoute(Pwd_Str).then(response => {

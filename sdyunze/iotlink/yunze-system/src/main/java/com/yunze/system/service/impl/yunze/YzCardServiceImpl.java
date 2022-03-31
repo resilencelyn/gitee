@@ -91,12 +91,20 @@ public class YzCardServiceImpl implements IYzCardService {
         }
         map.put("is_Internal", is_Internal);
         map = getChannelIdArr(map);
+
+
         CountMap.put("channel_id", map.get("channel_id"));
         PageUtil pu = null;
         List<Map<String, Object>> Rlist = null;
         boolean selLianTong = (boolean) map.get("selLianTong");
 
         Integer rowCount = null;
+        if (selLianTong) {
+            rowCount = yzCardMapper.selMapLianTongCount(CountMap);
+        } else {
+            rowCount = yzCardMapper.selMapCount(CountMap);
+        }
+      /*
         //同查询条件 缓存 查询总数 120 S
         Object isExecute = redisCache.getCacheObject(JSON.toJSONString(CountMap));
         if (isExecute == null) {
@@ -109,7 +117,7 @@ public class YzCardServiceImpl implements IYzCardService {
             redisCache.setCacheObject(JSON.toJSONString(CountMap), rowCount, 120, TimeUnit.SECONDS);//120 秒缓存
         } else {
             rowCount = Integer.parseInt(isExecute.toString());
-        }
+        }*/
 
         rowCount = rowCount != null ? rowCount : 0;
         pu = new PageUtil(rowCount, currenPage, pageSize);//初始化分页工具类
@@ -126,6 +134,7 @@ public class YzCardServiceImpl implements IYzCardService {
         omp.put("Pu", pu);
         omp.put("Data", Rlist);
         omp.put("Pmap", map);
+        omp.put("is_Internal", is_Internal);
         return omp;
 
     }
@@ -164,7 +173,7 @@ public class YzCardServiceImpl implements IYzCardService {
             String polling_routingKey = "admin.saveCard.queue";
             String polling_exchangeName = "admin_exchange";//路由
             try {
-                rabbitMQConfig.creatExchangeQueue(polling_exchangeName, polling_queueName, polling_routingKey, null, null, null, BuiltinExchangeType.DIRECT);
+                // rabbitMQConfig.creatExchangeQueue(polling_exchangeName, polling_queueName, polling_routingKey, null, null, null, BuiltinExchangeType.DIRECT);
                 Map<String, Object> start_type = new HashMap<>();
                 start_type.put("type", "importCardData");//启动类型
                 start_type.put("filePath", filePath);//项目根目录
@@ -201,7 +210,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 List<String>  iccidarr = yzCardMapper.isExistence(map);
 
                 String SaveUrl = "/getcsv/"+newName+".csv";
-                String task_name = create_by+"-连接管理上传 [导入] ";
+                String task_name ="连接管理上传 [导入] ";
                 Map<String, Object> task_map = new HashMap<String, Object>();
                 task_map.put("auth",create_by);
                 task_map.put("task_name",task_name);
@@ -239,13 +248,13 @@ public class YzCardServiceImpl implements IYzCardService {
                         return " 上传数据已全部在数据库，无需上传卡信息！ ";
                     }
                 }catch (DuplicateKeyException e){
-                    System.out.println("=================="+e.getCause().toString());
+                    System.out.println("===="+e.getCause().toString());
                     String[] solit=e.getCause().toString().split("'");
                     OutCSV(list,newName,e.getCause().toString(),create_by,"导入失败");
                     executionTaskMapper.set_end_time(task_map);//任务结束
                     return "上传excel异常 [插入数据 DuplicateKeyException ] "+e.getCause().toString() ;
                 }catch (Exception e){
-                    System.out.println("=================="+e.getCause().toString());
+                    System.out.println("===="+e.getCause().toString());
                     OutCSV(list,newName,e.getCause().toString(),create_by,"导入失败");
                     executionTaskMapper.set_end_time(task_map);//任务结束
                     return "上传excel异常 [插入数据 Exception] "+e.getCause().toString() ;
@@ -259,7 +268,7 @@ public class YzCardServiceImpl implements IYzCardService {
             return "上传excel异常";
         }
 
-        return "连接管理 导入指令 已发送，详细信息请在 【执行任务管理】查询！";
+        return "连接管理 导入指令 已发送，详细信息请在 【执行日志管理】查询！";
     }
 
     @Override
@@ -305,7 +314,7 @@ public class YzCardServiceImpl implements IYzCardService {
             String newName = UUID.randomUUID().toString().replace("-", "") + "_CardOut";
 
             String agent_id = User.getDept().getDeptId().toString();
-            String task_name = create_by + "-连接管理 [导出] ";
+            String task_name = "-连接管理 [导出] ";
             String SaveUrl = "/getcsv/" + newName + ".csv";
 
             Map<String, Object> task_map = new HashMap<String, Object>();
@@ -357,7 +366,7 @@ public class YzCardServiceImpl implements IYzCardService {
         } else {
             return "您当前的筛选的查询条件 未找到数据！导出任务取消！";
         }
-        return "已下发执行任务可在【设备管理】》【执行任务管理】查看";
+        return "已下发执行日志可在【系统管理】》【日志管理】》【执行日志】查看";
     }
 
     @Override
@@ -434,7 +443,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 System.out.println("划卡 失败 " + e.getMessage().toString());
                 return ("连接管理 划卡 操作失败！");
             }
-            Message = "当前筛选条件下需要划分的数据 [ " + dividIdArr.size() + " ] 条 至 [ " + map.get("set_dept_name") + " ] [ " + map.get("set_user_name") + " ] 指令已下发详情查看 【执行任务管理】 ！";
+            Message = "当前筛选条件下需要划分的数据 [ " + dividIdArr.size() + " ] 条 至 [ " + map.get("set_dept_name") + " ] [ " + map.get("set_user_name") + " ] 指令已下发详情查看 【执行日志管理】 ！";
         } else {
             Message = "当前筛选条件下未找到需要划分的数据！请核对后重试！";
         }
@@ -450,14 +459,20 @@ public class YzCardServiceImpl implements IYzCardService {
      */
     private Map<String, Object> getChannelIdArr(Map<String, Object> map) {
         //判断是否选择 运营商类型
-        map.put("selLianTong", false);
-        Object cd_operator_type = map.get("cd_operator_type");
-        if (cd_operator_type != null) {
-            String Str_cd_operator_type = cd_operator_type.toString();
-            if (Str_cd_operator_type != "" && Str_cd_operator_type.length() > 0) {
-                List<Map<String, Object>> smap = yzCardRouteMapper.find_simple(map);
+         map.put("selLianTong", false);
+
+        if (map.get("cd_operator_type") != null) {
+            List<String> cd_operator_type = (List<String>) map.get("cd_operator_type");
+            if ( cd_operator_type.size() > 0) {
+                List<Map<String, Object>> smap = yzCardRouteMapper.find_simpleOperatorArr(map);
                 //添加 【符合 运营类型】 的 通道 查询条件
                 List<String> channel_id = new ArrayList<String>();
+
+                if(map.get("channel_id") != null){
+                    List<String> Channel = (List<String>) map.get("channel_id");
+                    channel_id.addAll(Channel);
+                }
+
                 if (smap != null && smap.size() > 0) {
                     for (int i = 0; i < smap.size(); i++) {
                         channel_id.add(smap.get(i).get("cd_id").toString());
@@ -466,10 +481,17 @@ public class YzCardServiceImpl implements IYzCardService {
                 //未找到相匹配的通道时 将 通道id传参 -1 使查询不到相对应数据
                 if (channel_id.size() == 0) {
                     channel_id.add("-1");
+                }else {
+                    map.put("channel_id", channel_id);
                 }
-                map.put("channel_id", channel_id);
                 //如果是联通的查询 条件 且 条件是 卡号 查询长度大于19 或 起止 条件 是 iccid
-                if (Str_cd_operator_type.equals("2")) {
+                boolean LianTong = false;
+                for (int i = 0; i < cd_operator_type.size(); i++) {
+                    if(cd_operator_type.get(i).equals("2")){
+                        LianTong = true;
+                    }
+                }
+                if (LianTong) {
                     Object type = map.get("type");
                     Object value = map.get("value");
                     if (value != null && value.toString().length() > 0 && type != null) {
@@ -481,26 +503,6 @@ public class YzCardServiceImpl implements IYzCardService {
                     if (StartAndEndtype != null && StartAndEndtype.equals("3") && StartValue != null && EndValue != null) {
                         map.put("selLianTong", true);
                     }
-                }
-            } else {
-                Object c_id = map.get("channel_id");
-                if (c_id != null) {
-                    String Str_c_id = c_id.toString();
-                    if (Str_c_id != "" && Str_c_id.length() > 0) {
-                        List<String> channel_id = new ArrayList<String>();
-                        channel_id.add(c_id.toString());
-                        map.put("channel_id", channel_id);
-                    }
-                }
-            }
-        } else {
-            Object c_id = map.get("channel_id");
-            if (c_id != null) {
-                String Str_c_id = c_id.toString();
-                if (Str_c_id != "" && Str_c_id.length() > 0) {
-                    List<String> channel_id = new ArrayList<String>();
-                    channel_id.add(c_id.toString());
-                    map.put("channel_id", channel_id);
                 }
             }
         }
@@ -524,7 +526,7 @@ public class YzCardServiceImpl implements IYzCardService {
             String addOrder_exchangeName = "admin_exchange", addOrder_queueName = "admin_CardImportSet_queue", addOrder_routingKey = "admin.CardImportSet.queue",
                     addOrder_del_exchangeName = "dlx_" + addOrder_exchangeName, addOrder_del_queueName = "dlx_" + addOrder_queueName, addOrder_del_routingKey = "dlx_" + addOrder_routingKey;
             try {
-                rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
+                //rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
                 Map<String, Object> start_type = new HashMap<>();
                 start_type.put("filePath", filePath);//项目根目录
                 start_type.put("ReadName", ReadName);//上传新文件名
@@ -542,7 +544,7 @@ public class YzCardServiceImpl implements IYzCardService {
             System.out.println(e);
             return "上传excel异常";
         }
-        return "连接设置 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+        return "连接设置 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
     }
 
 
@@ -562,7 +564,7 @@ public class YzCardServiceImpl implements IYzCardService {
             String addOrder_exchangeName = "admin_exchange", addOrder_queueName = "admin_CardImportSelImei_queue", addOrder_routingKey = "admin.CardImportSelImei.queue",
                     addOrder_del_exchangeName = "dlx_" + addOrder_exchangeName, addOrder_del_queueName = "dlx_" + addOrder_queueName, addOrder_del_routingKey = "dlx_" + addOrder_routingKey;
             try {
-                rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
+                //rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
                 Map<String, Object> start_type = new HashMap<>();
                 start_type.put("filePath", filePath);//项目根目录
                 start_type.put("ReadName", ReadName);//上传新文件名
@@ -580,7 +582,7 @@ public class YzCardServiceImpl implements IYzCardService {
             System.out.println(e);
             return "上传excel异常";
         }
-        return "特殊操作查询IMEI 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+        return "特殊操作查询IMEI 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
     }
 
     @Override
@@ -600,7 +602,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 String addOrder_exchangeName = "admin_exchange", addOrder_queueName = "admin_CardImportBatch_queue", addOrder_routingKey = "admin.CardImportBatch.queue",
                         addOrder_del_exchangeName = "dlx_" + addOrder_exchangeName, addOrder_del_queueName = "dlx_" + addOrder_queueName, addOrder_del_routingKey = "dlx_" + addOrder_routingKey;
                 try {
-                    rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
+                   // rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
                     Map<String, Object> start_type = new HashMap<>();
                     start_type.put("filePath", filePath);//项目根目录
                     start_type.put("ReadName", ReadName);//上传新文件名
@@ -618,7 +620,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 System.out.println(e);
                 return "上传excel异常";
             }
-            return "批量停复机、断开网 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量停复机、断开网 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
 
@@ -664,7 +666,7 @@ public class YzCardServiceImpl implements IYzCardService {
             String addOrder_exchangeName = "admin_exchange", addOrder_queueName = "admin_importSetCardInfo_queue", addOrder_routingKey = "admin.importSetCardInfo.queue",
                     addOrder_del_exchangeName = "dlx_" + addOrder_exchangeName, addOrder_del_queueName = "dlx_" + addOrder_queueName, addOrder_del_routingKey = "dlx_" + addOrder_routingKey;
             try {
-                rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
+               // rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
                 Map<String, Object> start_type = new HashMap<>();
                 start_type.put("filePath", filePath);//项目根目录
                 start_type.put("ReadName", ReadName);//上传新文件名
@@ -682,7 +684,7 @@ public class YzCardServiceImpl implements IYzCardService {
             System.out.println(e);
             return "上传excel异常";
         }
-        return "特殊操作变更卡分组、备注 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+        return "特殊操作变更卡分组、备注 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
     }
 
     @Override
@@ -691,6 +693,7 @@ public class YzCardServiceImpl implements IYzCardService {
         if (map.get("agent_id") != null) {
             map.put("agent_id", yzCardMapper.queryChildrenAreaInfo(map));
         }
+
         return yzCardMapper.getCardGrouping(map);
     }
 
@@ -725,7 +728,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【停机】 生产指令 操作失败！");
             }
 
-            return "批量 【停机】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【停机】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
 
@@ -749,7 +752,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【复机】 生产指令 操作失败！");
             }
 
-            return "批量 【复机】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【复机】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
 
@@ -773,7 +776,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【断网】 生产指令 操作失败！");
             }
 
-            return "批量 【断网】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【断网】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
 
@@ -797,7 +800,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【开网】 生产指令 操作失败！");
             }
 
-            return "批量 【开网】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【开网】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
 
@@ -823,7 +826,7 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【同步用量】 生产指令 操作失败！");
             }
 
-            return "批量 【同步用量】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【同步用量】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
 
@@ -849,12 +852,15 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【同步状态】 生产指令 操作失败！");
             }
 
-            return "批量 【同步状态】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【同步状态】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
 
 
     }
-    /**批量 【同步状态和用量】*/
+
+    /**
+     * 批量 【同步状态和用量】
+     */
     @Override
     public String consumptionandstatearr(Map<String, Object> map) {
         {
@@ -874,9 +880,158 @@ public class YzCardServiceImpl implements IYzCardService {
                 return ("批量 【同步状态和用量】 生产指令 操作失败！");
             }
 
-            return "批量 【同步状态和用量】 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+            return "批量 【同步状态和用量】 指令 已发送，连接设置详细信息请在 【执行日志管理】查询！";
         }
     }
+
+    @Override
+    public Map<String, Object> getIccid(Map<String, Object> map) {
+        Map<String, Object> Rmap = null;
+        List<Map<String, Object>> selVidArr = yzCardMapper.selVid(map);
+        if (selVidArr != null && selVidArr.size() > 0) {
+            Rmap = selVidArr.get(0);
+            boolean is_Internal = false;
+            //权限过滤
+            if (map.get("agent_id") != null) {
+                List<Integer> agent_id = (List<Integer>) map.get("agent_id");
+                if (!Different.Is_existence(agent_id, 100)) {
+                } else {
+                    is_Internal = true;//内部人员 部门是 100 的 可看字段增加
+                }
+            } else {
+                is_Internal = true;//内部人员 部门是 100 的 可看字段增加
+            }
+            Rmap.put("is_Internal", is_Internal);
+        }
+        return Rmap;
+    }
+
+    @Override
+    public String cancelrealname(MultipartFile file, Map<String, Object> map) throws IOException {
+        String filename = file.getOriginalFilename();
+        String ReadName = UUID.randomUUID().toString().replace("-", "") + filename;
+        try {
+            // 获取当前项目的工作路径
+            File file2 = new File("");
+            String filePath = file2.getCanonicalPath();
+            File newFile = new File(filePath + "/upload/cancelrealname/" + ReadName);
+            File Url = new File(filePath + "/upload/cancelrealname/1.txt");//tomcat 生成路径
+            Upload.mkdirsmy(Url);
+            file.transferTo(newFile);
+            //1.创建路由 绑定 生产队列 发送消息
+            String addOrder_exchangeName = "admin_exchange", addOrder_queueName = "admin_CardCancelrealname_queue", addOrder_routingKey = "admin.CardCancelrealname.queue",
+                    addOrder_del_exchangeName = "dlx_" + addOrder_exchangeName, addOrder_del_queueName = "dlx_" + addOrder_queueName, addOrder_del_routingKey = "dlx_" + addOrder_routingKey;
+            try {
+               // rabbitMQConfig.creatExchangeQueue(addOrder_exchangeName, addOrder_queueName, addOrder_routingKey, addOrder_del_exchangeName, addOrder_del_queueName, addOrder_del_routingKey, null);
+                Map<String, Object> start_type = new HashMap<>();
+                start_type.put("filePath", filePath);//项目根目录
+                start_type.put("ReadName", ReadName);//上传新文件名
+                start_type.put("map", map);//参数
+                rabbitTemplate.convertAndSend(addOrder_exchangeName, addOrder_routingKey, JSON.toJSONString(start_type), message -> {
+                    // 设置消息过期时间 60 分钟 过期
+                    message.getMessageProperties().setExpiration("" + (60 * 1000 * 60));
+                    return message;
+                });
+            } catch (Exception e) {
+                System.out.println("批量取消实名 生产指令  失败 " + e.getMessage().toString());
+                return ("批量取消实名 生产指令 操作失败！");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return "上传excel异常";
+        }
+        return "批量取消实名 指令 已发送，连接设置详细信息请在 【执行任务管理】查询！";
+
+    }
+
+    @Override
+    public Map<String, Object> cardMatch(Map<String, Object> map) {
+        Map<String, Object> Rmap = new HashMap<>();
+        Map<String, Object> Pmap = new HashMap<>();
+        Map<String, Object> cardMatchMap = null;
+        String cardNo = map.get("cardNo").toString();
+        String PcardNo = map.get("cardNo").toString();
+
+        Integer cardMatchCount = 0;
+        Pmap.put("selType", map.get("selType"));
+
+        int frequency = 0;
+        while (true) {
+
+            Pmap.put("cardNo", PcardNo);
+            cardMatchCount = yzCardMapper.cardMatchCount(Pmap);
+            cardMatchCount = cardMatchCount != null ? cardMatchCount : 0;
+            if (cardMatchCount > 0) {
+                cardMatchMap = yzCardMapper.cardMatchOne(Pmap);
+                break;
+            } else {
+                PcardNo = PcardNo.substring(0, PcardNo.length() - 1);
+            }
+            frequency += 1;
+            if (frequency == 5) {
+                break;
+            }
+        }
+        boolean is_Internal = false;
+        //权限过滤
+        if (map.get("agent_id") != null) {
+            List<Integer> agent_id = (List<Integer>) map.get("agent_id");
+            if (!Different.Is_existence(agent_id, 100)) {
+            } else {
+                is_Internal = true;//内部人员 部门是 100 的 可看字段增加
+            }
+        } else {
+            is_Internal = true;//内部人员 部门是 100 的 可看字段增加
+        }
+        Rmap.put("is_Internal", is_Internal);
+
+
+        Rmap.put("cardCount", cardMatchCount);
+        Rmap.put("cardMatchMap", cardMatchMap);
+        Rmap.put("cardPrefix", PcardNo);
+        Rmap.put("cardSuffix", cardNo.substring(cardNo.length() - frequency));
+        return Rmap;
+
+    }
+
+
+    @Override
+    public String importCardReplace(MultipartFile file, Map<String, Object> map) {
+        String filename = file.getOriginalFilename();
+        String ReadName = UUID.randomUUID().toString().replace("-", "") + filename;
+        try {
+            // 获取当前项目的工作路径
+            File file2 = new File("");
+            String filePath = file2.getCanonicalPath();
+            File newFile = new File(filePath + "/upload/importCardReplace/" + ReadName);
+            File Url = new File(filePath + "/upload/importCardReplace/1.txt");//tomcat 生成路径
+            Upload.mkdirsmy(Url);
+            file.transferTo(newFile);
+            //1.创建路由 绑定 生产队列 发送消息
+            String addOrder_exchangeName = "admin_exchange", addOrder_queueName = "admin_CardImportReplace_queue", addOrder_routingKey = "admin.CardImportReplace.queue";
+            try {
+                Map<String, Object> start_type = new HashMap<>();
+                start_type.put("filePath", filePath);//项目根目录
+                start_type.put("ReadName", ReadName);//上传新文件名
+                start_type.put("map", map);//参数
+                rabbitTemplate.convertAndSend(addOrder_exchangeName, addOrder_routingKey, JSON.toJSONString(start_type), message -> {
+                    // 设置消息过期时间 60 分钟 过期
+                    message.getMessageProperties().setExpiration("" + (60 * 1000 * 60));
+                    return message;
+                });
+            } catch (Exception e) {
+                System.out.println("批量更新卡信息 生产指令  失败 " + e.getMessage().toString());
+                return ("批量更新卡信息 生产指令 操作失败！");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return "上传excel异常";
+        }
+        return "批量更新卡信息 指令 已发送，更新卡信息 详细信息请在 【执行日志管理】查询！";
+    }
+
+
+
 }
 
 

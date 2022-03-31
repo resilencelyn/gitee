@@ -24,7 +24,7 @@ import java.util.concurrent.*;
  * 线程执行器工具
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
 public class ExecutorKit {
     /**

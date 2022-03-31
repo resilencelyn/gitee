@@ -1,13 +1,12 @@
 package com.yunze.web.controller.yunze;
 
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.system.service.yunze.IYzAgentPacketService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 
 /**
  *  代理代理资费计划 管理
@@ -17,7 +16,7 @@ import java.util.HashMap;
 @Api("代理资费计划管理")
 @RestController
 @RequestMapping("/yunze/agentTariffPlan")
-public class YzAgentPacketController extends BaseController
+public class YzAgentPacketController extends MyBaseController
 {
 
     @Autowired
@@ -61,7 +60,7 @@ public class YzAgentPacketController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffPlan:add  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("代理资费计划 新增 异常！");
+        return Myerr("代理资费计划 新增 操作失败！");
     }
 
 
@@ -86,7 +85,7 @@ public class YzAgentPacketController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffPlan:find  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("代理资费计划 详情 异常！");
+        return Myerr("代理资费计划 详情 操作失败！");
     }
 
 
@@ -133,7 +132,7 @@ public class YzAgentPacketController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffPlan:edit  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("代理资费计划 编辑 异常！");
+        return Myerr("代理资费计划 编辑 操作失败！");
     }
 */
 

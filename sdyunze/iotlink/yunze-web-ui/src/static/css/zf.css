@@ -1,0 +1,144 @@
+.el-row {
+    margin-bottom: 20px;
+}
+
+.el-icon {
+    font-size: 45px;
+}
+
+.el-col {
+    border-radius: 4px;
+}
+
+.bg-purple-dark {
+    background: #99a9bf;
+}
+
+.bg-purple {
+    background: #d3dce6;
+}
+
+.bg-purple-light {
+    background: #e5e9f2;
+}
+
+.grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+}
+
+.row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+}
+
+.my_4182C8 {
+    color: #4182C8;
+}
+
+.my_84C445 {
+    color: #84C445;
+}
+
+.my_5DBEF3 {
+    color: #5DBEF3;
+}
+
+.my_bg_F5F5F5 {
+    /*border: 1px solid !important;*/
+
+    border-radius: 23px !important;
+}
+
+.el-card__body {
+    padding: 2px !important;
+}
+
+.my_20ACD3 {
+    color: #20ACD3;
+}
+
+
+.font_title {
+    margin: 15px 0px 0px 15px;
+    font-size: 18px;
+}
+
+.float_left {
+    float: left;
+}
+
+.el-header, .el-footer {
+    /* background-color: #B3C0D1;*/
+
+    text-align: left;
+}
+
+/*.el-aside {
+  background-color: #D3DCE6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}*/
+
+.el-main {
+    /* background-color: #E9EEF3;
+     color: #333;*/
+    text-align: center;
+    padding: 0px !important;
+    overflow: hidden !important;
+}
+
+.page-content {
+    padding: 0px 0px 0px 1.2% !important;
+}
+
+body > .el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
+
+.float_right {
+    float: right;
+}
+
+.right_herd {
+    width: 60%;
+}
+
+.el-menu--horizontal>.el-menu-item.is-active {
+    color : #FF9800;
+
+}
+.el-menu--horizontal>.el-submenu .el-submenu__title{
+    color : #FFF;
+}
+.el-menu--horizontal>.el-menu-item{
+    color: #FFF;
+}
+
+.el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .el-menu--horizontal>.el-submenu .el-submenu__title:hover{
+    color : #FF9800 ;
+}
+
+.el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .el-menu--horizontal>.el-submenu .el-submenu__title:hover {
+    background-color: #7c7c7d ;
+}
+
+.span_title{
+    font-size: 16px;
+}
+
+.root_line {
+    height: 1px;
+    background-color: #e0e6ed;
+    margin: 7px -24px;
+}

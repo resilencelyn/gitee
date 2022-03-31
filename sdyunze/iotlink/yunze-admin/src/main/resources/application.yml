@@ -3,7 +3,7 @@ yunze:
   # 名称
   name: IoTLink
   # 版本
-  version: 0.5.0
+  version: 0.7.0
   # 版权年份
   copyrightYear: 2022v
   # 实例演示开关
@@ -67,7 +67,7 @@ spring:
     # 密码
     password: Rdis20220107
     # 连接超时时间
-    timeout: 10s
+    timeout: 30s
     lettuce:
       pool:
         # 连接池中的最小空闲连接

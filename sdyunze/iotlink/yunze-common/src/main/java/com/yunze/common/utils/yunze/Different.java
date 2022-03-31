@@ -345,9 +345,7 @@ public class Different {
 
 		} else {
 			//若数组不为空，把数组复制出一个新的，在原数组的基础上加1
-
 			Object[] copy= Arrays.copyOf(custom, custom.length+1);
-
 			//把原先数组制空
 				custom=null;
 			//把新数组给原先这个数组

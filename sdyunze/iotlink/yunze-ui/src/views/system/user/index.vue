@@ -28,16 +28,6 @@
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="用户名称" prop="userName">
-            <el-input
-              v-model="queryParams.userName"
-              placeholder="请输入用户名称"
-              clearable
-              size="small"
-              style="width: 240px"
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
           <el-form-item label="手机号码" prop="phonenumber">
             <el-input
               v-model="queryParams.phonenumber"
@@ -76,68 +66,85 @@
               end-placeholder="结束日期"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
         </el-form>
 
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAdd"
-              v-hasPermi="['system:user:add']"
-            >新增</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="success"
-              plain
-              icon="el-icon-edit"
-              size="mini"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:user:edit']"
-            >修改</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="danger"
-              plain
-              icon="el-icon-delete"
-              size="mini"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['system:user:remove']"
-            >删除</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="info"
-              plain
-              icon="el-icon-upload2"
-              size="mini"
-              @click="handleImport"
-              v-hasPermi="['system:user:import']"
-            >导入</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              :loading="exportLoading"
-              @click="handleExport"
-              v-hasPermi="['system:user:export']"
-            >导出</el-button>
-          </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: -10px;line-height:35px">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-form-item label="用户名称" prop="userName" style="margin-bottom: 10px;line-height:35px">
+                <el-input
+                  v-model="queryParams.userName"
+                  placeholder="请输入用户名称"
+                  clearable
+                  size="small"
+                  style="width: 240px"
+                  @keyup.enter.native="handleQuery"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+                v-hasPermi="['system:user:add']"
+              >新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="success"
+                plain
+                icon="el-icon-edit"
+                size="mini"
+                :disabled="single"
+                @click="handleUpdate"
+                v-hasPermi="['system:user:edit']"
+              >修改</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="danger"
+                plain
+                icon="el-icon-delete"
+                size="mini"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['system:user:remove']"
+              >删除</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="info"
+                plain
+                icon="el-icon-upload2"
+                size="mini"
+                @click="handleImport"
+                v-hasPermi="['system:user:import']"
+              >导入</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="warning"
+                plain
+                icon="el-icon-download"
+                size="mini"
+                :loading="exportLoading"
+                @click="handleExport"
+                v-hasPermi="['system:user:export']"
+              >导出</el-button>
+            </el-col>
+            <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </el-form>
+
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
@@ -366,7 +373,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据

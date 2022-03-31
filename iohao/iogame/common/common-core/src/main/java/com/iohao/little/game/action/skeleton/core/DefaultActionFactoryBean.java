@@ -22,7 +22,7 @@ import com.iohao.little.game.action.skeleton.ext.spring.ActionFactoryBeanForSpri
  * single工厂对象 <BR>
  *
  * @author 洛朱
- * @Date 2021-12-12
+ * @date 2021-12-12
  */
 public final class DefaultActionFactoryBean<T> implements ActionFactoryBean<T> {
     @Override

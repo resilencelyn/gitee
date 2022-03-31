@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 执行任务 业务实现类
+ * 执行日志 业务实现类
  */
 @Service
 public class YzExecutionTaskService_Impl implements IYzExecutionTaskService {

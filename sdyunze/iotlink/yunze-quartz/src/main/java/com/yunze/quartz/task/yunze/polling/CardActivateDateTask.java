@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 定时任务 通道轮序
+ * 定时任务 通道轮询
  *
  * @author root
  */
@@ -28,21 +28,16 @@ public class CardActivateDateTask {
     private YzCardRouteMapper yzCardRouteMapper;
     @Resource
     private YzCardMapper yzCardMapper;
-    @Autowired
+    @Resource
     private RabbitTemplate rabbitTemplate;
 
-    @Autowired
+    @Resource
     private YzPassagewayPollingMapper yzPassagewayPollingMapper;
 
     @Resource
     private RabbitMQConfig rabbitMQConfig;
 
-    //卡轮询 路由队列
-    String polling_queueName = "polling_card_activatedate";
-    String polling_routingKey = "polling.card.activatedate";
-    String polling_exchangeName = "polling_card";
 
-    //
     String ad_exchangeName = null, ad_queueName = null, ad_routingKey = null,
            ad_del_exchangeName = null,ad_del_queueName = null, ad_del_routingKey = null;
 
@@ -51,7 +46,7 @@ public class CardActivateDateTask {
 
 
     /**
-     * 轮序 激活时间
+     * 轮询 激活时间
      * type Slight .还没有用量的数据; 2.超出用量的 Serious
      * @param type
      * @param time 多少 分钟 后失效
@@ -60,11 +55,10 @@ public class CardActivateDateTask {
         //1.状态 正常 轮询开启 时 获取  每个 通道下卡号 加入队列
         Map<String,Object> findRouteID_Map = new HashMap<>();
         findRouteID_Map.put("FindCd_id",null);
+
         List<Map<String, Object>> channelArr = yzCardRouteMapper.findRouteID(findRouteID_Map);
         if (channelArr != null && channelArr.size() > 0) {
             //2.获取 通道下卡号
-            boolean bool = false;
-            bool = type.equalsIgnoreCase("Slight") ? true : false;// 轮询 还没有用量的数据 是 开启 激活时间 任务生产
             for (int i = 0; i < channelArr.size(); i++) {
                 Map<String, Object> channel_obj = channelArr.get(i);
                 Map<String, Object> findMap = new HashMap<>();
@@ -73,27 +67,79 @@ public class CardActivateDateTask {
                 findMap.put("type", type);
                 List<Map<String, Object>> cardArr = yzCardMapper.channelCardSeriousAndSlight(findMap);
                 if (cardArr != null && cardArr.size() > 0) {
-                    //插入 通道轮序详情表
+                    //插入 通道轮询详情表
                     Map<String, Object> pollingPublic_Map = new HashMap<>();
                     pollingPublic_Map.put("cd_id", cd_id);
                     pollingPublic_Map.put("cd_current", 0);
                     //激活时间 任务生产
-                    //if (bool) {
-                        findMap.put("Arr", cardArr);
-                        List<Map<String, Object>> ActivateArr = yzCardMapper.activate_dateNull(findMap);// 获取激活时间为空 iccid
-                        if (ActivateArr != null && ActivateArr.size() > 0) {
-                            String polling_id = VeDate.getNo(4);
-                            //创建 路由 新增轮序详情 生产启动类型消息
-                            if(ActivateDate(time,ActivateArr.size(),polling_id,pollingPublic_Map)){
-                                ActivateDateRun(ActivateArr,channel_obj,polling_id,cd_id,time);
-                            }
-                        }
-                    //}
+                    findMap.put("Arr", cardArr);
+                    List<Map<String, Object>> ActivateArr = yzCardMapper.activate_dateNull(findMap);// 获取激活时间为空 iccid
+                    if (ActivateArr != null && ActivateArr.size() > 0) {
+                        String polling_id = VeDate.getNo(4);
+                        //创建 路由 新增轮询详情 生产启动类型消息
+                        ActivateDateRun(ActivateArr,channel_obj,polling_id,cd_id,time,pollingPublic_Map);
+                    }
 
                 }
             }
         }
     }
+
+
+    /**
+     * 轮询 激活时间
+     * @param time
+     */
+    public void pollingActivateDateIntelligent(Integer time) {
+        //1.状态 正常 轮询开启 时 获取  每个 通道下卡号 加入队列
+        Map<String,Object> findRouteID_Map = new HashMap<>();
+        findRouteID_Map.put("FindCd_id",null);
+        findRouteID_Map.put("cd_algorithm", "1");//高频轮询
+        List<Map<String, Object>> channelArr = yzCardRouteMapper.findRouteID(findRouteID_Map);
+        if (channelArr != null && channelArr.size() > 0) {
+            //2.获取 通道下卡号
+            for (int i = 0; i < channelArr.size(); i++) {
+                Map<String, Object> channel_obj = channelArr.get(i);
+                Map<String, Object> findMap = new HashMap<>();
+                String cd_id = channel_obj.get("cd_id").toString();
+                findMap.put("channel_id", cd_id);
+                findMap.put("activate_date", "Null");//激活时间 为空时才获取
+
+                List<Map<String, Object>> cardArr = yzCardMapper.findChannelIdCar(findMap);
+                if (cardArr != null && cardArr.size() > 0) {
+                    String polling_id = VeDate.getNo(4);
+                    //插入 通道轮询详情表
+                    Map<String, Object> pollingPublic_Map = new HashMap<>();
+                    pollingPublic_Map.put("cd_id", cd_id);
+                    pollingPublic_Map.put("cd_current", 0);
+                    //创建 路由 新增轮询详情 生产启动类型消息
+                    ActivateDateRun(cardArr,channel_obj,polling_id,cd_id,time,pollingPublic_Map);
+                }
+
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -105,28 +151,38 @@ public class CardActivateDateTask {
      * @param cd_id
      * @param time
      */
-    public void ActivateDateRun(List<Map<String, Object>> ActivateArr, Map<String, Object> channel_obj, String polling_id,String cd_id,int time) {
+    public void ActivateDateRun(List<Map<String, Object>> ActivateArr, Map<String, Object> channel_obj, String polling_id,String cd_id,int time,Map<String, Object> pollingPublic_Map) {
+
+        try {
+              //设置任务 路由器 名称 与队列 名称
+              ad_exchangeName = "polling_cardActivateDate_exchange";
+              ad_queueName = "polling_cardActivateDate_queue";
+              ad_routingKey = "polling.cardActivateDate.routingKey";
+              ad_del_exchangeName = "polling_dlxcardActivateDate_exchange";
+              ad_del_queueName = "polling_dlxcardActivateDate_queue" ;
+              ad_del_routingKey = "polling.dlxcardActivateDate.routingKey";
+             // rabbitMQConfig.creatExchangeQueue(ad_exchangeName, ad_queueName, ad_routingKey, ad_del_exchangeName, ad_del_queueName, ad_del_routingKey,null);
+
+          } catch (Exception e) {
+            System.out.println(e.getMessage().toString());
+        }
+
+        pollingPublic_Map.put("polling_type", "1");
+        pollingPublic_Map.put("cd_count", ActivateArr.size());
+        pollingPublic_Map.put("polling_id", polling_id);
+        yzPassagewayPollingMapper.add(pollingPublic_Map);//新增 轮询详情表
+
+
         for (int j = 0; j < ActivateArr.size(); j++) {
             Map<String, Object> card = ActivateArr.get(j);
             Map<String, Object> Card = new HashMap<>();
             Card.putAll(channel_obj);
             Card.put("iccid", card.get("iccid"));
             Card.put("card_no", card.get("card_no"));
-            Card.put("polling_id", polling_id);//轮序任务详情编号
+            Card.put("polling_id", polling_id);//轮询任务详情编号
             String msg = JSON.toJSONString(Card);
             //1. 更新激活时间 [生产任务]
             try {
-                if (j == 0) {
-                    //设置任务 路由器 名称 与队列 名称
-                    ad_exchangeName = "polling_cardActivateDate_exchange";
-                    ad_queueName = "polling_cardActivateDate_queue_" + cd_id;
-                    ad_routingKey = "polling.cardActivateDate.routingKey." + cd_id;
-                    ad_del_exchangeName = "polling_dlxcardActivateDate_exchange";
-                    ad_del_queueName = "polling_dlxcardActivateDate_queue_" + cd_id;
-                    ad_del_routingKey = "polling.dlxcardActivateDate.routingKey." + cd_id;
-                    rabbitMQConfig.creatExchangeQueue(ad_exchangeName, ad_queueName, ad_routingKey, ad_del_exchangeName, ad_del_queueName, ad_del_routingKey,null);
-                }
-                //rabbitMQConfig.send(exchangeName,queueName,routingKey,"direct",msg);
                 rabbitTemplate.convertAndSend(ad_exchangeName, ad_routingKey, msg, message -> {
                     // 设置消息过期时间 time 分钟 过期
                     message.getMessageProperties().setExpiration("" + (time * 1000 * 60));
@@ -149,7 +205,7 @@ public class CardActivateDateTask {
      * @param pollingPublic_Map
      * @return
      */
-    public boolean ActivateDate(int time, int size, String polling_id,Map<String, Object> pollingPublic_Map) {
+    /*public boolean ActivateDate(int time, int size, String polling_id,Map<String, Object> pollingPublic_Map) {
         boolean bool = true;
         try {
             rabbitMQConfig.creatExchangeQueue(polling_exchangeName, polling_queueName, polling_routingKey, null, null, null, BuiltinExchangeType.FANOUT);
@@ -163,12 +219,12 @@ public class CardActivateDateTask {
             pollingPublic_Map.put("polling_type", "1");
             pollingPublic_Map.put("cd_count", size);
             pollingPublic_Map.put("polling_id", polling_id);
-            yzPassagewayPollingMapper.add(pollingPublic_Map);//新增 轮序详情表
+            yzPassagewayPollingMapper.add(pollingPublic_Map);//新增 轮询详情表
         } catch (Exception e) {
-            System.out.println("生产 轮序 [ActivateDate] 启动类型 失败 " + e.getMessage().toString());
+            System.out.println("生产 轮询 [ActivateDate] 启动类型 失败 " + e.getMessage().toString());
         }
         return bool;
-    }
+    }*/
 
 
 

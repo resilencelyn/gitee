@@ -1,11 +1,11 @@
 package com.yunze.web.controller.yunze;
 
 import com.alibaba.fastjson.JSON;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.utils.ServletUtils;
 import com.yunze.common.utils.ip.IpUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.system.service.yunze.IYPollingService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 @Api("通道进度")
 @RestController
 @RequestMapping("/yunze/polling")
-public class PollingController extends BaseController {
+public class PollingController extends MyBaseController {
 
     @Autowired
     private IYPollingService iyPollingService;
@@ -43,7 +43,7 @@ public class PollingController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> system:polling:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ", e.getCause().toString());
         }
-        return Myerr("通道进度 异常！");
+        return Myerr("通道进度 操作失败！");
     }
 }
 

@@ -102,7 +102,7 @@ public class YzCradFlowHisServiceImpl implements YzCardFlowHisService {
             String newName = UUID.randomUUID().toString().replace("-", "") + "_ExportHis";
 
             String agent_id = User.getDept().getDeptId().toString();
-            String task_name = create_by + "-用量详情导出 [导出] ";
+            String task_name = "用量详情导出 [导出] ";
             String SaveUrl = "/getcsv/" + newName + ".csv";
 
             Map<String, Object> task_map = new HashMap<String, Object>();
@@ -149,7 +149,7 @@ public class YzCradFlowHisServiceImpl implements YzCardFlowHisService {
             return "您当前的筛选的查询条件 未找到数据！导出任务取消！";
         }
 
-        return "已下发执行任务可在【设备管理】》【执行任务管理】查看";
+        return "已下发执行日志可在【系统管理】》【日志管理】》【执行日志】查看";
 
     }
 }

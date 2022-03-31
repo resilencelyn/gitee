@@ -190,7 +190,7 @@ public class OrderAddPackageProductionTask
             });
         } catch (Exception e) {
             bool = false;
-            System.out.println("轮序 生产激活生效包  [CreateExchange] 启动类型 失败 " + e.getMessage().toString());
+            System.out.println("轮询 生产激活生效包  [CreateExchange] 启动类型 失败 " + e.getMessage().toString());
         }
         return bool;
     }

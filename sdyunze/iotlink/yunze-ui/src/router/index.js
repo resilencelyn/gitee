@@ -117,7 +117,7 @@ export const constantRoutes = [
         path: 'type/index/:cd_id(\\d+)',
         component: (resolve) => require(['@/views/yunze/API/polling/index'], resolve),
         name: 'polling',
-        meta: { title: '轮序进度查询', icon: '' }
+        meta: { title: '轮询进度查询', icon: '' }
       }
     ]
   },
@@ -167,10 +167,31 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/yunze/flowcard/cardSetting/index'], resolve),
         name: 'cardSetting',
         meta: { title: '物联卡设置', icon: '' }
-      }
+      },{
+        path: 'diagnosis/:Pstr(.*)',
+        component: (resolve) => require(['@/views/yunze/flowcard/diagnosis/index'], resolve),
+        name: 'diagnosis',
+        meta: { title: '智能诊断', icon: '' }
+      },{
+        path: 'agentTariffGroup/:Pstr(.*)',
+        component: (resolve) => require(['@/views/yunze/flowcard/tariffGroup/agent'], resolve),
+        name: 'agentTariffGroup',
+        meta: { title: '客户资费', icon: '' }
+      },
+      {
+        path: 'tariffGroupT/:Pstr(.*)',
+        component: (resolve) => require(['@/views/yunze/flowcard/tariffGroup/index'], resolve),
+        name: 'tariffGroupT',
+        meta: { title: '平台资费', icon: '' }
+      },
+      {
+        path: 'rechargeTariff',
+        component: (resolve) => require(['@/views/yunze/flowcard/rechargeTariff/index'], resolve),
+        name: 'rechargeTariff',
+        meta: { title: '资费订购', icon: '' }
+      },
     ]
   },
-
 
 
 
@@ -182,6 +203,12 @@ export const constantRoutes = [
     component: Layout,
     hidden: true,
     children: [
+      {
+        path: 'OrderShopping/:ordNo(.*)',
+        component: (resolve) => require(['@/views/yunze/order/OrderShopping/index'], resolve),
+        name: 'OrderShopping',
+        meta: { title: '购物订单'}
+      },
       {
         path: 'ordeAll/:Pstr(.*)',
         component: (resolve) => require(['@/views/yunze/order/ordeAll/index'], resolve),
@@ -237,11 +264,25 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/yunze/specialOperation/selImei'], resolve),
         name: 'selImei',
         meta: { title: '查询IMEI' }
+
+      },
+      {/*** 批量取消实名 */
+        path: 'type/realname',
+        component: (resolve) => require(['@/views/yunze/specialOperation/realname'], resolve),
+        name: 'realname',
+        meta: { title: '批量取消实名' }
+      },
+      {/*** 批量更新卡信息 */
+        path: 'type/cardInfoReplace',
+        component: (resolve) => require(['@/views/yunze/specialOperation/cardInfoReplace'], resolve),
+        name: 'cardInfoReplace',
+        meta: { title: '批量更新卡信息' }
       }
+
+
 
     ]
   },
-
 
 
 
@@ -283,6 +324,65 @@ export const constantRoutes = [
 
 
 
+
+/**
+ * 自动化配置
+ * */
+  {
+    path: '/ccurl',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/index/:id(.*)',
+        component: (resolve) => require(['@/views/yunze/automation/ccurl/index'], resolve),
+        name: 'ccurl',
+        meta: { title: '自动化配置', icon: ''}
+      }
+    ]
+  },
+  /**
+   * 推送记录
+   * */
+  {
+    path: '/cchis',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'type/index/:id(.*)',
+        component: (resolve) => require(['@/views/yunze/automation/cchis/index'], resolve),
+        name: 'cchis',
+        meta: { title: '推送记录', icon: ''}
+      }
+    ]
+  },
+
+
+
+
+
+
+
+  {
+    path: '/system',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'deptPrestore/:Pstr(.*)',
+        component: (resolve) => require(['@/views/yunze/system/deptPrestore/index'], resolve),
+        name: 'deptPrestore',
+        meta: { title: '企业预存', icon: '' }
+      },
+      {
+        path: 'apifile',
+        component: (resolve) => require(['@/views/tool/apifile/index'], resolve),
+        name: 'apifile',
+        meta: { title: 'API使用', icon: ''}
+      }
+    ]
+  },
 
 
 

@@ -93,7 +93,7 @@ public class CardImportSet {
 
         String newName = UUID.randomUUID().toString().replace("-","")+"_CardImportSet";
         String DistributeBackupName = UUID.randomUUID().toString().replace("-","")+"_CardImportSetBackup";
-        String task_name = create_by+"-设备管理 [连接设置] ";
+        String task_name ="设备管理 [连接设置] ";
         String SaveUrl = "/getcsv/"+newName+".csv";
         SaveUrl = "/getcsv/"+newName+".csv";
         SaveUrl += ",/getcsv/"+DistributeBackupName+".csv";
@@ -128,11 +128,6 @@ public class CardImportSet {
                 //1.判断 设置卡号是否都在库里
                     //库中查询出卡号与上传卡号数量 不一致 说明有卡号不在数据库中
                     if (!(iccidarr.size() == list.size())) {
-                        //上传数据>数据库查询 赛选出
-                        List<String> list1 = new ArrayList<>();
-                        for (int i = 0; i < list.size(); i++) {
-                            list1.add(list.get(i).get("iccid").toString());
-                        }
                         // 获取 数组去重数据 和 重复值
                         Map<String, Object> getNotRepeatingMap_DB = Different.getNotRepeating(list, iccidarr, "iccid");//获取 筛选不重复的某列值 和 重复的
                         list = (List<Map<String, Object>>) getNotRepeatingMap_DB.get("Rlist");//更新 设置数据
@@ -158,17 +153,15 @@ public class CardImportSet {
                             int sInt = yzCardMapper.SetCard(map);
                             if (sInt > 0) {
                                 writeCSV.OutCSVObj(list, newName, "批量 设置 成功 数据 [" + sInt + "] 条", create_by, "设置成功", Outcolumns, keys,OutSize);
-                                yzExecutionTaskMapper.set_end_time(task_map);//任务结束
                             }
                         }
                     } catch (DuplicateKeyException e) {
                         String[] solit = e.getCause().toString().split("'");
                         writeCSV.OutCSVObj(list, newName, e.getCause().toString(), create_by, "设置失败", Outcolumns, keys,OutSize);
-                        yzExecutionTaskMapper.set_end_time(task_map);//任务结束
                         log.error(">> cardSet-消费者- 上传excel异常 [插入数据 DuplicateKeyException ] :{}<<", e.getMessage().toString());
                     } catch (Exception e) {
                         writeCSV.OutCSVObj(list, newName, e.getCause().toString(), create_by, "设置失败", Outcolumns, keys,OutSize);
-                        yzExecutionTaskMapper.set_end_time(task_map);//任务结束
+
                         log.error(">>cardSet-消费者- 批量设置消费者:{}<<", e.getMessage());
                     }
 
@@ -176,6 +169,7 @@ public class CardImportSet {
                 log.info("上传ICCID卡号不在数据库中！请核对后重试！");
                 writeCSV.OutCSVObj(list, newName, "设置iccid卡号平台中未找到！设置取消！", create_by, "设置失败", Outcolumns, keys,OutSize);
             }
+            yzExecutionTaskMapper.set_end_time(task_map);//任务结束
         }else{
             log.error( "admin-消费者 上传表格无数据！无需执行设置");
         }

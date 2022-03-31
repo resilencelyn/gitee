@@ -49,11 +49,14 @@ public class FileConverter {
                     }
                     i++;
                     for (int j = 0; j < headList.size() ; j++) {
-                        obj.put(headList.get(j),list.get(j));
+                        Object val = "";
+                        try {
+                            val =  list.get(j);
+                        }catch (Exception e){
+                        }
+                        obj.put(headList.get(j),val);
                     }
                     rlist.add(obj);
-
-                    //
                    // System.out.println(csvReader.get("Link")); // 读这行的某一列
                 }
 

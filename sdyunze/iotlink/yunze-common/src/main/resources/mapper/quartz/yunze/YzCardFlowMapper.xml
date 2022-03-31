@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-	<!--查询套餐信息-->
+	<!--查询套餐信息    a.error_flow,a.error_time,   -->
 	<select id="queryflow" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		SELECT
 			a.id,
@@ -15,16 +15,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			a.packet_id,
 			a.ord_no,
 			a.true_flow,
-			a.error_flow,
+
 			DATE_FORMAT( a.start_time, "%Y-%m-%d %H:%i:%S" ) AS start_time,
 			DATE_FORMAT( a.end_time, "%Y-%m-%d %H:%i:%S" ) AS end_time,
 			DATE_FORMAT( a.create_time, "%Y-%m-%d %H:%i:%S" ) AS create_time,
+			DATE_FORMAT( c.create_time, "%Y-%m-%d %H:%i:%S" ) AS orderCreate_time,
 			a.ord_type,
 			a.status,
 			a.packet_type,
 			a.use_flow,
 			a.iccid,
-			a.error_time,
+
 			(IF(a.use_so_flow>0,a.use_so_flow,0)+IF(a.use_flow>0,a.use_flow,0)) AS use_so_flow,
 			c.ord_name,
 			c.wx_ord_no,
@@ -54,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-	<!--查询现有套餐信息-->
+	<!--查询现有套餐信息   a.error_flow,a.error_time,   -->
 	<select id="queryflow_agent" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		SELECT
 			a.id,
@@ -63,16 +64,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			a.packet_id,
 			a.ord_no,
 			a.true_flow,
-			a.error_flow,
+
 			DATE_FORMAT( a.start_time, "%Y-%m-%d %H:%i:%S" ) AS start_time,
 			DATE_FORMAT( a.end_time, "%Y-%m-%d %H:%i:%S" ) AS end_time,
 			DATE_FORMAT( a.create_time, "%Y-%m-%d %H:%i:%S" ) AS create_time,
+			DATE_FORMAT( c.create_time, "%Y-%m-%d %H:%i:%S" ) AS orderCreate_time,
 			a.ord_type,
 			a.status,
 			a.packet_type,
 			a.use_flow,
 			a.iccid,
-			a.error_time,
+
 			(IF(a.use_so_flow>0,a.use_so_flow,0)+IF(a.use_flow>0,a.use_flow,0)) AS use_so_flow,
 			c.ord_name,
 			c.wx_ord_no,
@@ -85,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			c.info
 		FROM
 			yz_card_flow a,
-			yz_card_packet b,
+			yz_agent_packet b,
 			yz_order c
 		<where>
 			a.iccid = #{iccid}

@@ -10,6 +10,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzAgentPackageService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +31,7 @@ import java.util.List;
 @Api("代理资费组管理")
 @RestController
 @RequestMapping("/yunze/agentTariffGroup")
-public class YzAgentPackageController extends BaseController
+public class YzAgentPackageController extends MyBaseController
 {
 
     @Autowired
@@ -65,7 +66,7 @@ public class YzAgentPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffGroup:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取代理资费组列表 异常！");
+        return Myerr("获取代理资费组列表 操作失败！");
     }
 
 
@@ -89,7 +90,7 @@ public class YzAgentPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffGroup:add  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("代理资费组 新增 异常！");
+        return Myerr("代理资费组 新增 操作失败！");
     }
 
 
@@ -112,7 +113,7 @@ public class YzAgentPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffGroup:find  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("代理资费组 详情 异常！");
+        return Myerr("代理资费组 详情 操作失败！");
     }
 
 
@@ -132,13 +133,13 @@ public class YzAgentPackageController extends BaseController
             Pstr =  AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject((String) Pstr));
             boolean bool = agentPackageService.update(Parammap);
-            String msg = bool?"修改 代理资费组成功！":"网络异常请稍后重试！！！";
+            String msg = bool?"修改 代理资费组成功！":"网络操作失败请稍后重试！！！";
             return MyRetunSuccess(bool,msg);
         }catch (Exception e){
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:agentTariffGroup:edit  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("代理资费组 修改 异常！");
+        return Myerr("代理资费组 修改 操作失败！");
     }
 */
 

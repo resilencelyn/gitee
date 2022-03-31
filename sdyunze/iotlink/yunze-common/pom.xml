@@ -5,7 +5,7 @@
     <parent>
         <artifactId>yunze</artifactId>
         <groupId>com.yunze</groupId>
-        <version>0.5.0</version>
+        <version>0.7.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -178,7 +178,12 @@
         </dependency>
 
 
-
+        <!--联通API 单jar -->
+        <dependency>
+            <groupId>com.cu</groupId>
+            <artifactId>api</artifactId>
+            <version>2</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -190,12 +195,18 @@
             <artifactId>mail</artifactId>
             <version>1.5.0-b01</version>
         </dependency>
-
         <dependency>
             <groupId>com.yunze</groupId>
             <artifactId>yunze-apiCommon</artifactId>
-            <version>0.5.0</version>
+            <version>0.7.0</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.jumpmind.symmetric</groupId>
+            <artifactId>symmetric-csv</artifactId>
+            <version>3.5.19</version>
+         </dependency>
 
 
     </dependencies>

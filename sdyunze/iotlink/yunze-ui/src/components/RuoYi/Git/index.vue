@@ -9,7 +9,7 @@ export default {
   name: 'YunZeGit',
   data() {
     return {
-      url: 'https://gitee.com/sdyunze/iotlink'
+      url: 'https://gitee.com/y_project/YunZe-Vue'
     }
   },
   methods: {

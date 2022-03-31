@@ -37,32 +37,7 @@
       <!--数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
+
           <el-form-item label="交易类型" prop="status">
             <el-select
               v-model="queryParams.ord_type"
@@ -137,17 +112,6 @@
           </el-form-item>
 
 
-
-
-
-
-
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-            <el-button size="mini" v-hasPermi="['yunze:card:listAgent']"  @click="agentShow" >公司所属</el-button>
-
-          </el-form-item>
 
           <el-form-item label="支付方式" prop="status" >
             <el-select
@@ -258,41 +222,77 @@
           </el-form-item>
 
 
-          <el-form-item label="显示删除" prop="status" v-hasPermi="['yunze:order:dellist']" >
-            <el-select
-              v-model="queryParams.del_flag"
-              placeholder="显示删除订单"
-              clearable
-              size="small"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in customize_whether"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-form-item>
-
-
         </el-form>
 
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: -10px;line-height:35px">
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+                <el-input
+                  v-model="queryParams.value"
+                  placeholder="查询值"
+                  clearable
+                  size="small"
+                  style="width: 350px"
+                  @keyup.enter.native="handleQuery"
+                >
+                  <el-select
+                    v-model="queryParams.type"
+                    placeholder="查询条件"
+                    clearable
+                    slot="prepend"
+                    style="width: 110px"
+                  >
+                    <el-option
+                      v-for="dict in typeOptions"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+                    />
+                  </el-select>
+                </el-input>
+            </el-col>
+            <el-col :span="1.5">
+              <el-form-item label="显示删除" prop="status" v-hasPermi="['yunze:order:dellist']" style="margin-bottom: 10px;line-height:35px">
+                <el-select
+                  v-model="queryParams.del_flag"
+                  placeholder="显示删除订单"
+                  clearable
+                  size="small"
+                  style="width: 110px"
+                >
+                  <el-option
+                    v-for="dict in customize_whether"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="1.5">
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button size="mini" v-hasPermi="['yunze:card:listAgent']"  @click="agentShow" >公司所属</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="warning"
+                plain
+                icon="el-icon-download"
+                size="mini"
+                :loading="exportLoading"
+                @click="handleExport"
+                v-hasPermi="['yunze:card:exportData']"
+              >导出</el-button>
+            </el-col>
+            <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:card:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+          </el-row>
+        </el-form>
 
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              :loading="exportLoading"
-              @click="handleExport"
-              v-hasPermi="['yunze:card:exportData']"
-            >导出</el-button>
-          </el-col>
-          <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:card:list']" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
         <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
           <!--<el-table-column type="selection" width="50" align="center" />-->
           <el-table-column label="交易名称" align="center" key="ord_name" prop="ord_name" v-if="columns[0].visible" :show-overflow-tooltip="true" width="150"  />
@@ -550,7 +550,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -743,8 +743,6 @@ export default {
         this.packageOptions = window['packageOptions'];
       });
     }
-
-
 
 
     //加载 时间赛选查询条件

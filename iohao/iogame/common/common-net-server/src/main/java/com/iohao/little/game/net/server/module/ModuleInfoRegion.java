@@ -17,6 +17,8 @@
 package com.iohao.little.game.net.server.module;
 
 import com.iohao.little.game.net.message.common.ModuleMessage;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
 import java.util.*;
 
@@ -27,10 +29,11 @@ import java.util.*;
  * </pre>
  *
  * @author 洛朱
- * @Date 2021-12-20
+ * @date 2021-12-20
  */
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ModuleInfoRegion {
-    Set<ModuleInfoProxy> moduleInfoProxySet = new HashSet<>();
+    final Set<ModuleInfoProxy> moduleInfoProxySet = new HashSet<>();
     int moduleId;
     ModuleInfoProxy moduleInfoProxy;
 

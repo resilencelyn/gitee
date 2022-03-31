@@ -2,7 +2,6 @@ package com.yunze.web.controller.yunze;
 
 
 import com.alibaba.fastjson.JSON;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.core.domain.entity.SysUser;
 import com.yunze.common.core.domain.model.LoginUser;
 import com.yunze.common.utils.ServletUtils;
@@ -11,6 +10,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzInfoChangeService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +30,7 @@ import java.util.List;
 @Api("卡信息变更")
 @RestController
 @RequestMapping("/yunze/change")
-public class YzYzInfoChangeController extends BaseController {
+public class YzYzInfoChangeController extends MyBaseController {
 
     @Autowired
     private IYzInfoChangeService iYzInfoChangeService;
@@ -66,7 +66,7 @@ public class YzYzInfoChangeController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> info:change:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取卡信息变更列表 异常！");
+        return Myerr("获取卡信息变更列表 操作失败！");
     }
 
     /**
@@ -88,7 +88,7 @@ public class YzYzInfoChangeController extends BaseController {
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:change:info  <br/>   ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("查询 【时间降序】  异常！");
+        return Myerr("查询 【时间降序】  操作失败！");
     }
 
 

@@ -27,7 +27,7 @@ public class ScheduleUtils
      * 得到quartz任务类
      *
      * @param sysJob 执行计划
-     * @return 具体执行任务类
+     * @return 具体执行日志类
      */
     private static Class<? extends Job> getQuartzJobClass(SysJob sysJob)
     {

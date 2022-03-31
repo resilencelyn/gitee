@@ -44,7 +44,7 @@ import java.util.function.Predicate;
  * </pre>
  *
  * @author 洛朱
- * @Date 2021-12-12
+ * @date 2021-12-12
  */
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public final class ActionCommandInfoBuilder {

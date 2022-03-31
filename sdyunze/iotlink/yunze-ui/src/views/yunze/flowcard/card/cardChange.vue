@@ -5,32 +5,7 @@
       <!--用户数据-->
       <el-col :span="mainwidth" :xs="24" >
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <!--条件选择-->
-          <el-form-item label="条件选择">
-          <el-input
-            v-model="queryParams.value"
-            placeholder="查询值"
-            clearable
-            size="small"
-            style="width: 350px"
-            @keyup.enter.native="handleQuery"
-          >
-            <el-select
-              v-model="queryParams.type"
-              placeholder="查询条件"
-              clearable
-              slot="prepend"
-              style="width: 110px"
-            >
-              <el-option
-                v-for="dict in typeOptions"
-                :key="dict.dictValue"
-                :label="dict.dictLabel"
-                :value="dict.dictValue"
-              />
-            </el-select>
-          </el-input>
-          </el-form-item>
+
             <!--变更类型   -->
           <el-form-item label="变更类型" prop="status">
           <el-select
@@ -97,11 +72,6 @@
 
           </el-form-item>
 
-          <el-form-item >
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-
           <el-form-item label="执行状态" prop="status">
             <el-select
               v-model="queryParams.state"
@@ -118,14 +88,46 @@
               />
             </el-select>
           </el-form-item>
+        </el-form>
 
-
+        <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px" style="margin-bottom: 10px">
+            <el-row :gutter="10" class="mb8">
+              <el-col :span="1.5">
+                  <el-input
+                    v-model="queryParams.value"
+                    placeholder="查询值"
+                    clearable
+                    size="small"
+                    style="width: 350px"
+                    @keyup.enter.native="handleQuery"
+                  >
+                    <el-select
+                      v-model="queryParams.type"
+                      placeholder="查询条件"
+                      clearable
+                      slot="prepend"
+                      style="width: 110px"
+                    >
+                      <el-option
+                        v-for="dict in typeOptions"
+                        :key="dict.dictValue"
+                        :label="dict.dictLabel"
+                        :value="dict.dictValue"
+                      />
+                    </el-select>
+                  </el-input>
+              </el-col>
+              <el-col :span="1.5">
+                  <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+              </el-col>
+                <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:change:list']" @queryTable="getList" :columns="columns"></right-toolbar>
+            </el-row>
         </el-form>
 
 
-        <el-row :gutter="10" class="mb8">
-          <right-toolbar :showSearch.sync="showSearch"   v-hasPermi="['yunze:change:list']" @queryTable="getList" :columns="columns"></right-toolbar>
-        </el-row>
 
         <el-table v-loading="loading" :data="cardList" @selection-change="handleSelectionChange">
           <el-table-column   label="iccid" align="center"  prop="iccid" v-if="columns[0].visible" :show-overflow-tooltip="true" width="190"/>
@@ -245,7 +247,7 @@ export default {
       // 非多个禁用
       multiple: true,
       // 显示搜索条件
-      showSearch: true,
+      showSearch: false,
       // 总条数
       total: 0,
       // 用户表格数据
@@ -475,7 +477,7 @@ export default {
       this.loading = true;
       this.getParams();
       this.queryParams.page = 1;
-      console.log(this.queryParams);
+      //console.log(this.queryParams);
       let Pwd_Str = tools.encrypt(JSON.stringify(this.queryParams));
       //console.log(Pwd_Str);
       listChange(Pwd_Str).then(response => {

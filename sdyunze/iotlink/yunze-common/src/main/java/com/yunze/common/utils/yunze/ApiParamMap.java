@@ -16,8 +16,8 @@ public class ApiParamMap {
         Map<String, Object> Parmap = new HashMap<String, Object>();
 
         String appId = "adminOption";
-        String password = "aaaaaaSXCV";
-        String access_key = "GGBBBSSXXX";
+        String password = "asdasdasczx";
+        String access_key = "asdfdrqads69846532065";
         String timeStamp = System.currentTimeMillis() + "";
 
         Yzmap.put("password", password);

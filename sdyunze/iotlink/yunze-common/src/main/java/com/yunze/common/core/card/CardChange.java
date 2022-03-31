@@ -56,7 +56,7 @@ public class CardChange {
                     remark = "执行成功！";
                     execution_status = "1";
                 }else{
-                    log.error(">>DB - 达量停机轮序消费者 同步达量停机失败:{} | {}<<",iccid,Upd_Map);
+                    log.error(">>DB - 达量停机轮询消费者 同步达量停机失败:{} | {}<<",iccid,Upd_Map);
                 }
             }else{
                 if(Rmap.get("Message")!=null){
@@ -96,7 +96,7 @@ public class CardChange {
                     remark = "执行成功！";
                     execution_status = "1";
                 }else{
-                    log.error(">>DB - 达量停机轮序消费者 同步达量停机失败:{} | {}<<",iccid,Upd_Map);
+                    log.error(">>DB - 达量停机轮询消费者 同步达量停机失败:{} | {}<<",iccid,Upd_Map);
                 }
             }else{
                 if(Rmap.get("Message")!=null){

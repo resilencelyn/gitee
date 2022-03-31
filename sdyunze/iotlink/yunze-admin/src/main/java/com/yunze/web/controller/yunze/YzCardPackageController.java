@@ -2,7 +2,6 @@ package com.yunze.web.controller.yunze;
 
 import com.alibaba.fastjson.JSON;
 import com.yunze.common.annotation.Log;
-import com.yunze.common.core.controller.BaseController;
 import com.yunze.common.core.domain.entity.SysUser;
 import com.yunze.common.core.domain.model.LoginUser;
 import com.yunze.common.enums.BusinessType;
@@ -12,6 +11,7 @@ import com.yunze.common.utils.spring.SpringUtils;
 import com.yunze.common.utils.yunze.AesEncryptUtil;
 import com.yunze.framework.web.service.TokenService;
 import com.yunze.system.service.yunze.IYzCardPackageService;
+import com.yunze.web.core.config.MyBaseController;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +32,7 @@ import java.util.List;
 @Api("资费组管理")
 @RestController
 @RequestMapping("/yunze/tariffGroup")
-public class YzCardPackageController extends BaseController
+public class YzCardPackageController extends MyBaseController
 {
 
     @Autowired
@@ -59,7 +59,7 @@ public class YzCardPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:list  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.getCause().toString());
         }
-        return Myerr("获取平台资费组列表 异常！");
+        return Myerr("获取平台资费组列表 操作失败！");
     }
 
 
@@ -83,7 +83,7 @@ public class YzCardPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:add  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("平台资费组 新增 异常！");
+        return Myerr("平台资费组 新增 操作失败！");
     }
 
 
@@ -106,7 +106,7 @@ public class YzCardPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:find  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("平台资费组 详情 异常！");
+        return Myerr("平台资费组 详情 操作失败！");
     }
 
 
@@ -126,13 +126,13 @@ public class YzCardPackageController extends BaseController
             Pstr =  AesEncryptUtil.desEncrypt(Pstr);
             Parammap.putAll(JSON.parseObject((String) Pstr));
             boolean bool = cardPackageService.update(Parammap);
-            String msg = bool?"修改 平台资费组成功！":"网络异常请稍后重试！！！";
+            String msg = bool?"修改 平台资费组成功！":"网络操作失败请稍后重试！！！";
             return MyRetunSuccess(bool,msg);
         }catch (Exception e){
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:edit  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("平台资费组 修改 异常！");
+        return Myerr("平台资费组 修改 操作失败！");
     }
 
     /**
@@ -159,7 +159,7 @@ public class YzCardPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:findPackage  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("划分资费组查询  异常！");
+        return Myerr("划分资费组查询  操作失败！");
     }
 
 
@@ -185,7 +185,7 @@ public class YzCardPackageController extends BaseController
                 set_packet_cost = Double.parseDouble(Parammap.get("set_packet_cost").toString());
                 set_packet_price = Double.parseDouble(Parammap.get("set_packet_price").toString());
             }catch (Exception e){
-                return Myerr("平台资费组 划分 参数数据 异常！");
+                return Myerr("平台资费组 划分 参数数据 操作失败！");
             }
             if(set_error_so>=1.0){
                 if(set_packet_price>=set_packet_cost){
@@ -216,7 +216,7 @@ public class YzCardPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:tariffDivision  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("平台资费组 划分 异常！");
+        return Myerr("平台资费组 划分 操作失败！");
     }
 
 
@@ -242,7 +242,7 @@ public class YzCardPackageController extends BaseController
                 set_packet_cost = Double.parseDouble(Parammap.get("set_packet_cost").toString());
                 set_packet_price = Double.parseDouble(Parammap.get("set_packet_price").toString());
             }catch (Exception e){
-                return Myerr("平台资费组 划分 参数数据 异常！");
+                return Myerr("平台资费组 划分 参数数据 操作失败！");
             }
             if(set_error_so>=1.0){
                 //售价大等于 成本
@@ -277,7 +277,7 @@ public class YzCardPackageController extends BaseController
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             logger.error("<br/> yunze:tariffGroup:agentTariffDivision  <br/> Pstr = " + Pstr + " <br/> ip =  " + ip + " <br/> ",e.toString());
         }
-        return Myerr("企业 资费组 划分 异常！");
+        return Myerr("企业 资费组 划分 操作失败！");
     }
 
 

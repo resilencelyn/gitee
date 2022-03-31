@@ -89,9 +89,9 @@
 	<!--获取订单金额sum-->
 	<select id="getOrderSum"  parameterType="java.util.HashMap" resultType="java.lang.String">
 		SELECT
-		Sum(price)
+			Sum(price)
 		FROM
-		yz_order a
+			yz_order a
 		<include refid="selwhere"/>
 	</select>
 
@@ -367,6 +367,48 @@
 		<include refid="selwhere"/>
 		GROUP BY b.packet_id
 	</select>
+
+	<!--获取交易总金额-->
+	<select id="getSumPrice" parameterType="java.util.HashMap" resultType="java.lang.String">
+		SELECT
+			Sum(a.price)
+		FROM
+			yz_order a
+		<include refid="selwhere"/>
+	</select>
+
+	<!--获取 订单简要 信息 -->
+	<select id="getOrderBriefly" parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+		SELECT
+			id,
+			ord_type,
+			status,
+			iccid,
+			agent_id,
+			price
+		FROM
+		yz_order
+		<where>
+			ord_no =#{ord_no}
+		</where>
+	</select>
+
+	<!-- 修改 微信订单号订单支付状态-->
+	<update id="updStatus" parameterType="java.util.HashMap" >
+		update yz_order
+		<set>
+			status = #{status}
+			<if test="wx_ord_no!=null">
+				,wx_ord_no =  #{wx_ord_no}
+			</if>
+		</set>
+		<where>
+			id =#{id}
+		</where>
+	</update>
+
+
+
 
 
 </mapper>
