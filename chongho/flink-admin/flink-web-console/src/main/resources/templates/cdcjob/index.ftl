@@ -148,7 +148,7 @@
                         <#list cdcJobList as job>
 
                         <tr role="row" class="odd">
-                            <td>${job.jobName}</td>
+                            <td>${(job.jobName)!}</td>
                             <td>${job.flinkColonyName}</td>
                             <td>${job.targetDbName}.${job.targetTableName}</td>
                             <td>

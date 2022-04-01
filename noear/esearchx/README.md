@@ -1,11 +1,12 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.noear/esearchx.svg)](https://mvnrepository.com/search?q=esearchx)
-
-` QQ交流群：22200020 `
+[![Apache 2.0](https://img.shields.io/:license-Apache2-blue.svg)](https://license.coscl.org.cn/Apache2/)
+[![JDK-8+](https://img.shields.io/badge/JDK-8+-green.svg)](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+[![QQ交流群](https://img.shields.io/badge/QQ交流群-22200020-orange)](https://jq.qq.com/?_wv=1027&k=kjB5JNiC)
 
 
 # EsearchX for java
 
-基于 okhttp + snack3 开发，是一个代码直白和简单的 Elasticsearch ORM 框架
+基于 okhttp + snack3 开发，是一个代码直白和简单的 Elasticsearch ORM 框架。支持 7.x , 8.x
 
 项目里有3个关键的对象概念：
 
@@ -21,7 +22,7 @@
 <dependency>
     <groupId>org.noear</groupId>
     <artifactId>esearchx</artifactId>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
 </dependency>
 ```
 

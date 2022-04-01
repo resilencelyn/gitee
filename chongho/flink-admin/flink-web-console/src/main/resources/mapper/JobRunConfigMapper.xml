@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chongho.inf.flink.mapper.JobRunConfigMapper">
+
+    <resultMap id="baseMap" type="cn.chongho.inf.flink.model.JobRunConfig">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="job_type" property="jobType" jdbcType="VARCHAR"/>
+        <result column="entry_class" property="entryClass" jdbcType="VARCHAR"/>
+        <result column="jar_id" property="jarId" jdbcType="INTEGER"/>
+
+        <result column="jarName" property="jarName" jdbcType="INTEGER"/>
+        <result column="jarTime" property="jarTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectAllConfig" resultMap="baseMap">
+        SELECT rc.*,IFNULL(jar.file_name,'') jarName,jar.create_time jarTime FROM cdc_job_run_config rc
+            LEFT JOIN jar ON jar.id = rc.jar_id AND jar.enable_flag = 1
+    </select>
+</mapper>

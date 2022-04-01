@@ -159,7 +159,7 @@
 
                     <div class="form-group" id="jobType2Insert">
                         <label class="col-sm-2 control-label no-padding-right" > 插入sql语句: </label>
-                        <label class="col-sm-30" style="color: red;margin-left: 30px"> 表名规则请遵循: dbName_dbId_tableName </label>
+                        <label id ="insertTips" class="col-sm-30" style="color: red;margin-left: 30px"> 表名规则请遵循: dbName_dbId_tableName ? </label>
                         <div class="col-sm-10">
                             <textarea  id="insertSql" name="insertSql" class="form-control" rows="10">${(cdcJob.columnAssociation)!}</textarea>
                         </div>
@@ -180,7 +180,19 @@
 </div>
 <script>
 
+    var insertSqlTips = "INSERT  INTO dbName_dbId_tableName ( id,field1,field2,fieldN) SELECT id,field1,field2,fieldN FROM dbName_dbId_tableName";
 
+    $("#insertTips").mouseover(function (){
+        if($("#insertSql").text() == ""){
+            $("#insertSql").text(insertSqlTips);
+        }
+    });
+
+    $("#insertTips").mouseout(function (){
+        if($("#insertSql").text() == insertSqlTips){
+            $("#insertSql").text("");
+        }
+    });
 
     function addSourceDb() {
         var dbIndex = parseInt($("#sdbList").children(".sourceDbDiv:last-child").attr("dbIndex"));
@@ -258,6 +270,11 @@
         var jobType = $("input[name=jobType]:checked").val();
         var targetDbId = $("#targetDbId").val();
         var targetTableId = $("#targetTableId").val();
+        var jobName = $("#jobName").val().trim();
+        if(jobName == ""){
+            alert("任务名称不能为空");
+            return;
+        }
 
         var jsonSourceInfo = buildJsonSourceInfo();
 

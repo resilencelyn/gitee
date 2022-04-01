@@ -57,7 +57,7 @@ public class SyncCheckPoint {
 
     private static final String TRIGGER_TIMESTAMP = "trigger_timestamp";
 
-//    @Scheduled(fixedRate = 60*1000L)
+    @Scheduled(fixedRate = 60*1000L)
     public void doSync() {
 
         Map<Integer, Map<String, Object>> checkpointMap = new HashMap<>();

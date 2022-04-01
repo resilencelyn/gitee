@@ -43,6 +43,9 @@
         <if test="job.flinkColonyId != null " >
             AND flink_colony_id  = #{job.flinkColonyId}
         </if>
+        <if test="job.jobType != null " >
+            AND job_type  = #{job.jobType}
+        </if>
         LIMIT #{offset},#{limit}
     </select>
 

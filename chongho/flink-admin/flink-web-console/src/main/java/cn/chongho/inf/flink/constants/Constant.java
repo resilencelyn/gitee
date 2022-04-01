@@ -47,6 +47,37 @@ public class Constant {
         ;
     }
 
+    public enum JobType {
+        /**
+         * 代码
+         */
+        JAR_JOB(1),
+        /**
+         * sql
+         */
+        SQL_JOB(2),
+        ;
+
+        private Integer value;
+
+        JobType(Integer value) {
+            this.value = value;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public static JobType getTypeByValue(Integer value){
+            for(JobType jobType : JobType.values()){
+                if(jobType.getValue().equals(value)){
+                    return jobType;
+                }
+            }
+            return null;
+        }
+    }
+
     public enum CdcJobType {
         /**
          * 单表同步
@@ -72,6 +103,41 @@ public class Constant {
             for(CdcJobType cdcJobType : CdcJobType.values()){
                 if(cdcJobType.getValue().equals(value)){
                     return cdcJobType;
+                }
+            }
+            return null;
+        }
+    }
+
+    public enum JobConfigType {
+        /**
+         * 单表同步
+         */
+        POINT_TO_POINT_SQL(1),
+        /**
+         * 多表合并同步
+         */
+        CONFLUENCE_SQL(2),
+        /**
+         * sql任务
+         */
+        SQL_JOB(3),
+        ;
+
+        private Integer value;
+
+        JobConfigType(Integer value) {
+            this.value = value;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public static JobConfigType getTypeByValue(Integer value){
+            for(JobConfigType jobConfigType : JobConfigType.values()){
+                if(jobConfigType.getValue().equals(value)){
+                    return jobConfigType;
                 }
             }
             return null;

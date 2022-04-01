@@ -140,6 +140,7 @@ public class JobServiceImpl implements JobService {
             job.setCreateTime(new Date());
             job.setCreateUserId(job.getUpdateUserId());
             job.setStatus(Constant.EnableFlag.NOT.ordinal());
+            job.setJobType(Constant.JobType.JAR_JOB.getValue());
             ret = jobMapper.insertSelective(job);
         }
         return ret > 0;

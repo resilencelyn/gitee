@@ -54,9 +54,7 @@
             <div class="widget-header">
                 <h4 class="widget-title lighter smaller">修改密码</h4>
             </div>
-            <form class="form-horizontal" id="userform" user="form" style="margin-top: 20px;">
-
-
+            <form class="form-horizontal" style="margin-top: 20px;">
                 <div class="form-group">
                     <label class="col-sm-3 control-label no-padding-right" > 旧密码 </label>
                     <div class="col-sm-9">
@@ -75,9 +73,6 @@
                         <input type="password"  name="re_psw" placeholder="确认密码" class="col-xs-10 col-sm-5">
                     </div>
                 </div>
-
-
-
             ${authorities?seq_contains("/admin/user/updatepass")?string('<button class="btn btn-info" type="button" style="margin-left: 20px;" onclick="add()">
                 <i class="ace-icon fa fa-check bigger-110"></i>
                 保存
@@ -122,11 +117,12 @@
             alert("请输入新密码");
             return;
         }
-        if(!$("input[name=psw]").val() == $("input[name=re_psw]").val()){
+        var psw = $("input[name=psw]").val();
+        var rePsw = $("input[name=re_psw]").val();
+        if(psw != rePsw){
             alert("2次输入密码不一致");
             return;
         }
-
         quickAjax({
             url: '/admin/user/updatepass',
             method:"POST",

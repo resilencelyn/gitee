@@ -126,8 +126,7 @@
                 args : $("#args").val(),
                 parallelism:$("input[name=parallelism]").val(),
                 savepointPath:$("#savepointPath").val(),
-                flinkColonyId:$("#flinkColonyId").val(),
-                status:$("select[name=status]").val()
+                flinkColonyId:$("#flinkColonyId").val()
             },
             success: function (response) {
                 if (response.code == 1){

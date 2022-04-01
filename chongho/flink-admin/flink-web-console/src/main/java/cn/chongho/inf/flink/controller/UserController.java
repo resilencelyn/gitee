@@ -151,7 +151,7 @@ public class UserController {
      */
     @GetMapping(value = "updatepass")
     public String updatePass(){
-        return "admin/user/password";
+        return "user/password";
     }
 
     /**

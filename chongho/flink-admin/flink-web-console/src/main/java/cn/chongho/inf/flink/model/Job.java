@@ -17,6 +17,8 @@ public class Job extends BaseJob {
 
     private Integer jarId;
 
+    private Integer jobType;
+
     @Transient
     private String fileName;
 

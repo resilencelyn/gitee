@@ -47,7 +47,7 @@
 </head>
 
 <body class="no-skin">
-	<div id="navbar" class="navbar navbar-default          ace-save-state">
+	<div id="navbar" class="navbar navbar-default ace-save-state">
 		<div class="navbar-container ace-save-state" id="navbar-container">
 			<button type="button" class="navbar-toggle menu-toggler pull-left"
 				id="menu-toggler" data-target="#sidebar">
@@ -57,7 +57,7 @@
 			</button>
 
 			<div class="navbar-header pull-left">
-				<a href="index.ftl" class="navbar-brand"> <small> <i
+				<a href="index" class="navbar-brand"> <small> <i
 						class="fa fa-leaf"></i> FlinkAdmin
 				</small>
 				</a>
@@ -78,11 +78,7 @@
 							class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 						${authorities?seq_contains("/admin/user/updatepass")?string('<li><a href="javascript:addTabs({id:\'-1\',title:\'修改密码\' ,close: true,url:\'/admin/user/updatepass\'})"> <i class="ace-icon fa fa-cog"></i> 修改密码
 							</a></li>','')}
-
-
-
 							<li class="divider"></li>
-
 							<li><a href="/admin/loginout"> <i class="ace-icon fa fa-power-off"></i>
 									退出登录
 							</a></li>
@@ -101,8 +97,7 @@
 			}
 		</script>
 		<!-- BEGIN 左边导航栏-->
-		<div id="sidebar"
-			class="sidebar                  responsive                    ace-save-state">
+		<div id="sidebar" class="sidebar responsive ace-save-state">
 			<script type="text/javascript">
 				try {
 					ace.settings.loadState('sidebar')
@@ -240,9 +235,7 @@
 <![endif]-->
 	<script type="text/javascript">
 		if ('ontouchstart' in document.documentElement)
-			document
-					.write("<script src='/assets/js/jquery.mobile.custom.min.js'>"
-							+ "<"+"/script>");
+			document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>"+ "<"+"/script>");
 	</script>
 	<script src="/assets/js/bootstrap.min.js"></script>
 

@@ -171,7 +171,7 @@
 <#--                            <td>-->
 <#--                                <a href="#">${job.id}</a>-->
 <#--                            </td>-->
-                            <td>${job.jobName}</td>
+                            <td>${(job.jobName)!}</td>
                             <td>${job.flinkColonyName}</td>
                             <td>${job.jobKey}</td>
                             <td>${job.entryClass}</td>

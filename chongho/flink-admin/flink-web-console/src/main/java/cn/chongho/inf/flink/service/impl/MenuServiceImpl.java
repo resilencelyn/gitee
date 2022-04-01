@@ -98,9 +98,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public boolean delete(int id) {
-        HashMap<String,Object> map = new HashMap<String, Object>();
-		map.put("menuid",id);
-//		mapper.deleteMenuById(map);
+		mapper.deleteByPrimaryKey(id);
         return true;
     }
 

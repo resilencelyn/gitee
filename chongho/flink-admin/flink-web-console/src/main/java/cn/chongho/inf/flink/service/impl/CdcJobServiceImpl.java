@@ -29,7 +29,7 @@ public class CdcJobServiceImpl implements CdcJobService {
     private CdcJobMapper cdcJobMapper;
 
     @Resource
-    private CdcJobRunConfigService cdcJobRunConfigService;
+    private JobRunConfigService jobRunConfigService;
 
     @Resource
     private DbTableColumnService dbTableColumnService;
@@ -198,20 +198,20 @@ public class CdcJobServiceImpl implements CdcJobService {
 
         dataAuthorityService.checkDataAuthority(cdcJob, Constant.DataType.CDCJOB, loginUserId);
 
-        CdcJobRunConfig cdcJobRunConfig = cdcJobRunConfigService.selectByJobType(Constant.CdcJobType.getTypeByValue(cdcJob.getJobType()).name());
-        log.info("cdcJobRunConfig{}", JSON.toJSONString(cdcJobRunConfig));
-        if(cdcJobRunConfig  == null){
+        JobRunConfig jobRunConfig = jobRunConfigService.selectByJobType(Constant.CdcJobType.getTypeByValue(cdcJob.getJobType()).name());
+        log.info("JobRunConfig{}", JSON.toJSONString(jobRunConfig));
+        if(jobRunConfig == null){
             return false;
         }
 
-        Jar jar = jarService.getJarOne(new Jar(cdcJobRunConfig.getJarId() ,Constant.EnableFlag.ENABLE.ordinal()));
+        Jar jar = jarService.getJarOne(new Jar(jobRunConfig.getJarId() ,Constant.EnableFlag.ENABLE.ordinal()));
         log.info("jar{}", JSON.toJSONString(jar));
         if(jar == null){
             return false;
         }
 
         Map<String, Object> params = new HashMap<>(4);
-        params.put("entryClass" ,cdcJobRunConfig.getEntryClass());
+        params.put("entryClass" , jobRunConfig.getEntryClass());
         params.put("programArgsList" , runJobArgsArray(cdcJob));
         params.put("parallelism" ,cdcJob.getParallelism() == null ? 1 : cdcJob.getParallelism());
         if(!StringUtils.isEmpty(cdcJob.getSavepointPath())){

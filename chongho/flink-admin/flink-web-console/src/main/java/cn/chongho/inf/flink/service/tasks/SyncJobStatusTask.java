@@ -60,7 +60,7 @@ public class SyncJobStatusTask {
     @Value("${alert-event.pushRobotId}")
     private String robotId;
 
-//    @Scheduled(fixedRate = 30*1000L)
+    @Scheduled(fixedRate = 30*1000L)
     public void doSync(){
 
         List<Cluster> allCluster = clusterService.getAllCluster();

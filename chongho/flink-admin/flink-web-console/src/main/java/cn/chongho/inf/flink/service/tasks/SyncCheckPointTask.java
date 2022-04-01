@@ -13,6 +13,7 @@ import cn.chongho.inf.flink.constants.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -21,7 +22,7 @@ import java.util.*;
 /**
  * @author ming
  */
-//@Component
+@Component
 @EnableScheduling
 @Slf4j
 public class SyncCheckPointTask {
@@ -54,7 +55,7 @@ public class SyncCheckPointTask {
 
     private static final String TRIGGER_TIMESTAMP = "trigger_timestamp";
 
-//    @Scheduled(fixedRate = 15*60*1000L)
+    @Scheduled(fixedRate = 15*60*1000L)
     public void doSync() {
 
         Map<Integer, Map<String, Object>> checkpointMap = new HashMap<>();

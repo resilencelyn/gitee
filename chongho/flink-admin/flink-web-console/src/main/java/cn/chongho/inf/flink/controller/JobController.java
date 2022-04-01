@@ -72,6 +72,7 @@ public class JobController {
         if(jobListRequest.getFlinkColonyId() != -1){
             job.setFlinkColonyId(jobListRequest.getFlinkColonyId());
         }
+        job.setJobType(Constant.JobType.JAR_JOB.getValue());
         Integer loginUserId = HttpSessionUtils.getLoginUser(httpSession).getId();
         int page = jobListRequest.getPage();
         int pageSize = jobListRequest.getPageSize();

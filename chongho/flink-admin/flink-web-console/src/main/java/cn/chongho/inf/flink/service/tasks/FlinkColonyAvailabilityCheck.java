@@ -45,7 +45,7 @@ public class FlinkColonyAvailabilityCheck {
     @Value("${alert-event.pushRobotId}")
     private String robotId;
 
-//    @Scheduled(fixedRate = 60*1000L)
+    @Scheduled(fixedRate = 60*1000L)
     public void doCheck(){
 
         List<Cluster> allFlinkColonyConfig = clusterService.getAllCluster();

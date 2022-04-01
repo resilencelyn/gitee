@@ -15,12 +15,20 @@ const props = defineProps({
 
 // 状态控制
 const signFlag = ref<boolean>(false);
+const notSignFlag = ref<boolean>(false);
 
 onMounted(async () => {
   try {
     const sign = await checkSign({ email: props.email });
-    signFlag.value = sign.isSign;
+    // 判断是否签署
+    if (sign.isSign) {
+      signFlag.value = true;
+      return;
+    }
+    notSignFlag.value = true;
   } catch (err) {
+    // 邮箱为空时展示未签署提示
+    notSignFlag.value = true;
     proxy.$throw(err, proxy);
   }
 });
@@ -64,7 +72,7 @@ const sure = () => {
         </div>
         <!-- 未签署 -->
         <div
-          v-else
+          v-if="notSignFlag"
           class="fail"
         >
           <img
