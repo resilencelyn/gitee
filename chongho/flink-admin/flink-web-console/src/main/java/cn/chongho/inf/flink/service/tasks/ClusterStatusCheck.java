@@ -8,6 +8,7 @@ import cn.chongho.inf.flink.service.impl.AlertEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 @EnableScheduling
 @Slf4j
-public class FlinkColonyAvailabilityCheck {
+@ConditionalOnProperty(prefix = "alert", value = "enable", havingValue = "true")
+public class ClusterStatusCheck {
 
     @Autowired
     private ClusterService clusterService;
@@ -40,13 +42,14 @@ public class FlinkColonyAvailabilityCheck {
     /**
      * 过期时间
      */
-    private static final int EXPIRE_TIME = 15*60;
+    private static final int EXPIRE_TIME = 15 * 60;
 
-    @Value("${alert-event.pushRobotId}")
+    @Value("${alert.pushRobotId}")
     private String robotId;
 
-    @Scheduled(fixedRate = 60*1000L)
+    @Scheduled(fixedRate = 60 * 1000L)
     public void doCheck(){
+        log.info("sync cluster status... ");
 
         List<Cluster> allFlinkColonyConfig = clusterService.getAllCluster();
 

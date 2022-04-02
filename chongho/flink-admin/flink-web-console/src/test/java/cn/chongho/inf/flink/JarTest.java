@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -51,4 +52,6 @@ public class JarTest {
         params.put("entryClass" ,"com.cfpamf.rtc.biz.mall.GoodsAndStoreAddJob");
         params.put("programArgsList" , argsArray);
     }
+
+
 }

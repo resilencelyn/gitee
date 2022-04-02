@@ -34,7 +34,6 @@ logging:
     cn.chongho.inf.flink.mapper: debug
     tk.mybatis: debug
 sys:
-  #  url: http://192.168.46.21:8081
   url: http://172.16.5.7:8081
   savepoint-path: /home/flink/savepoints
   checkpoint-path: /home/flink/checkpoints
@@ -43,3 +42,9 @@ sys:
     offset: 88888888
   upload:
     jar-path: E:\\tmp\\
+
+#监控推送用于告警
+alert:
+  enable: false
+  url: http://www.xxx.com/alert/upload
+  pushRobotId: xxx

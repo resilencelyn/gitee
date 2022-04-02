@@ -11,6 +11,7 @@ import cn.chongho.inf.flink.constants.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @Component
 @EnableScheduling
 @Slf4j
+@ConditionalOnProperty(prefix = "alert", value = "enable", havingValue = "true")
 public class SyncJobStatusTask {
 
     @Autowired
@@ -52,17 +54,17 @@ public class SyncJobStatusTask {
     /**
      * 过期时间
      */
-    private static final int EXPIRE_TIME = 5*60;
+    private static final int EXPIRE_TIME = 5 * 60;
 
     @Autowired
     private AlertEventService alertEventService;
 
-    @Value("${alert-event.pushRobotId}")
+    @Value("${alert.pushRobotId}")
     private String robotId;
 
-    @Scheduled(fixedRate = 30*1000L)
+    @Scheduled(fixedRate = 30 * 1000L)
     public void doSync(){
-
+        log.info("sync job status... ");
         List<Cluster> allCluster = clusterService.getAllCluster();
 
         for(Cluster cluster : allCluster){

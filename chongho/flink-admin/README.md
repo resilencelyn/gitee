@@ -48,7 +48,7 @@ admin/123456
 新增数据同步作业
 ![输入图片说明](imags/edit-sync.png)
 
-修改cdc初始化配置
+修改作业模板
 1. 上传flink-cdc-job.jar 到flink集群.  
 2. 修改对应的 jarId.   
 ![cdc-config.png](imags/cdc-config.png) 

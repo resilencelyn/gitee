@@ -55,7 +55,7 @@ public class SyncCheckPointTask {
 
     private static final String TRIGGER_TIMESTAMP = "trigger_timestamp";
 
-    @Scheduled(fixedRate = 15*60*1000L)
+    @Scheduled(fixedRate = 15 * 60 * 1000L)
     public void doSync() {
 
         Map<Integer, Map<String, Object>> checkpointMap = new HashMap<>();
@@ -149,7 +149,7 @@ public class SyncCheckPointTask {
                     }
                 }
             }catch (Exception e){
-                log.error("同步任务checkPoint失败{},{}",cdcJob.getJobName(), e.getMessage());
+                log.error("sync checkPoint失败:{},{}",cdcJob.getJobName(), e.getMessage());
             }
         }
         return checkpointMap;

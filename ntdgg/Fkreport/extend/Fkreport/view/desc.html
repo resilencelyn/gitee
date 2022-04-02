@@ -10,6 +10,7 @@
         <div class="fk-title"><span>Fkreport - 企业级报表开发平台</span></div>
     </div>
     <div class="fk-nav">
+       
         <ul class="layui-nav layui-bg-cyan">
             <li class="layui-nav-item"><a><i class="layui-icon layui-icon-set-fill"></i> 系统设置</a>
                 <dl class="layui-nav-child">
@@ -64,13 +65,15 @@
         </ul>
     </div>
     <div class="fk-content">
-        <div class="fk-ctl">
-            <div class="layui-tab-content">
-                <div class="sfdp-tool-title sfdp-mt10">图层控制</div>
-                {volist name='data.Json_data' id='k'}
-                <div class="fk-item layui-form-item" onclick="Fkreport.set_select('{$key}')"><a>&#8194;<b
-                        class='ico'>◉</b>&#8194; {$key}</a></div>
-                {/volist}
+        <div class="silder-hid-scrol">
+            <div class="fk-ctl">
+                <div class="layui-tab-content">
+                    <div class="sfdp-tool-title sfdp-mt10">图层控制</div>
+                    {volist name='data.Json_data' id='k'}
+                    <div class="fk-item layui-form-item" fk-id="{$key}" onclick="Fkreport.set_select('{$key}')"><a>&#8194;<b
+                            class='ico'>◉</b>&#8194; {$key}</a></div>
+                    {/volist}
+                </div>
             </div>
         </div>
         <div class="fk-design" style="padding: 20px">
@@ -79,9 +82,12 @@
                     <div style="position: absolute;top: 20px;left: 20px;transform: scale(1);">
                         <div id="fkreport"
                              style="width: {$data.data.width}px;height: {$data.data.height}px;background-image: url(/storage/{:addslashes($data.data.file)});">
-                             <div class="gril-fkreport"></div>
-                            </div>
-                           
+                             <div class="gril-fkreport">
+                                <div class="shu-line"></div>
+                                <div class="hen-line"></div>
+                                <span class="line-value"></span>
+                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -268,11 +274,13 @@
         })
     });
 
-
-    $(".dele-mask").click(function(e){
-        $(this).hide()
+    $("#fkreport").delegate(".delet-c","click",() => {
+        Fkreport.deleteElment()
     })
-       
+    $("#fkreport").delegate(".copy-c","click",() => {
+        Fkreport.copyelement()
+    })
+
     $(".sfdp-tool-con").draggable({
         helper: "clone",
         revert: "invalid",

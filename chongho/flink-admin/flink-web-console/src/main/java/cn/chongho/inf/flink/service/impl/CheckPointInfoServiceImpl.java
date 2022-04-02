@@ -6,6 +6,7 @@ import cn.chongho.inf.flink.model.CheckPointInfo;
 import cn.chongho.inf.flink.service.CheckPointInfoService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Comparator;
@@ -70,7 +71,9 @@ public class CheckPointInfoServiceImpl implements CheckPointInfoService {
 
     @Override
     public void addByBatch(List<CheckPointInfo> checkPointInfos) {
-        checkPointInfoMapper.insertByBatch(checkPointInfos);
+        if (!CollectionUtils.isEmpty(checkPointInfos)) {
+            checkPointInfoMapper.insertByBatch(checkPointInfos);
+        }
     }
 
     @Override

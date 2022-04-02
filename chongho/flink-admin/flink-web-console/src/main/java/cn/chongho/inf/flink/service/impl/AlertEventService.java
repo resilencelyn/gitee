@@ -19,7 +19,7 @@ public class AlertEventService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${alert-event.url}")
+    @Value("${alert.url}")
     private String alertEventUrl;
 
     /**

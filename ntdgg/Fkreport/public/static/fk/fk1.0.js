@@ -1,13 +1,13 @@
 var Fkreport = {
     //基础数据初始化
-    setgril:(width,height) => {  //格式化网格
+    setgril: (width, height) => {  //格式化网格
         var pxwid = height / 90
         console.log(pxwid)
         $(".gril-fkreport").css({
             width: '100%',
             height: '100%',
             backgroundSize: `${pxwid}px ${pxwid}px`,
-            backgroundImage:`-webkit-linear-gradient(top, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px), -webkit-linear-gradient(left, transparent ${pxwid-1}px, #e9ebed ${pxwid}px)`
+            backgroundImage: `-webkit-linear-gradient(top, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px), -webkit-linear-gradient(left, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px)`
         })
     },
     //基础数据初始化
@@ -38,60 +38,100 @@ var Fkreport = {
             Fkreport.convertFun(InitData.f_type, InitData.id, InitData, 1, tplType);
         }
     },
-    showdelete:(edata,id) => {
-        $(".dele-mask").show()
-        $(".dele-mask").bind("contextmenu", function (e) {
-            return false;
+    copyelement: () => {  //复制图层
+        var id
+        $(".fk_element").each((index, item) => {
+            if ($(item).hasClass("this_select")) {
+                id = $(item).attr("id")
+
+            }
+        })
+        var alocadata = JSON.parse(localStorage.getItem("fk_data"))
+        var copyData = Fkreport.dataSave("", id, "find_data")
+        var keys = Fkreport.dateFormat(new Date(), "mmssS");
+        keys = `${copyData.id.split("_")[0]}_${keys}`
+        copyData.id = keys
+        alocadata.f_list[keys] = copyData
+        localStorage.setItem("fk_data", JSON.stringify(alocadata))
+        Fkreport.convertFun(copyData.f_type, copyData.id, copyData, 1, "add");
+        Fkreport.ajax_save()  //复制的图层同步到接口
+
+        $(".fk_element").each((index, item) => {  //添加成功后自动选中该复制的图层
+            if (copyData.id == $(item).attr("id")) {
+                Fkreport.set_att(item,copyData.f_type)
+            }
+        })
+    },
+    deleteElment: () => {  //通过id删除指定图层
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.confirm('确认删除该图层？', {
+                btn: ['删除','取消'] //按钮
+              }, () => {
+              
+                var id
+                var deleteIndex = 0
+                var selectInde = 0
+                $(".fk_element").each((index, item) => {
+                    if ($(item).hasClass("this_select")) {
+                        id = $(item).attr("id")
+                        deleteIndex = index
+                    }
+                })
+        
+                $(".fk-item").each((index, item) => {
+                    if ($(item).attr("fk-id") == id) {
+                        selectInde = index
+                    }
+                })
+        
+                layui.use(['form'], function () {  //清除掉表单信息
+                    var form = layui.form
+                    form.val('example', {
+                        "left": "",
+                        "top": "",
+                        "zindex": "",
+                        "id": "",
+                        "f_title": "",
+                        "f_size": "",
+                        "f_color": "",
+                        "f_type": "",
+                        "f_height": "",
+                        "f_width": "",
+                        "fundata": "",
+                        "r_data": "",
+                        "d_type": "",
+                    });
+                });
+                $(".fk_element").eq(deleteIndex).remove()  //删除图层元素
+                $(".fk-item").eq(selectInde).remove()  //删除侧边栏的图层标识
+                Fkreport.dataSave('', id, 'Del');  //数据同步到本地
+                Fkreport.ajax_save();  //数据同步到线上
+                layer.msg("已删除")
+                Fkreport.setLinePosition(0,0)
+              });
         });
-        $(".swit-de-copy").css({
-            top: edata.clientY + 'px',
-            left:edata.clientX + 'px'
-        })
-        $(".swit-de-copy div").off("click")
-        $(".swit-de-copy div").click(function(){
-            if($(this).index() == 0){  //删除
-                Fkreport.dataSave('', id, 'Del');
-                Fkreport.ajax_save();
-                setTimeout(() => {
-                    location.reload();
-                },500)
-            }
-            if($(this).index() == 1){//复制
-                var alocadata = JSON.parse(localStorage.getItem("fk_data"))
-                var copyData = Fkreport.dataSave("",id,"find_data")
-                var keys = Fkreport.dateFormat(new Date(), "mmssS");
-                keys = `${copyData.id.split("_")[0]}_${keys}`
-                copyData.id = keys
-                alocadata.f_list[keys] = copyData
-                localStorage.setItem("fk_data",JSON.stringify(alocadata))
-                Fkreport.convertFun(copyData.f_type, copyData.id, copyData, 1, "add");
-                Fkreport.ajax_save()
-                // setTimeout(() => {
-                //     location.reload();
-                // },500)
-            }
-        })
+       
+
     },
     set_remove: function (id) {
         var posX;
         var posY;
         obj = document.getElementById(id);
         obj.onmousedown = function (e) {
-            if(e.which == 1){
+            if (e.which == 1) {
                 posX = event.x - obj.offsetLeft; //获得横坐标x
                 posY = event.y - obj.offsetTop; //获得纵坐标y
                 document.onmousemove = mousemove; //调用函数，只要一直按着按钮就能一直调用
             }
-            if(e.which == 3){
-               Fkreport.showdelete(e,id)
-            }
         }
         document.onmouseup = function (e) {
-            if(e.which == 1){
-            document.onmousemove = null; //鼠标举起，停止
-            Fkreport.ajax_save()
+            if (e.which == 1) {
+                document.onmousemove = null; //鼠标举起，停止
+                Fkreport.ajax_save()
             }
-           
+
         }
         function mousemove(ev) {
             if (ev == null) ev = window.event; //IE
@@ -101,6 +141,16 @@ var Fkreport = {
             var fk_list_data = fk_data.f_list[id];
             fk_list_data.top = ev.clientY - posY;
             fk_list_data.left = ev.clientX - posX;
+
+
+            layui.use(['form'], function () {
+                var form = layui.form
+                form.val('example', {
+                    "left": fk_list_data.left,
+                    "top": fk_list_data.top
+                });
+            });
+            Fkreport.setLinePosition(fk_list_data.left,fk_list_data.top)
             Fkreport.dataSave(fk_list_data, id, 'Position');
         }
     },
@@ -152,7 +202,7 @@ var Fkreport = {
         }
         $("#fkreport").append(html);
         if (type == 'bar' || type == 'line' || type == 'pie' || type == 'area' || type == 'rosePlot' || type == 'gauge' || type == 'Liquid') {
-            Fkreport.dataSave({type: (data.d_type || 1), fun: data.fundata}, id, 'Chart');
+            Fkreport.dataSave({ type: (data.d_type || 1), fun: data.fundata }, id, 'Chart');
             if (tplType != 'add' && data.r_data != '' && data.r_data > 0) {
                 Fkreport.runset(data.r_data + '00', type, id);
             } else {
@@ -172,7 +222,7 @@ var Fkreport = {
     dataSave: function (data, key, type = 'List') {
         var fk_data = JSON.parse(localStorage.getItem("fk_data"));
         switch (type) {
-            case 'Position':
+            case 'Position':   //执行的拖动位移
                 fk_data.f_list[key] = data;
                 break;
             case 'List':
@@ -192,12 +242,13 @@ var Fkreport = {
             default:
         }
         localStorage.setItem("fk_data", JSON.stringify(fk_data));
+
     },
     //保存提交
     ajax_save: function () {
         $.ajax({
             url: server_url,
-            data: {data: localStorage.getItem("fk_data")},
+            data: { data: localStorage.getItem("fk_data") },
             type: 'post',
             cache: true,
             dataType: 'json',
@@ -242,28 +293,48 @@ var Fkreport = {
             dataType: 'json',
             success: function (ret) {
                 if (ret.code === 0) {
-                    layer.msg(ret.msg, {icon: 1, time: 1500}, function () {
+                    layer.msg(ret.msg, { icon: 1, time: 1500 }, function () {
                         location.reload();
                     });
                 } else {
-                    layer.alert(ret.msg, {title: "错误信息", icon: 2});
+                    layer.alert(ret.msg, { title: "错误信息", icon: 2 });
                 }
             },
             error: function () {
-                layer.alert('请求出错！', {title: "错误信息", icon: 2});
+                layer.alert('请求出错！', { title: "错误信息", icon: 2 });
             }
         });
     },
-    auto_size:function(dw,dh){
-        $('#screen-container').css('height', $('body').height() -45+'px');
-        $('.fk-design').css('width', $('body').width() - 500 +'px');
-        $('.fk-design').css('height',  $('body').height()+'px');
-        var w = $('.fk-design').width();//获取页面可视宽度
-        $('#fkreport').css('transform', 'scale('+w/dw+','+w/dw+')');
+    setLinePosition(left,top){//设置辅助线的定位
+        // left  是当前图层对于父元素的距离
+        // top  同理
+        $(".shu-line").css({
+            left:left + 'px',
+            height:top + 'px'
+        })
+        $(".hen-line").css({
+            top:top + 'px',
+            width:left + 'px'
+        })
+        $(".line-value").css({
+            top:top + 'px',
+            left:left + 'px'
+        }).text(`${left},${top}`)
+
     },
-    set_att:function(obj, type = ''){
+    auto_size: function (dw, dh) {
+        $('#screen-container').css('height', $('body').height() - 45 + 'px');
+        $('.fk-design').css('width', $('body').width() - 500 + 'px');
+        $('.fk-design').css('height', $('body').height() + 'px');
+        var w = $('.fk-design').width();//获取页面可视宽度
+        $('#fkreport').css('transform', 'scale(' + w / dw + ',' + w / dw + ')');
+    },
+    set_att: function (obj, type = '') {
+        if ($(obj).hasClass("this_select")) {  //如果点击的是当前选中的就不要再执行下面下种的代码了
+            return
+        }
         $('.fk_element').removeClass('this_select');   //取消掉所有选中
-        $('.fk_element .zoom_right,.fk_element .zoom_rb,.fk_element .zoom_bottom').remove();//取消四角上的点
+        $('.fk_element .zoom_right,.fk_element .zoom_rb,.fk_element .zoom_bottom, .switted-c').remove();//取消四角上的点
         $(obj).addClass('this_select');  //给当前点击的添加选中
         $('#f_color_item,#f_title_item,#f_size_item,#pic').hide();
         if (type == 'text') {
@@ -277,9 +348,12 @@ var Fkreport = {
         }
         Fkreport.set_remove($(obj).attr("id"));/*id激活可以移动属性*/
         $('#' + $(obj).attr("id")).l_zoom('free');/*id激活可以放大拖动*/
+
+       
         layui.use(['form', 'layedit', 'laydate'], function () {
             var form = layui.form
             let data = Fkreport.dataSave('', $(obj).attr("id"), 'find_data');
+            Fkreport.setLinePosition(data.left,data.top)
             form.val('example', {
                 "left": data.left,
                 "top": data.top,
@@ -301,8 +375,8 @@ var Fkreport = {
             });
         });
     },
-    set_select:function(id){
-        $('#'+id).click();
+    set_select: function (id) {
+        $('#' + id).click();
     },
     set_class: function (id, data, datatype, val) {
         if (id == '') {
@@ -323,16 +397,16 @@ var Fkreport = {
         layui.use(['form', 'layedit', 'laydate'], function () {
             var form = layui.form
             var dataform = form.val("example")
-            Fkreport.textAsyncInputUpdate(dataform,id)
+            Fkreport.textAsyncInputUpdate(dataform, id)
             Fkreport.dataSave(form.val("example"), id);
         });
         layer.msg('调整成功！');
     },
-    textAsyncInputUpdate:(dataform,id) =>{
+    textAsyncInputUpdate: (dataform, id) => {
         $(`#${id}`).css({
-            "fontSize":`${dataform.f_size}px`,
-            "width":dataform.f_width + 'px',
-            height:dataform.f_height + 'px'
+            "fontSize": `${dataform.f_size}px`,
+            "width": dataform.f_width + 'px',
+            height: dataform.f_height + 'px'
         })
     },
     sFun: function (url, data, setActive) {
@@ -346,11 +420,11 @@ var Fkreport = {
                 return ret;
             },
             error: function () {
-                layer.alert('请求出错！', {title: "错误信息", icon: 2});
+                layer.alert('请求出错！', { title: "错误信息", icon: 2 });
             }
         });
     },
-    layer_open:function(Url,title='新增'){
+    layer_open: function (Url, title = '新增') {
         layer.open({
             type: 2,
             title: title,
