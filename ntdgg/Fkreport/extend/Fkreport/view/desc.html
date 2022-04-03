@@ -71,7 +71,7 @@
                     <div class="sfdp-tool-title sfdp-mt10">图层控制</div>
                     {volist name='data.Json_data' id='k'}
                     <div class="fk-item layui-form-item" fk-id="{$key}" onclick="Fkreport.set_select('{$key}')"><a>&#8194;<b
-                            class='ico'>◉</b>&#8194; {$key}</a></div>
+                            class='ico'>◉</b>&#8194; <span>{$key}</span></a></div>
                     {/volist}
                 </div>
             </div>

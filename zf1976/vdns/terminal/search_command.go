@@ -1,62 +1,75 @@
 package terminal
 
 import (
+	"errors"
 	"fmt"
 	"github.com/liushuochen/gotable"
 	"github.com/liushuochen/gotable/table"
 	"github.com/urfave/cli/v2"
 	"math"
 	"vdns/config"
-	"vdns/lib/util/strs"
+	"vdns/lib/util/vhttp"
 )
 
 //goland:noinspection SpellCheckingInspection
 func SearchCommand() *cli.Command {
 	return &cli.Command{
-		Name:    "search",
-		Aliases: []string{"s"},
-		Usage:   "Search vdns information",
+		Name:  "search",
+		Usage: "Search vdns information",
 		Subcommands: []*cli.Command{
 			{
-				Name:    "provider",
-				Aliases: []string{"p"},
+				Name:    "support-provider",
+				Aliases: []string{"sp"},
 				Usage:   "Support providers",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:  "path",
-						Usage: "sava table to csv file",
+						Usage: "sava table to csv filepath",
 					},
 				},
 				Action: providerAction(),
 			},
 			{
-				Name:    "record",
-				Aliases: []string{"r"},
+				Name:    "support-record-type",
+				Aliases: []string{"srt"},
 				Usage:   "Support record types",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:  "path",
-						Usage: "sava table to csv file",
+						Usage: "sava table to csv filepath",
 					},
 				},
 				Action: recordAction(),
 			},
 			{
-				Name:  `cat`,
-				Usage: "Print common Request APIs",
+				Name:    "print-ip-api",
+				Aliases: []string{"pia"},
+				Usage:   "Print search ip request api list",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:  "path",
-						Usage: "sava table to csv file",
+						Usage: "sava table to csv filepath",
 					},
 				},
-				Action: catAction(),
+				Action: printIpApiAction(),
+			},
+			{
+				Name:    "test-ip-api",
+				Aliases: []string{"tia"},
+				Usage:   "Test the API for requesting query ip",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "type",
+						Usage: "value is ipv4 or ipv6",
+					},
+				},
+				Action: testIpApiAction(),
 			},
 		},
 	}
 }
 
-func recordAction() func(ctx *cli.Context) error {
+func recordAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		fmt.Println("Supports record types: A、AAAA、NS、MX、CNAME、TXT、SRV、CA、REDIRECT_URL、FORWARD_URL")
 		table, err := gotable.Create("type", "value", "description")
@@ -74,27 +87,25 @@ func recordAction() func(ctx *cli.Context) error {
 		_ = table.AddRow([]string{"REDIRECT_URL", "REDIRECT_URL", "将域名重定向到另外一个地址"})
 		_ = table.AddRow([]string{"FORWARD_URL", "FORWARD_URL", "显性URL类似，但是会隐藏真实目标地址"})
 
-		fmt.Print(table)
-		fmt.Println("Reference: https://help.aliyun.com/document_detail/29805.html?spm=a2c4g.11186623.0.0.30e73067AXxwak")
-		path := ctx.String("path")
-		err = toCSVFile(table, path)
+		err = printTableAndSavaToCSVFile(table, ctx)
 		if err != nil {
 			return err
 		}
+		fmt.Println("Reference: https://help.aliyun.com/document_detail/29805.html?spm=a2c4g.11186623.0.0.30e73067AXxwak")
 		return nil
 	}
 }
 
-func providerAction() func(*cli.Context) error {
+func providerAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		table, err := gotable.Create("provider", "DNS API Document")
 		if err != nil {
 			return err
 		}
-		_ = table.AddRow([]string{"AliDNS", "https://help.aliyun.com/document_detail/39863.html"})
-		_ = table.AddRow([]string{"DNSPod", "https://cloud.tencent.com/document/product/1427"})
-		_ = table.AddRow([]string{"Cloudflare", "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
-		_ = table.AddRow([]string{"HuaweiDNS", "https://support.huaweicloud.com/function-dns/index.html"})
+		_ = table.AddRow([]string{config.AlidnsProvider, "https://help.aliyun.com/document_detail/39863.html"})
+		_ = table.AddRow([]string{config.DnspodProvider, "https://cloud.tencent.com/document/product/1427"})
+		_ = table.AddRow([]string{config.CloudflareProvider, "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
+		_ = table.AddRow([]string{config.HuaweiDnsProvider, "https://support.huaweicloud.com/function-dns/index.html"})
 
 		fmt.Print(table)
 		path := ctx.String("path")
@@ -106,7 +117,7 @@ func providerAction() func(*cli.Context) error {
 	}
 }
 
-func catAction() func(ctx *cli.Context) error {
+func printIpApiAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		table, err := gotable.Create("Ipv4 Request API", "Ipv6 Request API")
 		if err != nil {
@@ -129,34 +140,37 @@ func catAction() func(ctx *cli.Context) error {
 			_ = table.AddRow([]string{ipv4ApiList[i], ipv6ApiList[i]})
 		}
 
-		fmt.Print(table)
-		path := ctx.String("path")
-		err = toCSVFile(table, path)
-		if err != nil {
-			return err
-		}
-		return nil
+		return printTableAndSavaToCSVFile(table, ctx)
 	}
 }
 
-func toCSVFile(table *table.Table, path string) error {
-	if !strs.IsEmpty(path) {
-		err := table.ToCSVFile(path)
-		if err != nil {
-			return err
+func testIpApiAction() cli.ActionFunc {
+	return func(ctx *cli.Context) error {
+		ipType := ctx.String("type")
+		if (ipType != "ipv4") && (ipType != "ipv6") {
+			return errors.New("ip type must be: ipv4 or ipv6")
 		}
-		fmt.Printf("sava to: %s\n", path)
-	}
-	return nil
-}
-
-func toJsonFile(table *table.Table, path string) error {
-	if !strs.IsEmpty(path) {
-		err := table.ToJsonFile(path, 2)
-		if err != nil {
-			return err
+		var table *table.Table
+		var err error
+		var ipApiList []string
+		if ipType == "ipv4" {
+			table, err = gotable.Create("Ipv4 Request API", "Status")
+			if err != nil {
+				return err
+			}
+			ipApiList = config.GetIpv4ApiList()
 		}
-		fmt.Printf("\nsava to: %s\n", path)
+		if ipType == "ipv6" {
+			table, err = gotable.Create("Ipv6 Request API", "Status")
+			if err != nil {
+				return err
+			}
+			ipApiList = config.GetIpv6ApiList()
+		}
+		for _, api := range ipApiList {
+			_ = table.AddRow([]string{api, vhttp.GetIpv4AddrForUrl(api)})
+		}
+		fmt.Println(table)
+		return err
 	}
-	return nil
 }

@@ -156,7 +156,14 @@ li {
     margin: 5px;
     position: relative;
     z-index: 2;
+   
 }
+.fk-item a{
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
 
 .sfdp-tool-con a img {
     width: 18px;
@@ -466,16 +473,16 @@ li {
 }
 
 .switted-c{
-    width: 30px;
-    height: 30px;
+    width: 15px;
+    height: 15px;
     position: absolute;
     top: 5px;
 }
 .copy-c{
-    right: 5px;
+    right: 10px;
 }
 .delet-c{
-    right: 40px;
+    right: 30px;
 }
 .shu-line{
     width: 2px;
@@ -498,5 +505,5 @@ li {
     left: 0;
     top: 0;
     transform: translate(-110%,-110%);
-    color: #777272;
+    color: #2D6DCC;
 }
