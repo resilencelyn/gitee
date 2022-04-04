@@ -6,8 +6,8 @@ var Fkreport = {
         $(".gril-fkreport").css({
             width: '100%',
             height: '100%',
-            backgroundSize: `${pxwid}px ${pxwid}px`,
-            backgroundImage: `-webkit-linear-gradient(top, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px), -webkit-linear-gradient(left, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px)`
+            //backgroundSize: `${pxwid}px ${pxwid}px`,
+            //backgroundImage: `-webkit-linear-gradient(top, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px), -webkit-linear-gradient(left, transparent ${pxwid - 1}px, #e9ebed ${pxwid}px)`
         })
     },
     //基础数据初始化

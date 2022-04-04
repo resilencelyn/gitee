@@ -473,8 +473,8 @@ li {
 }
 
 .switted-c{
-    width: 15px;
-    height: 15px;
+    width: 25px;
+    height: 25px;
     position: absolute;
     top: 5px;
 }
@@ -482,7 +482,7 @@ li {
     right: 10px;
 }
 .delet-c{
-    right: 30px;
+    right: 45px;
 }
 .shu-line{
     width: 2px;
