@@ -11,7 +11,11 @@ let js_save = function () {
     let url = URL.createObjectURL(blob);
     let downa = document.getElementById("downa");
     downa.href = url;
-    downa.download = "CocoWidget.js";
+    let name = Blockly.JavaScript.workspaceToCode(workspace).substring(Blockly.JavaScript.workspaceToCode(workspace).indexOf('"',Blockly.JavaScript.workspaceToCode(workspace).indexOf('title'))+1,Blockly.JavaScript.workspaceToCode(workspace).indexOf('",',Blockly.JavaScript.workspaceToCode(workspace).indexOf('title')));
+    if (name == ''){
+        name = "我的控件"
+    }
+    downa.download = name+".js";
     downa.click();
     URL.revokeObjectURL(url);
 }
@@ -29,7 +33,11 @@ let save = function () {
     let url = URL.createObjectURL(blob);
     let downa = document.getElementById("downa");
     downa.href = url;
-    downa.download = "CocoWidget.waddle";
+    let name = Blockly.JavaScript.workspaceToCode(workspace).substring(Blockly.JavaScript.workspaceToCode(workspace).indexOf('"',Blockly.JavaScript.workspaceToCode(workspace).indexOf('title'))+1,Blockly.JavaScript.workspaceToCode(workspace).indexOf('",',Blockly.JavaScript.workspaceToCode(workspace).indexOf('title')));
+    if (name == ''){
+        name = "我的控件"
+    }
+    downa.download = name+".waddle";
     downa.click();
     URL.revokeObjectURL(url);
 }
@@ -55,6 +63,21 @@ let openfile = function () {
             Blockly.Xml.domToWorkspace(blocks, workspace);
         };
         file_reader.readAsText(file, 'UTF-8');
+    }
+}
+
+let upload = function (waddle) {
+    var request = new XMLHttpRequest();
+    request.open("get", waddle);
+    request.send(null);
+    request.onload = function(){
+        if(request.status == 200) {
+            let parser = new DOMParser();
+            let xml = parser.parseFromString(request.responseText, 'text/xml');
+            let blocks = xml.getElementsByTagName("body")[0].getElementsByTagName("blocks")[0].getElementsByTagName("xml")[0]
+            workspace.clear();
+            Blockly.Xml.domToWorkspace(blocks, workspace);
+        }
     }
 }
 
@@ -95,3 +118,19 @@ let count = function () {
     }
 }
 
+let fix_bug = function(){
+    try{if(document.getElementsByClassName('dropdown-menu show')[0].dataBsToggle == 'none'){
+        document.getElementsByClassName('dropdown')[0].style.backgroundColor = '';
+    }
+    else{
+        if(getCookie('mode')=='dark'){
+            document.getElementsByClassName('dropdown')[0].style.backgroundColor = '#666666';
+        }
+        else{
+            document.getElementsByClassName('dropdown')[0].style.backgroundColor = '#5439ce';
+        }
+    }}
+    catch(err){
+        document.getElementsByClassName('dropdown')[0].style.backgroundColor = '';
+    }
+}
