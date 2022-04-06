@@ -1,7 +1,6 @@
 {
-
   "name": "iotlink",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "description": "iotlink",
   "author": "sdyunze",
   "license": "Apache-2.0",
@@ -43,6 +42,7 @@
     "core-js": "3.19.1",
     "crypto-js": "^4.0.0",
     "echarts": "4.9.0",
+    "element-china-area-data": "^5.0.2",
     "element-ui": "2.15.6",
     "file-saver": "2.0.5",
     "fuse.js": "6.4.3",
@@ -51,6 +51,7 @@
     "js-cookie": "3.0.1",
     "jsencrypt": "3.2.1",
     "nprogress": "0.2.0",
+    "qrcodejs2": "^0.0.2",
     "quill": "1.3.7",
     "screenfull": "5.0.2",
     "sortablejs": "1.10.2",
@@ -93,7 +94,7 @@
 
   "name": "yunxioffical",
   "version": "0.1.0",
-<<<<<<< HEAD
+
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
@@ -22543,7 +22544,7 @@
     }
   }
 
-=======
+
   "private": true,
   "scripts": {
     "serve-dev": "vue-cli-service serve --mode dev",
@@ -22594,5 +22595,4 @@
     "last 2 versions",
     "not dead"
   ]
->>>>>>> b8e1da2b3b47f3859779610db7d58aa4bb67ba28
 }
