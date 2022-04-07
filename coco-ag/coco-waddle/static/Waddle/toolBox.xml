@@ -22,32 +22,27 @@ TIP
 		<block type="controls_repeat_ext">
 			<value name="TIMES">
 				<block type="math_number">
-					<field name="NUM">
-						10</field>
+					<field name="NUM">10</field>
 				</block>
 			</value>
 		</block>
 		<block type="controls_whileUntil">
 		</block>
 		<block type="controls_for">
-			<field name="VAR">
-				i</field>
+			<field name="VAR">i</field>
 			<value name="FROM">
 				<block type="math_number">
-					<field name="NUM">
-						1</field>
+					<field name="NUM">1</field>
 				</block>
 			</value>
 			<value name="TO">
 				<block type="math_number">
-					<field name="NUM">
-						10</field>
+					<field name="NUM">10</field>
 				</block>
 			</value>
 			<value name="BY">
 				<block type="math_number">
-					<field name="NUM">
-						1</field>
+					<field name="NUM">1</field>
 				</block>
 			</value>
 		</block>
@@ -77,8 +72,7 @@ TIP
 	</category>
 	<category name="数学" css-icon="iconfont waddle-math" colour="#FEAE8A">
 		<block type="math_number">
-			<field name="NUM">
-				114514</field>
+			<field name="NUM">114514</field>
 		</block>
 		<block type="math_arithmetic">
 		</block>
@@ -99,28 +93,24 @@ TIP
 		<block type="math_constrain">
 			<value name="LOW">
 				<block type="math_number">
-					<field name="NUM">
-						114</field>
+					<field name="NUM">114</field>
 				</block>
 			</value>
 			<value name="HIGH">
 				<block type="math_number">
-					<field name="NUM">
-						514</field>
+					<field name="NUM">514</field>
 				</block>
 			</value>
 		</block>
 		<block type="math_random_int">
 			<value name="FROM">
 				<block type="math_number">
-					<field name="NUM">
-						191</field>
+					<field name="NUM">191</field>
 				</block>
 			</value>
 			<value name="TO">
 				<block type="math_number">
-					<field name="NUM">
-						9810</field>
+					<field name="NUM">9810</field>
 				</block>
 			</value>
 		</block>
@@ -184,40 +174,34 @@ TIP
 		<block type="colour_rgb">
 			<value name="RED">
 				<shadow type="math_number">
-					<field name="NUM">
-						100</field>
+					<field name="NUM">100</field>
 				</shadow>
 			</value>
 			<value name="GREEN">
 				<shadow type="math_number">
-					<field name="NUM">
-						50</field>
+					<field name="NUM">50</field>
 				</shadow>
 			</value>
 			<value name="BLUE">
 				<shadow type="math_number">
-					<field name="NUM">
-						0</field>
+					<field name="NUM">0</field>
 				</shadow>
 			</value>
 		</block>
 		<block type="colour_blend">
 			<value name="COLOUR1">
 				<shadow type="colour_picker">
-					<field name="COLOUR">
-						#ff0000</field>
+					<field name="COLOUR">#ff0000</field>
 				</shadow>
 			</value>
 			<value name="COLOUR2">
 				<shadow type="colour_picker">
-					<field name="COLOUR">
-						#3333ff</field>
+					<field name="COLOUR">#3333ff</field>
 				</shadow>
 			</value>
 			<value name="RATIO">
 				<shadow type="math_number">
-					<field name="NUM">
-						0.5</field>
+					<field name="NUM">0.5</field>
 				</shadow>
 			</value>
 		</block>
@@ -234,8 +218,7 @@ TIP
 		<block type="lists_repeat">
 			<value name="NUM">
 				<shadow type="math_number">
-					<field name="NUM">
-						5</field>
+					<field name="NUM">5</field>
 				</shadow>
 			</value>
 		</block>
@@ -293,7 +276,8 @@ TIP
 		</block>
 		<block type="js_time">
 		</block>
-		<!--<block type="js_popup_alert">
+		<!--
+		<block type="js_popup_alert">
 		</block>
 		<block type="js_popup_confirm">
 		</block>
@@ -352,15 +336,65 @@ TIP
 		</block>
 		<block type="js_base">
 		</block>
-		<!--<block type="js_str_index">
+		<!--
+		<block type="js_str_index">
 		</block>
 		<block type="js_array_sort">
 		</block>
 		<block type="js_array_reverse">
 		</block>
 		<block type="js_array_join">
-		</block>-->
+		</block>
+		-->
 	</category>
+	<category name="lodash">
+		<button text="实验性功能提示" callbackKey="betawarning">
+		</button>
+		<block type="lodash_import">
+		</block>
+		<block type="lodash_chunk">
+		</block>
+		<block type="lodash_compact">
+		</block>
+		<block type="lodash_concat">
+		</block>
+		<block type="lodash_difference">
+		</block>
+		<block type="lodash_differencebydropdown">
+		</block>
+		<block type="lodash_differenceby">
+		</block>
+		<block type="lodash_differencewithdropdown">
+		</block>
+		<block type="lodash_differencewith">
+		</block>
+		<block type="lodash_drop">
+		</block>
+		<block type="lodash_dropright">
+		</block>
+		<block type="lodash_dropwhiledropdown">
+		</block>
+		<block type="lodash_droprightwhiledropdown">
+		</block>
+		<block type="lodash_dropwhile">
+		</block>
+		<block type="lodash_droprightwhile">
+		</block>
+		<block type="lodash_fill">
+		</block>
+		<block type="lodash_findindexdropdown">
+		</block>
+		<block type="lodash_findlastindexdropdown">
+		</block>
+		<block type="lodash_findindex">
+		</block>
+		<block type="lodash_findlastindex">
+		</block>
+		<block type="lodash_first">
+		</block>
+	</category>
+		<block type="lodash_flatten">
+		</block>
 	<category name="工具" css-icon="iconfont waddle-tool" colour="#0E7D65">
 		<label text="工具.积木夹子">
 		</label>
@@ -451,13 +485,15 @@ TIP
 		</label>
 		<block type="ivw_addProperty">
 		</block>
-		<!-- <block type="ivwAttri_key">
-			<value name="value">
-				<block type="text">
-					<field name="TEXT">属性名</field>
-				</block>
-			</value>
-		</block> -->
+		<!--
+		<block type="ivwAttri_key">
+		<value name="value">
+		<block type="text">
+		<field name="TEXT">属性名</field>
+		</block>
+		</value>
+		</block>
+		-->
 		<block type="ivwAttri_valueType">
 			<value name="value">
 				<block type="text">
@@ -521,6 +557,8 @@ TIP
 		</label>
 	</category>
 	<category css-icon="iconfont waddle-visiblewidget" name="实体定义" colour="#A15B5D">
+		<block type="ivw_methodReturn">
+		</block>
 		<block type="ivw_emit">
 			<value name="event">
 				<block type="text">
@@ -531,9 +569,9 @@ TIP
 		<block type="ivw_emitParameter">
 		</block>
 		<block type="ivw_propsinit">
-      		<field name="props_name">prop</field>
-      		<field name="this_name">default</field>
-    	</block>
+			<field name="props_name">prop</field>
+			<field name="this_name">default</field>
+		</block>
 	</category>
 	<category css-icon="iconfont waddle-example" name="框架" colour="#6d50f0">
 		<!-- <category name="基本框架" colour="#6d50f0"> -->
@@ -605,13 +643,17 @@ TIP
 		<label text="返回">
 		</label>
 		<block type="ivw_addMethod">
-			<statement name="other">
+			<!-- <statement name="other">
 				<block type="ivwAttri_valueType">
 					<value name="value">
 						<block type="text">
 							<field name="TEXT">返回值类型</field>
 						</block>
 					</value>
+				</block>
+			</statement> -->
+			<statement name="code">
+				<block type="ivw_methodReturn">
 				</block>
 			</statement>
 		</block>

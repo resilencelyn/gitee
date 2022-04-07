@@ -30,18 +30,11 @@ import {
   BasicObjectDataSupport,
   ObjectDataSupport,
 } from "../middleware/object/ObjectDataSupport";
-import { Rule } from "../core/Rule";
-import {
-  ObjectCompiler,
-  ObjectCompilerTarget,
-} from "../middleware/object/ObjectCompiler";
-import { ObjectConfig } from "../middleware/object/ObjectConfig";
-import { Object3D } from "three";
-import { validate } from "uuid";
 import { SymbolConfig } from "../middleware/common/CommonConfig";
 import { GroupCompilerTarget } from "../middleware/group/GroupCompiler";
 import { GroupDataSupport } from "../middleware/group/GroupDataSupport";
 import { stringify } from "../convenient/JSONHandler";
+import { getConfigModuleMap } from "../utils/utils";
 
 export interface LoadOptions {
   [MODULETYPE.TEXTURE]?: TextureCompilerTarget;
@@ -80,6 +73,8 @@ export interface DataSupportManagerParameters {
 }
 
 export class DataSupportManager {
+  static configModuleMap = getConfigModuleMap();
+
   cameraDataSupport: CameraDataSupport = new CameraDataSupport();
   lightDataSupport: LightDataSupport = new LightDataSupport();
   geometryDataSupport: GeometryDataSupport = new GeometryDataSupport();
@@ -123,7 +118,7 @@ export class DataSupportManager {
 
   /**
    *
-   * @deprecated - 下版本废弃
+   * @deprecated - 下版本废弃 不在单独区分object dataSupport
    *
    */
   getObjectDataSupportList(): BasicObjectDataSupport[] {
@@ -132,7 +127,7 @@ export class DataSupportManager {
 
   /**
    *
-   * @deprecated - 下版本废弃
+   * @deprecated - 下版本废弃 -> getConfigBySymbol
    *
    */
   getObjectConfig<T extends SymbolConfig>(vid: string): T | null {
@@ -205,6 +200,35 @@ export class DataSupportManager {
     }
 
     return null;
+  }
+
+  applyConfig<T extends SymbolConfig>(config: T): this {
+    const module = DataSupportManager.configModuleMap[config.type];
+
+    if (module) {
+      this.dataSupportMap.get(module as MODULETYPE)!.addConfig(config);
+    } else {
+      console.warn(
+        `dataSupportManager can not found this config module: ${config.type}`
+      );
+    }
+
+    return this;
+  }
+
+  reactiveConfig<T extends SymbolConfig>(config: T): T {
+    const module = DataSupportManager.configModuleMap[config.type];
+    if (module) {
+      return this.dataSupportMap
+        .get(module as MODULETYPE)!
+        .addConfig(config)
+        .getConfig<T>(config.vid);
+    } else {
+      console.warn(
+        `dataSupportManager can not found this config module: ${config.type}`
+      );
+      return config;
+    }
   }
 
   load(config: LoadOptions): this {

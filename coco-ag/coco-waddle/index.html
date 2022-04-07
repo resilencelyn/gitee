@@ -9,7 +9,7 @@
 	<meta name="description" content="让CoCo没有难做的控件">
 	<script src="./static/js/jquery-3.6.0.min.js"></script>
 	<script>
-		var version = 'V1.4.11(505)-alpha' //以后版本号改我就行！
+		var version = 'V1.4.11(514)-alpha' //以后版本号改我就行！
 		console.log("%c ", "background: url('https://waddle.coco-central.cn/static/img/cs.png');padding:14px 100px;background-size: contain;background-repeat: no-repeat;")
 		console.log("%c嘿，欢迎使用 Waddle!", "font-size:13px;color:rgb(222,154,81)")
 		console.log("%c\n本工具基于blockly开发，CoCo中控台所有成员共同开发！\n\n特别鸣谢：https://gitee.com/coco-ag/coco-waddle/contributors?ref=master", "font-size:15px;color:rgb(179,222,255)")
@@ -527,7 +527,7 @@
 				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 			}
 
-			.modal-content {
+			/*.modal-content {
 				-webkit-animation-name: animateleft;
 				-webkit-animation-duration: 0.4s;
 				animation-name: animateleft;
@@ -541,7 +541,7 @@
 				animation-duration: 0.4s
 			}
 
-			/* 添加动画 */
+			
 			@-webkit-keyframes animateright {
 				from {
 					opacity: 0
@@ -563,7 +563,7 @@
 				}
 			}
 
-			/* 添加动画 */
+			
 			@-webkit-keyframes animateleft {
 				from {
 					opacity: 1
@@ -582,7 +582,7 @@
 				to {
 					opacity: 0
 				}
-			}
+			} */
 
 			/* 关闭按钮 */
 			.close {
@@ -752,6 +752,11 @@
 <script src="./static/Waddle/blocks/invisibleWidget.js"></script>
 <script src="./static/Waddle/generators/javascript/invisibleWidget.js"></script>
 <script>$('.cls-1').animate({ 'stroke-dashoffset': '610px' }, 10);</script>
+
+<!--lodash控件积木(实验性)-->
+<script src="./static/Waddle/blocks/lodash.js"></script>
+<script src="./static/Waddle/generators/javascript/lodash.js"></script>
+
 <!--导入导航栏按钮函数-->
 <script src="./static/js/navFuncs.js"></script>
 <script>$('.cls-1').animate({ 'stroke-dashoffset': '600px' }, 10);</script>
@@ -878,6 +883,8 @@
 			renderer: 'zelos' //scratch风格，自定义的是custom_renderer
 		});
 
+		workspace.registerButtonCallback("betawarning", function(){swal("这是实验性功能，正在测试，将来可能会频繁改动，若有bug请向作者反馈！")})
+
 	/* 加载初始积木 */
 	Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
 
@@ -906,7 +913,7 @@
 	btn.onclick = function () {
 		document.getElementsByClassName("modal-content")[0].className = "modal-content show";
 
-		setTimeout(() => { document.getElementById("blocklyDiv").style.width = '70vw'; document.getElementById("toolbox").style.width = '70vw'; Blockly.svgResize(workspace); }, 400)
+		setTimeout(() => { document.getElementById("blocklyDiv").style.width = '70vw'; document.getElementById("toolbox").style.width = '70vw'; Blockly.svgResize(workspace); }, 0)
 		modal.style.display = "block";
 	}
 
@@ -916,7 +923,7 @@
 		document.getElementById("blocklyDiv").style.width = '100vw';
 		document.getElementById("toolbox").style.width = '100vw';
 		Blockly.svgResize(workspace);
-		setTimeout(() => { modal.style.display = "none"; }, 400)
+		setTimeout(() => { modal.style.display = "none"; }, 0)
 	}
 
 	// 点击复制，复制代码
