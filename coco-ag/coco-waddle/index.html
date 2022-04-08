@@ -9,12 +9,12 @@
 	<meta name="description" content="让CoCo没有难做的控件">
 	<script src="./static/js/jquery-3.6.0.min.js"></script>
 	<script>
-		var version = 'V1.4.11(514)-alpha' //以后版本号改我就行！
+		var version = 'V1.4.11(541)-alpha' //以后版本号改我就行！
 		console.log("%c ", "background: url('https://waddle.coco-central.cn/static/img/cs.png');padding:14px 100px;background-size: contain;background-repeat: no-repeat;")
 		console.log("%c嘿，欢迎使用 Waddle!", "font-size:13px;color:rgb(222,154,81)")
 		console.log("%c\n本工具基于blockly开发，CoCo中控台所有成员共同开发！\n\n特别鸣谢：https://gitee.com/coco-ag/coco-waddle/contributors?ref=master", "font-size:15px;color:rgb(179,222,255)")
 		console.log("%c\n欢迎各位进入开源仓库参与建设：https://gitee.com/coco-ag/coco-waddle/\n建议或特性反馈链接：https://www.yuque.com/forms/share/21daa75d-9aac-4887-8eb9-77dd20e658ec", "font-size:14px;color:rgb(42,125,255)")
-		console.log("%c" +version+ " ©️ 2022 CoCo Central, All rights reserved.", "color:red;")
+		console.log("%c" + version + " ©️ 2022 CoCo Central, All rights reserved.", "color:red;")
 	</script>
 	<script>
 		// 判断浏览器是否支持 service worker
@@ -94,7 +94,7 @@
 
 			</div>
 
-			<noscript>请打开javascript获得最佳体验</noscript>
+			<noscript>这里马上会有彩蛋~耐心等等~(顺便先开开Javascript))</noscript>
 			<p id="loading-text" onClick="document.getElementById('loading-text').style.color = 'rgba(255,255,255,100)'"
 				style="color: rgb(255,255,255);">让CoCo没有难做的控件</p>
 		</div>
@@ -103,7 +103,7 @@
 		document.body.style.overflow = 'hidden' //禁止页面滑动
 		var tipList = [
 			"让CoCo没有难做的控件",
-			"你知道吗？在Waddle中有三个彩蛋！",
+			"你知道吗？在Waddle中有N个彩蛋！",
 			"点击2次Waddle图标有惊喜！",
 			"试一试夜间模式！",
 			"工具是给开发者调试的利器！",
@@ -113,9 +113,9 @@
 			"听说Waddle有VSCode主题了？",
 			"咕咕咕~",
 			"不会用怎么办？首先不要慌张，打开语雀看看。",
-			"不要问我实体定义怎么做，我会告诉你我们都没做~不要问我什么时候做出来，我会告诉你114514年后~",
+			"不要问我为什么没有doctype~我会告诉你自己去逝世~",
 			"我们抄的隔街Phigros的Tips～",
-			"Waddle缂栬緫鍣�",
+			"Waddle YYDS！",
 			"祝编程猫发展的越来越好！",
 			"你看不到我～",
 			"Waddle编辑器上gitee项目推荐了！",
@@ -186,7 +186,9 @@
 			margin-top: 22vh;
 		}
 	</style>
-	<script>$('.cls-1').animate({ 'stroke-dashoffset': '1600px' }, 10);</script>
+	<script>
+		$('.cls-1').animate({ 'stroke-dashoffset': '1600px' }, 10);
+	</script>
 	<div id="body" style="visibility:hidden;">
 		<nav class="navbar navbar-expand navbar-dark" style="background-color: #6d50f0;min-width: 316px;">
 			<div class="container-fluid" style="min-height: 52px;">
@@ -196,33 +198,41 @@
 
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav">
-						<li class="nav-item dropdown" data-title="文件"
-							onclick=fix_bug()>
+						<li class="nav-item dropdown" data-title="文件" onclick=fix_bug()>
 							<a id="navbarDropdown" class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
-								one-link-mark="yes"><svg xmlns="http://www.w3.org/2000/svg" width="24.96"
-									height="24" fill="currentColor" viewBox="0 0 130 125">
+								one-link-mark="yes">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24.96" height="24" fill="currentColor"
+									viewBox="0 0 130 125">
 									<path id="联合_1" data-name="联合 1"
 										d="M7,125a7,7,0,0,1-7-7V57a7,7,0,0,1,7-7H123a7,7,0,0,1,7,7v61a7,7,0,0,1-7,7ZM4.667,35A4.667,4.667,0,0,1,0,30.334V7A7,7,0,0,1,7,0H48.823A20,20,0,0,1,68.6,17h48.067A13.334,13.334,0,0,1,130,30.334,4.667,4.667,0,0,1,125.333,35Z" />
-								</svg></a>
+								</svg>
+							</a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<li><a class="dropdown-item" href="javascript:void(0)"
+								<li>
+									<a class="dropdown-item" href="javascript:void(0)"
 										onClick='newsth.style.display = "block";document.getElementsByClassName("newsth-content")[0].className = "newsth-content show";document.getElementsByClassName("newsth")[0].className = "newsth show"'>新建</a>
 								</li>
-								<li><a class="dropdown-item" href="javascript:void(0)" onClick="save()">保存到电脑</a></li>
-								<li><a class="dropdown-item" href="javascript:void(0)"
+								<li>
+									<a class="dropdown-item" href="javascript:void(0)" onClick="save()">保存到电脑</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="javascript:void(0)"
 										onClick="openfile()">打开Waddle文件</a>
 								</li>
 								<div style="height: 1px;background-color: #f2f2f2;margin: 0 10px;"></div>
-								<li><a class="dropdown-item" href="javascript:void(0)" onClick="js_save()">另存为js文件</a>
+								<li>
+									<a class="dropdown-item" href="javascript:void(0)" onClick="js_save()">另存为js文件</a>
 								</li>
 							</ul>
 						</li>
-						<script>$('.cls-1').animate({ 'stroke-dashoffset': '1550px' }, 10);</script>
+						<script>
+							$('.cls-1').animate({ 'stroke-dashoffset': '1550px' }, 10);
+						</script>
 						<li class="nav-item" data-title="代码"
 							style="right: 20;top: auto;position: absolute;min-height: 50;">
 							<a id="switch_code" class="nav-link" href="javascript:void(0)">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24.96" height="24"
-									fill="currentColor" viewBox="0 0 130 125">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24.96" height="24" fill="currentColor"
+									viewBox="0 0 130 125">
 									<path id="减去_1" data-name="减去 1"
 										d="M123,125H7a7.008,7.008,0,0,1-7-7V7A7.008,7.008,0,0,1,7,0H123a7.008,7.008,0,0,1,7,7V118A7.008,7.008,0,0,1,123,125ZM69.814,69.944a7.008,7.008,0,0,0-7,7v1a7.008,7.008,0,0,0,7,7h36a7.008,7.008,0,0,0,7-7v-1a7.008,7.008,0,0,0-7-7ZM27.793,19.565a6.954,6.954,0,0,0-4.95,2.05l-.707.707a7,7,0,0,0,0,9.9L42.207,52.293,22.43,72.071a7.008,7.008,0,0,0,0,9.9l.706.707a7,7,0,0,0,9.9,0L58.492,57.222a7.008,7.008,0,0,0,0-9.9l-.707-.707c-.155-.155-.315-.3-.476-.435L32.743,21.615A6.954,6.954,0,0,0,27.793,19.565Z" />
 								</svg>
@@ -231,8 +241,8 @@
 						<li class="nav-item" data-title="关于">
 							<a class="nav-link" href="javascript:void(0)"
 								onclick='aboutus.style.display = "block";document.getElementsByClassName("aboutus-content")[0].className = "aboutus-content show";document.getElementsByClassName("aboutus")[0].className = "aboutus show"'>
-								<svg xmlns="http://www.w3.org/2000/svg" width="25.92" height="25.92"
-									fill="currentColor" viewBox="0 0 135 135">
+								<svg xmlns="http://www.w3.org/2000/svg" width="25.92" height="25.92" fill="currentColor"
+									viewBox="0 0 135 135">
 									<path id="circle-question-solid"
 										d="M67.5,0A67.5,67.5,0,1,0,135,67.5,67.495,67.495,0,0,0,67.5,0Zm0,103.469a8.33,8.33,0,0,1-8.437-8.437A8.188,8.188,0,0,1,67.5,86.594a8.438,8.438,0,0,1,0,16.875ZM85.72,66.027,73.828,73.41v.527a6.328,6.328,0,0,1-12.656,0V69.719a6.5,6.5,0,0,1,3.164-5.537l15.029-8.965a5.653,5.653,0,0,0,2.9-5.01,6.062,6.062,0,0,0-6.038-5.8H62.754a5.7,5.7,0,0,0-5.8,5.8,6.328,6.328,0,0,1-12.656,0A18.293,18.293,0,0,1,62.517,31.75H75.99c10.758,0,18.932,8.174,18.932,18.457A18.517,18.517,0,0,1,85.72,66.027Z" />
 								</svg>
@@ -240,8 +250,8 @@
 						</li>
 						<li class="nav-item" data-title="主题">
 							<a class="nav-link" href="javascript:void(0)" onclick="switch_theme()">
-								<svg id="theme" xmlns="http://www.w3.org/2000/svg" width="22.627776"
-									height="25.344" fill="currentColor" viewBox="0 0 135 135">
+								<svg id="theme" xmlns="http://www.w3.org/2000/svg" width="22.627776" height="25.344"
+									fill="currentColor" viewBox="0 0 135 135">
 									<path id="moon-solid_3_" data-name="moon-solid (3)"
 										d="M32,98A65.973,65.973,0,0,1,97.941,32a79.615,79.615,0,0,1,12.051,1.1,3.1,3.1,0,0,1,.966,5.728,51.7,51.7,0,0,0,35.216,95.734,3.1,3.1,0,0,1,2.979,4.994A65.919,65.919,0,0,1,32,98Z"
 										transform="translate(-32 -32)" />
@@ -253,7 +263,9 @@
 				</div>
 			</div>
 		</nav>
-		<script>$('.cls-1').animate({ 'stroke-dashoffset': '1500px' }, 10);</script>
+		<script>
+			$('.cls-1').animate({ 'stroke-dashoffset': '1500px' }, 10);
+		</script>
 		<div id="table">
 			<div id="blocklyDiv" style="width:100vw;"></div>
 			<!--ToolBox积木-->
@@ -426,7 +438,9 @@
 				color: #000;
 			}
 		</style>
-		<script>$('.cls-1').animate({ 'stroke-dashoffset': '1450px' }, 10);</script>
+		<script>
+			$('.cls-1').animate({ 'stroke-dashoffset': '1450px' }, 10);
+		</script>
 		<!-- 代码框 -->
 		<div id="myModal" class="modal">
 			<!-- 代码框内容 -->
@@ -474,7 +488,9 @@
 				</button>
 			</div>
 		</div>
-		<script>$('.cls-1').animate({ 'stroke-dashoffset': '1400px' }, 10);</script>
+		<script>
+			$('.cls-1').animate({ 'stroke-dashoffset': '1400px' }, 10);
+		</script>
 		<style>
 			.copy {
 				-webkit-transition-duration: 0.1s;
@@ -502,6 +518,7 @@
 			}
 
 			/* 代码框 (background) */
+
 			.modal {
 				display: none;
 				/* 默认隐藏 */
@@ -515,6 +532,7 @@
 			}
 
 			/* 代码框内容 */
+
 			.modal-content {
 				position: relative;
 				background-color: #fefefe;
@@ -583,8 +601,8 @@
 					opacity: 0
 				}
 			} */
-
 			/* 关闭按钮 */
+
 			.close {
 				color: white;
 				border: 13px solid #6d50f0;
@@ -640,9 +658,12 @@
 						onclick='newsth.style.display = "none";workspace.clear();Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);'>
 						<span class="sord">不可见控件模版</span>
 					</div>
-					<div class="card" id="card" onclick="newsth.style.display = 'none';upload('./static/Waddle/tutorials/hello.waddle')"><span class="sord">[不可见控件]<br>Hello</span></div>
+					<div class="card" id="card"
+						onclick="newsth.style.display = 'none';upload('./static/Waddle/tutorials/hello.waddle')"><span
+							class="sord">[不可见控件]<br>Hello</span></div>
 					<div class="card" id="card" onclick='swal("还没有呢～")'><span class="sord">[不可见控件]<br>定时器</span></div>
-					<div class="card" id="card" onclick='swal("还没有呢～")'><span class="sord">[不可见控件]<br>Base编解码</span></div>
+					<div class="card" id="card" onclick='swal("还没有呢～")'><span class="sord">[不可见控件]<br>Base编解码</span>
+					</div>
 					<div class="card" id="card" onclick='swal("还没有呢～")'><span class="sord">[可见控件]<br>超链接</span></div>
 					<div class="card" id="card" onclick='swal("还没有呢～")'><span class="sord">[可见控件]<br>闪烁的按钮</span></div>
 				</div>
@@ -661,108 +682,163 @@
 				<div class="aboutus-body">
 					<img width="240" src="./static/img/waddle.svg" style="margin: 30px 0;" alt="Waddle"></img>
 					<p style="color: #ffffff;font-size: 25px;font-weight: bold;">让CoCo没有难做的控件</p>
-					</br></br>
+					</br>
+					</br>
 					<p style="color: #ffffff;font-size: 20px;font-weight: bold;">由CoCo中控台所有成员共同开发！</p>
 					<!----<p style="color: #ffffff;font-size: 17px;">中子星000（QQ：2422481178）主理制作</br>MathCalculus（QQ：2504556268）主理制作</br>Epeiuss（Mail：ffxw0720@163.com）监制</br>海藻酸钠（QQ：3409473369）美术/UI/监制</br>小鱼yuzifu（QQ：1906929246）前端设计</br>刘lyxAndy（QQ：3449556207）细节处理</p>--->
-					<p style="color: #ffffff;font-size: 15px;">帮助链接：<a
-							href="https://www.yuque.com/coco-central/waddle/index"
+					<p style="color: #ffffff;font-size: 15px;">帮助链接：
+						<a href="https://www.yuque.com/coco-central/waddle/index"
 							style="color: #ffffff;font-size: 15px;" target="_blank"
-							rel="noopener">https://www.yuque.com/coco-central/waddle/index</a></p>
-					</br></br>
+							rel="noopener">https://www.yuque.com/coco-central/waddle/index</a>
+					</p>
+					</br>
+					</br>
 					<p id="version" style="color: #ffffff;font-size: 25px;font-weight: bold;" onclick=count()></p>
-					<script>$("#version").text("目前版本："+version);</script>
+					<script>
+						$("#version").text("目前版本：" + version);
+					</script>
 				</div>
 			</div>
 		</div>
 	</div>
-	<script>$('.cls-1').animate({ 'stroke-dashoffset': '1300px' }, 10);</script>
+	<script>
+		$('.cls-1').animate({ 'stroke-dashoffset': '1300px' }, 10);
+	</script>
 	</div>
 </body>
 <!--引入Blockly必要文件-->
 
 <script src="./static/blockly-master/blockly_compressed.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1280px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1280px' }, 10);
+</script>
 <script src="./static/blockly-master/javascript_compressed.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1260px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1260px' }, 10);
+</script>
 <script src="./static/blockly-master/blocks_compressed.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1240px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1240px' }, 10);
+</script>
 <script src="./static/blockly-master/msg/js/zh-hans.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1200px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1200px' }, 10);
+</script>
 <link rel="shortcut icon" href="./static/img/logo.svg">
 <title>Waddle - 让CoCo没有难做的控件</title>
 
 <!--图标库-->
 <link rel="stylesheet" href="https://at.alicdn.com/t/font_3193112_l62ftr4pl4h.css">
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1180px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1180px' }, 10);
+</script>
 
 <!--定义Blocks-->
 <!-- <script src="static/blockly-master/blocks/invisibleWidget.js"></script> -->
 <!-- <script src="static/blockly-master/blocks/coco.js"></script> -->
 <script src="./static/blockly-master/blocks/js.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1170px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1170px' }, 10);
+</script>
 <!--<script src="./static/Waddle/blocks/procedures.js"></script>-->
 
 <!--Blocks 对应代码-->
 <!-- <script src="static/blockly-master/generators/javascript/invisibleWidget.js"></script> -->
 <!-- <script src="static/blockly-master/generators/javascript/coco.js"></script> -->
 <script src="./static/blockly-master/generators/javascript/js.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1160px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1160px' }, 10);
+</script>
 
 <!--引入框架-->
 <script src="./static/js/bootstrap.bundle.min.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '1010px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '1010px' }, 10);
+</script>
 <link href="./static/css/bootstrap.min.css" rel="stylesheet">
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '910px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '910px' }, 10);
+</script>
 <!--引入高亮-->
 <script src="./static/js/highlight.min.js"></script>
 <script src="./static/js/javascript.min.js"></script>
 <link href="./static/css/googlecode.min.css" rel="stylesheet">
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '800px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '800px' }, 10);
+</script>
 
 <!--自定义Blockly样式-->
 <script src="./static/Waddle/custom_category.js"></script>
 <link href="./static/css/blockly_style.css" rel="stylesheet" />
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '760px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '760px' }, 10);
+</script>
 <!--包含toolbox和积木-->
 
 <!--自定义积木样式-->
 <script src="./static/Waddle/custom_renderer.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '730px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '730px' }, 10);
+</script>
 <!--自定义网格样式-->
 <script src="./static/Waddle/custom_grid.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '710px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '710px' }, 10);
+</script>
 <!--引入Waddle主题-->
 <script src="./static/Waddle/core/theme/waddleTheme.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '700px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '700px' }, 10);
+</script>
 <!--引入tools积木-->
 <script src="./static/Waddle/blocks/tools.js"></script>
 <script src="./static/Waddle/generators/javascript/tools.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '680px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '680px' }, 10);
+</script>
 <!--JavaScript积木-->
 <script src="./static/blockly-master/blocks/js.js"></script>
 <script src="./static/blockly-master/generators/javascript/js.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '640px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '640px' }, 10);
+</script>
 
 <!--JavaScript积木-->
 <script src="./static/blockly-master/blocks/html.js"></script>
 <script src="./static/blockly-master/generators/javascript/html.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '630px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '630px' }, 10);
+</script>
 
 <!--不可见控件积木-->
 <script src="./static/Waddle/blocks/invisibleWidget.js"></script>
 <script src="./static/Waddle/generators/javascript/invisibleWidget.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '610px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '610px' }, 10);
+</script>
 
 <!--lodash控件积木(实验性)-->
 <script src="./static/Waddle/blocks/lodash.js"></script>
 <script src="./static/Waddle/generators/javascript/lodash.js"></script>
 
+<!--axios控件积木(实验性)-->
+<script src="./static/Waddle/blocks/axios.js"></script>
+<script src="./static/Waddle/generators/javascript/axios.js"></script>
+
+<!--utils控件积木(实验性)-->
+<script src="./static/Waddle/blocks/utils.js"></script>
+<script src="./static/Waddle/generators/javascript/utils.js"></script>
+
 <!--导入导航栏按钮函数-->
 <script src="./static/js/navFuncs.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '600px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '600px' }, 10);
+</script>
 <!--sweetalert-->
 <script src="./static/js/sweetalert.min.js"></script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '500px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '500px' }, 10);
+</script>
 <!--彩蛋定义-->
 <script>
 	function estchk() {
@@ -784,8 +860,11 @@
 			document.cookie = "easter=1";
 		}
 	}
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '480px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '480px' }, 10);
+</script>
 <script>
 	document.body.style.overflow = 'hidden' //禁止页面滑动
 	function createjscssfile(filename, filetype) {
@@ -819,8 +898,11 @@
 			}
 		}
 	}
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '460px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '460px' }, 10);
+</script>
 <script>
 	//加载工作区
 	//积木盒
@@ -883,15 +965,16 @@
 			renderer: 'zelos' //scratch风格，自定义的是custom_renderer
 		});
 
-		workspace.registerButtonCallback("betawarning", function(){swal("这是实验性功能，正在测试，将来可能会频繁改动，若有bug请向作者反馈！")})
+	workspace.registerButtonCallback("betawarning", function () { swal("这是实验性功能，正在测试，将来可能会频繁改动，若有bug请向作者反馈！") })
 
 	/* 加载初始积木 */
 	Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
 
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '400px' }, 10);</script>
 <script>
-
+	$('.cls-1').animate({ 'stroke-dashoffset': '400px' }, 10);
+</script>
+<script>
 	function myUpdateFunction(event) {
 		var code = Blockly.JavaScript.workspaceToCode(workspace);
 		document.getElementById("codeArea").innerHTML = code;
@@ -938,8 +1021,11 @@
 			document.getElementsByClassName("copyit")[0].style.display = 'inline-block'
 		}, 400)
 	}
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '380px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '380px' }, 10);
+</script>
 <script>
 	//各种函数
 	/* 搬迁了，在static/js/navFuncs.js */
@@ -958,10 +1044,14 @@
 	//         reader.readAsText(this.files[0]);
 	//     }
 	// });
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '360px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '360px' }, 10);
+</script>
 <style>
 	/* 代码框 (background) */
+
 	.newsth {
 		display: none;
 		/* 默认隐藏 */
@@ -995,6 +1085,7 @@
 	}
 
 	/* 代码框内容 */
+
 	.newsth-content {
 		position: relative;
 		min-width: 300px;
@@ -1012,7 +1103,6 @@
 	.show.newsth-content {
 		-webkit-animation: scale-up-center 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 		animation: scale-up-center 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-
 	}
 
 	.newsth-content {
@@ -1028,16 +1118,15 @@
 		border-radius: 0.4em;
 		transition: border 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		border: rgb(202, 202, 202) 0.2em solid;
-    	display: inline-flex;
-    	flex-direction: column;
-    	justify-content: center;
-    	align-items: center;
+		display: inline-flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.card:hover {
 		border: #6d50f0 0.2em solid;
 	}
-
 
 	@-webkit-keyframes scale-up-center {
 		0% {
@@ -1136,6 +1225,7 @@
 	}
 
 	/* 关闭按钮 */
+
 	.newsth-close {
 		color: #6d50f0;
 		font-weight: bold;
@@ -1168,15 +1258,15 @@
 
 	.newsth-body {
 		padding: 2px 16px;
-    	overflow-y: auto;
-    	overflow-x: hidden;
-    	height: calc(75vh - 78px);
-    	width: 100%;
-    	text-align: center;
-    	display: flex;
-    	align-items: center;
-    	align-content: flex-start;
-    	flex-wrap: wrap;
+		overflow-y: auto;
+		overflow-x: hidden;
+		height: calc(75vh - 78px);
+		width: 100%;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		align-content: flex-start;
+		flex-wrap: wrap;
 		justify-content: space-evenly;
 	}
 
@@ -1201,10 +1291,14 @@
 		document.getElementsByClassName("newsth")[0].className = "newsth"
 		setTimeout(() => { newsth.style.display = "none"; }, 400)
 	}
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '340px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '340px' }, 10);
+</script>
 <style>
 	/* 代码框 (background) */
+
 	.aboutus {
 		display: none;
 		/* 默认隐藏 */
@@ -1232,6 +1326,7 @@
 	}
 
 	/* 代码框内容 */
+
 	.aboutus-content {
 		position: relative;
 		border-radius: 10px;
@@ -1249,7 +1344,6 @@
 	.show.aboutus-content {
 		-webkit-animation: scale-up-center 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 		animation: scale-up-center 0.3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-
 	}
 
 	.aboutus-content {
@@ -1354,6 +1448,7 @@
 	}
 
 	/* 关闭按钮 */
+
 	.aboutus-close {
 		color: #6d50f0;
 		font-weight: bold;
@@ -1403,8 +1498,11 @@
 		document.getElementsByClassName("aboutus")[0].className = "aboutus"
 		setTimeout(() => { aboutus.style.display = "none"; }, 400)
 	}
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '240px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '240px' }, 10);
+</script>
 <script>
 	let logo = document.getElementById("logo");
 	$(window).resize(function () {
@@ -1422,8 +1520,11 @@
 		document.getElementById("toolbox").style.height = (document.body.clientHeight - 52);
 		Blockly.svgResize(workspace);
 	});
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '190px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '190px' }, 10);
+</script>
 <script>
 	var theme = getCookie('mode')
 	var date = new Date();
@@ -1538,12 +1639,16 @@
 		logo.src = "./static/img/waddle.svg";
 		document.getElementsByClassName("modal")[0].style.width = "30%"
 	}
+
 </script>
-<script>$('.cls-1').animate({ 'stroke-dashoffset': '50px' }, 10);</script>
+<script>
+	$('.cls-1').animate({ 'stroke-dashoffset': '50px' }, 10);
+</script>
 <script>
 	// 等待加载完毕
 	$('.cls-1').animate({ 'stroke-dashoffset': '0px' }, 10);
 	setTimeout(() => { document.getElementById("body").style = "visibility: visible"; if (getCookie('logo-egg') == 1) { document.cookie = 'logo-egg=true'; swal("获得成就：最简单的彩蛋"); } }, 1000)
+
 </script>
 
 
