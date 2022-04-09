@@ -15,6 +15,7 @@ export default {
         dataText:dataText,
     },
     attribute:{
+        map:'china',
         roam:false,titleText:'肺炎地图',titleLeft: 'center', titleTop: 10,
         subtext:'数据纯属虚构',titleFontSize:20,titleColor: '#ddd',
         subTitleColor:'#aaa',subTitleFontSize:13,

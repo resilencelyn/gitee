@@ -1,7 +1,7 @@
 <template>
   <div>
 <!--    组件内部没有设置deep监听props，数据变更时，请生成新的props，不然组件将无法刷新状态-->
-    <dv-scroll-board :config="config" :style="{width:width+'px',height:height+'px'}" />
+    <dv-scroll-board :key="refreshFlagKey" :config="config" :style="{width:width+'px',height:height+'px'}" />
   </div>
 
 </template>
@@ -21,7 +21,8 @@ export default {
   data(){
     return {
       config: {},
-      uuid: null
+      uuid: null,
+      refreshFlagKey: null
     }
   },
   watch: {
@@ -34,6 +35,7 @@ export default {
   },
   created() {
     this.uuid = require('uuid').v1();
+    this.refreshFlagKey = require('uuid').v1();
     this.refreshCptData();
   },
   methods:{
@@ -42,8 +44,29 @@ export default {
     },
     loadData(){
       getDataStr(this.option.cptDataForm).then(res => {
-        this.config = JSON.parse(JSON.stringify(this.option.attribute))
-        this.config.data = JSON.parse(res);
+        let temp = JSON.parse(JSON.stringify(this.option.attribute));
+        const columns = JSON.parse(temp.columns)
+        temp.header = [];
+        temp.columnWidth=[80];//列宽
+        temp.data =[];
+        temp.align=['center']//对齐方式
+        columns.forEach(item => {
+          temp.header.push(item.title)
+          if (item.width){
+            temp.columnWidth.push(item.width)
+          }
+          temp.align.push('center')
+        })
+        let data = JSON.parse(res);
+        data.forEach(item => {
+          let row = []
+          columns.forEach(column => {
+            row.push(item[column.key])
+          })
+          temp.data.push(row)
+        })
+        this.config = temp;
+        this.refreshFlagKey = require('uuid').v1();
       });
     }
   }

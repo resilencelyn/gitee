@@ -38,17 +38,14 @@ const cptOptions = {
             },
             'cpt-image-option':{
                 attribute:{
-                    url:require('/src/assets/logo.png'),
+                    url:null,
                     fit:'fill',preview:false
                 }
             },
             'cpt-carousel-option':{
                 attribute:{
                     trigger:'hover',fit:'cover',
-                    imgUrls:[
-                        require('@/assets/readme/test.png'),
-                        require('@/assets/readme/options.png')
-                    ],
+                    imgUrls:[],
                 }
             },
             'cpt-dataV-decoration-option': {
@@ -75,6 +72,20 @@ const cptOptions = {
             'cpt-iframe-option':{
                 attribute:{
                     url: 'https://www.rainy.pub/'
+                }
+            },
+            'cpt-num-option':{
+                cptDataForm:{dataText:'{"value":"275.39","unit":"人"}',dataSource: 1, pollTime: 0,apiUrl:'/text', sql:'select id from test limit 1'},
+                attribute:{
+                    title:'总人数',numColor:'#32B0FF',numSize:20,numHeight:30
+                }
+            },
+            'cpt-rect-num-option':{
+                cptDataForm:{
+                    dataSource: 1, pollTime: 0, dataText: '{"value":"1920"}',
+                },
+                attribute:{
+                    fontSize:50,padding:10,borderColor:'#22628D',bgColor: 'rgba(5,30,85,0.68)',color:'#7ca1d3'
                 }
             }
         }
@@ -147,7 +158,7 @@ const cptOptions = {
                     color: ['#91cc75', '#fac858', '#ee6666', '#73c0de' , '#5470c6', '#ff8c71']
                 }
             },
-            'cpt-chart-gauge-option':cpt_chart_gauge_option
+            'cpt-chart-gauge-option':cpt_chart_gauge_option,
         }
     },
     map:{

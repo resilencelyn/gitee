@@ -113,7 +113,7 @@ export default {
           show: !0
         },
         geo: {
-          map: "china",
+          map: attribute.map,
           roam: attribute.roam,//允许缩放
           //scaleLimit: { min: 1, max: 2 },//允许缩放级别
           zoom: 1.23,
