@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liblcg: src/lib/lcg_cuda.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Liblcg
+   &#160;<span id="projectnumber">2.0</span>
+   </div>
+   <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('lcg__cuda_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">lcg_cuda.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="lcg__cuda_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/******************************************************/</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifndef _LCG_CUDA_H</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#define _LCG_CUDA_H</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="util_8h.html">util.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">config.h</a>&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#ifdef LibLCG_CUDA</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;cublas_v2.h&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;cusparse.h&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;cuda_runtime.h&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="lcg__cuda_8h.html#a70b6532f02d3a70baf8390f6d2317cf7">   49</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="lcg__cuda_8h.html#a70b6532f02d3a70baf8390f6d2317cf7">lcg_axfunc_cuda_ptr</a>)(<span class="keywordtype">void</span>* instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="lcg__cuda_8h.html#a54359a8e48c0f5d74886e0ecbc830b0c">   65</a></span>&#160;<span class="keyword">typedef</span> int (*<a class="code" href="lcg__cuda_8h.html#a54359a8e48c0f5d74886e0ecbc830b0c">lcg_progress_cuda_ptr</a>)(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">int</span> <a class="code" href="lcg__cuda_8h.html#a18a6e4bd5c8fc23354d909fc9e489441">lcg_solver_cuda</a>(<a class="code" href="lcg__cuda_8h.html#a70b6532f02d3a70baf8390f6d2317cf7">lcg_axfunc_cuda_ptr</a> Afp, <a class="code" href="lcg__cuda_8h.html#a54359a8e48c0f5d74886e0ecbc830b0c">lcg_progress_cuda_ptr</a> Pfp, <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* B, </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keywordtype">void</span>* instance, cublasHandle_t cub_handle, </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    cusparseHandle_t cus_handle, <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id = <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keywordtype">int</span> <a class="code" href="lcg__cuda_8h.html#a2726ab6773bd3add08ff64acc80fcb07">lcg_solver_preconditioned_cuda</a>(<a class="code" href="lcg__cuda_8h.html#a70b6532f02d3a70baf8390f6d2317cf7">lcg_axfunc_cuda_ptr</a> Afp, <a class="code" href="lcg__cuda_8h.html#a70b6532f02d3a70baf8390f6d2317cf7">lcg_axfunc_cuda_ptr</a> Mfp, <a class="code" href="lcg__cuda_8h.html#a54359a8e48c0f5d74886e0ecbc830b0c">lcg_progress_cuda_ptr</a> Pfp, </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* B, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keywordtype">void</span>* instance, </div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    cublasHandle_t cub_handle, cusparseHandle_t cus_handle, <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id = <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a>);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html">  114</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_l_c_g___c_u_d_a___solver.html">LCG_CUDA_Solver</a></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;{</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#a7844351dee2fc9f2eb7c1ae84c336f94">  117</a></span>&#160;    <a class="code" href="structlcg__para.html">lcg_para</a> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a7844351dee2fc9f2eb7c1ae84c336f94">param_</a>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#a322f967081a5a022902495b8cc113e62">  118</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a322f967081a5a022902495b8cc113e62">inter_</a>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#ad563b60238fbc64664d75025e6566852">  119</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#ad563b60238fbc64664d75025e6566852">silent_</a>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <a class="code" href="class_l_c_g___c_u_d_a___solver.html#af0f8e68427342c66be96bedb86a79031">LCG_CUDA_Solver</a>();</div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#aba92e0085afaedd09f7d599567b5445b">  123</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#aba92e0085afaedd09f7d599567b5445b">~LCG_CUDA_Solver</a>(){}</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#aa6ff418957ffb3b1030867026f5886e9">  130</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#aa6ff418957ffb3b1030867026f5886e9">_AxProduct</a>(<span class="keywordtype">void</span>* instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size)</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    {</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="class_l_c_g___c_u_d_a___solver.html">LCG_CUDA_Solver</a>*<span class="keyword">&gt;</span>(instance)-&gt;<a class="code" href="class_l_c_g___c_u_d_a___solver.html#a57fd79c2f668a5fdab31824eb499d924">AxProduct</a>(cub_handle, cus_handle, x, prod_Ax, n_size, nz_size);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    }</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a57fd79c2f668a5fdab31824eb499d924">AxProduct</a>(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size) = 0;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#aa3d499e5d03e58b3788b5beac46635c4">  138</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#aa3d499e5d03e58b3788b5beac46635c4">_MxProduct</a>(<span class="keywordtype">void</span>* instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size)</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    {</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="class_l_c_g___c_u_d_a___solver.html">LCG_CUDA_Solver</a>*<span class="keyword">&gt;</span>(instance)-&gt;<a class="code" href="class_l_c_g___c_u_d_a___solver.html#a57fd79c2f668a5fdab31824eb499d924">AxProduct</a>(cub_handle, cus_handle, x, prod_Ax, n_size, nz_size);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    }</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a6350827f4281768e8f4b916c771f0703">MxProduct</a>(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size) = 0;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="class_l_c_g___c_u_d_a___solver.html#a581f22c54c24ec35c4720a6198d57625">  146</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a581f22c54c24ec35c4720a6198d57625">_Progress</a>(<span class="keywordtype">void</span>* instance, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k)</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    {</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="class_l_c_g___c_u_d_a___solver.html">LCG_CUDA_Solver</a>*<span class="keyword">&gt;</span>(instance)-&gt;<a class="code" href="class_l_c_g___c_u_d_a___solver.html#ae6b11e503ff9102bd1f23e850445bd3c">Progress</a>(m, converge, param, n_size, nz_size, k);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    }</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#ae6b11e503ff9102bd1f23e850445bd3c">Progress</a>(<span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* m, <span class="keyword">const</span> <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a>* param, <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <span class="keyword">const</span> <span class="keywordtype">int</span> k);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a6a920357ca4ca3ccfc65167b7b8558d0">silent</a>();</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a48f93c1df3b02af8bb520a39a9bf4239">set_report_interval</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> inter);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a750303093c9ccce74d6d9823972950b5">set_lcg_parameter</a>(<span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> &amp;in_param);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#ade64c5b4f5f04acceb283e074455bd47">Minimize</a>(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x, <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *b, </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id = <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>, <span class="keywordtype">bool</span> verbose = <span class="keyword">true</span>, <span class="keywordtype">bool</span> er_throw = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_l_c_g___c_u_d_a___solver.html#a22b8826c4c9e1cea057e593978688009">MinimizePreconditioned</a>(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x, <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *b, </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">int</span> n_size, <span class="keyword">const</span> <span class="keywordtype">int</span> nz_size, <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id = <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>, <span class="keywordtype">bool</span> verbose = <span class="keyword">true</span>, <span class="keywordtype">bool</span> er_throw = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;};</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#endif // LibLCG_CUDA</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">#endif // _LCG_CUDA_H</span></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<div class="ttc" id="aalgebra_8h_html_a5282007dc6f0c317361d25fa0eeb4a35"><div class="ttname"><a href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a></div><div class="ttdeci">double lcg_float</div><div class="ttdoc">A simple definition of the float type we use here. Easy to change in the future. Right now it is just...</div><div class="ttdef"><b>Definition:</b> algebra.h:52</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a57fd79c2f668a5fdab31824eb499d924"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a57fd79c2f668a5fdab31824eb499d924">LCG_CUDA_Solver::AxProduct</a></div><div class="ttdeci">virtual void AxProduct(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)=0</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a></div><div class="ttdeci">@ LCG_CG</div><div class="ttdef"><b>Definition:</b> util.h:40</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a48f93c1df3b02af8bb520a39a9bf4239"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a48f93c1df3b02af8bb520a39a9bf4239">LCG_CUDA_Solver::set_report_interval</a></div><div class="ttdeci">void set_report_interval(unsigned int inter)</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a581f22c54c24ec35c4720a6198d57625"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a581f22c54c24ec35c4720a6198d57625">LCG_CUDA_Solver::_Progress</a></div><div class="ttdeci">static int _Progress(void *instance, const lcg_float *m, const lcg_float converge, const lcg_para *param, const int n_size, const int nz_size, const int k)</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:146</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_aba92e0085afaedd09f7d599567b5445b"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#aba92e0085afaedd09f7d599567b5445b">LCG_CUDA_Solver::~LCG_CUDA_Solver</a></div><div class="ttdeci">virtual ~LCG_CUDA_Solver()</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:123</div></div>
+<div class="ttc" id="astructlcg__para_html"><div class="ttname"><a href="structlcg__para.html">lcg_para</a></div><div class="ttdoc">Parameters of the conjugate gradient methods.</div><div class="ttdef"><b>Definition:</b> util.h:98</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a750303093c9ccce74d6d9823972950b5"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a750303093c9ccce74d6d9823972950b5">LCG_CUDA_Solver::set_lcg_parameter</a></div><div class="ttdeci">void set_lcg_parameter(const lcg_para &amp;in_param)</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_af0f8e68427342c66be96bedb86a79031"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#af0f8e68427342c66be96bedb86a79031">LCG_CUDA_Solver::LCG_CUDA_Solver</a></div><div class="ttdeci">LCG_CUDA_Solver()</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a6350827f4281768e8f4b916c771f0703"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a6350827f4281768e8f4b916c771f0703">LCG_CUDA_Solver::MxProduct</a></div><div class="ttdeci">virtual void MxProduct(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)=0</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_aa6ff418957ffb3b1030867026f5886e9"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#aa6ff418957ffb3b1030867026f5886e9">LCG_CUDA_Solver::_AxProduct</a></div><div class="ttdeci">static void _AxProduct(void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:130</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a22b8826c4c9e1cea057e593978688009"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a22b8826c4c9e1cea057e593978688009">LCG_CUDA_Solver::MinimizePreconditioned</a></div><div class="ttdeci">void MinimizePreconditioned(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, lcg_float *x, lcg_float *b, const int n_size, const int nz_size, lcg_solver_enum solver_id=LCG_CG, bool verbose=true, bool er_throw=false)</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a></div><div class="ttdeci">@ LCG_PCG</div><div class="ttdef"><b>Definition:</b> util.h:44</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_ade64c5b4f5f04acceb283e074455bd47"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#ade64c5b4f5f04acceb283e074455bd47">LCG_CUDA_Solver::Minimize</a></div><div class="ttdeci">void Minimize(cublasHandle_t cub_handle, cusparseHandle_t cus_handle, lcg_float *x, lcg_float *b, const int n_size, const int nz_size, lcg_solver_enum solver_id=LCG_CG, bool verbose=true, bool er_throw=false)</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a322f967081a5a022902495b8cc113e62"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a322f967081a5a022902495b8cc113e62">LCG_CUDA_Solver::inter_</a></div><div class="ttdeci">unsigned int inter_</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:118</div></div>
+<div class="ttc" id="alcg__cuda_8h_html_a54359a8e48c0f5d74886e0ecbc830b0c"><div class="ttname"><a href="lcg__cuda_8h.html#a54359a8e48c0f5d74886e0ecbc830b0c">lcg_progress_cuda_ptr</a></div><div class="ttdeci">int(* lcg_progress_cuda_ptr)(void *instance, const lcg_float *m, const lcg_float converge, const lcg_para *param, const int n_size, const int nz_size, const int k)</div><div class="ttdoc">Callback interface for monitoring the progress and terminate the iteration if necessary....</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:65</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a6a920357ca4ca3ccfc65167b7b8558d0"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a6a920357ca4ca3ccfc65167b7b8558d0">LCG_CUDA_Solver::silent</a></div><div class="ttdeci">void silent()</div></div>
+<div class="ttc" id="alcg__cuda_8h_html_a2726ab6773bd3add08ff64acc80fcb07"><div class="ttname"><a href="lcg__cuda_8h.html#a2726ab6773bd3add08ff64acc80fcb07">lcg_solver_preconditioned_cuda</a></div><div class="ttdeci">int lcg_solver_preconditioned_cuda(lcg_axfunc_cuda_ptr Afp, lcg_axfunc_cuda_ptr Mfp, lcg_progress_cuda_ptr Pfp, lcg_float *m, const lcg_float *B, const int n_size, const int nz_size, const lcg_para *param, void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, lcg_solver_enum solver_id=LCG_PCG)</div><div class="ttdoc">A combined conjugate gradient solver function. Note that both m and B are hosted on the GPU device.</div></div>
+<div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html">LCG_CUDA_Solver</a></div><div class="ttdoc">Linear conjugate gradient solver class</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:114</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_ae6b11e503ff9102bd1f23e850445bd3c"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#ae6b11e503ff9102bd1f23e850445bd3c">LCG_CUDA_Solver::Progress</a></div><div class="ttdeci">virtual int Progress(const lcg_float *m, const lcg_float converge, const lcg_para *param, const int n_size, const int nz_size, const int k)</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a></div><div class="ttdeci">lcg_solver_enum</div><div class="ttdoc">Types of method that could be recognized by the lcg_solver() function.</div><div class="ttdef"><b>Definition:</b> util.h:35</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_aa3d499e5d03e58b3788b5beac46635c4"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#aa3d499e5d03e58b3788b5beac46635c4">LCG_CUDA_Solver::_MxProduct</a></div><div class="ttdeci">static void _MxProduct(void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:138</div></div>
+<div class="ttc" id="alcg__cuda_8h_html_a18a6e4bd5c8fc23354d909fc9e489441"><div class="ttname"><a href="lcg__cuda_8h.html#a18a6e4bd5c8fc23354d909fc9e489441">lcg_solver_cuda</a></div><div class="ttdeci">int lcg_solver_cuda(lcg_axfunc_cuda_ptr Afp, lcg_progress_cuda_ptr Pfp, lcg_float *m, const lcg_float *B, const int n_size, const int nz_size, const lcg_para *param, void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, lcg_solver_enum solver_id=LCG_CG)</div><div class="ttdoc">A combined conjugate gradient solver function. Note that both m and B are hosted on the GPU device.</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_ad563b60238fbc64664d75025e6566852"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#ad563b60238fbc64664d75025e6566852">LCG_CUDA_Solver::silent_</a></div><div class="ttdeci">bool silent_</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:119</div></div>
+<div class="ttc" id="aclass_l_c_g___c_u_d_a___solver_html_a7844351dee2fc9f2eb7c1ae84c336f94"><div class="ttname"><a href="class_l_c_g___c_u_d_a___solver.html#a7844351dee2fc9f2eb7c1ae84c336f94">LCG_CUDA_Solver::param_</a></div><div class="ttdeci">lcg_para param_</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:117</div></div>
+<div class="ttc" id="autil_8h_html"><div class="ttname"><a href="util_8h.html">util.h</a></div></div>
+<div class="ttc" id="alcg__cuda_8h_html_a70b6532f02d3a70baf8390f6d2317cf7"><div class="ttname"><a href="lcg__cuda_8h.html#a70b6532f02d3a70baf8390f6d2317cf7">lcg_axfunc_cuda_ptr</a></div><div class="ttdeci">void(* lcg_axfunc_cuda_ptr)(void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)</div><div class="ttdoc">Callback interface for calculating the product of a N*N matrix 'A' multiplied by a vertical vector 'x...</div><div class="ttdef"><b>Definition:</b> lcg_cuda.h:49</div></div>
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="lcg__cuda_8h.html">lcg_cuda.h</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

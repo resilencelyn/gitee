@@ -1,0 +1,897 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liblcg: src/lib/algebra.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Liblcg
+   &#160;<span id="projectnumber">2.0</span>
+   </div>
+   <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('algebra_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#typedef-members">类型定义</a> &#124;
+<a href="#enum-members">枚举</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">algebra.h 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><a href="algebra_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+类型定义</h2></td></tr>
+<tr class="memitem:a5282007dc6f0c317361d25fa0eeb4a35"><td class="memItemLeft" align="right" valign="top">typedef double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a></td></tr>
+<tr class="memdesc:a5282007dc6f0c317361d25fa0eeb4a35"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple definition of the float type we use here. Easy to change in the future. Right now it is just an alias of double  <a href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">更多...</a><br /></td></tr>
+<tr class="separator:a5282007dc6f0c317361d25fa0eeb4a35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+枚举</h2></td></tr>
+<tr class="memitem:afa1356d2f38311c3519c524f2a9f8e79"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">matrix_layout_e</a> { <a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79a5ecbcf0afce98b042f35ec71ba03fa4b">Normal</a>, 
+<a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79af11ca2d40b3bca2eb37e5b28d425d5ba">Transpose</a>
+ }</td></tr>
+<tr class="memdesc:afa1356d2f38311c3519c524f2a9f8e79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Matrix layouts.  <a href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">更多...</a><br /></td></tr>
+<tr class="separator:afa1356d2f38311c3519c524f2a9f8e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b798f257bb3294c912dcedc1e76f6b5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5">complex_conjugate_e</a> { <a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5a3c58aeb596460847714a08cfa58b0362">NonConjugate</a>, 
+<a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5a3a520a6a0b858c61cad005ad660ffa4d">Conjugate</a>
+ }</td></tr>
+<tr class="memdesc:a9b798f257bb3294c912dcedc1e76f6b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conjugate types for a complex number.  <a href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5">更多...</a><br /></td></tr>
+<tr class="separator:a9b798f257bb3294c912dcedc1e76f6b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ae64db17d8a7244337ebe75be50ff644e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#ae64db17d8a7244337ebe75be50ff644e">lcg_abs</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> a)</td></tr>
+<tr class="memdesc:ae64db17d8a7244337ebe75be50ff644e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return absolute value  <a href="algebra_8h.html#ae64db17d8a7244337ebe75be50ff644e">更多...</a><br /></td></tr>
+<tr class="separator:ae64db17d8a7244337ebe75be50ff644e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adca8ae8584005830c690b576782c274f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#adca8ae8584005830c690b576782c274f">lcg_max</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> b)</td></tr>
+<tr class="memdesc:adca8ae8584005830c690b576782c274f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the bigger value  <a href="algebra_8h.html#adca8ae8584005830c690b576782c274f">更多...</a><br /></td></tr>
+<tr class="separator:adca8ae8584005830c690b576782c274f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18d42877be8de7a79dc23e311bb1f620"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a18d42877be8de7a79dc23e311bb1f620">lcg_min</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> b)</td></tr>
+<tr class="memdesc:a18d42877be8de7a79dc23e311bb1f620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the smaller value  <a href="algebra_8h.html#a18d42877be8de7a79dc23e311bb1f620">更多...</a><br /></td></tr>
+<tr class="separator:a18d42877be8de7a79dc23e311bb1f620"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af78b2411bc26e46373de099e2be25c62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#af78b2411bc26e46373de099e2be25c62">lcg_set2box</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> low, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> hig, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> a, bool low_bound=true, bool hig_bound=true)</td></tr>
+<tr class="memdesc:af78b2411bc26e46373de099e2be25c62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the input value within a box constraint  <a href="algebra_8h.html#af78b2411bc26e46373de099e2be25c62">更多...</a><br /></td></tr>
+<tr class="separator:af78b2411bc26e46373de099e2be25c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba72b525ff25e2412789ef21b1ded5df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#aba72b525ff25e2412789ef21b1ded5df">lcg_malloc</a> (int n)</td></tr>
+<tr class="memdesc:aba72b525ff25e2412789ef21b1ded5df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate memory for a lcg_float pointer type.  <a href="algebra_8h.html#aba72b525ff25e2412789ef21b1ded5df">更多...</a><br /></td></tr>
+<tr class="separator:aba72b525ff25e2412789ef21b1ded5df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945cce3562bdc6abfd79bdbca16024da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a945cce3562bdc6abfd79bdbca16024da">lcg_malloc</a> (int m, int n)</td></tr>
+<tr class="memdesc:a945cce3562bdc6abfd79bdbca16024da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate memory for a lcg_float second pointer type.  <a href="algebra_8h.html#a945cce3562bdc6abfd79bdbca16024da">更多...</a><br /></td></tr>
+<tr class="separator:a945cce3562bdc6abfd79bdbca16024da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51d9b69c6afbba37a48470b4e1db4739"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a51d9b69c6afbba37a48470b4e1db4739">lcg_free</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x)</td></tr>
+<tr class="memdesc:a51d9b69c6afbba37a48470b4e1db4739"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy memory used by the lcg_float type array.  <a href="algebra_8h.html#a51d9b69c6afbba37a48470b4e1db4739">更多...</a><br /></td></tr>
+<tr class="separator:a51d9b69c6afbba37a48470b4e1db4739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bf28e4c8f108a1d501d8359c29efb80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a2bf28e4c8f108a1d501d8359c29efb80">lcg_free</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **x, int m)</td></tr>
+<tr class="memdesc:a2bf28e4c8f108a1d501d8359c29efb80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy memory used by the 2D lcg_float type array.  <a href="algebra_8h.html#a2bf28e4c8f108a1d501d8359c29efb80">更多...</a><br /></td></tr>
+<tr class="separator:a2bf28e4c8f108a1d501d8359c29efb80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbff87f4f6bca34de4982794d99e7ff6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#abbff87f4f6bca34de4982794d99e7ff6">lcg_vecset</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> b, int size)</td></tr>
+<tr class="memdesc:abbff87f4f6bca34de4982794d99e7ff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a vector's value  <a href="algebra_8h.html#abbff87f4f6bca34de4982794d99e7ff6">更多...</a><br /></td></tr>
+<tr class="separator:abbff87f4f6bca34de4982794d99e7ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1afe822670d9c701b9927a7f3f3710e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a1afe822670d9c701b9927a7f3f3710e9">lcg_vecset</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> b, int m, int n)</td></tr>
+<tr class="memdesc:a1afe822670d9c701b9927a7f3f3710e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a 2d vector's value  <a href="algebra_8h.html#a1afe822670d9c701b9927a7f3f3710e9">更多...</a><br /></td></tr>
+<tr class="separator:a1afe822670d9c701b9927a7f3f3710e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e38d47946c42e072021ea94c881cfab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a5e38d47946c42e072021ea94c881cfab">lcg_vecrnd</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> l, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> h, int size)</td></tr>
+<tr class="memdesc:a5e38d47946c42e072021ea94c881cfab"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a vector using random values  <a href="algebra_8h.html#a5e38d47946c42e072021ea94c881cfab">更多...</a><br /></td></tr>
+<tr class="separator:a5e38d47946c42e072021ea94c881cfab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75b74d874c1e450dfd9464bf082fe78d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a75b74d874c1e450dfd9464bf082fe78d">lcg_vecrnd</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> l, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> h, int m, int n)</td></tr>
+<tr class="memdesc:a75b74d874c1e450dfd9464bf082fe78d"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a 2D vector using random values  <a href="algebra_8h.html#a75b74d874c1e450dfd9464bf082fe78d">更多...</a><br /></td></tr>
+<tr class="separator:a75b74d874c1e450dfd9464bf082fe78d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0410065bf55a7fab967414cf03195956"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a0410065bf55a7fab967414cf03195956">lcg_squaredl2norm</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *a, int n)</td></tr>
+<tr class="memdesc:a0410065bf55a7fab967414cf03195956"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate the squared L2 norm of the input vector  <a href="algebra_8h.html#a0410065bf55a7fab967414cf03195956">更多...</a><br /></td></tr>
+<tr class="separator:a0410065bf55a7fab967414cf03195956"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3518dbc8e1c8d65340985f5a647b15ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#a3518dbc8e1c8d65340985f5a647b15ba">lcg_dot</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> &amp;ret, const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *a, const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *b, int size)</td></tr>
+<tr class="memdesc:a3518dbc8e1c8d65340985f5a647b15ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate dot product of two real vectors  <a href="algebra_8h.html#a3518dbc8e1c8d65340985f5a647b15ba">更多...</a><br /></td></tr>
+<tr class="separator:a3518dbc8e1c8d65340985f5a647b15ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab49d2050c9178d2a98ee9529fa722b5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="algebra_8h.html#ab49d2050c9178d2a98ee9529fa722b5f">lcg_matvec</a> (<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **A, const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *Ax, int m_size, int n_size, <a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">matrix_layout_e</a> layout=<a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79a5ecbcf0afce98b042f35ec71ba03fa4b">Normal</a>)</td></tr>
+<tr class="memdesc:ab49d2050c9178d2a98ee9529fa722b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate product of a real matrix and a vector  <a href="algebra_8h.html#ab49d2050c9178d2a98ee9529fa722b5f">更多...</a><br /></td></tr>
+<tr class="separator:ab49d2050c9178d2a98ee9529fa722b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">类型定义说明</h2>
+<a id="a5282007dc6f0c317361d25fa0eeb4a35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5282007dc6f0c317361d25fa0eeb4a35">&#9670;&nbsp;</a></span>lcg_float</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef double <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A simple definition of the float type we use here. Easy to change in the future. Right now it is just an alias of double </p>
+
+</div>
+</div>
+<h2 class="groupheader">枚举类型说明</h2>
+<a id="a9b798f257bb3294c912dcedc1e76f6b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b798f257bb3294c912dcedc1e76f6b5">&#9670;&nbsp;</a></span>complex_conjugate_e</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5">complex_conjugate_e</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Conjugate types for a complex number. </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="a9b798f257bb3294c912dcedc1e76f6b5a3c58aeb596460847714a08cfa58b0362"></a>NonConjugate&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9b798f257bb3294c912dcedc1e76f6b5a3a520a6a0b858c61cad005ad660ffa4d"></a>Conjugate&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="afa1356d2f38311c3519c524f2a9f8e79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa1356d2f38311c3519c524f2a9f8e79">&#9670;&nbsp;</a></span>matrix_layout_e</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">matrix_layout_e</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Matrix layouts. </p>
+<p>C++ library of real and complex linear algebra.</p>
+<p>Copyright (c) 2019-2029 Yi Zhang (<a href="#" onclick="location.href='mai'+'lto:'+'zha'+'ng'+'yis'+'s@'+'icl'+'ou'+'d.c'+'om'; return false;">zhang<span style="display: none;">.nosp@m.</span>yiss<span style="display: none;">.nosp@m.</span>@iclo<span style="display: none;">.nosp@m.</span>ud.c<span style="display: none;">.nosp@m.</span>om</a>) All rights reserved.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="afa1356d2f38311c3519c524f2a9f8e79a5ecbcf0afce98b042f35ec71ba03fa4b"></a>Normal&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afa1356d2f38311c3519c524f2a9f8e79af11ca2d40b3bca2eb37e5b28d425d5ba"></a>Transpose&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a id="ae64db17d8a7244337ebe75be50ff644e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae64db17d8a7244337ebe75be50ff644e">&#9670;&nbsp;</a></span>lcg_abs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> lcg_abs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return absolute value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>The absolute value </dd></dl>
+
+</div>
+</div>
+<a id="a3518dbc8e1c8d65340985f5a647b15ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3518dbc8e1c8d65340985f5a647b15ba">&#9670;&nbsp;</a></span>lcg_dot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_dot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate dot product of two real vectors </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>pointer of the vector a </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>pointer of the vector b </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>size of the vector</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>dot product </dd></dl>
+
+</div>
+</div>
+<a id="a2bf28e4c8f108a1d501d8359c29efb80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bf28e4c8f108a1d501d8359c29efb80">&#9670;&nbsp;</a></span>lcg_free() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroy memory used by the 2D lcg_float type array. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Pointer of the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a51d9b69c6afbba37a48470b4e1db4739"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51d9b69c6afbba37a48470b4e1db4739">&#9670;&nbsp;</a></span>lcg_free() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroy memory used by the lcg_float type array. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Pointer of the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a945cce3562bdc6abfd79bdbca16024da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a945cce3562bdc6abfd79bdbca16024da">&#9670;&nbsp;</a></span>lcg_malloc() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>** lcg_malloc </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Locate memory for a lcg_float second pointer type. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Size of the lcg_float array.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Pointer of the array's location. </dd></dl>
+
+</div>
+</div>
+<a id="aba72b525ff25e2412789ef21b1ded5df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba72b525ff25e2412789ef21b1ded5df">&#9670;&nbsp;</a></span>lcg_malloc() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>* lcg_malloc </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Locate memory for a lcg_float pointer type. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Size of the lcg_float array.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Pointer of the array's location. </dd></dl>
+
+</div>
+</div>
+<a id="ab49d2050c9178d2a98ee9529fa722b5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab49d2050c9178d2a98ee9529fa722b5f">&#9670;&nbsp;</a></span>lcg_matvec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_matvec </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>Ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">matrix_layout_e</a>&#160;</td>
+          <td class="paramname"><em>layout</em> = <code><a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79a5ecbcf0afce98b042f35ec71ba03fa4b">Normal</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate product of a real matrix and a vector </p>
+<p>Different configurations: layout=Normal -&gt; A layout=Transpose -&gt; A^T</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">A</td><td>matrix A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>vector x </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">Ax</td><td>product of Ax </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m_size</td><td>row size of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>column size of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">layout</td><td>layout of A used for multiplication. Must be Normal or Transpose </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adca8ae8584005830c690b576782c274f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adca8ae8584005830c690b576782c274f">&#9670;&nbsp;</a></span>lcg_max()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> lcg_max </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the bigger value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>input value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>The bigger value </dd></dl>
+
+</div>
+</div>
+<a id="a18d42877be8de7a79dc23e311bb1f620"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18d42877be8de7a79dc23e311bb1f620">&#9670;&nbsp;</a></span>lcg_min()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> lcg_min </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the smaller value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>input value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>input value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>The smaller value </dd></dl>
+
+</div>
+</div>
+<a id="af78b2411bc26e46373de099e2be25c62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af78b2411bc26e46373de099e2be25c62">&#9670;&nbsp;</a></span>lcg_set2box()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> lcg_set2box </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>hig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>low_bound</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hig_bound</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the input value within a box constraint </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>low boundary </td></tr>
+    <tr><td class="paramname">b</td><td>high boundary </td></tr>
+    <tr><td class="paramname">in</td><td>input value </td></tr>
+    <tr><td class="paramname">low_bound</td><td>Whether to include the low boundary value </td></tr>
+    <tr><td class="paramname">hig_bound</td><td>Whether to include the high boundary value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>box constrained value </dd></dl>
+
+</div>
+</div>
+<a id="a0410065bf55a7fab967414cf03195956"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0410065bf55a7fab967414cf03195956">&#9670;&nbsp;</a></span>lcg_squaredl2norm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double lcg_squaredl2norm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate the squared L2 norm of the input vector </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramname">n</td><td>size of the vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>double L2 norm </dd></dl>
+
+</div>
+</div>
+<a id="a75b74d874c1e450dfd9464bf082fe78d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b74d874c1e450dfd9464bf082fe78d">&#9670;&nbsp;</a></span>lcg_vecrnd() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecrnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a 2D vector using random values </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">l</td><td>the lower bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>the higher bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>row size of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>column size of the vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5e38d47946c42e072021ea94c881cfab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e38d47946c42e072021ea94c881cfab">&#9670;&nbsp;</a></span>lcg_vecrnd() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecrnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a vector using random values </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">l</td><td>the lower bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>the higher bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>size of the vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1afe822670d9c701b9927a7f3f3710e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1afe822670d9c701b9927a7f3f3710e9">&#9670;&nbsp;</a></span>lcg_vecset() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> **&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a 2d vector's value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>initial value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>row size of the matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>column size of the matrix </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abbff87f4f6bca34de4982794d99e7ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbff87f4f6bca34de4982794d99e7ff6">&#9670;&nbsp;</a></span>lcg_vecset() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a vector's value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>initial value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>vector size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="algebra_8h.html">algebra.h</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    name: Build
+    runs-on: macOS-latest
+    env:
+        GIT_SSL_NO_VERIFY: true
+        DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v1
+      - name: Clean
+        run: make clean
+      - name: Build
+        run: git pull --all && git submodule sync; make update; make

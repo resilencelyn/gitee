@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['clcg_5falready_5foptimizied_343',['CLCG_ALREADY_OPTIMIZIED',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285',1,'util.h']]],
+  ['clcg_5fbicg_344',['CLCG_BICG',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316',1,'util.h']]],
+  ['clcg_5fbicg_5fsym_345',['CLCG_BICG_SYM',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de',1,'util.h']]],
+  ['clcg_5fbicgstab_346',['CLCG_BICGSTAB',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a',1,'util.h']]],
+  ['clcg_5fcgs_347',['CLCG_CGS',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5',1,'util.h']]],
+  ['clcg_5fconvergence_348',['CLCG_CONVERGENCE',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629',1,'util.h']]],
+  ['clcg_5finvalid_5fpointer_349',['CLCG_INVALID_POINTER',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f',1,'util.h']]],
+  ['clcg_5finvilad_5fepsilon_350',['CLCG_INVILAD_EPSILON',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa',1,'util.h']]],
+  ['clcg_5finvilad_5fmax_5fiterations_351',['CLCG_INVILAD_MAX_ITERATIONS',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e',1,'util.h']]],
+  ['clcg_5finvilad_5fvariable_5fsize_352',['CLCG_INVILAD_VARIABLE_SIZE',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0',1,'util.h']]],
+  ['clcg_5fnan_5fvalue_353',['CLCG_NAN_VALUE',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f',1,'util.h']]],
+  ['clcg_5fpbicg_354',['CLCG_PBICG',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a',1,'util.h']]],
+  ['clcg_5fpcg_355',['CLCG_PCG',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3',1,'util.h']]],
+  ['clcg_5freached_5fmax_5fiterations_356',['CLCG_REACHED_MAX_ITERATIONS',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15',1,'util.h']]],
+  ['clcg_5fsize_5fnot_5fmatch_357',['CLCG_SIZE_NOT_MATCH',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f',1,'util.h']]],
+  ['clcg_5fstop_358',['CLCG_STOP',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb',1,'util.h']]],
+  ['clcg_5fsuccess_359',['CLCG_SUCCESS',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad',1,'util.h']]],
+  ['clcg_5ftfqmr_360',['CLCG_TFQMR',['../util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333',1,'util.h']]],
+  ['clcg_5funknown_5ferror_361',['CLCG_UNKNOWN_ERROR',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279',1,'util.h']]],
+  ['clcg_5funknown_5fsolver_362',['CLCG_UNKNOWN_SOLVER',['../util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84',1,'util.h']]],
+  ['conjugate_363',['Conjugate',['../algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5a3a520a6a0b858c61cad005ad660ffa4d',1,'algebra.h']]]
+];

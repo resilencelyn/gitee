@@ -1,0 +1,569 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liblcg: src/lib/util.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Liblcg
+   &#160;<span id="projectnumber">2.0</span>
+   </div>
+   <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('util_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">结构体</a> &#124;
+<a href="#enum-members">枚举</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">util.h 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;string&quot;</code><br />
+<code>#include &quot;<a class="el" href="algebra_8h_source.html">algebra.h</a>&quot;</code><br />
+</div>
+<p><a href="util_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+结构体</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlcg__para.html">lcg_para</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters of the conjugate gradient methods.  <a href="structlcg__para.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structclcg__para.html">clcg_para</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters of the conjugate gradient methods.  <a href="structclcg__para.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+枚举</h2></td></tr>
+<tr class="memitem:a9ce95cfde91c2580af819d69bdcc86b1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> { <br />
+&#160;&#160;<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>, 
+<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a>, 
+<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6">LCG_CGS</a>, 
+<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827">LCG_BICGSTAB</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4">LCG_BICGSTAB2</a>, 
+<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d">LCG_PG</a>, 
+<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b">LCG_SPG</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a9ce95cfde91c2580af819d69bdcc86b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types of method that could be recognized by the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function.  <a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">更多...</a><br /></td></tr>
+<tr class="separator:a9ce95cfde91c2580af819d69bdcc86b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad643ef582f994ef247d3e040811feb81"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81">lcg_return_enum</a> { <br />
+&#160;&#160;<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e">LCG_SUCCESS</a> = 0, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67">LCG_CONVERGENCE</a> = 0, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a21f7d6b296dbafdccd9038b83c0ecb75">LCG_STOP</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9f5a58d40b4813f005e593f85d3bae2c">LCG_ALREADY_OPTIMIZIED</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9cd8172c00dd3b80b1caa63482bcc416">LCG_UNKNOWN_ERROR</a> = -1024, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae09df33800717847337f26b0d04e7bc9">LCG_INVILAD_VARIABLE_SIZE</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ab06a35f60ee30b6bb3ecb5f5b5e55b5f">LCG_INVILAD_MAX_ITERATIONS</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee">LCG_INVILAD_EPSILON</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34">LCG_INVILAD_RESTART_EPSILON</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e">LCG_REACHED_MAX_ITERATIONS</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef">LCG_NULL_PRECONDITION_MATRIX</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">LCG_NAN_VALUE</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544">LCG_INVALID_POINTER</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a">LCG_INVALID_LAMBDA</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa">LCG_INVALID_SIGMA</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2">LCG_INVALID_BETA</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151">LCG_INVALID_MAXIM</a>, 
+<a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81acb02fa099f4c3ed904d2e496caf34f79">LCG_SIZE_NOT_MATCH</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ad643ef582f994ef247d3e040811feb81"><td class="mdescLeft">&#160;</td><td class="mdescRight">return value of the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function  <a href="util_8h.html#ad643ef582f994ef247d3e040811feb81">更多...</a><br /></td></tr>
+<tr class="separator:ad643ef582f994ef247d3e040811feb81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af99347c7374b3b5c75db9f4f8732bf0d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a> { <br />
+&#160;&#160;<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316">CLCG_BICG</a>, 
+<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de">CLCG_BICG_SYM</a>, 
+<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5">CLCG_CGS</a>, 
+<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a">CLCG_BICGSTAB</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333">CLCG_TFQMR</a>, 
+<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3">CLCG_PCG</a>, 
+<a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a">CLCG_PBICG</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:af99347c7374b3b5c75db9f4f8732bf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types of method that could be recognized by the <a class="el" href="clcg_8cpp.html#a14eba38c7642bf538ded153e7c6ba6db" title="A combined complex conjugate gradient solver function.">clcg_solver()</a> function.  <a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">更多...</a><br /></td></tr>
+<tr class="separator:af99347c7374b3b5c75db9f4f8732bf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af82eac923ab2df65f9aa20c7cc9edb7e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7e">clcg_return_enum</a> { <br />
+&#160;&#160;<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad">CLCG_SUCCESS</a> = 0, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629">CLCG_CONVERGENCE</a> = 0, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb">CLCG_STOP</a>, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285">CLCG_ALREADY_OPTIMIZIED</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279">CLCG_UNKNOWN_ERROR</a> = -1024, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0">CLCG_INVILAD_VARIABLE_SIZE</a>, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e">CLCG_INVILAD_MAX_ITERATIONS</a>, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa">CLCG_INVILAD_EPSILON</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15">CLCG_REACHED_MAX_ITERATIONS</a>, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f">CLCG_NAN_VALUE</a>, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f">CLCG_INVALID_POINTER</a>, 
+<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f">CLCG_SIZE_NOT_MATCH</a>, 
+<br />
+&#160;&#160;<a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84">CLCG_UNKNOWN_SOLVER</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:af82eac923ab2df65f9aa20c7cc9edb7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">return value of the <a class="el" href="clcg_8cpp.html#a14eba38c7642bf538ded153e7c6ba6db" title="A combined complex conjugate gradient solver function.">clcg_solver()</a> function  <a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7e">更多...</a><br /></td></tr>
+<tr class="separator:af82eac923ab2df65f9aa20c7cc9edb7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ae709a311e61bd35843a9f4333c38ab18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlcg__para.html">lcg_para</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a> ()</td></tr>
+<tr class="memdesc:ae709a311e61bd35843a9f4333c38ab18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> type instance with default values.  <a href="util_8h.html#ae709a311e61bd35843a9f4333c38ab18">更多...</a><br /></td></tr>
+<tr class="separator:ae709a311e61bd35843a9f4333c38ab18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67b408800cd0a006af13e0dec0d231c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#a67b408800cd0a006af13e0dec0d231c5">lcg_select_solver</a> (std::string slr_char)</td></tr>
+<tr class="memdesc:a67b408800cd0a006af13e0dec0d231c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select a type of solver according to the name  <a href="util_8h.html#a67b408800cd0a006af13e0dec0d231c5">更多...</a><br /></td></tr>
+<tr class="separator:a67b408800cd0a006af13e0dec0d231c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a526b1d6f2e9bc6b146dc0be21b1bce32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#a526b1d6f2e9bc6b146dc0be21b1bce32">lcg_error_str</a> (int er_index, bool er_throw=false)</td></tr>
+<tr class="memdesc:a526b1d6f2e9bc6b146dc0be21b1bce32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display or throw out a string explanation for the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function's return values.  <a href="util_8h.html#a526b1d6f2e9bc6b146dc0be21b1bce32">更多...</a><br /></td></tr>
+<tr class="separator:a526b1d6f2e9bc6b146dc0be21b1bce32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3023497f88be45d555171bd63f427e20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structclcg__para.html">clcg_para</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#a3023497f88be45d555171bd63f427e20">clcg_default_parameters</a> ()</td></tr>
+<tr class="memdesc:a3023497f88be45d555171bd63f427e20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a <a class="el" href="structclcg__para.html" title="Parameters of the conjugate gradient methods.">clcg_para</a> type instance with default values.  <a href="util_8h.html#a3023497f88be45d555171bd63f427e20">更多...</a><br /></td></tr>
+<tr class="separator:a3023497f88be45d555171bd63f427e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a573aff66f0d357bdea15b6380841428f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#a573aff66f0d357bdea15b6380841428f">clcg_select_solver</a> (std::string slr_char)</td></tr>
+<tr class="memdesc:a573aff66f0d357bdea15b6380841428f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Select a type of solver according to the name  <a href="util_8h.html#a573aff66f0d357bdea15b6380841428f">更多...</a><br /></td></tr>
+<tr class="separator:a573aff66f0d357bdea15b6380841428f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5a6b6af37e276d13520d96154304008"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8h.html#ab5a6b6af37e276d13520d96154304008">clcg_error_str</a> (int er_index, bool er_throw=false)</td></tr>
+<tr class="memdesc:ab5a6b6af37e276d13520d96154304008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display or throw out a string explanation for the <a class="el" href="clcg_8cpp.html#a14eba38c7642bf538ded153e7c6ba6db" title="A combined complex conjugate gradient solver function.">clcg_solver()</a> function's return values.  <a href="util_8h.html#ab5a6b6af37e276d13520d96154304008">更多...</a><br /></td></tr>
+<tr class="separator:ab5a6b6af37e276d13520d96154304008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">枚举类型说明</h2>
+<a id="af82eac923ab2df65f9aa20c7cc9edb7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af82eac923ab2df65f9aa20c7cc9edb7e">&#9670;&nbsp;</a></span>clcg_return_enum</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7e">clcg_return_enum</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>return value of the <a class="el" href="clcg_8cpp.html#a14eba38c7642bf538ded153e7c6ba6db" title="A combined complex conjugate gradient solver function.">clcg_solver()</a> function </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad"></a>CLCG_SUCCESS&#160;</td><td class="fielddoc"><p>The solver function terminated successfully. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629"></a>CLCG_CONVERGENCE&#160;</td><td class="fielddoc"><p>The iteration reached convergence. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb"></a>CLCG_STOP&#160;</td><td class="fielddoc"><p>The iteration is stopped by the monitoring function. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285"></a>CLCG_ALREADY_OPTIMIZIED&#160;</td><td class="fielddoc"><p>The initial solution is already optimized. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279"></a>CLCG_UNKNOWN_ERROR&#160;</td><td class="fielddoc"><p>Unknown error. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0"></a>CLCG_INVILAD_VARIABLE_SIZE&#160;</td><td class="fielddoc"><p>The variable size is negative </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e"></a>CLCG_INVILAD_MAX_ITERATIONS&#160;</td><td class="fielddoc"><p>The maximal iteration times is negative. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa"></a>CLCG_INVILAD_EPSILON&#160;</td><td class="fielddoc"><p>The epsilon is negative. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15"></a>CLCG_REACHED_MAX_ITERATIONS&#160;</td><td class="fielddoc"><p>Iteration reached maximal limit. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f"></a>CLCG_NAN_VALUE&#160;</td><td class="fielddoc"><p>Nan value. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f"></a>CLCG_INVALID_POINTER&#160;</td><td class="fielddoc"><p>Invalid pointer. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f"></a>CLCG_SIZE_NOT_MATCH&#160;</td><td class="fielddoc"><p>Sizes of m and B do not match </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84"></a>CLCG_UNKNOWN_SOLVER&#160;</td><td class="fielddoc"><p>Unknown solver </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="af99347c7374b3b5c75db9f4f8732bf0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af99347c7374b3b5c75db9f4f8732bf0d">&#9670;&nbsp;</a></span>clcg_solver_enum</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Types of method that could be recognized by the <a class="el" href="clcg_8cpp.html#a14eba38c7642bf538ded153e7c6ba6db" title="A combined complex conjugate gradient solver function.">clcg_solver()</a> function. </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316"></a>CLCG_BICG&#160;</td><td class="fielddoc"><p>Jacob's Bi-Conjugate Gradient Method </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de"></a>CLCG_BICG_SYM&#160;</td><td class="fielddoc"><p>Bi-Conjugate Gradient Method accelerated for complex symmetric A </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5"></a>CLCG_CGS&#160;</td><td class="fielddoc"><p>Conjugate Gradient Squared Method with real coefficients. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a"></a>CLCG_BICGSTAB&#160;</td><td class="fielddoc"><p>Biconjugate gradient method. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333"></a>CLCG_TFQMR&#160;</td><td class="fielddoc"><p>Quasi-Minimal Residual Method Transpose Free Quasi-Minimal Residual Method </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3"></a>CLCG_PCG&#160;</td><td class="fielddoc"><p>Preconditioned conjugate gradient </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a"></a>CLCG_PBICG&#160;</td><td class="fielddoc"><p>Preconditioned Bi-Conjugate Gradient Method </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ad643ef582f994ef247d3e040811feb81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad643ef582f994ef247d3e040811feb81">&#9670;&nbsp;</a></span>lcg_return_enum</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="util_8h.html#ad643ef582f994ef247d3e040811feb81">lcg_return_enum</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>return value of the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e"></a>LCG_SUCCESS&#160;</td><td class="fielddoc"><p>The solver function terminated successfully. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67"></a>LCG_CONVERGENCE&#160;</td><td class="fielddoc"><p>The iteration reached convergence. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a21f7d6b296dbafdccd9038b83c0ecb75"></a>LCG_STOP&#160;</td><td class="fielddoc"><p>The iteration is stopped by the monitoring function. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a9f5a58d40b4813f005e593f85d3bae2c"></a>LCG_ALREADY_OPTIMIZIED&#160;</td><td class="fielddoc"><p>The initial solution is already optimized. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a9cd8172c00dd3b80b1caa63482bcc416"></a>LCG_UNKNOWN_ERROR&#160;</td><td class="fielddoc"><p>Unknown error. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81ae09df33800717847337f26b0d04e7bc9"></a>LCG_INVILAD_VARIABLE_SIZE&#160;</td><td class="fielddoc"><p>The variable size is negative </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81ab06a35f60ee30b6bb3ecb5f5b5e55b5f"></a>LCG_INVILAD_MAX_ITERATIONS&#160;</td><td class="fielddoc"><p>The maximal iteration times is negative. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee"></a>LCG_INVILAD_EPSILON&#160;</td><td class="fielddoc"><p>The epsilon is negative. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34"></a>LCG_INVILAD_RESTART_EPSILON&#160;</td><td class="fielddoc"><p>The restart epsilon is negative. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e"></a>LCG_REACHED_MAX_ITERATIONS&#160;</td><td class="fielddoc"><p>Iteration reached maximal limit. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef"></a>LCG_NULL_PRECONDITION_MATRIX&#160;</td><td class="fielddoc"><p>Null precondition matrix. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3"></a>LCG_NAN_VALUE&#160;</td><td class="fielddoc"><p>Nan value. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544"></a>LCG_INVALID_POINTER&#160;</td><td class="fielddoc"><p>Invalid pointer. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a"></a>LCG_INVALID_LAMBDA&#160;</td><td class="fielddoc"><p>Invalid range for lambda. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa"></a>LCG_INVALID_SIGMA&#160;</td><td class="fielddoc"><p>Invalid range for sigma. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2"></a>LCG_INVALID_BETA&#160;</td><td class="fielddoc"><p>Invalid range for beta. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151"></a>LCG_INVALID_MAXIM&#160;</td><td class="fielddoc"><p>Invalid range for maxi_m. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ad643ef582f994ef247d3e040811feb81acb02fa099f4c3ed904d2e496caf34f79"></a>LCG_SIZE_NOT_MATCH&#160;</td><td class="fielddoc"><p>Sizes of m and B do not match </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a9ce95cfde91c2580af819d69bdcc86b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ce95cfde91c2580af819d69bdcc86b1">&#9670;&nbsp;</a></span>lcg_solver_enum</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Types of method that could be recognized by the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function. </p>
+<p>C++ library of linear conjugate gradient.</p>
+<p>Copyright (c) 2019-2029 Yi Zhang (<a href="#" onclick="location.href='mai'+'lto:'+'zha'+'ng'+'yis'+'s@'+'icl'+'ou'+'d.c'+'om'; return false;">zhang<span style="display: none;">.nosp@m.</span>yiss<span style="display: none;">.nosp@m.</span>@iclo<span style="display: none;">.nosp@m.</span>ud.c<span style="display: none;">.nosp@m.</span>om</a>) All rights reserved.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02"></a>LCG_CG&#160;</td><td class="fielddoc"><p>Conjugate gradient method. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921"></a>LCG_PCG&#160;</td><td class="fielddoc"><p>Preconditioned conjugate gradient method. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6"></a>LCG_CGS&#160;</td><td class="fielddoc"><p>Conjugate gradient squared method. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827"></a>LCG_BICGSTAB&#160;</td><td class="fielddoc"><p>Biconjugate gradient method. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4"></a>LCG_BICGSTAB2&#160;</td><td class="fielddoc"><p>Biconjugate gradient method with restart. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d"></a>LCG_PG&#160;</td><td class="fielddoc"><p>Conjugate gradient method with projected gradient for inequality constraints. This algorithm comes without non-monotonic linear search for the step length. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b"></a>LCG_SPG&#160;</td><td class="fielddoc"><p>Conjugate gradient method with spectral projected gradient for inequality constraints. This algorithm comes with non-monotonic linear search for the step length. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a id="a3023497f88be45d555171bd63f427e20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3023497f88be45d555171bd63f427e20">&#9670;&nbsp;</a></span>clcg_default_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structclcg__para.html">clcg_para</a> clcg_default_parameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return a <a class="el" href="structclcg__para.html" title="Parameters of the conjugate gradient methods.">clcg_para</a> type instance with default values. </p>
+<p>Users can use this function to get default parameters' value for the complex conjugate gradient methods.</p>
+<dl class="section return"><dt>返回</dt><dd>A <a class="el" href="structclcg__para.html" title="Parameters of the conjugate gradient methods.">clcg_para</a> type instance. </dd></dl>
+
+</div>
+</div>
+<a id="ab5a6b6af37e276d13520d96154304008"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5a6b6af37e276d13520d96154304008">&#9670;&nbsp;</a></span>clcg_error_str()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void clcg_error_str </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>er_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>er_throw</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Display or throw out a string explanation for the <a class="el" href="clcg_8cpp.html#a14eba38c7642bf538ded153e7c6ba6db" title="A combined complex conjugate gradient solver function.">clcg_solver()</a> function's return values. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">er_index</td><td>The error index returned by the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">er_throw</td><td>throw out a char string of the explanation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>A string explanation of the error. </dd></dl>
+
+</div>
+</div>
+<a id="a573aff66f0d357bdea15b6380841428f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a573aff66f0d357bdea15b6380841428f">&#9670;&nbsp;</a></span>clcg_select_solver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a> clcg_select_solver </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>slr_char</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Select a type of solver according to the name </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">slr_char</td><td>Name of the solver</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>The clcg solver enum. </dd></dl>
+
+</div>
+</div>
+<a id="ae709a311e61bd35843a9f4333c38ab18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae709a311e61bd35843a9f4333c38ab18">&#9670;&nbsp;</a></span>lcg_default_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structlcg__para.html">lcg_para</a> lcg_default_parameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return a <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> type instance with default values. </p>
+<p>Users can use this function to get default parameters' value for the conjugate gradient methods.</p>
+<dl class="section return"><dt>返回</dt><dd>A <a class="el" href="structlcg__para.html" title="Parameters of the conjugate gradient methods.">lcg_para</a> type instance. </dd></dl>
+
+</div>
+</div>
+<a id="a526b1d6f2e9bc6b146dc0be21b1bce32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a526b1d6f2e9bc6b146dc0be21b1bce32">&#9670;&nbsp;</a></span>lcg_error_str()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_error_str </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>er_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>er_throw</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Display or throw out a string explanation for the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function's return values. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">er_index</td><td>The error index returned by the <a class="el" href="lcg_8cpp.html#a8980c9cac32832f118188487467606e6" title="A combined conjugate gradient solver function.">lcg_solver()</a> function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">er_throw</td><td>throw out a char string of the explanation.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>A string explanation of the error. </dd></dl>
+
+</div>
+</div>
+<a id="a67b408800cd0a006af13e0dec0d231c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67b408800cd0a006af13e0dec0d231c5">&#9670;&nbsp;</a></span>lcg_select_solver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> lcg_select_solver </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>slr_char</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Select a type of solver according to the name </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">slr_char</td><td>Name of the solver</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>The lcg solver enum. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="util_8h.html">util.h</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

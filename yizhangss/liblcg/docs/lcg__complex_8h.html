@@ -1,0 +1,809 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liblcg: src/lib/lcg_complex.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Liblcg
+   &#160;<span id="projectnumber">2.0</span>
+   </div>
+   <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('lcg__complex_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#typedef-members">类型定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">lcg_complex.h 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;iostream&quot;</code><br />
+<code>#include &quot;<a class="el" href="algebra_8h_source.html">algebra.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="config_8h_source.html">config.h</a>&quot;</code><br />
+<code>#include &quot;complex&quot;</code><br />
+</div>
+<p><a href="lcg__complex_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+类型定义</h2></td></tr>
+<tr class="memitem:a06a3164cabcbbd244ee0157390ca9465"><td class="memItemLeft" align="right" valign="top">typedef std::complex&lt; <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a></td></tr>
+<tr class="separator:a06a3164cabcbbd244ee0157390ca9465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a56ceacd006013241a3788828b2d4f1f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a56ceacd006013241a3788828b2d4f1f3">set</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> r, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> i)</td></tr>
+<tr class="memdesc:a56ceacd006013241a3788828b2d4f1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">setup a complex number  <a href="lcg__complex_8h.html#a56ceacd006013241a3788828b2d4f1f3">更多...</a><br /></td></tr>
+<tr class="separator:a56ceacd006013241a3788828b2d4f1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d1c635de50c916b5543634223ed99d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a0d1c635de50c916b5543634223ed99d7">square</a> (const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a)</td></tr>
+<tr class="memdesc:a0d1c635de50c916b5543634223ed99d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the squared module of a complex number  <a href="lcg__complex_8h.html#a0d1c635de50c916b5543634223ed99d7">更多...</a><br /></td></tr>
+<tr class="separator:a0d1c635de50c916b5543634223ed99d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc5dafdcc7cc108ad71604d4d618ab91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#abc5dafdcc7cc108ad71604d4d618ab91">module</a> (const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a)</td></tr>
+<tr class="memdesc:abc5dafdcc7cc108ad71604d4d618ab91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the module of a complex number  <a href="lcg__complex_8h.html#abc5dafdcc7cc108ad71604d4d618ab91">更多...</a><br /></td></tr>
+<tr class="separator:abc5dafdcc7cc108ad71604d4d618ab91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e37614f8c04f73da0722ccfc816fadb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a7e37614f8c04f73da0722ccfc816fadb">conjugate</a> (const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a)</td></tr>
+<tr class="memdesc:a7e37614f8c04f73da0722ccfc816fadb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the conjugate of a complex number  <a href="lcg__complex_8h.html#a7e37614f8c04f73da0722ccfc816fadb">更多...</a><br /></td></tr>
+<tr class="separator:a7e37614f8c04f73da0722ccfc816fadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18af68c2da578cfb7ea2e0101b7e37b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a18af68c2da578cfb7ea2e0101b7e37b7">lcg_malloc_complex</a> (int n)</td></tr>
+<tr class="memdesc:a18af68c2da578cfb7ea2e0101b7e37b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate memory for a lcg_complex pointer type.  <a href="lcg__complex_8h.html#a18af68c2da578cfb7ea2e0101b7e37b7">更多...</a><br /></td></tr>
+<tr class="separator:a18af68c2da578cfb7ea2e0101b7e37b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a671f3a8f91526147c5a9bf6b65915595"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a671f3a8f91526147c5a9bf6b65915595">lcg_malloc_complex</a> (int m, int n)</td></tr>
+<tr class="memdesc:a671f3a8f91526147c5a9bf6b65915595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locate memory for a lcg_complex second pointer type.  <a href="lcg__complex_8h.html#a671f3a8f91526147c5a9bf6b65915595">更多...</a><br /></td></tr>
+<tr class="separator:a671f3a8f91526147c5a9bf6b65915595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fd19e8ac7b5a111196590aa7f5327a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a0fd19e8ac7b5a111196590aa7f5327a7">lcg_free</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *x)</td></tr>
+<tr class="memdesc:a0fd19e8ac7b5a111196590aa7f5327a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy memory used by the lcg_complex type array.  <a href="lcg__complex_8h.html#a0fd19e8ac7b5a111196590aa7f5327a7">更多...</a><br /></td></tr>
+<tr class="separator:a0fd19e8ac7b5a111196590aa7f5327a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a98f679a97ba420d5aeb6f90f12fe15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a5a98f679a97ba420d5aeb6f90f12fe15">lcg_free</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **x, int m)</td></tr>
+<tr class="memdesc:a5a98f679a97ba420d5aeb6f90f12fe15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy memory used by the 2D lcg_complex type array.  <a href="lcg__complex_8h.html#a5a98f679a97ba420d5aeb6f90f12fe15">更多...</a><br /></td></tr>
+<tr class="separator:a5a98f679a97ba420d5aeb6f90f12fe15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a3c89538ba16c4b92c6fc6d8df412e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a7a3c89538ba16c4b92c6fc6d8df412e0">lcg_vecset</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> b, int size)</td></tr>
+<tr class="memdesc:a7a3c89538ba16c4b92c6fc6d8df412e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a complex vector's value  <a href="lcg__complex_8h.html#a7a3c89538ba16c4b92c6fc6d8df412e0">更多...</a><br /></td></tr>
+<tr class="separator:a7a3c89538ba16c4b92c6fc6d8df412e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb707080222c6e05b3510834462e00eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#acb707080222c6e05b3510834462e00eb">lcg_vecset</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **a, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> b, int m, int n)</td></tr>
+<tr class="memdesc:acb707080222c6e05b3510834462e00eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a 2d complex vector's value  <a href="lcg__complex_8h.html#acb707080222c6e05b3510834462e00eb">更多...</a><br /></td></tr>
+<tr class="separator:acb707080222c6e05b3510834462e00eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ee0b1eed59d726e87d7f9dda9cd54f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a5ee0b1eed59d726e87d7f9dda9cd54f1">lcg_vecrnd</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> l, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> h, int size)</td></tr>
+<tr class="memdesc:a5ee0b1eed59d726e87d7f9dda9cd54f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a complex vector using random values  <a href="lcg__complex_8h.html#a5ee0b1eed59d726e87d7f9dda9cd54f1">更多...</a><br /></td></tr>
+<tr class="separator:a5ee0b1eed59d726e87d7f9dda9cd54f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe47d19bb671a5863586d620b9b277a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#afe47d19bb671a5863586d620b9b277a4">lcg_vecrnd</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **a, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> l, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> h, int m, int n)</td></tr>
+<tr class="memdesc:afe47d19bb671a5863586d620b9b277a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a 2D complex vector using random values  <a href="lcg__complex_8h.html#afe47d19bb671a5863586d620b9b277a4">更多...</a><br /></td></tr>
+<tr class="separator:afe47d19bb671a5863586d620b9b277a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafb7f1e0cba1be17f157cb09f3b9e6c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#aafb7f1e0cba1be17f157cb09f3b9e6c8">lcg_dot</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> &amp;ret, const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a, const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *b, int size)</td></tr>
+<tr class="memdesc:aafb7f1e0cba1be17f157cb09f3b9e6c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate dot product of two complex vectors  <a href="lcg__complex_8h.html#aafb7f1e0cba1be17f157cb09f3b9e6c8">更多...</a><br /></td></tr>
+<tr class="separator:aafb7f1e0cba1be17f157cb09f3b9e6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88ec1cf1c6cdacf88e2c193a7b1aae0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#a88ec1cf1c6cdacf88e2c193a7b1aae0b">lcg_inner</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> &amp;ret, const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *a, const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *b, int size)</td></tr>
+<tr class="memdesc:a88ec1cf1c6cdacf88e2c193a7b1aae0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate inner product of two complex vectors  <a href="lcg__complex_8h.html#a88ec1cf1c6cdacf88e2c193a7b1aae0b">更多...</a><br /></td></tr>
+<tr class="separator:a88ec1cf1c6cdacf88e2c193a7b1aae0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abab1d80596610b5cd8c4e724f9ba91f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="lcg__complex_8h.html#abab1d80596610b5cd8c4e724f9ba91f7">lcg_matvec</a> (<a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **A, const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *x, <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *Ax, int m_size, int n_size, <a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">matrix_layout_e</a> layout=<a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79a5ecbcf0afce98b042f35ec71ba03fa4b">Normal</a>, <a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5">complex_conjugate_e</a> <a class="el" href="lcg__complex_8h.html#a7e37614f8c04f73da0722ccfc816fadb">conjugate</a>=<a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5a3c58aeb596460847714a08cfa58b0362">NonConjugate</a>)</td></tr>
+<tr class="memdesc:abab1d80596610b5cd8c4e724f9ba91f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculate product of a complex matrix and a complex vector  <a href="lcg__complex_8h.html#abab1d80596610b5cd8c4e724f9ba91f7">更多...</a><br /></td></tr>
+<tr class="separator:abab1d80596610b5cd8c4e724f9ba91f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">类型定义说明</h2>
+<a id="a06a3164cabcbbd244ee0157390ca9465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06a3164cabcbbd244ee0157390ca9465">&#9670;&nbsp;</a></span>lcg_complex</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::complex&lt;<a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&gt; <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>C++ library of real and complex linear algebra.</p>
+<p>Copyright (c) 2019-2029 Yi Zhang (<a href="#" onclick="location.href='mai'+'lto:'+'zha'+'ng'+'yis'+'s@'+'icl'+'ou'+'d.c'+'om'; return false;">zhang<span style="display: none;">.nosp@m.</span>yiss<span style="display: none;">.nosp@m.</span>@iclo<span style="display: none;">.nosp@m.</span>ud.c<span style="display: none;">.nosp@m.</span>om</a>) All rights reserved.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a id="a7e37614f8c04f73da0722ccfc816fadb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e37614f8c04f73da0722ccfc816fadb">&#9670;&nbsp;</a></span>conjugate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> conjugate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the conjugate of a complex number </p>
+<dl class="section return"><dt>返回</dt><dd>The complex conjugate. </dd></dl>
+
+</div>
+</div>
+<a id="aafb7f1e0cba1be17f157cb09f3b9e6c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafb7f1e0cba1be17f157cb09f3b9e6c8">&#9670;&nbsp;</a></span>lcg_dot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_dot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate dot product of two complex vectors </p>
+<p>the product of two complex vectors are defined as &lt;a, b&gt; = \sum{a_i \cdot b_i}</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>complex vector a </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>complex vector b </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_size</td><td>size of the vector</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>product </dd></dl>
+
+</div>
+</div>
+<a id="a5a98f679a97ba420d5aeb6f90f12fe15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a98f679a97ba420d5aeb6f90f12fe15">&#9670;&nbsp;</a></span>lcg_free() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroy memory used by the 2D lcg_complex type array. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Pointer of the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0fd19e8ac7b5a111196590aa7f5327a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fd19e8ac7b5a111196590aa7f5327a7">&#9670;&nbsp;</a></span>lcg_free() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_free </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroy memory used by the lcg_complex type array. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Pointer of the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a88ec1cf1c6cdacf88e2c193a7b1aae0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88ec1cf1c6cdacf88e2c193a7b1aae0b">&#9670;&nbsp;</a></span>lcg_inner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_inner </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate inner product of two complex vectors </p>
+<p>the product of two complex vectors are defined as &lt;a, b&gt; = \sum{\bar{a_i} \cdot b_i}</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>complex vector a </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>complex vector b </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_size</td><td>size of the vector</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>product </dd></dl>
+
+</div>
+</div>
+<a id="a671f3a8f91526147c5a9bf6b65915595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a671f3a8f91526147c5a9bf6b65915595">&#9670;&nbsp;</a></span>lcg_malloc_complex() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>** lcg_malloc_complex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Locate memory for a lcg_complex second pointer type. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Size of the lcg_float array.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Pointer of the array's location. </dd></dl>
+
+</div>
+</div>
+<a id="a18af68c2da578cfb7ea2e0101b7e37b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18af68c2da578cfb7ea2e0101b7e37b7">&#9670;&nbsp;</a></span>lcg_malloc_complex() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>* lcg_malloc_complex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Locate memory for a lcg_complex pointer type. </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Size of the lcg_float array.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>Pointer of the array's location. </dd></dl>
+
+</div>
+</div>
+<a id="abab1d80596610b5cd8c4e724f9ba91f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abab1d80596610b5cd8c4e724f9ba91f7">&#9670;&nbsp;</a></span>lcg_matvec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_matvec </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>Ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79">matrix_layout_e</a>&#160;</td>
+          <td class="paramname"><em>layout</em> = <code><a class="el" href="algebra_8h.html#afa1356d2f38311c3519c524f2a9f8e79a5ecbcf0afce98b042f35ec71ba03fa4b">Normal</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5">complex_conjugate_e</a>&#160;</td>
+          <td class="paramname"><em>conjugate</em> = <code><a class="el" href="algebra_8h.html#a9b798f257bb3294c912dcedc1e76f6b5a3c58aeb596460847714a08cfa58b0362">NonConjugate</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>calculate product of a complex matrix and a complex vector </p>
+<p>the product of two complex vectors are defined as &lt;a, b&gt; = \sum{\bar{a_i}\cdot\b_i}. Different configurations: layout=Normal,conjugate=false -&gt; A layout=Transpose,conjugate=false -&gt; A^T layout=Normal,conjugate=true -&gt; \bar{A} layout=Transpose,conjugate=true -&gt; A^H</p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">A</td><td>complex matrix A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>complex vector x </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">Ax</td><td>product of Ax </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m_size</td><td>row size of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n_size</td><td>column size of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">layout</td><td>layout of A used for multiplication. Must be Normal or Transpose </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">conjugate</td><td>whether to use the complex conjugate of A for calculation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afe47d19bb671a5863586d620b9b277a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe47d19bb671a5863586d620b9b277a4">&#9670;&nbsp;</a></span>lcg_vecrnd() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecrnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a 2D complex vector using random values </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">l</td><td>the lower bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>the higher bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>row size of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>column size of the vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5ee0b1eed59d726e87d7f9dda9cd54f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ee0b1eed59d726e87d7f9dda9cd54f1">&#9670;&nbsp;</a></span>lcg_vecrnd() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecrnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td>
+          <td class="paramname"><em>h</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a complex vector using random values </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">l</td><td>the lower bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">h</td><td>the higher bound of random values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>size of the vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acb707080222c6e05b3510834462e00eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb707080222c6e05b3510834462e00eb">&#9670;&nbsp;</a></span>lcg_vecset() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> **&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a 2d complex vector's value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>initial value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>row size of the matrix </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>column size of the matrix </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7a3c89538ba16c4b92c6fc6d8df412e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a3c89538ba16c4b92c6fc6d8df412e0">&#9670;&nbsp;</a></span>lcg_vecset() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lcg_vecset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a>&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set a complex vector's value </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">a</td><td>pointer of the vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>initial value </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>vector size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abc5dafdcc7cc108ad71604d4d618ab91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc5dafdcc7cc108ad71604d4d618ab91">&#9670;&nbsp;</a></span>module()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> module </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the module of a complex number </p>
+<dl class="section return"><dt>返回</dt><dd>The module </dd></dl>
+
+</div>
+</div>
+<a id="a56ceacd006013241a3788828b2d4f1f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56ceacd006013241a3788828b2d4f1f3">&#9670;&nbsp;</a></span>set()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void set </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>setup a complex number </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">r</td><td>The real part of the complex number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The imaginary part of the complex number </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0d1c635de50c916b5543634223ed99d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d1c635de50c916b5543634223ed99d7">&#9670;&nbsp;</a></span>square()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> square </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="lcg__complex_8h.html#a06a3164cabcbbd244ee0157390ca9465">lcg_complex</a> *&#160;</td>
+          <td class="paramname"><em>a</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the squared module of a complex number </p>
+<dl class="section return"><dt>返回</dt><dd>The module </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="lcg__complex_8h.html">lcg_complex.h</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,851 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liblcg: LCG_CUDA_Solver类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Liblcg
+   &#160;<span id="projectnumber">2.0</span>
+   </div>
+   <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('class_l_c_g___c_u_d_a___solver.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
+<a href="#pro-attribs">Protected 属性</a>  </div>
+  <div class="headertitle">
+<div class="title">LCG_CUDA_Solver类 参考<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Linear conjugate gradient solver class  
+ <a href="class_l_c_g___c_u_d_a___solver.html#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="lcg__cuda_8h_source.html">lcg_cuda.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:af0f8e68427342c66be96bedb86a79031"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#af0f8e68427342c66be96bedb86a79031">LCG_CUDA_Solver</a> ()</td></tr>
+<tr class="separator:af0f8e68427342c66be96bedb86a79031"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba92e0085afaedd09f7d599567b5445b"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#aba92e0085afaedd09f7d599567b5445b">~LCG_CUDA_Solver</a> ()</td></tr>
+<tr class="separator:aba92e0085afaedd09f7d599567b5445b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57fd79c2f668a5fdab31824eb499d924"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a57fd79c2f668a5fdab31824eb499d924">AxProduct</a> (cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)=0</td></tr>
+<tr class="separator:a57fd79c2f668a5fdab31824eb499d924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6350827f4281768e8f4b916c771f0703"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a6350827f4281768e8f4b916c771f0703">MxProduct</a> (cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)=0</td></tr>
+<tr class="separator:a6350827f4281768e8f4b916c771f0703"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6b11e503ff9102bd1f23e850445bd3c"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#ae6b11e503ff9102bd1f23e850445bd3c">Progress</a> (const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, const int n_size, const int nz_size, const int k)</td></tr>
+<tr class="separator:ae6b11e503ff9102bd1f23e850445bd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a920357ca4ca3ccfc65167b7b8558d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a6a920357ca4ca3ccfc65167b7b8558d0">silent</a> ()</td></tr>
+<tr class="separator:a6a920357ca4ca3ccfc65167b7b8558d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48f93c1df3b02af8bb520a39a9bf4239"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a48f93c1df3b02af8bb520a39a9bf4239">set_report_interval</a> (unsigned int inter)</td></tr>
+<tr class="separator:a48f93c1df3b02af8bb520a39a9bf4239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a750303093c9ccce74d6d9823972950b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a750303093c9ccce74d6d9823972950b5">set_lcg_parameter</a> (const <a class="el" href="structlcg__para.html">lcg_para</a> &amp;in_param)</td></tr>
+<tr class="separator:a750303093c9ccce74d6d9823972950b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade64c5b4f5f04acceb283e074455bd47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#ade64c5b4f5f04acceb283e074455bd47">Minimize</a> (cublasHandle_t cub_handle, cusparseHandle_t cus_handle, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *b, const int n_size, const int nz_size, <a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id=<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>, bool verbose=true, bool er_throw=false)</td></tr>
+<tr class="separator:ade64c5b4f5f04acceb283e074455bd47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b8826c4c9e1cea057e593978688009"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a22b8826c4c9e1cea057e593978688009">MinimizePreconditioned</a> (cublasHandle_t cub_handle, cusparseHandle_t cus_handle, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *x, <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *b, const int n_size, const int nz_size, <a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> solver_id=<a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>, bool verbose=true, bool er_throw=false)</td></tr>
+<tr class="separator:a22b8826c4c9e1cea057e593978688009"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+静态 Public 成员函数</h2></td></tr>
+<tr class="memitem:aa6ff418957ffb3b1030867026f5886e9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#aa6ff418957ffb3b1030867026f5886e9">_AxProduct</a> (void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)</td></tr>
+<tr class="separator:aa6ff418957ffb3b1030867026f5886e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3d499e5d03e58b3788b5beac46635c4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#aa3d499e5d03e58b3788b5beac46635c4">_MxProduct</a> (void *instance, cublasHandle_t cub_handle, cusparseHandle_t cus_handle, cusparseDnVecDescr_t x, cusparseDnVecDescr_t prod_Ax, const int n_size, const int nz_size)</td></tr>
+<tr class="separator:aa3d499e5d03e58b3788b5beac46635c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581f22c54c24ec35c4720a6198d57625"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a581f22c54c24ec35c4720a6198d57625">_Progress</a> (void *instance, const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *m, const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> converge, const <a class="el" href="structlcg__para.html">lcg_para</a> *param, const int n_size, const int nz_size, const int k)</td></tr>
+<tr class="separator:a581f22c54c24ec35c4720a6198d57625"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected 属性</h2></td></tr>
+<tr class="memitem:a7844351dee2fc9f2eb7c1ae84c336f94"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlcg__para.html">lcg_para</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a7844351dee2fc9f2eb7c1ae84c336f94">param_</a></td></tr>
+<tr class="separator:a7844351dee2fc9f2eb7c1ae84c336f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a322f967081a5a022902495b8cc113e62"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#a322f967081a5a022902495b8cc113e62">inter_</a></td></tr>
+<tr class="separator:a322f967081a5a022902495b8cc113e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad563b60238fbc64664d75025e6566852"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_c_g___c_u_d_a___solver.html#ad563b60238fbc64664d75025e6566852">silent_</a></td></tr>
+<tr class="separator:ad563b60238fbc64664d75025e6566852"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>Linear conjugate gradient solver class </p>
+</div><h2 class="groupheader">构造及析构函数说明</h2>
+<a id="af0f8e68427342c66be96bedb86a79031"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0f8e68427342c66be96bedb86a79031">&#9670;&nbsp;</a></span>LCG_CUDA_Solver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LCG_CUDA_Solver::LCG_CUDA_Solver </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba92e0085afaedd09f7d599567b5445b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba92e0085afaedd09f7d599567b5445b">&#9670;&nbsp;</a></span>~LCG_CUDA_Solver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual LCG_CUDA_Solver::~LCG_CUDA_Solver </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a id="aa6ff418957ffb3b1030867026f5886e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6ff418957ffb3b1030867026f5886e9">&#9670;&nbsp;</a></span>_AxProduct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void LCG_CUDA_Solver::_AxProduct </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cublasHandle_t&#160;</td>
+          <td class="paramname"><em>cub_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseHandle_t&#160;</td>
+          <td class="paramname"><em>cus_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>prod_Ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>因为类的成员函数指针不能直接被调用，所以我们在这里定义一个静态的中转函数来辅助Ax函数的调用 这里我们利用reinterpret_cast将_Ax的指针转换到Ax上，需要注意的是成员函数的指针只能通过 实例对象进行调用，因此需要void* instance变量。 </p>
+
+</div>
+</div>
+<a id="aa3d499e5d03e58b3788b5beac46635c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3d499e5d03e58b3788b5beac46635c4">&#9670;&nbsp;</a></span>_MxProduct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void LCG_CUDA_Solver::_MxProduct </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cublasHandle_t&#160;</td>
+          <td class="paramname"><em>cub_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseHandle_t&#160;</td>
+          <td class="paramname"><em>cus_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>prod_Ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a581f22c54c24ec35c4720a6198d57625"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a581f22c54c24ec35c4720a6198d57625">&#9670;&nbsp;</a></span>_Progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int LCG_CUDA_Solver::_Progress </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>converge</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlcg__para.html">lcg_para</a> *&#160;</td>
+          <td class="paramname"><em>param</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a57fd79c2f668a5fdab31824eb499d924"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57fd79c2f668a5fdab31824eb499d924">&#9670;&nbsp;</a></span>AxProduct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void LCG_CUDA_Solver::AxProduct </td>
+          <td>(</td>
+          <td class="paramtype">cublasHandle_t&#160;</td>
+          <td class="paramname"><em>cub_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseHandle_t&#160;</td>
+          <td class="paramname"><em>cus_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>prod_Ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ade64c5b4f5f04acceb283e074455bd47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade64c5b4f5f04acceb283e074455bd47">&#9670;&nbsp;</a></span>Minimize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LCG_CUDA_Solver::Minimize </td>
+          <td>(</td>
+          <td class="paramtype">cublasHandle_t&#160;</td>
+          <td class="paramname"><em>cub_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseHandle_t&#160;</td>
+          <td class="paramname"><em>cus_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a>&#160;</td>
+          <td class="paramname"><em>solver_id</em> = <code><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>verbose</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>er_throw</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22b8826c4c9e1cea057e593978688009"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b8826c4c9e1cea057e593978688009">&#9670;&nbsp;</a></span>MinimizePreconditioned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LCG_CUDA_Solver::MinimizePreconditioned </td>
+          <td>(</td>
+          <td class="paramtype">cublasHandle_t&#160;</td>
+          <td class="paramname"><em>cub_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseHandle_t&#160;</td>
+          <td class="paramname"><em>cus_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a>&#160;</td>
+          <td class="paramname"><em>solver_id</em> = <code><a class="el" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>verbose</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>er_throw</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6350827f4281768e8f4b916c771f0703"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6350827f4281768e8f4b916c771f0703">&#9670;&nbsp;</a></span>MxProduct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void LCG_CUDA_Solver::MxProduct </td>
+          <td>(</td>
+          <td class="paramtype">cublasHandle_t&#160;</td>
+          <td class="paramname"><em>cub_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseHandle_t&#160;</td>
+          <td class="paramname"><em>cus_handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cusparseDnVecDescr_t&#160;</td>
+          <td class="paramname"><em>prod_Ax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae6b11e503ff9102bd1f23e850445bd3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6b11e503ff9102bd1f23e850445bd3c">&#9670;&nbsp;</a></span>Progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int LCG_CUDA_Solver::Progress </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a>&#160;</td>
+          <td class="paramname"><em>converge</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structlcg__para.html">lcg_para</a> *&#160;</td>
+          <td class="paramname"><em>param</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>nz_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>k</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a750303093c9ccce74d6d9823972950b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a750303093c9ccce74d6d9823972950b5">&#9670;&nbsp;</a></span>set_lcg_parameter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LCG_CUDA_Solver::set_lcg_parameter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structlcg__para.html">lcg_para</a> &amp;&#160;</td>
+          <td class="paramname"><em>in_param</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a48f93c1df3b02af8bb520a39a9bf4239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48f93c1df3b02af8bb520a39a9bf4239">&#9670;&nbsp;</a></span>set_report_interval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LCG_CUDA_Solver::set_report_interval </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>inter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6a920357ca4ca3ccfc65167b7b8558d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a920357ca4ca3ccfc65167b7b8558d0">&#9670;&nbsp;</a></span>silent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LCG_CUDA_Solver::silent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">结构体成员变量说明</h2>
+<a id="a322f967081a5a022902495b8cc113e62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a322f967081a5a022902495b8cc113e62">&#9670;&nbsp;</a></span>inter_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int LCG_CUDA_Solver::inter_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7844351dee2fc9f2eb7c1ae84c336f94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7844351dee2fc9f2eb7c1ae84c336f94">&#9670;&nbsp;</a></span>param_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structlcg__para.html">lcg_para</a> LCG_CUDA_Solver::param_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad563b60238fbc64664d75025e6566852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad563b60238fbc64664d75025e6566852">&#9670;&nbsp;</a></span>silent_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LCG_CUDA_Solver::silent_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>src/lib/<a class="el" href="lcg__cuda_8h_source.html">lcg_cuda.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="class_l_c_g___c_u_d_a___solver.html">LCG_CUDA_Solver</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>

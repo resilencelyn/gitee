@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liblcg: src/lib/util.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Liblcg
+   &#160;<span id="projectnumber">2.0</span>
+   </div>
+   <div id="projectbrief">C++ Library of Linear Conjugate Gradient Methods</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('util_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">util.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="util_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/******************************************************/</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#ifndef _LCG_UTIL_H</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#define _LCG_UTIL_H</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="algebra_8h.html">algebra.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">   35</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">   40</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a>,</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">   44</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a>,</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6">   48</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6">LCG_CGS</a>,</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827">   52</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827">LCG_BICGSTAB</a>,</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4">   56</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4">LCG_BICGSTAB2</a>,</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d">   61</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d">LCG_PG</a>,</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b">   66</a></span>&#160;    <a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b">LCG_SPG</a>,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81">   72</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81">lcg_return_enum</a></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e">   74</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e">LCG_SUCCESS</a> = 0, </div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67">   75</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67">LCG_CONVERGENCE</a> = 0, </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a21f7d6b296dbafdccd9038b83c0ecb75">   76</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a21f7d6b296dbafdccd9038b83c0ecb75">LCG_STOP</a>, </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9f5a58d40b4813f005e593f85d3bae2c">   77</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9f5a58d40b4813f005e593f85d3bae2c">LCG_ALREADY_OPTIMIZIED</a>, </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">// A negative number means a error</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9cd8172c00dd3b80b1caa63482bcc416">   79</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9cd8172c00dd3b80b1caa63482bcc416">LCG_UNKNOWN_ERROR</a> = -1024, </div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae09df33800717847337f26b0d04e7bc9">   80</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae09df33800717847337f26b0d04e7bc9">LCG_INVILAD_VARIABLE_SIZE</a>, </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ab06a35f60ee30b6bb3ecb5f5b5e55b5f">   81</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ab06a35f60ee30b6bb3ecb5f5b5e55b5f">LCG_INVILAD_MAX_ITERATIONS</a>, </div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee">   82</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee">LCG_INVILAD_EPSILON</a>, </div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34">   83</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34">LCG_INVILAD_RESTART_EPSILON</a>, </div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e">   84</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e">LCG_REACHED_MAX_ITERATIONS</a>, </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef">   85</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef">LCG_NULL_PRECONDITION_MATRIX</a>, </div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">   86</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">LCG_NAN_VALUE</a>, </div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544">   87</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544">LCG_INVALID_POINTER</a>, </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a">   88</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a">LCG_INVALID_LAMBDA</a>, </div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa">   89</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa">LCG_INVALID_SIGMA</a>, </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2">   90</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2">LCG_INVALID_BETA</a>, </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151">   91</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151">LCG_INVALID_MAXIM</a>, </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="util_8h.html#ad643ef582f994ef247d3e040811feb81acb02fa099f4c3ed904d2e496caf34f79">   92</a></span>&#160;    <a class="code" href="util_8h.html#ad643ef582f994ef247d3e040811feb81acb02fa099f4c3ed904d2e496caf34f79">LCG_SIZE_NOT_MATCH</a>, </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="structlcg__para.html">   98</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structlcg__para.html">lcg_para</a></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;{</div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">  104</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">max_iterations</a>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">  113</a></span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> <a class="code" href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">epsilon</a>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="structlcg__para.html#a720fed9c894845ab2f2ee0ba7700d3a1">  121</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structlcg__para.html#a720fed9c894845ab2f2ee0ba7700d3a1">abs_diff</a>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="structlcg__para.html#ac6ea8932a62c8d67c618c04999901396">  126</a></span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> <a class="code" href="structlcg__para.html#ac6ea8932a62c8d67c618c04999901396">restart_epsilon</a>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="structlcg__para.html#a5151a9c973c04e18210d3d6364dad224">  131</a></span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> <a class="code" href="structlcg__para.html#a5151a9c973c04e18210d3d6364dad224">lambda</a>;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="structlcg__para.html#a6e6ebc034899a17948ee88fc2dd8f0fa">  137</a></span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> <a class="code" href="structlcg__para.html#a6e6ebc034899a17948ee88fc2dd8f0fa">sigma</a>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="structlcg__para.html#a579674af789ee65aab2bf4f606df3bdf">  143</a></span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> <a class="code" href="structlcg__para.html#a579674af789ee65aab2bf4f606df3bdf">beta</a>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="structlcg__para.html#a54175d14ccdf34738d472d78d0b5d0b9">  150</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structlcg__para.html#a54175d14ccdf34738d472d78d0b5d0b9">maxi_m</a>;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;};</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="structlcg__para.html">lcg_para</a> defparam = {0, 1e-6, 0, 1e-6, 1.0, 0.95, 0.9, 10};</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<a class="code" href="structlcg__para.html">lcg_para</a> <a class="code" href="util_8h.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a>();</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<a class="code" href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a> <a class="code" href="util_8h.html#a67b408800cd0a006af13e0dec0d231c5">lcg_select_solver</a>(std::string slr_char);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keywordtype">void</span> <a class="code" href="util_8h.html#a526b1d6f2e9bc6b146dc0be21b1bce32">lcg_error_str</a>(<span class="keywordtype">int</span> er_index, <span class="keywordtype">bool</span> er_throw = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">  190</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;{</div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316">  195</a></span>&#160;    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316">CLCG_BICG</a>,</div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de">  199</a></span>&#160;    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de">CLCG_BICG_SYM</a>,</div>
+<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5">  203</a></span>&#160;    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5">CLCG_CGS</a>,</div>
+<div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a">  207</a></span>&#160;    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a">CLCG_BICGSTAB</a>,</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="comment">//CLCG_QMR,</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333">  215</a></span>&#160;<span class="comment"></span>    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333">CLCG_TFQMR</a>,</div>
+<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3">  219</a></span>&#160;    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3">CLCG_PCG</a>,</div>
+<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a">  223</a></span>&#160;    <a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a">CLCG_PBICG</a>,</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;};</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7e">  229</a></span>&#160;<span class="keyword">enum</span> <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7e">clcg_return_enum</a></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;{</div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad">  231</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad">CLCG_SUCCESS</a> = 0, </div>
+<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629">  232</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629">CLCG_CONVERGENCE</a> = 0, </div>
+<div class="line"><a name="l00233"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb">  233</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb">CLCG_STOP</a>, </div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285">  234</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285">CLCG_ALREADY_OPTIMIZIED</a>, </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="comment">// A negative number means a error</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279">  236</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279">CLCG_UNKNOWN_ERROR</a> = -1024, </div>
+<div class="line"><a name="l00237"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0">  237</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0">CLCG_INVILAD_VARIABLE_SIZE</a>, </div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e">  238</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e">CLCG_INVILAD_MAX_ITERATIONS</a>, </div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa">  239</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa">CLCG_INVILAD_EPSILON</a>, </div>
+<div class="line"><a name="l00240"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15">  240</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15">CLCG_REACHED_MAX_ITERATIONS</a>, </div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f">  241</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f">CLCG_NAN_VALUE</a>, </div>
+<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f">  242</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f">CLCG_INVALID_POINTER</a>, </div>
+<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f">  243</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f">CLCG_SIZE_NOT_MATCH</a>, </div>
+<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84">  244</a></span>&#160;    <a class="code" href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84">CLCG_UNKNOWN_SOLVER</a>, </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;};</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="structclcg__para.html">  250</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structclcg__para.html">clcg_para</a></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;{</div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="structclcg__para.html#a404d8c3a84920ebe583d213d13282c20">  256</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structclcg__para.html#a404d8c3a84920ebe583d213d13282c20">max_iterations</a>;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno"><a class="line" href="structclcg__para.html#a6ee42c4e0d3b25a810804cc589e37c65">  267</a></span>&#160;    <a class="code" href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a> <a class="code" href="structclcg__para.html#a6ee42c4e0d3b25a810804cc589e37c65">epsilon</a>;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="structclcg__para.html#a24cf3b5ba379a2e942c115eb7a4a3184">  275</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structclcg__para.html#a24cf3b5ba379a2e942c115eb7a4a3184">abs_diff</a>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;};</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="structclcg__para.html">clcg_para</a> defparam2 = {0, 1e-6, 0};</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<a class="code" href="structclcg__para.html">clcg_para</a> <a class="code" href="util_8h.html#a3023497f88be45d555171bd63f427e20">clcg_default_parameters</a>();</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<a class="code" href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a> <a class="code" href="util_8h.html#a573aff66f0d357bdea15b6380841428f">clcg_select_solver</a>(std::string slr_char);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="keywordtype">void</span> <a class="code" href="util_8h.html#ab5a6b6af37e276d13520d96154304008">clcg_error_str</a>(<span class="keywordtype">int</span> er_index, <span class="keywordtype">bool</span> er_throw = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="preprocessor">#endif // _LCG_UTIL_H</span></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81acb02fa099f4c3ed904d2e496caf34f79"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81acb02fa099f4c3ed904d2e496caf34f79">LCG_SIZE_NOT_MATCH</a></div><div class="ttdeci">@ LCG_SIZE_NOT_MATCH</div><div class="ttdoc">Sizes of m and B do not match</div><div class="ttdef"><b>Definition:</b> util.h:92</div></div>
+<div class="ttc" id="astructlcg__para_html_a6e6ebc034899a17948ee88fc2dd8f0fa"><div class="ttname"><a href="structlcg__para.html#a6e6ebc034899a17948ee88fc2dd8f0fa">lcg_para::sigma</a></div><div class="ttdeci">lcg_float sigma</div><div class="ttdef"><b>Definition:</b> util.h:137</div></div>
+<div class="ttc" id="autil_8h_html_ab5a6b6af37e276d13520d96154304008"><div class="ttname"><a href="util_8h.html#ab5a6b6af37e276d13520d96154304008">clcg_error_str</a></div><div class="ttdeci">void clcg_error_str(int er_index, bool er_throw=false)</div><div class="ttdoc">Display or throw out a string explanation for the clcg_solver() function's return values.</div><div class="ttdef"><b>Definition:</b> util.cpp:146</div></div>
+<div class="ttc" id="aalgebra_8h_html_a5282007dc6f0c317361d25fa0eeb4a35"><div class="ttname"><a href="algebra_8h.html#a5282007dc6f0c317361d25fa0eeb4a35">lcg_float</a></div><div class="ttdeci">double lcg_float</div><div class="ttdoc">A simple definition of the float type we use here. Easy to change in the future. Right now it is just...</div><div class="ttdef"><b>Definition:</b> algebra.h:52</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea83598e2325e40352abd1340e6e2ab7ad">CLCG_SUCCESS</a></div><div class="ttdeci">@ CLCG_SUCCESS</div><div class="ttdoc">The solver function terminated successfully.</div><div class="ttdef"><b>Definition:</b> util.h:231</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea1c729fee91ac7223e829d612e528f629">CLCG_CONVERGENCE</a></div><div class="ttdeci">@ CLCG_CONVERGENCE</div><div class="ttdoc">The iteration reached convergence.</div><div class="ttdef"><b>Definition:</b> util.h:232</div></div>
+<div class="ttc" id="astructlcg__para_html_a945e14f1204dc4a68eacedc79600694b"><div class="ttname"><a href="structlcg__para.html#a945e14f1204dc4a68eacedc79600694b">lcg_para::max_iterations</a></div><div class="ttdeci">int max_iterations</div><div class="ttdef"><b>Definition:</b> util.h:104</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9d6fc5f264fc537012dd935f2bbe4b34">LCG_INVILAD_RESTART_EPSILON</a></div><div class="ttdeci">@ LCG_INVILAD_RESTART_EPSILON</div><div class="ttdoc">The restart epsilon is negative.</div><div class="ttdef"><b>Definition:</b> util.h:83</div></div>
+<div class="ttc" id="astructlcg__para_html_a54175d14ccdf34738d472d78d0b5d0b9"><div class="ttname"><a href="structlcg__para.html#a54175d14ccdf34738d472d78d0b5d0b9">lcg_para::maxi_m</a></div><div class="ttdeci">int maxi_m</div><div class="ttdef"><b>Definition:</b> util.h:150</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a1bce3354b52508bccfeb0bdee74fec02">LCG_CG</a></div><div class="ttdeci">@ LCG_CG</div><div class="ttdef"><b>Definition:</b> util.h:40</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0daa5e83d7f7e9ba3622b263e3cc07120a3">CLCG_PCG</a></div><div class="ttdeci">@ CLCG_PCG</div><div class="ttdef"><b>Definition:</b> util.h:219</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a13620b4ffef894ee83310ed42aa83eef">LCG_NULL_PRECONDITION_MATRIX</a></div><div class="ttdeci">@ LCG_NULL_PRECONDITION_MATRIX</div><div class="ttdoc">Null precondition matrix.</div><div class="ttdef"><b>Definition:</b> util.h:85</div></div>
+<div class="ttc" id="autil_8h_html_a526b1d6f2e9bc6b146dc0be21b1bce32"><div class="ttname"><a href="util_8h.html#a526b1d6f2e9bc6b146dc0be21b1bce32">lcg_error_str</a></div><div class="ttdeci">void lcg_error_str(int er_index, bool er_throw=false)</div><div class="ttdoc">Display or throw out a string explanation for the lcg_solver() function's return values.</div><div class="ttdef"><b>Definition:</b> util.cpp:31</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eab5b733d3cb20cd53edd4edd39f6a1b15">CLCG_REACHED_MAX_ITERATIONS</a></div><div class="ttdeci">@ CLCG_REACHED_MAX_ITERATIONS</div><div class="ttdoc">Iteration reached maximal limit.</div><div class="ttdef"><b>Definition:</b> util.h:240</div></div>
+<div class="ttc" id="astructlcg__para_html_ac6ea8932a62c8d67c618c04999901396"><div class="ttname"><a href="structlcg__para.html#ac6ea8932a62c8d67c618c04999901396">lcg_para::restart_epsilon</a></div><div class="ttdeci">lcg_float restart_epsilon</div><div class="ttdef"><b>Definition:</b> util.h:126</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81ae09df33800717847337f26b0d04e7bc9"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae09df33800717847337f26b0d04e7bc9">LCG_INVILAD_VARIABLE_SIZE</a></div><div class="ttdeci">@ LCG_INVILAD_VARIABLE_SIZE</div><div class="ttdoc">The variable size is negative</div><div class="ttdef"><b>Definition:</b> util.h:80</div></div>
+<div class="ttc" id="astructlcg__para_html_a579674af789ee65aab2bf4f606df3bdf"><div class="ttname"><a href="structlcg__para.html#a579674af789ee65aab2bf4f606df3bdf">lcg_para::beta</a></div><div class="ttdeci">lcg_float beta</div><div class="ttdef"><b>Definition:</b> util.h:143</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eacc82df3e4d363bc47174d34848c29ca0">CLCG_INVILAD_VARIABLE_SIZE</a></div><div class="ttdeci">@ CLCG_INVILAD_VARIABLE_SIZE</div><div class="ttdoc">The variable size is negative</div><div class="ttdef"><b>Definition:</b> util.h:237</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81ab06a35f60ee30b6bb3ecb5f5b5e55b5f"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81ab06a35f60ee30b6bb3ecb5f5b5e55b5f">LCG_INVILAD_MAX_ITERATIONS</a></div><div class="ttdeci">@ LCG_INVILAD_MAX_ITERATIONS</div><div class="ttdoc">The maximal iteration times is negative.</div><div class="ttdef"><b>Definition:</b> util.h:81</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a742a59eb85b7fe90ed34e348da29ce0b">LCG_SPG</a></div><div class="ttdeci">@ LCG_SPG</div><div class="ttdef"><b>Definition:</b> util.h:66</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae52258fb404871a729992a05fff913de">CLCG_BICG_SYM</a></div><div class="ttdeci">@ CLCG_BICG_SYM</div><div class="ttdef"><b>Definition:</b> util.h:199</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a62822fc57a40064b6ddc96bac4881544">LCG_INVALID_POINTER</a></div><div class="ttdeci">@ LCG_INVALID_POINTER</div><div class="ttdoc">Invalid pointer.</div><div class="ttdef"><b>Definition:</b> util.h:87</div></div>
+<div class="ttc" id="autil_8h_html_a573aff66f0d357bdea15b6380841428f"><div class="ttname"><a href="util_8h.html#a573aff66f0d357bdea15b6380841428f">clcg_select_solver</a></div><div class="ttdeci">clcg_solver_enum clcg_select_solver(std::string slr_char)</div><div class="ttdoc">Select a type of solver according to the name</div><div class="ttdef"><b>Definition:</b> util.cpp:135</div></div>
+<div class="ttc" id="astructclcg__para_html_a6ee42c4e0d3b25a810804cc589e37c65"><div class="ttname"><a href="structclcg__para.html#a6ee42c4e0d3b25a810804cc589e37c65">clcg_para::epsilon</a></div><div class="ttdeci">lcg_float epsilon</div><div class="ttdef"><b>Definition:</b> util.h:267</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a337f0c675d30489b175d2371787bbaee">LCG_INVILAD_EPSILON</a></div><div class="ttdeci">@ LCG_INVILAD_EPSILON</div><div class="ttdoc">The epsilon is negative.</div><div class="ttdef"><b>Definition:</b> util.h:82</div></div>
+<div class="ttc" id="astructlcg__para_html"><div class="ttname"><a href="structlcg__para.html">lcg_para</a></div><div class="ttdoc">Parameters of the conjugate gradient methods.</div><div class="ttdef"><b>Definition:</b> util.h:98</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a0da166a7b3f85cc3a16baae92395a62d">LCG_PG</a></div><div class="ttdeci">@ LCG_PG</div><div class="ttdef"><b>Definition:</b> util.h:61</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a21f7d6b296dbafdccd9038b83c0ecb75"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a21f7d6b296dbafdccd9038b83c0ecb75">LCG_STOP</a></div><div class="ttdeci">@ LCG_STOP</div><div class="ttdoc">The iteration is stopped by the monitoring function.</div><div class="ttdef"><b>Definition:</b> util.h:76</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81af31d49d816004939ae08e12441c50fd2">LCG_INVALID_BETA</a></div><div class="ttdeci">@ LCG_INVALID_BETA</div><div class="ttdoc">Invalid range for beta.</div><div class="ttdef"><b>Definition:</b> util.h:90</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaaa5480fc511545a4a4a5690dc667398f">CLCG_NAN_VALUE</a></div><div class="ttdeci">@ CLCG_NAN_VALUE</div><div class="ttdoc">Nan value.</div><div class="ttdef"><b>Definition:</b> util.h:241</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dad5d16e91037902d8dbd851d4d3df442a">CLCG_BICGSTAB</a></div><div class="ttdeci">@ CLCG_BICGSTAB</div><div class="ttdef"><b>Definition:</b> util.h:207</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2cc16f7375c3e261a3b669a2a6bca13f">CLCG_SIZE_NOT_MATCH</a></div><div class="ttdeci">@ CLCG_SIZE_NOT_MATCH</div><div class="ttdoc">Sizes of m and B do not match</div><div class="ttdef"><b>Definition:</b> util.h:243</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2479eebeea0b98b400f711bef5415c84">CLCG_UNKNOWN_SOLVER</a></div><div class="ttdeci">@ CLCG_UNKNOWN_SOLVER</div><div class="ttdoc">Unknown solver</div><div class="ttdef"><b>Definition:</b> util.h:244</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaed688fea4ac440f0e08775c47f20bffa">CLCG_INVILAD_EPSILON</a></div><div class="ttdeci">@ CLCG_INVILAD_EPSILON</div><div class="ttdoc">The epsilon is negative.</div><div class="ttdef"><b>Definition:</b> util.h:239</div></div>
+<div class="ttc" id="astructclcg__para_html"><div class="ttname"><a href="structclcg__para.html">clcg_para</a></div><div class="ttdoc">Parameters of the conjugate gradient methods.</div><div class="ttdef"><b>Definition:</b> util.h:250</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0d"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0d">clcg_solver_enum</a></div><div class="ttdeci">clcg_solver_enum</div><div class="ttdoc">Types of method that could be recognized by the clcg_solver() function.</div><div class="ttdef"><b>Definition:</b> util.h:190</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81ae5f6ce62bb4d6aba69ecce84750f0d0e">LCG_REACHED_MAX_ITERATIONS</a></div><div class="ttdeci">@ LCG_REACHED_MAX_ITERATIONS</div><div class="ttdoc">Iteration reached maximal limit.</div><div class="ttdef"><b>Definition:</b> util.h:84</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a883bb6d23fbf342404921510838cc921">LCG_PCG</a></div><div class="ttdeci">@ LCG_PCG</div><div class="ttdef"><b>Definition:</b> util.h:44</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7e"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7e">clcg_return_enum</a></div><div class="ttdeci">clcg_return_enum</div><div class="ttdoc">return value of the clcg_solver() function</div><div class="ttdef"><b>Definition:</b> util.h:229</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a9f5a58d40b4813f005e593f85d3bae2c"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9f5a58d40b4813f005e593f85d3bae2c">LCG_ALREADY_OPTIMIZIED</a></div><div class="ttdeci">@ LCG_ALREADY_OPTIMIZIED</div><div class="ttdoc">The initial solution is already optimized.</div><div class="ttdef"><b>Definition:</b> util.h:77</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1a91f1452bb812869a8dcb50fbe0e60ca4">LCG_BICGSTAB2</a></div><div class="ttdeci">@ LCG_BICGSTAB2</div><div class="ttdef"><b>Definition:</b> util.h:56</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea9daa2ffa119c09d00d683aac0c4a3279">CLCG_UNKNOWN_ERROR</a></div><div class="ttdeci">@ CLCG_UNKNOWN_ERROR</div><div class="ttdoc">Unknown error.</div><div class="ttdef"><b>Definition:</b> util.h:236</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1aad28288f368765535f046e9cd47c9827">LCG_BICGSTAB</a></div><div class="ttdeci">@ LCG_BICGSTAB</div><div class="ttdef"><b>Definition:</b> util.h:52</div></div>
+<div class="ttc" id="astructclcg__para_html_a404d8c3a84920ebe583d213d13282c20"><div class="ttname"><a href="structclcg__para.html#a404d8c3a84920ebe583d213d13282c20">clcg_para::max_iterations</a></div><div class="ttdeci">int max_iterations</div><div class="ttdef"><b>Definition:</b> util.h:256</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa3247f00ca027f1ac9cd7b9b8dd69b67">LCG_CONVERGENCE</a></div><div class="ttdeci">@ LCG_CONVERGENCE</div><div class="ttdoc">The iteration reached convergence.</div><div class="ttdef"><b>Definition:</b> util.h:75</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a638e748add2522474dfe4bb0fcc9cffa">LCG_INVALID_SIGMA</a></div><div class="ttdeci">@ LCG_INVALID_SIGMA</div><div class="ttdoc">Invalid range for sigma.</div><div class="ttdef"><b>Definition:</b> util.h:89</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea2e8cec9e25261900a80ddaa75cee7285">CLCG_ALREADY_OPTIMIZIED</a></div><div class="ttdeci">@ CLCG_ALREADY_OPTIMIZIED</div><div class="ttdoc">The initial solution is already optimized.</div><div class="ttdef"><b>Definition:</b> util.h:234</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf09992ff638ac9f578123f47aa4859bb">CLCG_STOP</a></div><div class="ttdeci">@ CLCG_STOP</div><div class="ttdoc">The iteration is stopped by the monitoring function.</div><div class="ttdef"><b>Definition:</b> util.h:233</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81">lcg_return_enum</a></div><div class="ttdeci">lcg_return_enum</div><div class="ttdoc">return value of the lcg_solver() function</div><div class="ttdef"><b>Definition:</b> util.h:72</div></div>
+<div class="ttc" id="astructclcg__para_html_a24cf3b5ba379a2e942c115eb7a4a3184"><div class="ttname"><a href="structclcg__para.html#a24cf3b5ba379a2e942c115eb7a4a3184">clcg_para::abs_diff</a></div><div class="ttdeci">int abs_diff</div><div class="ttdef"><b>Definition:</b> util.h:275</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7ea900b1ed259e407ca9df97a029986360f">CLCG_INVALID_POINTER</a></div><div class="ttdeci">@ CLCG_INVALID_POINTER</div><div class="ttdoc">Invalid pointer.</div><div class="ttdef"><b>Definition:</b> util.h:242</div></div>
+<div class="ttc" id="autil_8h_html_af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e"><div class="ttname"><a href="util_8h.html#af82eac923ab2df65f9aa20c7cc9edb7eaf9fd374a5557e9836a98fb6ec690ca7e">CLCG_INVILAD_MAX_ITERATIONS</a></div><div class="ttdeci">@ CLCG_INVILAD_MAX_ITERATIONS</div><div class="ttdoc">The maximal iteration times is negative.</div><div class="ttdef"><b>Definition:</b> util.h:238</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1acc5dd438a153e97dc12881d78f9023e6">LCG_CGS</a></div><div class="ttdeci">@ LCG_CGS</div><div class="ttdef"><b>Definition:</b> util.h:48</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0dae8d1d9a315797b6e26159e45278a6316">CLCG_BICG</a></div><div class="ttdeci">@ CLCG_BICG</div><div class="ttdef"><b>Definition:</b> util.h:195</div></div>
+<div class="ttc" id="aalgebra_8h_html"><div class="ttname"><a href="algebra_8h.html">algebra.h</a></div></div>
+<div class="ttc" id="autil_8h_html_a67b408800cd0a006af13e0dec0d231c5"><div class="ttname"><a href="util_8h.html#a67b408800cd0a006af13e0dec0d231c5">lcg_select_solver</a></div><div class="ttdeci">lcg_solver_enum lcg_select_solver(std::string slr_char)</div><div class="ttdoc">Select a type of solver according to the name</div><div class="ttdef"><b>Definition:</b> util.cpp:17</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81aa7949f9d6aec19191f5d43fcb2f9f93a">LCG_INVALID_LAMBDA</a></div><div class="ttdeci">@ LCG_INVALID_LAMBDA</div><div class="ttdoc">Invalid range for lambda.</div><div class="ttdef"><b>Definition:</b> util.h:88</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a1f2ed35558627d6b93931677c40531a3">LCG_NAN_VALUE</a></div><div class="ttdeci">@ LCG_NAN_VALUE</div><div class="ttdoc">Nan value.</div><div class="ttdef"><b>Definition:</b> util.h:86</div></div>
+<div class="ttc" id="autil_8h_html_a3023497f88be45d555171bd63f427e20"><div class="ttname"><a href="util_8h.html#a3023497f88be45d555171bd63f427e20">clcg_default_parameters</a></div><div class="ttdeci">clcg_para clcg_default_parameters()</div><div class="ttdoc">Return a clcg_para type instance with default values.</div><div class="ttdef"><b>Definition:</b> util.cpp:129</div></div>
+<div class="ttc" id="astructlcg__para_html_a5151a9c973c04e18210d3d6364dad224"><div class="ttname"><a href="structlcg__para.html#a5151a9c973c04e18210d3d6364dad224">lcg_para::lambda</a></div><div class="ttdeci">lcg_float lambda</div><div class="ttdef"><b>Definition:</b> util.h:131</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a776c14ddb174249eeaa71b184b366151">LCG_INVALID_MAXIM</a></div><div class="ttdeci">@ LCG_INVALID_MAXIM</div><div class="ttdoc">Invalid range for maxi_m.</div><div class="ttdef"><b>Definition:</b> util.h:91</div></div>
+<div class="ttc" id="autil_8h_html_a9ce95cfde91c2580af819d69bdcc86b1"><div class="ttname"><a href="util_8h.html#a9ce95cfde91c2580af819d69bdcc86b1">lcg_solver_enum</a></div><div class="ttdeci">lcg_solver_enum</div><div class="ttdoc">Types of method that could be recognized by the lcg_solver() function.</div><div class="ttdef"><b>Definition:</b> util.h:35</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a9cd8172c00dd3b80b1caa63482bcc416"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a9cd8172c00dd3b80b1caa63482bcc416">LCG_UNKNOWN_ERROR</a></div><div class="ttdeci">@ LCG_UNKNOWN_ERROR</div><div class="ttdoc">Unknown error.</div><div class="ttdef"><b>Definition:</b> util.h:79</div></div>
+<div class="ttc" id="autil_8h_html_ae709a311e61bd35843a9f4333c38ab18"><div class="ttname"><a href="util_8h.html#ae709a311e61bd35843a9f4333c38ab18">lcg_default_parameters</a></div><div class="ttdeci">lcg_para lcg_default_parameters()</div><div class="ttdoc">Return a lcg_para type instance with default values.</div><div class="ttdef"><b>Definition:</b> util.cpp:11</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da84714db4e1db704a84249dcd9369518a">CLCG_PBICG</a></div><div class="ttdeci">@ CLCG_PBICG</div><div class="ttdef"><b>Definition:</b> util.h:223</div></div>
+<div class="ttc" id="astructlcg__para_html_aa67ce230d9611ba0db3facda29851f56"><div class="ttname"><a href="structlcg__para.html#aa67ce230d9611ba0db3facda29851f56">lcg_para::epsilon</a></div><div class="ttdeci">lcg_float epsilon</div><div class="ttdef"><b>Definition:</b> util.h:113</div></div>
+<div class="ttc" id="astructlcg__para_html_a720fed9c894845ab2f2ee0ba7700d3a1"><div class="ttname"><a href="structlcg__para.html#a720fed9c894845ab2f2ee0ba7700d3a1">lcg_para::abs_diff</a></div><div class="ttdeci">int abs_diff</div><div class="ttdef"><b>Definition:</b> util.h:121</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da57bb4b2b80bd19b23c4c31e1d4087333">CLCG_TFQMR</a></div><div class="ttdeci">@ CLCG_TFQMR</div><div class="ttdef"><b>Definition:</b> util.h:215</div></div>
+<div class="ttc" id="autil_8h_html_ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e"><div class="ttname"><a href="util_8h.html#ad643ef582f994ef247d3e040811feb81a32a9bf0edbe7dd63342da1a56038166e">LCG_SUCCESS</a></div><div class="ttdeci">@ LCG_SUCCESS</div><div class="ttdoc">The solver function terminated successfully.</div><div class="ttdef"><b>Definition:</b> util.h:74</div></div>
+<div class="ttc" id="autil_8h_html_af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5"><div class="ttname"><a href="util_8h.html#af99347c7374b3b5c75db9f4f8732bf0da58fe97d47b9c952e92421e6a8179a9d5">CLCG_CGS</a></div><div class="ttdeci">@ CLCG_CGS</div><div class="ttdef"><b>Definition:</b> util.h:203</div></div>
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="util_8h.html">util.h</a></li>
+    <li class="footer">制作者
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
+</body>
+</html>
