@@ -24,6 +24,7 @@ import cpt_chart_gauge from '@/components/echarts/cpt-chart-gauge'
 //import cpt_threeJs_dom from '@/components/threeD/cpt-threeJs-dom'
 import cpt_num from '@/components/element/cpt-num'
 import cpt_rect_num from '@/components/element/cpt-rect-num'
+// import sg_icon_table from '@/components/element/sg-icon-table'
 
 let cptList = [
     cpt_dataV_border,cpt_text,cpt_carousel,cpt_button,cpt_image,

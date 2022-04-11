@@ -133,7 +133,37 @@ cuDoubleComplex Zsqrt(cuDoubleComplex a);
  * @param Ac_col     Output column index
  * @param Ac_val     Non-zero values of the output matrix
  */
+void smCcoo_row2col(const int *A_row, const int *A_col, const cuComplex *A, int N, int nz, int *Ac_row, int *Ac_col, cuComplex *Ac_val);
+
+/**
+ * @brief   Convert the indexing sequence of a sparse matrix from the row-major to col-major format.
+ * 
+ * @note    The sparse matrix is stored in the COO foramt. This is a host side function.
+ * 
+ * @param A_row      Row index
+ * @param A_col      Column index
+ * @param A          Non-zero values of the matrix
+ * @param N          Row/column length of A
+ * @param nz         Number of the non-zero values in A
+ * @param Ac_row     Output row index
+ * @param Ac_col     Output column index
+ * @param Ac_val     Non-zero values of the output matrix
+ */
 void smZcoo_row2col(const int *A_row, const int *A_col, const cuDoubleComplex *A, int N, int nz, int *Ac_row, int *Ac_col, cuDoubleComplex *Ac_val);
+
+/**
+ * @brief      Extract diagonal elements from a square CUDA sparse matrix that is formatted in the CSR format
+ * 
+ * @note       This is a device side function. All memories must be allocated on the GPU device.
+ *
+ * @param[in]  A_ptr   Row index pointer
+ * @param[in]  A_col   Column index
+ * @param[in]  A_val   Non-zero values of the matrix
+ * @param[in]  A_len   Dimension of the matrix
+ * @param      A_diag  Output digonal elements
+ * @param[in]  bk_size Default CUDA block size.
+ */
+void smCcsr_get_diagonal(const int *A_ptr, const int *A_col, const cuComplex *A_val, const int A_len, cuComplex *A_diag, int bk_size = 1024);
 
 /**
  * @brief      Extract diagonal elements from a square CUDA sparse matrix that is formatted in the CSR format
@@ -160,7 +190,33 @@ void smZcsr_get_diagonal(const int *A_ptr, const int *A_col, const cuDoubleCompl
  * @param[in]  n     Length of the arraies
  * @param[in]  bk_size Default CUDA block size.
  */
+void vecMvecC_element_wise(const cuComplex *a, const cuComplex *b, cuComplex *c, int n, int bk_size = 1024);
+
+/**
+ * @brief      Element-wise muplication between two CUDA arries.
+ * 
+ * @note       This is a device side function. All memories must be allocated on the GPU device.
+ *
+ * @param[in]  a     Pointer of the input array
+ * @param[in]  b     Pointer of the input array
+ * @param      c     Pointer of the output array
+ * @param[in]  n     Length of the arraies
+ * @param[in]  bk_size Default CUDA block size.
+ */
 void vecMvecZ_element_wise(const cuDoubleComplex *a, const cuDoubleComplex *b, cuDoubleComplex *c, int n, int bk_size = 1024);
+
+/**
+ * @brief      Element-wise division between two CUDA arries.
+ * 
+ * @note       This is a device side function. All memories must be allocated on the GPU device.
+ *
+ * @param[in]  a     Pointer of the input array
+ * @param[in]  b     Pointer of the input array
+ * @param      c     Pointer of the output array
+ * @param[in]  n     Length of the arraies
+ * @param[in]  bk_size Default CUDA block size.
+ */
+void vecDvecC_element_wise(const cuComplex *a, const cuComplex *b, cuComplex *c, int n, int bk_size = 1024);
 
 /**
  * @brief      Element-wise division between two CUDA arries.

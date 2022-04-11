@@ -3,7 +3,7 @@
     <el-form-item label="地图">
       <el-select v-model="attribute.map">
         <el-option label="全国" value="china"/>
-<!--        <el-option label="常州" value="changZhou"/>-->
+        <el-option label="常州" value="changZhou"/>
       </el-select>
     </el-form-item>
     <el-form-item label="标题">

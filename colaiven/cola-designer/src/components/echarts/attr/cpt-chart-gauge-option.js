@@ -1,7 +1,7 @@
 export default {
     cptDataForm:{
         dataSource: 1, pollTime: 0,
-        dataText: '22',
+        dataText: '{"value":22}',
     },
     attribute:{
         title:'速度',min:0,max:100,lineDistance:5,labelDistance:10,labelSize:12,tickLength:5,

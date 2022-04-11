@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="astator.Views.NavBarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:v="clr-namespace:astator.Views">
+    <Grid ColumnDefinitions="*,*,*,*">
+        <!--<Grid.Resources>
+            <Style TargetType="Image">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+            </Style>
+        </Grid.Resources>-->
+        <v:CustomCard
+            Grid.Column="0"
+            Padding="11"
+            Clicked="HomeTab_Clicked">
+            <Image x:Name="HomeTab" Source="home.png" />
+        </v:CustomCard>
+        <v:CustomCard
+            Grid.Column="1"
+            Padding="11"
+            Clicked="LogTab_Clicked">
+            <Image x:Name="LogTab" Source="log.png" />
+        </v:CustomCard>
+        <v:CustomCard
+            Grid.Column="2"
+            Padding="11"
+            Clicked="DocTab_Clicked">
+            <Image x:Name="DocTab" Source="doc.png" />
+        </v:CustomCard>
+        <v:CustomCard
+            Grid.Column="3"
+            Padding="11"
+            Clicked="SettingsTab_Clicked">
+            <Image x:Name="SettingsTab" Source="settings.png" />
+        </v:CustomCard>
+    </Grid>
+</ContentView>

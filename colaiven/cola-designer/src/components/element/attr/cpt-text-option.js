@@ -1,5 +1,5 @@
 export default {
-    cptDataForm:{dataText:'普通文本',dataSource: 1, pollTime: 0},
+    cptDataForm:{dataText:'{"value":"普通文本"}',dataSource: 1, pollTime: 0},
     attribute:{
         url: '', textColor: '#4BB344', textSize: 16,
         fontWeight: 'normal', textLineHeight: 30,

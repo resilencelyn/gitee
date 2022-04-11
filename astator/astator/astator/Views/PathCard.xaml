@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<v:CustomCard
+    x:Class="astator.Views.PathCard"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:v="clr-namespace:astator.Views"
+    Padding="20,5,10,5"
+    ColumnDefinitions="auto,*,auto, auto"
+    HeightRequest="60">
+
+    <Image
+        Grid.Column="0"
+        HeightRequest="40"
+        Source="{Binding Source={RelativeSource FindAncestor, AncestorType={x:Type v:CustomCard}}, Path=TypeImageSource}"
+        VerticalOptions="Center"
+        WidthRequest="40" />
+
+    <Grid
+        Grid.Column="1"
+        Padding="10,5,0,5"
+        BackgroundColor="Transparent"
+        RowDefinitions="auto,auto">
+        <Label
+            Grid.Row="0"
+            FontAttributes="Bold"
+            FontSize="14"
+            Text="{Binding Source={RelativeSource FindAncestor, AncestorType={x:Type v:CustomCard}}, Path=PathName}" />
+        <Label
+            Grid.Row="1"
+            Padding="0,3,0,0"
+            FontSize="8"
+            Text="{Binding Source={RelativeSource FindAncestor, AncestorType={x:Type v:CustomCard}}, Path=PathInfo}"
+            TextColor="#666666"
+            VerticalOptions="End" />
+    </Grid>
+
+</v:CustomCard>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="astator.Pages.DocPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:v="clr-namespace:astator.Views">
+    <Grid RowDefinitions="55,*,55">
+        <Grid Grid.Row="0">
+            <Label
+                x:Name="Header"
+                Margin="15,5"
+                FontAttributes="Bold"
+                FontSize="28"
+                HorizontalOptions="Start"
+                Text="文档"
+                VerticalOptions="Center" />
+        </Grid>
+        <WebView
+            x:Name="Web"
+            Grid.Row="1"
+            Source="https://astator.gitee.io/docs" />
+        <v:NavBarView Grid.Row="2" ActiveTab="doc" />
+    </Grid>
+</ContentPage>

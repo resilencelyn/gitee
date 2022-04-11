@@ -134,6 +134,7 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
     bf = new cuComplex [nz];
     ans_xf = new cuComplex [nz];
 
+	// Note that converting complex numbers from double to single precisions may case stack overflow
     for (size_t i = 0; i < nz; i++)
     {
         Af[i].x = A[i].x; Af[i].y = A[i].y;

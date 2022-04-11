@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0-android</TargetFrameworks>
+		<Nullable>disable</Nullable>
+		<SingleProject>true</SingleProject>
+		<RootNamespace>astator.Core</RootNamespace>
+		<OutputType>Library</OutputType>
+		<UseMaui>true</UseMaui>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
+		<SupportedOSPlatformVersion>24.0</SupportedOSPlatformVersion>
+		
+		<Authors>yiszza</Authors>
+		<Version>0.3.2</Version>
+		<PackageProjectUrl>https://github.com/astator-community/astator</PackageProjectUrl>
+		<Company>astator</Company>
+		<Description>用于astator脚本的开发</Description>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NLog" Version="4.7.14" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\3rdparty\Obfuscar\Obfuscar\Obfuscar.csproj">
+		</ProjectReference>
+		<ProjectReference Include="..\astator.NugetManager\astator.NugetManager.csproj">
+		</ProjectReference>
+		<ProjectReference Include="..\astator.TipsView\astator.TipsView.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Reference Include="PaddleOCRBinding">
+	    <HintPath>..\3rdparty\PaddleOcrBinding\bin\Release\net6.0-android\PaddleOCRBinding.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+</Project>

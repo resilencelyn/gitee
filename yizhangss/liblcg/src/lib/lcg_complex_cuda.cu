@@ -2,6 +2,25 @@
 #include "complex"
 #include "map"
 
+__global__ void smCcsr_get_diagonal_device(const int *A_row, const int *A_col, const cuComplex *A_val, const int A_len, cuComplex *A_diag)
+{
+	const int i = blockIdx.x * blockDim.x + threadIdx.x;
+	if (i < A_len)
+	{
+		const int num_non0_row = A_row[i + 1] - A_row[i];
+
+		for (int j = 0; j < num_non0_row; j++)
+		{
+			if (A_col[j + A_row[i]] == i)
+			{
+				A_diag[i] = A_val[j + A_row[i]];
+				break;
+			}
+		}
+	}
+	return;
+}
+
 __global__ void smZcsr_get_diagonal_device(const int *A_row, const int *A_col, const cuDoubleComplex *A_val, const int A_len, cuDoubleComplex *A_diag)
 {
 	const int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -21,12 +40,32 @@ __global__ void smZcsr_get_diagonal_device(const int *A_row, const int *A_col, c
 	return;
 }
 
+__global__ void vecMvecC_element_wise_device(const cuComplex *a, const cuComplex *b, cuComplex *c, int n)
+{
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	if (i < n)
+	{
+		c[i] = cuCmulf(a[i], b[i]);
+	}
+	return;
+}
+
 __global__ void vecMvecZ_element_wise_device(const cuDoubleComplex *a, const cuDoubleComplex *b, cuDoubleComplex *c, int n)
 {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	if (i < n)
 	{
 		c[i] = cuCmul(a[i], b[i]);
+	}
+	return;
+}
+
+__global__ void vecDvecC_element_wise_device(const cuComplex *a, const cuComplex *b, cuComplex *c, int n)
+{
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	if (i < n)
+	{
+		c[i] = cuCdivf(a[i], b[i]);
 	}
 	return;
 }
@@ -152,6 +191,33 @@ cuDoubleComplex Zsqrt(cuDoubleComplex a)
 	return s;
 }
 
+void smCcoo_row2col(const int *A_row, const int *A_col, const cuComplex *A, int N, int nz, int *Ac_row, int *Ac_col, cuComplex *Ac_val)
+{
+	size_t i, order;
+	std::map<size_t, cuComplex> sort_map;
+	std::map<size_t, cuComplex>::iterator st_iter;
+
+	for (i = 0; i < nz; i++)
+	{
+		order = N*A_col[i] + A_row[i];
+		sort_map[order] = A[i];
+	}
+
+	i = 0;
+	for (st_iter = sort_map.begin(); st_iter != sort_map.end(); st_iter++)
+	{
+		order = st_iter->first;
+		// exchange the row and column indice to rotate the matrix
+		Ac_row[i] = order/N;
+		Ac_col[i] = order%N;
+		Ac_val[i] = st_iter->second;
+		i++;
+	}
+
+	sort_map.clear();
+	return;
+}
+
 void smZcoo_row2col(const int *A_row, const int *A_col, const cuDoubleComplex *A, int N, int nz, int *Ac_row, int *Ac_col, cuDoubleComplex *Ac_val)
 {
 	size_t i, order;
@@ -179,6 +245,14 @@ void smZcoo_row2col(const int *A_row, const int *A_col, const cuDoubleComplex *A
 	return;
 }
 
+void smCcsr_get_diagonal(const int *A_ptr, const int *A_col, const cuComplex *A_val, const int A_len, cuComplex *A_diag, int bk_size)
+{
+	int blockSize = bk_size;
+	int numBlocks = (A_len + blockSize - 1) / blockSize;
+	smCcsr_get_diagonal_device<<<numBlocks, blockSize>>>(A_ptr, A_col, A_val, A_len, A_diag);
+	return;
+}
+
 void smZcsr_get_diagonal(const int *A_ptr, const int *A_col, const cuDoubleComplex *A_val, const int A_len, cuDoubleComplex *A_diag, int bk_size)
 {
 	int blockSize = bk_size;
@@ -187,11 +261,27 @@ void smZcsr_get_diagonal(const int *A_ptr, const int *A_col, const cuDoubleCompl
 	return;
 }
 
+void vecMvecC_element_wise(const cuComplex *a, const cuComplex *b, cuComplex *c, int n, int bk_size)
+{
+	int blockSize = bk_size;
+	int numBlocks = (n + blockSize - 1) / blockSize;
+	vecMvecC_element_wise_device<<<numBlocks, blockSize>>>(a, b, c, n);
+	return;
+}
+
 void vecMvecZ_element_wise(const cuDoubleComplex *a, const cuDoubleComplex *b, cuDoubleComplex *c, int n, int bk_size)
 {
 	int blockSize = bk_size;
 	int numBlocks = (n + blockSize - 1) / blockSize;
 	vecMvecZ_element_wise_device<<<numBlocks, blockSize>>>(a, b, c, n);
+	return;
+}
+
+void vecDvecC_element_wise(const cuComplex *a, const cuComplex *b, cuComplex *c, int n, int bk_size)
+{
+	int blockSize = bk_size;
+	int numBlocks = (n + blockSize - 1) / blockSize;
+	vecDvecC_element_wise_device<<<numBlocks, blockSize>>>(a, b, c, n);
 	return;
 }
 

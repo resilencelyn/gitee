@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {getDataStr, pollingRefresh} from "@/utils/refreshCptData";
+import {getDataJson, pollingRefresh} from "@/utils/refreshCptData";
 
 export default {
   name: "cpt-rect-num",
@@ -44,8 +44,8 @@ export default {
       pollingRefresh(this.uuid, this.option.cptDataForm, this.loadData)
     },
     loadData() {
-      getDataStr(this.option.cptDataForm).then(res => {
-        this.cptData = JSON.parse(res);
+      getDataJson(this.option.cptDataForm).then(res => {
+        this.cptData = res;
       });
     },
   }

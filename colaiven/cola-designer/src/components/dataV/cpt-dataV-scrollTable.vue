@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import {getDataStr, pollingRefresh} from "@/utils/refreshCptData";
+import {getDataJson, pollingRefresh} from "@/utils/refreshCptData";
 export default {
   name: "cpt-dataV-scrollTable",
   title: "滚动表格",
@@ -43,7 +43,7 @@ export default {
       pollingRefresh(this.uuid, this.option.cptDataForm, this.loadData)
     },
     loadData(){
-      getDataStr(this.option.cptDataForm).then(res => {
+      getDataJson(this.option.cptDataForm).then(res => {
         let temp = JSON.parse(JSON.stringify(this.option.attribute));
         const columns = JSON.parse(temp.columns)
         temp.header = [];
@@ -57,8 +57,7 @@ export default {
           }
           temp.align.push('center')
         })
-        let data = JSON.parse(res);
-        data.forEach(item => {
+        res.forEach(item => {
           let row = []
           columns.forEach(column => {
             row.push(item[column.key])

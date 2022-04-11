@@ -86,24 +86,6 @@ void incomplete_Cholesky_cuda_half(const int *row, const int *col, const cuCompl
         if (IC_row[i] > IC_col[i])
         {
             // Find needed values from previous elements
-            /*
-            f = 0;
-            for (j = row_st_idx[IC_col[i]]; j < row_st_idx[IC_col[i]+1]; j++)
-            {
-                if (IC_col[j] < IC_col[i])
-                {
-                    tmp_row[IC_col[j]] = IC_val[j];
-                    filled_idx[f]  = IC_col[j];
-                    f++;
-                }
-            }
-            
-            for (j = row_st_idx[IC_row[i]]; j < i; j++)
-            {
-                IC_val[i] = Zdiff(IC_val[i], cuCmulf(IC_val[j], tmp_row[IC_col[j]]));
-            }
-            */
-
             f = 0;
             j = row_st_idx[IC_col[i]];
             while (IC_col[j] < IC_col[i])
@@ -220,24 +202,6 @@ void incomplete_Cholesky_cuda_half(const int *row, const int *col, const cuDoubl
         if (IC_row[i] > IC_col[i])
         {
             // Find needed values from previous elements
-            /*
-            f = 0;
-            for (j = row_st_idx[IC_col[i]]; j < row_st_idx[IC_col[i]+1]; j++)
-            {
-                if (IC_col[j] < IC_col[i])
-                {
-                    tmp_row[IC_col[j]] = IC_val[j];
-                    filled_idx[f]  = IC_col[j];
-                    f++;
-                }
-            }
-            
-            for (j = row_st_idx[IC_row[i]]; j < i; j++)
-            {
-                IC_val[i] = Zdiff(IC_val[i], cuCmul(IC_val[j], tmp_row[IC_col[j]]));
-            }
-            */
-
             f = 0;
             j = row_st_idx[IC_col[i]];
             while (IC_col[j] < IC_col[i])
