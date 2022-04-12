@@ -116,7 +116,7 @@ Fkreport 遵循 MIT 开源协议发布，并提供免费使用。
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有 Copyright © 2018-2020 by Fkreport (http://liuzhiyun.com)
+版权所有 Copyright © 2022-2025 by Fkreport (http://liuzhiyun.com)
 
 All rights reserved。
 

@@ -1,0 +1,362 @@
+<html lang="zh-cn">
+<head>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/fk/fk1.0.css">
+    <title>Fkreport</title>
+</head>
+<body>
+<div class="fk-main">
+    <div class="fk-head">
+        <div class="fk-title"><span>Fkreport - 企业级报表开发平台</span></div>
+    </div>
+    <div class="fk-nav">
+       
+        <ul class="layui-nav layui-bg-cyan">
+            <li class="layui-nav-item"><a><i class="layui-icon layui-icon-set-fill"></i> 系统设置</a>
+                <dl class="layui-nav-child">
+                    <dd><a style="color: #ffffff !important;" onclick=Fkreport.layer_open('{:url('fk/api')}?act=edit&id={$id}')>大屏配置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a><i class="layui-icon layui-icon-fonts-i"></i> 文本控件</a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <div class="sfdp-tool-con" id="text"><a>&#8194;<b class='ico'>Α</b>&#8194;大屏文本</a></div>
+                    </dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="img"><a>&#8194;<b class='ico'>½</b>&#8194;大屏图片</a></div>
+                    </dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="date"><a>&#8194;<b class='ico'>ρ</b>&#8194;时间时钟</a></div>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a><i class="layui-icon layui-icon-diamond"></i> 图表控件</a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <div class="sfdp-tool-con" id="pie"><a>&#8194;<b class='ico'>◉</b>&#8194;饼状图</a></div>
+                    </dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="bar"><a>&#8194;<b class='ico'>ρ</b>&#8194;柱状图 </a></div>
+                    </dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="line"><a>&#8194;<b class='ico'>⇑</b>&#8194;折线图 </a></div>
+                    </dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="area"><a>&#8194;<b class='ico'>∼</b>&#8194;面积图 </a></div>
+                    </a></dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="rosePlot"><a>&#8194;<b class='ico'>§</b>&#8194;玫瑰图</a></div>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a><i class="layui-icon layui-icon-engine"></i> 仪表控件</a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <div class="sfdp-tool-con" id="gauge"><a>&#8194;<b class='ico'>«</b>&#8194;仪表盘</a></div>
+                    </dd>
+                    <dd>
+                        <div class="sfdp-tool-con" id="Liquid"><a>&#8194;<b class='ico'>∝</b>&#8194;水波图</a></div>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a onclick=window.open("/fk/api.html?act=view&id={$id}");> <i class="layui-icon layui-icon-play"></i> 预览</a></li>
+            <li class="layui-nav-item"><a onclick=window.open("//gadmin8.com");> <i class="layui-icon layui-icon-read"></i> 文档</a></li>
+            <li class="layui-nav-item"><a onclick=window.open("//fkreport.com");> <i class="layui-icon layui-icon-about"></i> 帮助</a></li>
+        </ul>
+    </div>
+    <div class="fk-content">
+        <div class="silder-hid-scrol">
+            <div class="fk-ctl">
+                <div class="layui-tab-content">
+                    <div class="sfdp-tool-title sfdp-mt10">图层控制</div>
+                    {volist name='data.Json_data' id='k'}
+                    <div class="fk-item layui-form-item" fk-id="{$key}" onclick="Fkreport.set_select('{$key}')"><a>&#8194;<b
+                            class='ico'>◉</b>&#8194; <span>{$key}</span></a></div>
+                    {/volist}
+                </div>
+            </div>
+        </div>
+        <div class="fk-design" style="padding: 20px">
+            <div id="fk-app">
+                <div id="fk-con" style="position: relative;width: 5000px;background: url('/static/fk/dot.png') repeat;">
+                    <div style="position: absolute;top: 20px;left: 20px;transform: scale(1);">
+                        <div id="fkreport"
+                             style="width: {$data.data.width}px;height: {$data.data.height}px;background-image: url(/storage/{:addslashes($data.data.file)});">
+                             <div class="gril-fkreport">
+                                <div class="shu-line"></div>
+                                <div class="hen-line"></div>
+                                <span class="line-value"></span>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fk-ctl" style="width: 320px;">
+            <form class="layui-form" action="" lay-filter="example">
+                <div class="layui-tab-content">
+                    <div class="sfdp-tool-title sfdp-mt10">属性控制</div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">模块标识</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="id" id='f_id' readonly lay-verify="title" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="f_title_item">
+                        <label class="layui-form-label">文本内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="f_title" id="f_title" style="display:revert;width:65%"
+                                   lay-verify="title" data-type="html" data="html" autocomplete="off"
+                                   placeholder="请输入标题" class="layui-input"><a id='pic' onclick="Fkreport.open_pic()"
+                                                                              style='float: right;width: 34%;'
+                                                                              class="upload layui-btn">上传</a>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="f_color_item">
+                        <label class="layui-form-label">文本颜色</label>
+                        <div class="layui-input-block">
+                            <input type="hidden" name="f_color" id="f_color" data-type="class" data="f_color"
+                                   lay-verify="f_color" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                            <div id="f_color_e"></div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="f_size_item">
+                        <label class="layui-form-label">字体大小</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="f_size" id="f_size" data-type="class" data="f_size"
+                                   lay-verify="f_size" autocomplete="off" placeholder="字体尺寸" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">模块宽度</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="f_width" id='f_width' lay-verify="f_width" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">模块高度</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="f_height" id='f_height' lay-verify="f_height" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">左边距离</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="left" data-type="class" data="left" lay-verify="number"
+                                   autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">上边距</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="top" data-type="class" data="top" lay-verify="number"
+                                   autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图层层级</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="zindex" data-type="class" data="z-index" lay-verify="number"
+                                   autocomplete="off" placeholder="请输入标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">取源方式</label>
+                        <div class="layui-input-block">
+                            <select data="d_type" name="d_type" class="layui-input">
+                                <option value="1">静态数据</option>
+                                <option value="2">动态函数</option>
+                                <!--<option value="3">远程数据</option>-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">取源数据</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="你可以直接写函数，或者直接写数据！" name="fundata" type="text/plain"
+                                      style="width:96%;height:180px;" class="layui-input"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">数据刷新</label>
+                        <div class="layui-input-block">
+                            <select lay-filter="r_data" data="r_data" name="r_data" class="layui-input"
+                                    style="width:96%;">
+                                <option value="">不刷新</option>
+                                <option value="10">10秒刷新一次</option>
+                                <option value="30">30秒刷新一次</option>
+                                <option value="60">60秒刷新一次</option>
+                                <option value="300">300秒刷新一次</option>
+                                <option value="600">600秒刷新一次</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="f_type" id="f_type" class="layui-input">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <p class="layui-btn" style="z-index:0" onclick="Fkreport.ajax_save(1)">立即提交</p>
+                    </div>
+                </div>
+            </form>
+            <div class="sfdp-cl"></div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="dele-mask">
+    <div class="swit-de-copy">
+        <div>
+            删除
+        </div>
+        <div>
+            复制
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="/static/fk/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="/static/fk/jquery-ui-1.12.min.js?111123"></script>
+<script type="text/javascript" src="/static/fk/fk1.0.js"></script>
+<script type="text/javascript" src="/static/layui/layui.js"></script>
+<script type="text/javascript" src="/static/fk/l_zoom.min.js"></script>
+<script type="text/javascript" src="/static/fk/g2plot.min.js"></script>
+<script type="text/javascript" src="/static/fk/fk.g2.js"></script>
+<script type="text/javascript">
+    const Fk_id = {$id};
+    const server_url = "{:url('fk/api')}?act=save&id="+Fk_id;
+    const sfun_url = "{$url_api}";
+    const files_url = "{:url('fk/data')}";
+    const app_height = '{$data.data.height}';/*设计的高度*/
+    const app_width = "{$data.data.width}";/*设计的宽度*/
+    $(function () {
+        Fkreport.int_data({$data.data.data|raw}, Fk_id);
+        /*调整页面布局，自适应*/
+        window.onresize = function () {
+            Fkreport.auto_size(app_width, app_height)
+        }
+        Fkreport.setgril(app_width,app_height);
+        Fkreport.auto_size(app_width, app_height);
+        layui.use(['colorpicker', 'element'], function () {
+            var element = layui.element,
+                colorpicker = layui.colorpicker;
+            colorpicker.render({
+                elem: '#f_color_e'
+                , color: 'rgba(68,66,66,0.5)'
+                , format: 'rgb'
+                , alpha: true //开启透明度滑块
+                , size: 'lg'
+                , change: function (color) {
+                    let f_id = $('#f_id').val();
+                    Fkreport.set_class(f_id, 'color', 'class', color);
+                },
+                done: function (color) {
+                    let f_id = $('#f_id').val();
+                    $('#f_color').val(color).trigger("click");
+                    Fkreport.set_class(f_id, 'color', 'class', color);
+                }
+            });
+        });
+        $('.fk_element').mousedown(function (e) {
+            // if (e.which === 3) {
+            //     if (confirm("你确定删除吗？")) {
+            //         var activeId = $(this).attr("id");//右键当前的ID
+            //         Fkreport.dataSave('', activeId, 'Del');
+            //         Fkreport.ajax_save();
+            //         location.reload();
+            //     }
+            // }
+            // return false;//阻止链接跳转
+        })
+    });
+
+    $("#fkreport").delegate(".delet-c","click",() => {
+        Fkreport.deleteElment()
+    })
+    $("#fkreport").delegate(".copy-c","click",() => {
+        Fkreport.copyelement()
+    })
+
+    $(".sfdp-tool-con").draggable({
+        helper: "clone",
+        revert: "invalid",
+        cursor: "move"
+    });
+    $("#fkreport").droppable({
+        drop: function (event, ui) {
+            var sourceElement = $(ui.helper.context);
+            var type = sourceElement.attr("id");
+            if (sourceElement.attr("class").indexOf("sfdp-tool-con") >= 0) {
+                let offset = ui.position;
+                let list_id = sourceElement.attr("id") + '_' + Fkreport.dateFormat(new Date(), "mmssS");
+                var bl = $('.fk-design').width() / app_width;
+                let top = offset.top / bl;
+                let left = offset.left / bl;
+                Fkreport.dataSave({
+                    id: list_id,
+                    f_type: type,
+                    f_color: 'rgb(45, 109, 204)',
+                    f_size: '20',
+                    f_height: 150,
+                    f_width: 150,
+                    f_title: '大屏文字',
+                    top: top,
+                    left: left,
+                    zindex: 2
+                }, list_id);
+                $(this).append(Fkreport.convertFun(type, list_id, {
+                    left: left,
+                    top: top,
+                    zindex: 2,
+                    f_height: 150,
+                    f_width: 150
+                }, 0));
+                if (type == 'bar' || type == 'line' || type == 'pie' || type == 'area' || type == 'rosePlot') {
+                    Fkreport.dataSave({
+                        type: 1,
+                        fun: '[{ type: \'一线\', value: 0.19 },{ type: \'二线\', value: 0.21 }]'
+                    }, list_id, 'Chart');
+                    desk.int(type, list_id, {});
+                }
+                if (type == 'gauge' || type == 'Liquid') {
+                    Fkreport.dataSave({type: 1, fun: '0.85'}, list_id, 'Chart');
+                    desk.int(type, list_id, {});
+                }
+                if (type == 'date') {
+                    Fkreport.showTime(list_id);
+                }
+            } else {
+                var fk_data = JSON.parse(localStorage.getItem("fk_data"));
+                var fk_list_data = fk_data.f_list[type];
+                fk_list_data.top = ui.position.top;
+                fk_list_data.left = ui.position.left;
+                Fkreport.dataSave(fk_list_data, type, 'Position');
+            }
+        }
+    });
+    $(document).on("select propertychange", ".layui-input", function (e) {
+        let f_id = $('#f_id').val();
+        let val = $(this).val();
+        let data = $(this).attr("data");
+        let datatype = $(this).attr("data-type");
+        Fkreport.set_class(f_id, data, datatype, val);
+    });
+    $(document).on("input propertychange", ".layui-input", function (e) {
+        let f_id = $('#f_id').val();
+        let val = $(this).val();
+        let data = $(this).attr("data");
+        let datatype = $(this).attr("data-type");
+        Fkreport.set_class(f_id, data, datatype, val);
+    });
+    function set_ui(obj,w,h){
+        var id = obj.parent().attr('id');
+        if(id != ''){
+            $('#f_width').val(w).trigger('input',w);
+            $('#f_height').val(h).trigger('input',h);
+        }
+    }
+</script>
