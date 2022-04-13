@@ -73,6 +73,7 @@ const Cvetable=(params)=> {
     valueType: "option",
     render: (_, record) => [
             <a key="showDetail" onClick={async()=>{
+                setflags(true)
                     setsuccesvisible(true)
                     seterrvisible(false)
                 const  time =setInterval(()=>{
@@ -104,9 +105,9 @@ const Cvetable=(params)=> {
     },
 ]
     const  repair=async()=>{
+        setflags(true)
     const  arry=[];
     const leght =selectedRows.length;
-
     if(leght>0){
         setsuccesvisible(true)
         seterrvisible(false) 
@@ -114,9 +115,10 @@ const Cvetable=(params)=> {
         setCount(vlue=>vlue+1);
         
         },2500)
-        const id=params.id
-        for(let i = 0; i < leght; i++){
-            arry.push({"cve_id":id, "hostname":[selectedRows[i].hostname ]})
+        const id=params.id;
+        arry.push({"cve_id":id, "hostname":[selectedRows[0].hostname ]})
+        for(let i = 1; i < leght; i++){
+            arry[0].hostname.push(selectedRows[i].hostname)
         }
         const msg=await manyApi({cve_id_list:arry});
         if(msg){
@@ -140,11 +142,7 @@ const Cvetable=(params)=> {
     }
     const [flags,setflags]=useState(false)
     const cancel=()=>{
-        if(succesvisible==true){
-            setflags(true)
-        }else{
-            history.push("/security/list") 
-        }
+        history.goBack();
     }
   return (
     <>
@@ -164,7 +162,7 @@ const Cvetable=(params)=> {
         <Col span={11}>
               <Row className="allbtn">
               <Col><Button type="primary" onClick={repair}>一键修复</Button></Col>
-              <Col style={{'line-height':'58px'}}><Button disabled={flags} onClick={cancel} style={{'margin-right':'10px'}}>返回</Button></Col>
+              <Col style={{lineHeight:'58px'}}><Button disabled={flags} onClick={cancel} style={{marginRight:'10px'}}>返回</Button></Col>
               </Row>
               </Col>
     </Row>

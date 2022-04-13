@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <linux/perf_event.h>
@@ -23,9 +25,14 @@ struct env {
 	time_t duration;
 	bool verbose;
 } env = {
-	.sample_period = 2*1000*1000 + 1,	//1ms
-	.duration = 10,
+	.sample_period = 1*1000*1000 + 1,	//1ms
+	.duration = 0,
 };
+
+FILE *filep = NULL;
+char filename[256] = {0};
+char log_dir[] = "/var/log/sysak/irqoff";
+char defaultfile[] = "/var/log/sysak/irqoff/irqoff.log";
 
 static struct ksym *ksyms;
 static int stackmp_fd;
@@ -39,11 +46,18 @@ const char *argp_program_version = "irqoff 0.1";
 const char argp_program_doc[] =
 "Catch the irq-off time more than threshold.\n"
 "\n"
-"USAGE: irqoff [--help] [-c SAMPLE_PERIOD(ns)] [-t THRESH(ns)] [duration(s)]\n";
+"USAGE: irqoff [--help] [-p SAMPLE_PERIOD(us)] [-t THRESH(us)] [-f LOGFILE] [duration(s)]\n"
+"\n"
+"EXAMPLES:\n"
+"    irqoff                # run 10s, and detect irqoff more than 10ms(default)\n"
+"    irqoff -p 2000        # detect irqoff with period 2ms (default 1ms)\n"
+"    irqoff -t 15000       # detect irqoff with threshold 15ms (default 10ms)\n"
+"    irqoff -f a.log       # record result to a.log (default to ~sysak/irqoff/irqoff.log)\n";
 
 static const struct argp_option opts[] = {
-	{ "sample_period", 'c', "SAMPLE_PERIOD", 0, "Period default to 2ms"},
+	{ "sample_period", 'p', "SAMPLE_PERIOD", 0, "Period default to 1ms"},
 	{ "threshold", 't', "THRESH", 0, "Threshold to detect, default 10ms"},
+	{ "logfile", 'f', "LOGFILE", 0, "logfile for result"},
 	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
 	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help" },
 	{},
@@ -60,20 +74,35 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
 	case 'v':
 		env.verbose = true;
 		break;
-	case 'c':
+	case 'p':
 		errno = 0;
-		env.sample_period = strtol(arg, NULL, 10);
+		env.sample_period = strtoull(arg, NULL, 10);
 		if (errno) {
 			fprintf(stderr, "invalid sample period\n");
 			argp_usage(state);
 		}
+		env.sample_period = env.sample_period * 10;
 		break;
 	case 't':
 		errno = 0;
-		threshold = strtol(arg, NULL, 10);
+		threshold = strtoull(arg, NULL, 10);
 		if (errno) {
 			fprintf(stderr, "invalid threshold\n");
 			argp_usage(state);
+		}
+		threshold = threshold * 1000;
+		break;
+	case 'f':
+		if (strlen(arg) < 2)
+			strncpy(filename, defaultfile, sizeof(filename));
+		else 
+			strncpy(filename, arg, sizeof(filename));
+		filep = fopen(filename, "w+");
+		if (!filep) {
+			int ret = errno;
+			fprintf(stderr, "%s :fopen %s\n",
+				strerror(errno), filename);
+			return ret;
 		}
 		break;
 	case ARGP_KEY_ARG:
@@ -92,6 +121,19 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
 	default:
 		return ARGP_ERR_UNKNOWN;
 	}
+	if (!filep) {
+		filep = fopen(defaultfile, "w+");
+		if (!filep) {
+			int ret = errno;
+			fprintf(stderr, "%s :fopen %s\n",
+				strerror(errno), defaultfile);
+			return ret;
+		}
+	}
+
+	if (env.sample_period > threshold)
+		env.sample_period = threshold >> 2 ;
+
 	return 0;
 }
 
@@ -152,7 +194,7 @@ void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
 	time(&t);
 	tm = localtime(&t);
 	strftime(ts, sizeof(ts), "%F_%H:%M:%S", tm);
-	fprintf(stdout, "%-21s %-5d %-15s %-8d %-10llu\n",
+	fprintf(filep, "%-21s %-5d %-15s %-8d %-10llu\n",
 		ts, e->cpu, e->comm, e->pid, e->delay);
 	print_stack(stackmp_fd, e->ret, ksyms);
 }
@@ -163,7 +205,7 @@ void irqoff_handler(int poll_fd)
 	struct perf_buffer *pb = NULL;
 	struct perf_buffer_opts pb_opts = {};
 
-	fprintf(stdout, "%-21s %-5s %-15s %-8s %-10s\n", "TIME(irqoff)", "CPU", "COMM", "TID", "LAT(us)");
+	fprintf(filep, "%-21s %-5s %-15s %-8s %-10s\n", "TIME(irqoff)", "CPU", "COMM", "TID", "LAT(us)");
 
 	pb_opts.sample_cb = handle_event;
 	pb = perf_buffer__new(poll_fd, 64, &pb_opts);
@@ -194,6 +236,17 @@ static int libbpf_print_fn(enum libbpf_print_level level, const char *format, va
 	return vfprintf(stderr, format, args);
 }
 
+static int prepare_dictory(char *path)
+{
+	int ret;
+
+	ret = mkdir(path, 0777);
+	if (ret < 0 && errno != EEXIST)
+		return errno;
+	else
+		return 0;
+}
+
 static void sig_alarm(int signo)
 {
 	exiting = 1;
@@ -215,6 +268,10 @@ int main(int argc, char **argv)
 		.parser = parse_arg,
 		.doc = argp_program_doc,
 	};
+
+	err = prepare_dictory(log_dir);
+	if (err)
+		return err;
 
 	ksyms = NULL;
 	threshold = LAT_THRESH_NS;
@@ -266,7 +323,6 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Failed to update args map\n");
 		goto cleanup;
 	}
-	printf("Running for %ld seconds thresh=%llu, or Hit Ctrl-C to end.\n", env.duration, threshold);
 
 	if (signal(SIGINT, sig_int) == SIG_ERR ||
 		signal(SIGALRM, sig_alarm) == SIG_ERR) {
@@ -275,7 +331,9 @@ int main(int argc, char **argv)
 		goto cleanup;
 	}
 
-	alarm(env.duration);
+	if (env.duration)
+		alarm(env.duration);
+
 	irqoff_handler(ent_fd);
 
 cleanup:
