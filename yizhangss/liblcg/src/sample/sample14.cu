@@ -105,7 +105,7 @@ private:
 	int *d_rowPtrA; // CSR
 	int *d_colIdxA;
 	cuComplex *d_A;
-	cuComplex *d_B;
+	cuComplex *d_t;
 	cuComplex *d_p;
 	cusparseDnVecDescr_t dvec_p;
 
@@ -115,8 +115,7 @@ private:
 	cuComplex *d_L;
 
 	cuComplex *host_m;
-	cuComplex *d_m;
-	cusparseDnVecDescr_t dvec_b;
+	cusparseDnVecDescr_t dvec_tmp;
 };
 
 void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle_t cub_handle, cusparseHandle_t cus_handle)
@@ -158,14 +157,14 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
 	cudaMalloc(&d_rowIdxA, nz * sizeof(int));
 	cudaMalloc(&d_rowPtrA, (N + 1) * sizeof(int));
 	cudaMalloc(&d_colIdxA, nz * sizeof(int));
-	cudaMalloc(&d_B, N * sizeof(cuComplex));
+	cudaMalloc(&d_t, N * sizeof(cuComplex));
 	cudaMalloc(&d_p, N * sizeof(cuComplex));
     cusparseCreateDnVec(&dvec_p, N, d_p, CUDA_C_32F);
 
 	cudaMemcpy(d_A, Af, nz * sizeof(cuComplex), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_rowIdxA, rowIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_colIdxA, colIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
-	cudaMemcpy(d_B, bf, N * sizeof(cuComplex), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_t, bf, N * sizeof(cuComplex), cudaMemcpyHostToDevice);
 
     cudaMalloc(&d_L, lnz * sizeof(cuComplex));
 	cudaMalloc(&d_rowIdxL, lnz * sizeof(int));
@@ -199,11 +198,11 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
 	cusparseSpMatSetAttribute(smat_L, CUSPARSE_SPMAT_DIAG_TYPE, &diagtype, sizeof(diagtype));
 
     // This is just used to get bufferSize;
-	cusparseCreateDnVec(&dvec_b, N, d_B, CUDA_C_32F);
+	cusparseCreateDnVec(&dvec_tmp, N, d_t, CUDA_C_32F);
 
 	size_t bufferSize_B;
 	cusparseSpMV_bufferSize(cus_handle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_A,
-		dvec_b, &zero, dvec_b, CUDA_C_32F, CUSPARSE_SPMV_ALG_DEFAULT, &bufferSize_B);
+		dvec_tmp, &zero, dvec_tmp, CUDA_C_32F, CUSPARSE_SPMV_ALG_DEFAULT, &bufferSize_B);
 
     // --- Start of the preconditioning part ---
     cusparseSpSV_createDescr(&descr_L);
@@ -213,24 +212,22 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
 	bufferSize = bufferSize_B;
 
     cusparseSpSV_bufferSize(cus_handle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_L, dvec_p, 
-        dvec_b, CUDA_C_32F, CUSPARSE_SPSV_ALG_DEFAULT, descr_L, &bufferSize_L);
+        dvec_tmp, CUDA_C_32F, CUSPARSE_SPSV_ALG_DEFAULT, descr_L, &bufferSize_L);
     cusparseSpSV_bufferSize(cus_handle, CUSPARSE_OPERATION_TRANSPOSE, &one, smat_L, dvec_p, 
-        dvec_b, CUDA_C_32F, CUSPARSE_SPSV_ALG_DEFAULT, descr_LT, &bufferSize_LT);
+        dvec_tmp, CUDA_C_32F, CUSPARSE_SPSV_ALG_DEFAULT, descr_LT, &bufferSize_LT);
 
     bufferSize = max(max(bufferSize, bufferSize_L), bufferSize_LT);
 	cudaMalloc(&d_buf, bufferSize);
 	cudaMalloc(&d_buf2, bufferSize);
 
-	cusparseSpSV_analysis(cus_handle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_L, dvec_b, dvec_p, 
+	cusparseSpSV_analysis(cus_handle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_L, dvec_tmp, dvec_p, 
 		CUDA_C_32F, CUSPARSE_SPSV_ALG_DEFAULT, descr_L, d_buf);
 
-	cusparseSpSV_analysis(cus_handle, CUSPARSE_OPERATION_TRANSPOSE, &one, smat_L, dvec_p, dvec_b, 
+	cusparseSpSV_analysis(cus_handle, CUSPARSE_OPERATION_TRANSPOSE, &one, smat_L, dvec_p, dvec_tmp, 
 		CUDA_C_32F, CUSPARSE_SPSV_ALG_DEFAULT, descr_LT, d_buf2);
 	// --- End of the preconditioning part ---
 
 	// Declare an initial solution
-    cudaMalloc(&d_m, N * sizeof(cuComplex));
-
     clcg_para self_para = clcg_default_parameters();
 	self_para.epsilon = 1e-6;
 	self_para.abs_diff = 0;
@@ -242,11 +239,9 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
 	{
 		host_m[i].x = 0.0; host_m[i].y = 0.0;	
 	}
-	cudaMemcpy(d_m, host_m, N * sizeof(cuComplex), cudaMemcpyHostToDevice);
 
-	MinimizePreconditioned(cub_handle, cus_handle, d_m, d_B, N, nz, CLCG_PCG);
+	MinimizePreconditioned(cub_handle, cus_handle, host_m, bf, N, nz, CLCG_PCG);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(cuComplex), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_xf, N) << std::endl;
 
 	// Free Host memory
@@ -265,7 +260,7 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
 
     if (host_m != nullptr) delete[] host_m;
 
-	cusparseDestroyDnVec(dvec_b);
+	cusparseDestroyDnVec(dvec_tmp);
     cusparseDestroyDnVec(dvec_p);
 
 	cudaFree(d_buf);
@@ -274,15 +269,13 @@ void sample14::solve(std::string inputPath, std::string answerPath, cublasHandle
 	cudaFree(d_rowPtrA);
 	cudaFree(d_colIdxA);
     cudaFree(d_A);
-	cudaFree(d_B);
+	cudaFree(d_t);
 	cudaFree(d_p);
 
     cudaFree(d_rowIdxL);
 	cudaFree(d_rowPtrL);
 	cudaFree(d_colIdxL);
     cudaFree(d_L);
-
-	cudaFree(d_m);
 
 	cusparseDestroySpMat(smat_A);
 	cusparseDestroySpMat(smat_L);

@@ -78,16 +78,23 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
     if (cub_handle == nullptr) return LCG_INVALID_POINTER;
     if (cus_handle == nullptr) return LCG_INVALID_POINTER;
 
+	cuDoubleComplex *d_m = nullptr, *d_B = nullptr;
 	cuDoubleComplex *r1k = nullptr, *r2k = nullptr;
 	cuDoubleComplex *d1k = nullptr, *d2k = nullptr, *Ax = nullptr;
+	cudaMalloc(&d_m, n_size * sizeof(cuDoubleComplex));
+	cudaMalloc(&d_B, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&r1k, n_size * sizeof(cuDoubleComplex));
 	cudaMalloc(&r2k, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&d1k, n_size * sizeof(cuDoubleComplex));
 	cudaMalloc(&d2k, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&Ax, n_size * sizeof(cuDoubleComplex));
 
+	// Copy initial solutions
+	cudaMemcpy(d_m, m, n_size * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_B, B, n_size * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
+
     cusparseDnVecDescr_t dvec_m, dvec_d1k, dvec_d2k, dvec_Ax;
-	cusparseCreateDnVec(&dvec_m, n_size, m, CUDA_C_64F);
+	cusparseCreateDnVec(&dvec_m, n_size, d_m, CUDA_C_64F);
 	cusparseCreateDnVec(&dvec_d1k, n_size, d1k, CUDA_C_64F);
 	cusparseCreateDnVec(&dvec_d2k, n_size, d2k, CUDA_C_64F);
 	cusparseCreateDnVec(&dvec_Ax, n_size, Ax, CUDA_C_64F);
@@ -100,7 +107,7 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
 	Afp(instance, cub_handle, cus_handle, dvec_m, dvec_Ax, n_size, nz_size, CUSPARSE_OPERATION_NON_TRANSPOSE);
 
     // r0 = B - Ax
-    cudaMemcpy(r1k, B, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // r0 = B
+    cudaMemcpy(r1k, d_B, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // r0 = B
     cublasZaxpy_v2(cub_handle, n_size, &none, Ax, 1, r1k, 1); // r0 -= Ax
     cudaMemcpy(d1k, r1k, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // d0 = r0
 
@@ -113,7 +120,7 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
 	lcg_float m_mod;
     if (!para.abs_diff)
     {
-        cublasDznrm2_v2(cub_handle, n_size, m, 1, &m_mod);
+        cublasDznrm2_v2(cub_handle, n_size, d_m, 1, &m_mod);
         if (m_mod < 1.0) m_mod = 1.0;
     }
 
@@ -126,7 +133,7 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
 		ret = LCG_ALREADY_OPTIMIZIED;
 		if (Pfp != nullptr)
 		{
-			Pfp(instance, m, rk_mod/n_size, &para, n_size, nz_size, 0);
+			Pfp(instance, d_m, rk_mod/n_size, &para, n_size, nz_size, 0);
 		}
 		goto func_ends;
 	}	
@@ -135,7 +142,7 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
 		ret = LCG_ALREADY_OPTIMIZIED;
 		if (Pfp != nullptr)
 		{
-			Pfp(instance, m, rk_mod*rk_mod/(m_mod*m_mod), &para, n_size, nz_size, 0);
+			Pfp(instance, d_m, rk_mod*rk_mod/(m_mod*m_mod), &para, n_size, nz_size, 0);
 		}
 		goto func_ends;
 	}
@@ -148,7 +155,7 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
 
 		if (Pfp != nullptr)
 		{
-			if (Pfp(instance, m, residual, &para, n_size, nz_size, t))
+			if (Pfp(instance, d_m, residual, &para, n_size, nz_size, t))
 			{
 				ret = CLCG_STOP; goto func_ends;
 			}
@@ -174,12 +181,12 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
         nak = cuCmul(none, ak);
 		conj_ak = cuConj(nak);
 
-        cublasZaxpy_v2(cub_handle, n_size, &ak, d1k, 1, m, 1);
+        cublasZaxpy_v2(cub_handle, n_size, &ak, d1k, 1, d_m, 1);
         cublasZaxpy_v2(cub_handle, n_size, &nak, Ax, 1, r1k, 1);
 
         if (!para.abs_diff)
         {
-            cublasDznrm2_v2(cub_handle, n_size, m, 1, &m_mod);
+            cublasDznrm2_v2(cub_handle, n_size, d_m, 1, &m_mod);
             if (m_mod < 1.0) m_mod = 1.0;
         }
 
@@ -203,6 +210,11 @@ int clbicg(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDoubleComplex
 
 	func_ends:
 	{
+		// Copy to host memories
+		cudaMemcpy(m, d_m, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
+
+		cudaFree(d_m);
+		cudaFree(d_B);
 		cudaFree(r1k);
 		cudaFree(r2k);
 		cudaFree(d1k);
@@ -234,13 +246,20 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
     if (cub_handle == nullptr) return LCG_INVALID_POINTER;
     if (cus_handle == nullptr) return LCG_INVALID_POINTER;
 
+	cuDoubleComplex *d_m = nullptr, *d_B = nullptr;
 	cuDoubleComplex *rk = nullptr, *dk = nullptr, *Ax = nullptr;
+	cudaMalloc(&d_m, n_size * sizeof(cuDoubleComplex));
+	cudaMalloc(&d_B, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&rk, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&dk, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&Ax, n_size * sizeof(cuDoubleComplex));
 
+	// Copy initial solutions
+	cudaMemcpy(d_m, m, n_size * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_B, B, n_size * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
+
     cusparseDnVecDescr_t dvec_m, dvec_dk, dvec_Ax;
-	cusparseCreateDnVec(&dvec_m, n_size, m, CUDA_C_64F);
+	cusparseCreateDnVec(&dvec_m, n_size, d_m, CUDA_C_64F);
 	cusparseCreateDnVec(&dvec_dk, n_size, dk, CUDA_C_64F);
 	cusparseCreateDnVec(&dvec_Ax, n_size, Ax, CUDA_C_64F);
 
@@ -252,7 +271,7 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
 	Afp(instance, cub_handle, cus_handle, dvec_m, dvec_Ax, n_size, nz_size, CUSPARSE_OPERATION_NON_TRANSPOSE);
 
     // r0 = B - Ax
-    cudaMemcpy(rk, B, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // r0 = B
+    cudaMemcpy(rk, d_B, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // r0 = B
     cublasZaxpy_v2(cub_handle, n_size, &none, Ax, 1, rk, 1); // r0 -= Ax
     cudaMemcpy(dk, rk, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // d0 = r0
 
@@ -262,7 +281,7 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
 	lcg_float m_mod;
     if (!para.abs_diff)
     {
-        cublasDznrm2_v2(cub_handle, n_size, m, 1, &m_mod);
+        cublasDznrm2_v2(cub_handle, n_size, d_m, 1, &m_mod);
         if (m_mod < 1.0) m_mod = 1.0;
     }
 
@@ -275,7 +294,7 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
 		ret = LCG_ALREADY_OPTIMIZIED;
 		if (Pfp != nullptr)
 		{
-			Pfp(instance, m, rk_mod/n_size, &para, n_size, nz_size, 0);
+			Pfp(instance, d_m, rk_mod/n_size, &para, n_size, nz_size, 0);
 		}
 		goto func_ends;
 	}	
@@ -284,7 +303,7 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
 		ret = LCG_ALREADY_OPTIMIZIED;
 		if (Pfp != nullptr)
 		{
-			Pfp(instance, m, rk_mod*rk_mod/(m_mod*m_mod), &para, n_size, nz_size, 0);
+			Pfp(instance, d_m, rk_mod*rk_mod/(m_mod*m_mod), &para, n_size, nz_size, 0);
 		}
 		goto func_ends;
 	}
@@ -297,7 +316,7 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
 
 		if (Pfp != nullptr)
 		{
-			if (Pfp(instance, m, residual, &para, n_size, nz_size, t))
+			if (Pfp(instance, d_m, residual, &para, n_size, nz_size, t))
 			{
 				ret = CLCG_STOP; goto func_ends;
 			}
@@ -322,12 +341,12 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
         ak = cuCdiv(rkrk, dkAx);
         nak = cuCmul(none, ak);
 
-        cublasZaxpy_v2(cub_handle, n_size, &ak, dk, 1, m, 1);
+        cublasZaxpy_v2(cub_handle, n_size, &ak, dk, 1, d_m, 1);
         cublasZaxpy_v2(cub_handle, n_size, &nak, Ax, 1, rk, 1);
 
         if (!para.abs_diff)
         {
-            cublasDznrm2_v2(cub_handle, n_size, m, 1, &m_mod);
+            cublasDznrm2_v2(cub_handle, n_size, d_m, 1, &m_mod);
             if (m_mod < 1.0) m_mod = 1.0;
         }
 
@@ -343,6 +362,11 @@ int clbicg_symmetric(clcg_axfunc_cuda_ptr Afp, clcg_progress_cuda_ptr Pfp, cuDou
 
 	func_ends:
 	{
+		// Copy to host memories
+		cudaMemcpy(m, d_m, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
+
+		cudaFree(d_m);
+		cudaFree(d_B);
 		cudaFree(rk);
 		cudaFree(dk);
 		cudaFree(Ax);
@@ -371,14 +395,21 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
     if (cub_handle == nullptr) return LCG_INVALID_POINTER;
     if (cus_handle == nullptr) return LCG_INVALID_POINTER;
 
+	cuDoubleComplex *d_m = nullptr, *d_B = nullptr;
     cuDoubleComplex *rk = nullptr, *dk = nullptr, *sk = nullptr, *Ax = nullptr;
+	cudaMalloc(&d_m, n_size * sizeof(cuDoubleComplex));
+	cudaMalloc(&d_B, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&rk, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&dk, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&sk, n_size * sizeof(cuDoubleComplex));
     cudaMalloc(&Ax, n_size * sizeof(cuDoubleComplex));
 
+	// Copy initial solutions
+	cudaMemcpy(d_m, m, n_size * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_B, B, n_size * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
+
     cusparseDnVecDescr_t dvec_m, dvec_rk, dvec_dk, dvec_sk, dvec_Ax;
-	cusparseCreateDnVec(&dvec_m, n_size, m, CUDA_C_64F);
+	cusparseCreateDnVec(&dvec_m, n_size, d_m, CUDA_C_64F);
     cusparseCreateDnVec(&dvec_rk, n_size, rk, CUDA_C_64F);
 	cusparseCreateDnVec(&dvec_dk, n_size, dk, CUDA_C_64F);
     cusparseCreateDnVec(&dvec_sk, n_size, sk, CUDA_C_64F);
@@ -392,7 +423,7 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
     Afp(instance, cub_handle, cus_handle, dvec_m, dvec_Ax, n_size, nz_size, CUSPARSE_OPERATION_NON_TRANSPOSE);
 
     // r0 = B - Ax
-    cudaMemcpy(rk, B, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // r0 = B
+    cudaMemcpy(rk, d_B, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToDevice); // r0 = B
     cublasZaxpy_v2(cub_handle, n_size, &none, Ax, 1, rk, 1); // r0 -= Ax
 
 	Mfp(instance, cub_handle, cus_handle, dvec_rk, dvec_dk, n_size, nz_size, CUSPARSE_OPERATION_NON_TRANSPOSE);
@@ -403,7 +434,7 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
     lcg_float m_mod;
     if (!para.abs_diff)
     {
-        cublasDznrm2_v2(cub_handle, n_size, m, 1, &m_mod);
+        cublasDznrm2_v2(cub_handle, n_size, d_m, 1, &m_mod);
         if (m_mod < 1.0) m_mod = 1.0;
     }
 
@@ -416,7 +447,7 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
 		ret = LCG_ALREADY_OPTIMIZIED;
 		if (Pfp != nullptr)
 		{
-			Pfp(instance, m, rk_mod/n_size, &para, n_size, nz_size, 0);
+			Pfp(instance, d_m, rk_mod/n_size, &para, n_size, nz_size, 0);
 		}
 		goto func_ends;
 	}	
@@ -425,7 +456,7 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
 		ret = LCG_ALREADY_OPTIMIZIED;
 		if (Pfp != nullptr)
 		{
-			Pfp(instance, m, rk_mod*rk_mod/(m_mod*m_mod), &para, n_size, nz_size, 0);
+			Pfp(instance, d_m, rk_mod*rk_mod/(m_mod*m_mod), &para, n_size, nz_size, 0);
 		}
 		goto func_ends;
 	}
@@ -438,7 +469,7 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
 
 		if (Pfp != nullptr)
 		{
-			if (Pfp(instance, m, residual, &para, n_size, nz_size, t))
+			if (Pfp(instance, d_m, residual, &para, n_size, nz_size, t))
 			{
 				ret = CLCG_STOP; goto func_ends;
 			}
@@ -462,12 +493,12 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
 		ak = cuCdiv(d_new, dkAx);
         nak = cuCmul(none, ak);
 
-        cublasZaxpy_v2(cub_handle, n_size, &ak, dk, 1, m, 1);
+        cublasZaxpy_v2(cub_handle, n_size, &ak, dk, 1, d_m, 1);
         cublasZaxpy_v2(cub_handle, n_size, &nak, Ax, 1, rk, 1);
 
 		if (!para.abs_diff)
         {
-            cublasDznrm2_v2(cub_handle, n_size, m, 1, &m_mod);
+            cublasDznrm2_v2(cub_handle, n_size, d_m, 1, &m_mod);
             if (m_mod < 1.0) m_mod = 1.0;
         }
 
@@ -486,6 +517,11 @@ int clpcg(clcg_axfunc_cuda_ptr Afp, clcg_axfunc_cuda_ptr Mfp, clcg_progress_cuda
 
 	func_ends:
 	{
+		// Copy to host memories
+		cudaMemcpy(m, d_m, n_size * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
+
+		cudaFree(d_m);
+		cudaFree(d_B);
 		cudaFree(rk);
 		cudaFree(dk);
 		cudaFree(sk);

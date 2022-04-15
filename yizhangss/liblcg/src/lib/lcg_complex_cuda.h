@@ -50,6 +50,31 @@ lcg_complex cuda2lcg_complex(cuDoubleComplex a);
 cuDoubleComplex lcg2cuda_complex(lcg_complex a);
 
 /**
+ * @brief      Locate memory for a cuDoubleComplex pointer type.
+ *
+ * @param[in]  n     Size of the lcg_float array.
+ *
+ * @return     Pointer of the array's location.
+ */
+cuDoubleComplex* clcg_malloc_cuda(size_t n);
+
+/**
+ * @brief      Destroy memory used by the cuDoubleComplex type array.
+ *
+ * @param      x     Pointer of the array.
+ */
+void clcg_free_cuda(cuDoubleComplex *x);
+
+/**
+ * @brief      set a complex vector's value
+ *
+ * @param      a     pointer of the vector
+ * @param[in]  b     initial value
+ * @param[in]  size  vector size
+ */
+void clcg_vecset_cuda(cuDoubleComplex *a, cuDoubleComplex b, size_t size);
+
+/**
  * @brief    Host side function for scale a cuDoubleComplex object
  * 
  * @param s  scale factor

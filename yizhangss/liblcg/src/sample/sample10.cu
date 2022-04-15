@@ -112,7 +112,6 @@ private:
 	int *d_rowPtrA; // CSR
 	int *d_colIdxA;
 	cuDoubleComplex *d_A;
-	cuDoubleComplex *d_B;
 	cuDoubleComplex *d_pd;
 	cuDoubleComplex *d_ic;
 
@@ -123,8 +122,7 @@ private:
 	csrsv2Info_t info_LT;
 
 	cuDoubleComplex *host_m;
-	cuDoubleComplex *d_m;
-	cusparseDnVecDescr_t dvec_b;
+	cusparseDnVecDescr_t dvec_tmp;
 };
 
 void sample10::solve(std::string inputPath, std::string answerPath)
@@ -147,13 +145,11 @@ void sample10::solve(std::string inputPath, std::string answerPath)
 	cudaMalloc(&d_rowIdxA, nz * sizeof(int));
 	cudaMalloc(&d_rowPtrA, (N + 1) * sizeof(int));
 	cudaMalloc(&d_colIdxA, nz * sizeof(int));
-	cudaMalloc(&d_B, N * sizeof(cuDoubleComplex));
 	cudaMalloc(&d_pd, N * sizeof(cuDoubleComplex));
 
 	cudaMemcpy(d_A, A, nz * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_rowIdxA, rowIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_colIdxA, colIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
-	cudaMemcpy(d_B, b, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
 	// Convert matrix A from COO format to CSR format
 	cusparseXcoo2csr(cusHandle, d_rowIdxA, nz, N, d_rowPtrA, CUSPARSE_INDEX_BASE_ZERO);
@@ -163,12 +159,12 @@ void sample10::solve(std::string inputPath, std::string answerPath)
 		CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F);
 
 	// This is just used to get bufferSize;
-	cusparseDnVecDescr_t dvec_b;
-	cusparseCreateDnVec(&dvec_b, N, d_B, CUDA_C_64F);
+	cusparseDnVecDescr_t dvec_tmp;
+	cusparseCreateDnVec(&dvec_tmp, N, d_pd, CUDA_C_64F);
 
 	size_t bufferSize_B;
 	cusparseSpMV_bufferSize(cusHandle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_A,
-		dvec_b, &zero, dvec_b, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
+		dvec_tmp, &zero, dvec_tmp, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
 
 	// --- Start of the preconditioning part ---
 	// Get the diagonal elemenets
@@ -230,7 +226,6 @@ void sample10::solve(std::string inputPath, std::string answerPath)
 
 	// Declare an initial solution
 	host_m = new cuDoubleComplex[N];
-    cudaMalloc(&d_m, N * sizeof(cuDoubleComplex));
 
     clcg_para self_para = clcg_default_parameters();
 	self_para.epsilon = 1e-6;
@@ -240,12 +235,10 @@ void sample10::solve(std::string inputPath, std::string answerPath)
 	{
 		host_m[i].x = 0.0; host_m[i].y = 0.0;	
 	}
-	cudaMemcpy(d_m, host_m, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
 	use_incomplete_cholesky = false;
-	MinimizePreconditioned(cubHandle, cusHandle, d_m, d_B, N, nz, CLCG_PCG);
+	MinimizePreconditioned(cubHandle, cusHandle, host_m, b, N, nz, CLCG_PCG);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 	
 	// Preconditioning with incomplete-Cholesky factorization
@@ -253,12 +246,10 @@ void sample10::solve(std::string inputPath, std::string answerPath)
 	{
 		host_m[i].x = 0.0; host_m[i].y = 0.0;	
 	}
-	cudaMemcpy(d_m, host_m, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
 	use_incomplete_cholesky = true;
-	MinimizePreconditioned(cubHandle, cusHandle, d_m, d_B, N, nz, CLCG_PCG);
+	MinimizePreconditioned(cubHandle, cusHandle, host_m, b, N, nz, CLCG_PCG);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Free Host memory
@@ -274,12 +265,10 @@ void sample10::solve(std::string inputPath, std::string answerPath)
 	cudaFree(d_rowIdxA);
 	cudaFree(d_rowPtrA);
 	cudaFree(d_colIdxA);
-	cudaFree(d_B);
 	cudaFree(d_pd);
-	cudaFree(d_m);
 	cudaFree(d_ic);
 
-	cusparseDestroyDnVec(dvec_b);
+	cusparseDestroyDnVec(dvec_tmp);
 	cusparseDestroySpMat(smat_A);
 	cudaFree(d_buf);
 

@@ -63,7 +63,6 @@ int *d_rowIdxA; // COO
 int *d_rowPtrA; // CSR
 int *d_colIdxA;
 cuDoubleComplex *d_A;
-cuDoubleComplex *d_B;
 cuDoubleComplex *d_pd;
 cuDoubleComplex *d_iu;
 
@@ -142,13 +141,11 @@ int main(int argc, char **argv)
 	cudaMalloc(&d_rowIdxA, nz * sizeof(int));
 	cudaMalloc(&d_rowPtrA, (N + 1) * sizeof(int));
 	cudaMalloc(&d_colIdxA, nz * sizeof(int));
-	cudaMalloc(&d_B, N * sizeof(cuDoubleComplex));
 	cudaMalloc(&d_pd, N * sizeof(cuDoubleComplex));
 
 	cudaMemcpy(d_A, A, nz * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_rowIdxA, rowIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_colIdxA, colIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
-	cudaMemcpy(d_B, b, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
 	// Convert matrix A from COO format to CSR format
 	cusparseXcoo2csr(cusHandle, d_rowIdxA, nz, N, d_rowPtrA, CUSPARSE_INDEX_BASE_ZERO);
@@ -158,12 +155,12 @@ int main(int argc, char **argv)
 		CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F);
 
 	// This is just used to get bufferSize;
-	cusparseDnVecDescr_t dvec_b;
-	cusparseCreateDnVec(&dvec_b, N, d_B, CUDA_C_64F);
+	cusparseDnVecDescr_t dvec_tmp;
+	cusparseCreateDnVec(&dvec_tmp, N, d_pd, CUDA_C_64F);
 
 	size_t bufferSize_B;
 	cusparseSpMV_bufferSize(cusHandle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_A,
-		dvec_b, &zero, dvec_b, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
+		dvec_tmp, &zero, dvec_tmp, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
 
 	// --- Start of the preconditioning part ---
 	// Copy A
@@ -226,9 +223,6 @@ int main(int argc, char **argv)
 	// --- End of the preconditioning part ---
 
 	// Declare an initial solution
-    cuDoubleComplex *d_m;
-    cudaMalloc(&d_m, N * sizeof(cuDoubleComplex));
-
     clcg_para self_para = clcg_default_parameters();
 	self_para.epsilon = 1e-6;
 	self_para.abs_diff = 0;
@@ -241,12 +235,10 @@ int main(int argc, char **argv)
 	{
 		host_m[i].x = 0.0; host_m[i].y = 0.0;	
 	}
-	cudaMemcpy(d_m, host_m, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
-	ret = clcg_solver_preconditioned_cuda(cudaAx, cudaMx_ILU, cudaProgress, d_m, d_B, N, nz, &self_para, nullptr, cubHandle, cusHandle, CLCG_PCG);
+	ret = clcg_solver_preconditioned_cuda(cudaAx, cudaMx_ILU, cudaProgress, host_m, b, N, nz, &self_para, nullptr, cubHandle, cusHandle, CLCG_PCG);
     lcg_error_str(ret);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Free Host memory
@@ -262,12 +254,10 @@ int main(int argc, char **argv)
 	cudaFree(d_rowIdxA);
 	cudaFree(d_rowPtrA);
 	cudaFree(d_colIdxA);
-	cudaFree(d_B);
 	cudaFree(d_pd);
-	cudaFree(d_m);
 	cudaFree(d_iu);
 
-	cusparseDestroyDnVec(dvec_b);
+	cusparseDestroyDnVec(dvec_tmp);
 	cusparseDestroySpMat(smat_A);
 	cudaFree(d_buf);
 

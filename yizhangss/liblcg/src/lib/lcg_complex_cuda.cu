@@ -127,6 +127,30 @@ cuDoubleComplex lcg2cuda_complex(lcg_complex a)
 
 #endif // LibLCG_STD_COMPLEX
 
+cuDoubleComplex* clcg_malloc_cuda(size_t n)
+{
+	cuDoubleComplex *x = new cuDoubleComplex [n];
+	return x;
+}
+
+void clcg_free_cuda(cuDoubleComplex *x)
+{
+	if (x != nullptr)
+	{
+		delete[] x; x = nullptr;
+	}
+	return;
+}
+
+void clcg_vecset_cuda(cuDoubleComplex *a, cuDoubleComplex b, size_t size)
+{
+	for (size_t i = 0; i < size; i++)
+	{
+		a[i].x = b.x; a[i].y = b.y;
+	}
+	return;
+}
+
 cuComplex Cscale(float s, cuComplex a)
 {
 	cuComplex o;

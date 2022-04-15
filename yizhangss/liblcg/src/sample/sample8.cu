@@ -62,7 +62,6 @@ int *d_rowIdxA; // COO
 int *d_rowPtrA; // CSR
 int *d_colIdxA;
 double *d_A;
-double *d_B;
 double *d_pd;
 double *d_ic;
 
@@ -138,13 +137,11 @@ int main(int argc, char **argv)
 	cudaMalloc(&d_rowIdxA, nz * sizeof(int));
 	cudaMalloc(&d_rowPtrA, (N + 1) * sizeof(int));
 	cudaMalloc(&d_colIdxA, nz * sizeof(int));
-	cudaMalloc(&d_B, N * sizeof(double));
 	cudaMalloc(&d_pd, N * sizeof(double));
 
 	cudaMemcpy(d_A, A, nz * sizeof(double), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_rowIdxA, rowIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_colIdxA, colIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
-	cudaMemcpy(d_B, b, N * sizeof(double), cudaMemcpyHostToDevice);
 
 	// Convert matrix A from COO format to CSR format
 	cusparseXcoo2csr(cusHandle, d_rowIdxA, nz, N, d_rowPtrA, CUSPARSE_INDEX_BASE_ZERO);
@@ -154,12 +151,12 @@ int main(int argc, char **argv)
 		CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, CUDA_R_64F);
 
 	// This is just used to get bufferSize;
-	cusparseDnVecDescr_t dvec_b;
-	cusparseCreateDnVec(&dvec_b, N, d_B, CUDA_R_64F);
+	cusparseDnVecDescr_t dvec_tmp;
+	cusparseCreateDnVec(&dvec_tmp, N, d_pd, CUDA_R_64F);
 
 	size_t bufferSize_B;
 	cusparseSpMV_bufferSize(cusHandle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_A,
-		dvec_b, &zero, dvec_b, CUDA_R_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
+		dvec_tmp, &zero, dvec_tmp, CUDA_R_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
 
 	// --- Start of the preconditioning part ---
 
@@ -219,9 +216,6 @@ int main(int argc, char **argv)
 	// --- End of the preconditioning part ---
 
 	// Declare an initial solution
-    lcg_float *d_m;
-    cudaMalloc(&d_m, N * sizeof(lcg_float));
-
     lcg_para self_para = lcg_default_parameters();
 	self_para.epsilon = 1e-6;
 	self_para.abs_diff = 0;
@@ -230,30 +224,36 @@ int main(int argc, char **argv)
 	double *host_m = new double[N];
 
 	// Solve with CG
-	cudaMemset(d_m, 0.0, N * sizeof(lcg_float));
+	for (size_t i = 0; i < N; i++)
+	{
+		host_m[i] = 0.0;
+	}
 
-    ret = lcg_solver_cuda(cudaAx, cudaProgress, d_m, d_B, N, nz, &self_para, nullptr, cubHandle, cusHandle, LCG_CG);
+    ret = lcg_solver_cuda(cudaAx, cudaProgress, host_m, b, N, nz, &self_para, nullptr, cubHandle, cusHandle, LCG_CG);
     lcg_error_str(ret);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(double), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Solve with CGS
-	cudaMemset(d_m, 0.0, N * sizeof(lcg_float));
+	for (size_t i = 0; i < N; i++)
+	{
+		host_m[i] = 0.0;
+	}
 
-	ret = lcg_solver_cuda(cudaAx, cudaProgress, d_m, d_B, N, nz, &self_para, nullptr, cubHandle, cusHandle, LCG_CGS);
+	ret = lcg_solver_cuda(cudaAx, cudaProgress, host_m, b, N, nz, &self_para, nullptr, cubHandle, cusHandle, LCG_CGS);
     lcg_error_str(ret);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(double), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Solve with PCG
-	cudaMemset(d_m, 0.0, N * sizeof(lcg_float));
+	for (size_t i = 0; i < N; i++)
+	{
+		host_m[i] = 0.0;
+	}
 
-	ret = lcg_solver_preconditioned_cuda(cudaAx, cudaMx, cudaProgress, d_m, d_B, N, nz, &self_para, nullptr, cubHandle, cusHandle, LCG_PCG);
+	ret = lcg_solver_preconditioned_cuda(cudaAx, cudaMx, cudaProgress, host_m, b, N, nz, &self_para, nullptr, cubHandle, cusHandle, LCG_PCG);
     lcg_error_str(ret);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(double), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Free Host memory
@@ -269,12 +269,10 @@ int main(int argc, char **argv)
 	cudaFree(d_rowIdxA);
 	cudaFree(d_rowPtrA);
 	cudaFree(d_colIdxA);
-	cudaFree(d_B);
 	cudaFree(d_pd);
-	cudaFree(d_m);
 	cudaFree(d_ic);
 
-	cusparseDestroyDnVec(dvec_b);
+	cusparseDestroyDnVec(dvec_tmp);
 	cusparseDestroySpMat(smat_A);
 	cudaFree(d_buf);
 

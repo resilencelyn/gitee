@@ -119,7 +119,6 @@ int main(int argc, char **argv)
 	cudaMemcpy(d_A, A, nz * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_rowIdxA, rowIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
 	cudaMemcpy(d_colIdxA, colIdxA, nz * sizeof(int), cudaMemcpyHostToDevice);
-	cudaMemcpy(d_B, b, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
 	// Convert matrix A from COO format to CSR format
 	cusparseXcoo2csr(cusHandle, d_rowIdxA, nz, N, d_rowPtrA, CUSPARSE_INDEX_BASE_ZERO);
@@ -129,24 +128,21 @@ int main(int argc, char **argv)
 		CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, CUDA_C_64F);
 
 	// This is just used to get bufferSize;
-	cusparseDnVecDescr_t dvec_b;
-	cusparseCreateDnVec(&dvec_b, N, d_B, CUDA_C_64F);
+	cusparseDnVecDescr_t dvec_tmp;
+	cusparseCreateDnVec(&dvec_tmp, N, d_B, CUDA_C_64F);
 
 	size_t bufferSize_B, bufferSize_B2;
 
 	cusparseSpMV_bufferSize(cusHandle, CUSPARSE_OPERATION_NON_TRANSPOSE, &one, smat_A,
-		dvec_b, &zero, dvec_b, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
+		dvec_tmp, &zero, dvec_tmp, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B);
 	
 	cusparseSpMV_bufferSize(cusHandle, CUSPARSE_OPERATION_CONJUGATE_TRANSPOSE, &one, smat_A,
-		dvec_b, &zero, dvec_b, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B2);
+		dvec_tmp, &zero, dvec_tmp, CUDA_C_64F, CUSPARSE_MV_ALG_DEFAULT, &bufferSize_B2);
 	
 	if (bufferSize_B2 > bufferSize_B) bufferSize_B = bufferSize_B2;
 	cudaMalloc(&d_buf, bufferSize_B);
 
 	// Declare an initial solution
-    cuDoubleComplex *d_m;
-    cudaMalloc(&d_m, N * sizeof(cuDoubleComplex));
-
     clcg_para self_para = clcg_default_parameters();
 	self_para.epsilon = 1e-6;
 	self_para.abs_diff = 0;
@@ -159,12 +155,10 @@ int main(int argc, char **argv)
 	{
 		host_m[i].x = 0.0; host_m[i].y = 0.0;	
 	}
-	cudaMemcpy(d_m, host_m, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
-    ret = clcg_solver_cuda(cudaAx, cudaProgress, d_m, d_B, N, nz, &self_para, nullptr, cubHandle, cusHandle, CLCG_BICG);
+    ret = clcg_solver_cuda(cudaAx, cudaProgress, host_m, b, N, nz, &self_para, nullptr, cubHandle, cusHandle, CLCG_BICG);
     lcg_error_str(ret);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Solve with BICG_SYM
@@ -172,12 +166,10 @@ int main(int argc, char **argv)
 	{
 		host_m[i].x = 0.0; host_m[i].y = 0.0;	
 	}
-	cudaMemcpy(d_m, host_m, N * sizeof(cuDoubleComplex), cudaMemcpyHostToDevice);
 
-    ret = clcg_solver_cuda(cudaAx, cudaProgress, d_m, d_B, N, nz, &self_para, nullptr, cubHandle, cusHandle, CLCG_BICG_SYM);
+    ret = clcg_solver_cuda(cudaAx, cudaProgress, host_m, b, N, nz, &self_para, nullptr, cubHandle, cusHandle, CLCG_BICG_SYM);
     lcg_error_str(ret);
 
-	cudaMemcpy(host_m, d_m, N * sizeof(cuDoubleComplex), cudaMemcpyDeviceToHost);
 	std::clog << "Averaged error (compared with ans_x): " << avg_error(host_m, ans_x, N) << std::endl;
 
 	// Free Host memory
@@ -194,9 +186,8 @@ int main(int argc, char **argv)
 	cudaFree(d_rowPtrA);
 	cudaFree(d_colIdxA);
 	cudaFree(d_B);
-	cudaFree(d_m);
 
-	cusparseDestroyDnVec(dvec_b);
+	cusparseDestroyDnVec(dvec_tmp);
 	cusparseDestroySpMat(smat_A);
 	cudaFree(d_buf);
 
