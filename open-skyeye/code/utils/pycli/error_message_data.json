@@ -1,0 +1,170 @@
+{
+
+    "0x20000000":"12",
+
+
+    "0x30000000":"13",
+
+    "0x0":{"ch":"%s","en":"%s"},
+    "0x1":{"ch":"参数缺失, 需要: %d, 给定: %d","en":"Missing Parameter, need %d, given %d"},
+    "0x2":{"ch":"%s文件不存在","en":"The %s file is inexistent"},
+    "0x3":{"ch":"没有加载配置文件","en":"No configuration file is loaded"},
+    "0x4":{"ch":"没有找到 %s 实例","en":"%s did not find the instance"},
+    "0x5":{"ch":"请检查json内存空间配置!","en":"Please check json memory-space config!"},
+    "0x6":{"ch":"%s路径不存在","en":"%s path does not exist"},
+
+    "0x40000000":{"ch":"JSON格式有错误","en":"There is an error in the JSON format"},
+    
+    "0x40020000":{"ch":"JSON配置有错误","en":"There is an error in JSON configuration"},
+    "0x2001":{"ch":"实例 %s 对应的类 %s 不存在","en":"Instance %s device, using class %s does not exist"},
+    "0x2002":{"ch":"%s 没有 %s 这个属性","en":"%s doesn't have the property of %s"},
+    "0x2003":{"ch":"%s 的 %s 属性类型错误,错误的值: %s","en":"Device %s: %s property type error, incorrect value :%s"},
+    "0x2004":{"ch":"%s 没有 %s 这个接口","en":"%s does not have the interface of %s"},
+    "0x2005":{"ch":"没有找到 %s 设备中 %s 接口所连接的 %s 设备","en":"No interface of device %s was found for device %s to connect to device %s"},
+    "0x2006":{"ch":"%s 连接的 %s 设备没有 %s 这个接口","en":"Device %s : Connected device %s does not have an interface of %s"},
+    "0x2007":{"ch":"%s 设备的内存映射地址与前面设备的内存映射地址冲突","en":"The memory mapped address of the %s device conflicts with the previous device"},
+    "0x2008":{"ch":"未找到 %s 设备的基本属性：%s","en":"The base property for %s device: %s was not found"},
+    "0x2009":{"ch":"%s 设备的 %s 类型不存在","en":"%s the %s type of the device does not exist"},
+    "0x200a":{"ch":"SkyEyeCreateMach 调用失败,无法创建 %s 设备","en":"SkyEyeCreateMach call failed, Cannot create %s device"},
+    "0x200b":{"ch":"SkyEyeCreateLinker 调用失败,无法创建 %s 设备","en":"SkyEyeCreateLinker call failed, Cannot create %s device"},
+    "0x200c":{"ch":"SkyEyeCreateCpu 调用失败,无法创建 %s 设备","en":"SkyEyeCreateCpu call failed, Cannot create %s device"},
+    "0x200d":{"ch":"SkyEyeCreateDevice 调用失败,无法创建 %s 设备","en":"SkyEyeCreateDevice call failed, Cannot create %s device"},
+    "0x200e":{"ch":"SkyEyeSetAttr 调用失败!","en":"The SkyEyeSetAttr call failed!"},
+    "0x200f":{"ch":"SkyEyeCreateCpu 调用失败, 无法创建 %s 设备\n请检查是否拥有授权!","en":"SkyEyeCreateCpu call failed,Cannot create %s device\n Please check if you have authorization!"},
+    "0x2010":{"ch":"%s 设备中%s 值不符合定义标准","en":"%s: Value that does not meet the defined criteria: %s"},
+    "0x2011":{"ch":"%s 设备中 %s 属性的值不完整","en":"The %s device property %s has an incomplete value"},
+    "0x2012":{"ch":"%s 设备中 %s 接口的值不完整","en":"The %s device interface %s has an incomplete value"},
+    "0x2013":{"ch":"%s 设备中 %s 属性的值存在空值","en":"The %s device property %s has a null value"},
+    "0x2014":{"ch":"设备名称存在空值，请检查!","en":"Null value exists in device name, please check!"},
+    "0x2015":{"ch":"%s 设备中 base 的值为空值","en":"The value of base for the %s device is null"},
+    "0x2016":{"ch":"%s 设备中 class 的值为空值","en":"The value of class for the %s device is null"},
+    "0x2017":{"ch":"%s 设备中接口名称存在空值","en":"Null value exists for interface name of %s device"},
+    "0x2018":{"ch":"%s 设备中 %s 接口的值存在空值","en":"The %s device interface %s has a null value"},
+    "0x2019":{"ch":"%s 设备连接的 %s 的地址或长度值无效","en":"Invalid address or length value for %s device to which %s is connected"},
+    "0x201a":{"ch":"%s 设备中属性名称存在空值","en":"Null value exists for property name of %s device"},
+    "0x201b":{"ch":"%s 设备中 %s 属性的类型存在空值","en":"The %s device property type %s has a null value"},
+    
+    
+    "0x40030000":{"ch":"load-binary执行错误","en":"load-binary execution error"},
+    
+    "0x40040000":{"ch":"delay-load执行错误","en":"delay-load execution error"},
+    
+    "0x40050000":{"ch":"disable-device-work执行错误","en":"disable-device-work execution error"},
+    
+    "0x40060000":{"ch":"disable-reverse执行错误","en":"disable-reverse execution error"},
+    "0x6001":{"ch":"逆向执行已禁用，可以使用enable-reverse开启","en":"Reverse execution is disabled and can be enabled using enable-reverse"},
+    
+    "0x40070000":{"ch":"enable-codecov执行错误","en":"enable-codecov execution error"},
+    "0x7001":{"ch":"覆盖率融合参数错误，请正确输入true或者false。","en":"Coverage fusion parameter error, please enter true or false correctly."},
+
+    "0x40080000":{"ch":"enable-device-work执行错误","en":"enable-device-work execution error"},
+    
+    "0x40090000":{"ch":"enable-reverse执行错误","en":"enable-reverse execution error"},
+    "0x9001":{"ch":"逆向执行已启用，可以使用disable-reverse关闭","en":"Reverse execution is enabled and can be disabled using disable-reverse"},
+    
+    "0x400a0000":{"ch":"init ok执行错误","en":"init ok execution error"},
+    "0xa001":{"ch":"对象实例化错误!","en":"Object instantiation error!"},
+    
+    "0x400b0000":{"ch":"load-aout-binary执行错误","en":"load-aout-binary execution error"},
+    "0x400c0000":{"ch":"load-bin-binary执行错误","en":"load-bin-binary execution error"},
+    "0x400d0000":{"ch":"load_conf执行错误","en":"load_conf execution error"},
+    "0x400e0000":{"ch":"load_file执行错误","en":"load_file execution error"},
+    "0x400f0000":{"ch":"parse-symbol执行错误","en":"parse-symbol execution error"},
+    "0x40100000":{"ch":"pretranslate执行错误","en":"pretranslate execution error"},
+    "0x40110000":{"ch":"read-configure执行错误","en":"read-configure execution error"},
+    "0x1101":{"ch":"配置文件已加载，请重新启动skyeye","en":"configuration file is loaded, please restart skyeye"},
+    "0x1102":{"ch":"没有加载配置文件，请检查","en":"No configure file is loaded, please check"},
+    
+    "0x40120000":{"ch":"remote-gdb执行错误","en":"remote-gdb execution error"},
+    "0x1201":{"ch":"远程GDB启动错误，目标CPU名称:%s，端口:%d, Ip: %s","en":"Remote GDB Start error, Target CPU Name: %s, Port: %d, Ip: %s"},
+    "0x1202":{"ch":"远程GDB启动时发生错误!\nTarget CPU名称:%s，端口:%d, Ip: %s","en":"An error has occurred happend when remote GDB start!\nTarget CPU name: %s, Port: %d, Ip: %s"},
+    
+    "0x40130000":{"ch":"reverse执行错误","en":"reverse execution error"},
+    "0x1301":{"ch":"逆向执行在反向状态为启用时生效","en":"reverse execute take effect when reverse state is enable"},
+    "0x1302":{"ch":"逆向步幅超过最大范围，必须在0和%d之间","en":"The reverse stride exceeds the maximum range and must be between 0 and %d"},
+    
+    "0x40140000":{"ch":"run-command执行错误","en":"run-command execution error"},
+    "0x1401":{"ch":"找不到命令: %s","en":"Can not find command: %s"},
+    
+    "0x40150000":{"ch":"run-pyfile执行错误","en":"run-pyfile execution error"},
+    "0x1501":{"ch":"在文件 %s: %s","en":"In %s: %s"},
+    
+    "0x40160000":{"ch":"run-script执行错误","en":"run-script execution error"},
+    "0x40170000":{"ch":"save-image执行错误","en":"save-image execution error"},
+    "0x40180000":{"ch":"set-addr-mask执行错误","en":"set-addr-mask execution error"},
+    "0x40190000":{"ch":"set-min-syntime执行错误","en":"set-min-syntime execution error"},
+    "0x1901":{"ch":"缺少参数，需要1个参数，给定%d个参数","en":"Missing parameter, need 1, given %d"},
+    "0x1902":{"ch":"给定%d个参数，最多需要2个参数","en":"Requires up to 2 Parameters, given %d"},
+    "0x1903":{"ch":"set-min-syntime的第二个参数不是浮点类型","en":"The second arg of set-min-syntime is not the floating-point type"},
+    "0x1904":{"ch":"set-min-syntime的第一个参数不是浮点类型","en":"The first arg of set-min-syntime is not the floating-point type"},
+    
+    "0x401a0000":{"ch":"slow-x86执行错误","en":"slow-x86 execution error"},
+    "0x401b0000":{"ch":"write-configure执行错误","en":"write-configure execution error"},
+    "0x1b01":{"ch":"工作区目录不存在!","en":"workspace dir does not exists!"},
+    
+    "0x401c0000":{"ch":"define-conf执行错误","en":"define-conf execution error"},
+    
+    "0x401d0000":{"ch":"命令初始化错误","en":"Command initialization error"},
+    "0x401e0000":{"ch":"DLL调用出错","en":"DLL CALL ERROR"},
+    "0x1e01":{"ch":"%s 调用失败!","en":"%s call error!"},
+
+    "0x401f0000":{"ch":"close-instr-record执行错误","en":"close-instr-record execution error"},
+    "0x1f01":{"ch":"关闭指令记录失败","en":"Failed to close instruction record"},
+
+    "0x40200000":{"ch":"get-pc执行错误","en":"get-pc execution error"},
+
+    "0x40210000":{"ch":"open-instr-record执行错误","en":"open-instr-record execution error"},
+    "0x2101":{"ch":"打开指令记录失败","en":"Failed to open instruction record"},
+
+    "0x40220000":{"ch":"set-pc执行错误","en":"set-pc execution error"},
+
+    "0x40230000":{"ch":"enable-skyeye-debug执行错误","en":"enable-skyeye-debug execution error"},
+    "0x2301":{"ch":"开启SkyEye调试功能失败","en":"Open SkyEye debug interface failed"},
+
+    "0x40240000":{"ch":"load-binary-x86执行错误","en":"load-binary-x86 execution error"},
+
+    "0x40250000":{"ch":"License 验证","en":"License verification failed"},
+    "0x2500":{"ch":"未定义错误，请联系开发者，错误码:E1","en":"Undefined error please contact the developer, error code: E1"},
+    "0x2501":{"ch":"超出允许的时间范围","en":"Outside the scope of the allowed time"},
+    "0x2502":{"ch":"超出允许的MAC地址范围","en":"Outside the scope of the allowed MAC addresses"},
+    "0x2503":{"ch":"注册成功","en":"Registered successfully"},
+    "0x2504":{"ch":"找不到Key.dat","en":"Could not find the Key.dat"},
+    "0x2505":{"ch":"找不到License文件","en":"Could not find the license file"},
+    "0x2506":{"ch":"未找到验证函数","en":"Validation functions not found"},
+    "0x2507":{"ch":"没有找到RSADecrypt.dll文件","en":"The file RSADecrypt.dll has not been found"},
+    "0x2508":{"ch":"没有找到License配置文件","en":"The license configuration file was not found"},
+    "0x2509":{"ch":"未定义错误，请联系开发者，错误码:E9","en":"Undefined error please contact the developer, error code: E9"},
+    "0x250a":{"ch":"执行WSAStartup失败","en":"Execute the WSAStartup faild"},
+    "0x250b":{"ch":"创建网络连接失败!","en":"Create socket error!"},
+    "0x250c":{"ch":"连接失败!","en":"Connection failed!"},
+    "0x250d":{"ch":"连接超过最大连接数!","en":"Link exceeds maximum connectable number!"},
+    "0x250e":{"ch":"返回信息为空","en":"Return information is empty"},
+    "0x250f":{"ch":"心跳线程创建失败!","en":"The heartbeat thread creation failed!"},
+    "0x2510":{"ch":"设置成功，需重启生效!","en":"Set successful and restart to take effect!"},
+    "0x2511":{"ch":"在SkyEye中找不到超级狗的Dll文件!","en":"Sueper dog Dll file can't be found in SkyEye!"},
+    "0x2512":{"ch":"超级狗登录成功!","en":"Surper dog login success!"},
+    "0x2513":{"ch":"找不到超级狗!","en":"Surper dog can't be found!"},
+    "0x2514":{"ch":"无法找到超级狗功能许可证!","en":"Surper dog feature license can't be found!"},
+    "0x2515":{"ch":"超级狗编码错误!","en":"Surper dog vcode error!"},
+    "0x2516":{"ch":"API和本地超级狗许可管理器之间的通信错误","en":"Communication error between API and local SuperDog License Manager"},
+    "0x2517":{"ch":"超级狗功能许可证已过期!","en":"Surper dog feature license was out-date!"},
+    "0x2518":{"ch":"超级狗的未知错误!","en":"Unknow error for surper dog!"},
+    "0x2519":{"ch":"超级狗读取数据失败!","en":"Surper dog read data failed!"},
+    "0x251a":{"ch":"无效的license文件，文件大小不正确!","en":"Invalid license file with incorrect size!"},
+    "0x251b":{"ch":"许可证文件和密钥文件不匹配!","en":"License file and key file do not match!"},
+    "0x251c":{"ch":"CPU信息不匹配!","en":"CPU information does not match!"},
+    "0x251d":{"ch":"未定义错误，请联系开发者，错误码:E29","en":"Undefined error please contact the developer, error code: E29"},
+    "0x251e":{"ch":"未定义错误，请联系开发者，错误码:E30","en":"Undefined error please contact the developer, error code: E30"},
+    "0x251f":{"ch":"无效的License文件","en":"Invalid license file"},
+
+
+
+    "0x90000001":{"ch":"在 %s 中，行: %s，文件名: %s 打开失败!","en":"In %s,line: %s,filename: %s open failed!"},
+    "0x90000002":{"ch":"在 %s 中，行: %s, 处理器名: %s get %s iface失败!","en":"In %s,line: %s,cpuname: %s get %s iface failed!"},
+    "0x90000003":{"ch":"在 %s 中，行: %s，超出范围执行!","en":"In %s,line: %s,excess range exceotion!"},
+    "0x90000004":{"ch":"在 %s 中，行: %s 获取二进制文件起始地址失败!","en": "In %s , line:%d Get Binary Start Address Failed!"},
+    "0x90000005":{"ch":"在 %s 中，行: %s 加载二进制文件失败!","en": "In %s , line:%d Load binary File Failed!"},
+    "0x90000006":{"ch":"在 %s 中，行: %s 执行 clear_plug 失败!","en": "In %s , line:%d clear_plug failed!"},
+
+    "0xffffffff":""
+}

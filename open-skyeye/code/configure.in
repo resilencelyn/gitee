@@ -1,0 +1,566 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.60)
+AC_INIT(SkyEye, 1.3.5, skyeye-developer@lists.sourceforge.net, skyeye)
+
+AC_CANONICAL_SYSTEM
+AC_ARG_PROGRAM
+
+AC_CONFIG_AUX_DIR([libltdl/config])
+#AC_CONFIG_MACRO_DIR([libltdl/m4])
+
+AM_INIT_AUTOMAKE
+AC_CONFIG_SRCDIR([utils/main/skyeye.c])
+AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([bochs_config.h])
+AC_CONFIG_HEADER(ltdlconf.h)
+
+# some common header path we should include them
+COMMON_INCLUDES="-I\$(top_srcdir)/common/include -I\$(srcdir)/common/"
+AC_SUBST(COMMON_INCLUDES)
+# some common cflags to be used in building all the files.
+COMMON_CFLAGS=" -Werror-implicit-function-declaration -Wmissing-field-initializers -Wuninitialized"
+AC_SUBST(COMMON_CFLAGS)
+
+AC_CONFIG_MACRO_DIR([m4])
+
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_AWK
+AC_PROG_CC
+AC_PROG_MAKE_SET
+AC_PROG_CPP
+#AC_PROG_RANLIB
+
+#LT_PREREQ([2.2.6])
+#AC_PROG_LIBTOOL
+#AM_PROG_LIBTOOL
+#LT_INIT([win32-dll])
+
+AC_PREFIX_DEFAULT([/opt/skyeye])
+AM_CONDITIONAL([LINUX], [test x$host = *linux*])
+AM_CONDITIONAL(LINUX_64, test `uname -m` = "x86_64")
+
+# according to host type, we can select different macro
+dbct=false
+host_plat=linux
+case $host in
+  *linux*)
+# FIXME: Replace `main' with a function in `-liberty':
+	AC_CHECK_LIB([iberty], [main])
+	host_plat=linux
+    #dbct=true
+    ;;
+  *-*-mingw32*)
+    CFLAGS=" -mms-bitfields -DWINVER=0x0501"
+    LIBS="$LIBS -Xlinker -lstdc++ -Xlinker -lole32 -Xlinker -lmingwex -Xlinker -lmingw32 -Xlinker -lpthread -Xlinker -limagehlp -Xlinker -lgcc -Xlinker -lpsapi  -Xlinker -lshell32 -Xlinker -lmoldnamed -Xlinker -lgw32c -Xlinker -lkernel32 -Xlinker -lmsvcrt -Xlinker -lws2_32 -Xlinker -lwinmm -Xlinker -ladvapi32 -Xlinker -luser32"
+    #dbct=true
+    host_plat=mingw32
+    ;;
+  *-*-cygwin*)
+    LIBS="$LIBS -L/usr/lib/w32api -Xlinker -lwinmm -Xlinker -ladvapi32"
+    #dbct=true
+    host_plat=cygwin
+    ;;
+  *-*-beos*|*-*-haiku*)
+    # TODO
+    host_plat=beos
+    ;;
+esac
+
+# check GCC & DBCT
+if test "$GCC" = "yes" ; then
+  AC_MSG_CHECKING(for gcc)
+  if test -z "$ac_cv_prog_CC" ; then
+    gcc_exec="$CC"
+  else
+    gcc_exec="$ac_cv_prog_CC"
+  fi
+  case `$gcc_exec -dumpversion | cut -f1 -d.` in
+    3)
+      ;;
+    [[4-9] | [1-9][0-9]])
+      dbct=false
+      ;;
+    *)
+      AC_MSG_ERROR([**** gcc < 3.0 !!!])
+      ;;
+  esac
+  AC_MSG_RESULT([done])
+else
+  dbct=false
+fi
+AM_CONDITIONAL([DBCT], [test x$dbct = xtrue])
+
+#check link llvm
+#ENABLE_DYNCOM=
+#AC_ARG_ENABLE([dyncom],
+#		AC_HELP_STRING([--enable-dyncom],[Build skyeye specific link llvm library(default=yes)]),
+#		[case "${enableval}" in
+#		no)ENABLE_DYNCOM=no;;
+#		yes)ENABLE_DYNCOM=yes;;
+#		*)AC_MSG_ERROR(bad value ${ENABLE_DYNCOM} for --enable-dyncom);;
+#		esac],
+#		ENABLE_DYNCOM=yes)
+ #check dml
+ENABLE_DML=
+AC_ARG_ENABLE([dml],
+        AC_HELP_STRING([--enable-dml],[Build skyeye specific dml spec(default=yes)]),
+        [case "${enableval}" in
+        no)ENABLE_DML=no;;
+        yes)ENABLE_DML=yes;;
+        *)AC_MSG_ERROR(bad value ${ENABLE_DML} for --enable-dml);;
+        esac],
+        ENABLE_DML=yes)
+
+AM_CONDITIONAL([BUILD_DML], [test "${ENABLE_DML}" = "yes"])
+
+# enable android support
+ENABLE_ANDROID=
+AC_ARG_ENABLE([android],
+		AC_HELP_STRING([--enable-android],[Build skyeye with android support(default=no)]),
+		[case "${enableval}" in
+		no)ENABLE_ANDROID=no;;
+		yes)ENABLE_ANDROID=yes;;
+		*)AC_MSG_ERROR(bad value ${ENABLE_ANDROID} for --enable-android);;
+		esac],
+		ENABLE_ANDROID=no)
+AM_CONDITIONAL([BUILD_ANDROID], [test "${ENABLE_ANDROID}" = "yes"])
+
+#check enable backtrace
+ENABLE_BACKTRACE=
+AC_ARG_ENABLE([backtrace],
+		AC_HELP_STRING([--enable-backtrace],[Build skyeye specific backtrace(default=yes)]),
+		[case "${enableval}" in
+		no)ENABLE_BACKTRACE=no;;
+		yes)ENABLE_BACKTRACE=yes;;
+		*)AC_MSG_ERROR(bad value ${ENABLE_BACKTRACE} for --enable-backtrace);;
+		esac],
+		ENABLE_BACKTRACE=yes)
+
+AC_DEFINE([BX_WITH_BACKTRACE], [], [Description])
+if test "${ENABLE_BACKTRACE}" = "yes" ; then
+	AC_DEFINE(BX_WITH_BACKTRACE, 1)
+else
+	AC_DEFINE(BX_WITH_BACKTRACE, 0)
+fi
+
+#check compile target
+ENABLE_TARGETS=
+AC_ARG_ENABLE([targets],
+        AC_HELP_STRING([--enable-targets],[Build specific host targets: all or target1,target2,... Valid targets are: arm,bfin,coldfire,mips,ppc,sparc,x86,  c6kplus, c28, c55, c54, tricore(default=all) ]),
+    [case "${enableval}" in
+    arm)ENABLE_TARGETS=arm;;
+    bfin)ENABLE_TARGETS=bfin;;
+    coldfire)ENABLE_TARGETS=coldfire;;
+    mips)ENABLE_TARGETS=mips;;
+    ppc)ENABLE_TARGETS=ppc;;
+    sparc)ENABLE_TARGETS=sparc;;
+    x86)ENABLE_TARGETS=x86;;
+    c6kplus)ENABLE_TARGETS=c6kplus;;
+    c28)ENABLE_TARGETS=c28;;
+    c55)ENABLE_TARGETS=c55;;
+    c54)ENABLE_TARGETS=c54;;
+    tricore)ENABLE_TARGETS=tricore;;
+    all)ENABLE_TARGETS=all;;
+    yes)ENABLE_TARGETS=default_arch;;
+    *)AC_MSG_ERROR([bad value ${ENABLE_TARGETS} for --enable-targets]);;
+     esac],
+    ENABLE_TARGETS=default_arch)
+
+
+AM_CONDITIONAL([BUILD_ARM], [test "${ENABLE_TARGETS}" = "arm"])
+AM_CONDITIONAL([BUILD_BFIN], [test "${ENABLE_TARGETS}" = "bfin"])
+AM_CONDITIONAL([BUILD_COLDFIRE], [test "${ENABLE_TARGETS}" = "coldfire"])
+AM_CONDITIONAL([BUILD_MIPS], [test "${ENABLE_TARGETS}" = "mips"])
+AM_CONDITIONAL([BUILD_PPC], [test "${ENABLE_TARGETS}" = "ppc"])
+AM_CONDITIONAL([BUILD_SPARC], [test "${ENABLE_TARGETS}" = "sparc"])
+AM_CONDITIONAL([BUILD_X86], [test "${ENABLE_TARGETS}" = "x86"])
+AM_CONDITIONAL([BUILD_C6KPLUS], [test "${ENABLE_TARGETS}" = "c6kplus"])
+AM_CONDITIONAL([BUILD_C28], [test "${ENABLE_TARGETS}" = "c28"])
+AM_CONDITIONAL([BUILD_C55], [test "${ENABLE_TARGETS}" = "c55"])
+AM_CONDITIONAL([BUILD_C54], [test "${ENABLE_TARGETS}" = "c54"])
+AM_CONDITIONAL([BUILD_TRICORE], [test "${ENABLE_TARGETS}" = "tricore"])
+AM_CONDITIONAL([BUILD_ALL], [test "${ENABLE_TARGETS}" = "all"])
+AM_CONDITIONAL([BUILD_DEFAULT], [test "${ENABLE_TARGETS}" = "default_arch"])
+
+
+if test "x${ENABLE_TARGETS}" = "xdefault_arch" ; then
+    DEFAULT_TARGET_1="arm"
+    DEFAULT_TARGET_2="ppc"
+    DEFAULT_TARGET_3="sparc"
+    DEFAULT_TARGET_4="c28"
+    DEFAULT_TARGET_5="c55"
+    DEFAULT_TARGET_6="x86"
+    DEFAULT_TARGET_7="c6kplus"
+    DEFAULT_TARGET_8="c54"
+    DEFAULT_TARGET_9="tricore"
+    DEFAULT_TARGET_10="mips"
+fi
+#check compile target
+SYSTEMC_DIR="none"
+SYSTEMC_ENABLE=NONE
+AC_ARG_WITH([systemc],
+        AC_HELP_STRING([--with-systemc=DIR],[Build with systemc]),
+    [SYSTEMC_DIR="${withval}"])
+AC_SUBST(SYSTEMC_DIR)
+AM_CONDITIONAL([SYSTEMC_ENABLE], [test "${SYSTEMC_DIR}" != "none"])
+
+# check LCD
+LCD_CFLAGS=
+LCD_LIBS=
+lcd_module=none
+AC_DEFINE([BX_WITH_WIN32], [], [Description])
+AC_DEFINE([BX_WITH_X11], [], [Description])
+AC_ARG_ENABLE([lcd],
+  AC_HELP_STRING([--enable-lcd], [enable lcd simulation (default=yes) ]),
+  [ENABLE_LCD="${enableval}"],
+  [ENABLE_LCD="yes"])
+if test "x${ENABLE_LCD}" = "xyes" ; then
+case $host in
+  *-*-mingw*|*-*-cygwin*)
+    lcd_module=win32
+    LCD_CFLAGS="-DLCD -DWIN32_LCD"
+    LCD_LIBS="-lgdi32 -lkernel32 -luser32"
+    AC_DEFINE(BX_WITH_WIN32, 1)
+    AC_DEFINE(BX_WITH_X11, 0)
+    ;;
+  *-*-beos*|*-*-haiku*)
+    # TODO
+    ;;
+  *)
+    lcd_module=auto
+    AC_DEFINE(BX_WITH_X11, 1)
+    AC_DEFINE(BX_WITH_WIN32, 0)
+    ;;
+esac
+fi
+#if test "${lcd_module}" = "auto" ; then
+#  lcd_module=none
+#  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+#  if test x$PKG_CONFIG != xno ; then
+#    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.0.0,
+#      [
+#        lcd_module=gtk
+#        LCD_CFLAGS="-DLCD -DGTK_LCD $GTK_CFLAGS"
+#        LCD_LIBS="$GTK_LIBS"
+#      ], [:])
+#  fi
+AM_CONDITIONAL([WIN32], [test "${lcd_module}" = "win32"])
+
+#if test "${lcd_module}" = "auto" ; then
+  lcd_module=none
+  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+  if test x$PKG_CONFIG != xno ; then
+    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.0.0,
+      [
+        lcd_module=gtk
+        LCD_CFLAGS="-DLCD -DGTK_LCD $GTK_CFLAGS"
+        LCD_LIBS="$GTK_LIBS"
+      ], [:])
+  fi
+#fi
+AM_CONDITIONAL([GTK_LCD], [test "${lcd_module}" = "gtk"])
+AM_CONDITIONAL([WIN32_LCD], [test "${lcd_module}" = "win32"])
+AM_CONDITIONAL([LCD], [test "${lcd_module}" != "none"])
+AC_SUBST(LCD_CFLAGS)
+AC_SUBST(LCD_LIBS)
+
+# check python and setting python flags
+PYTHON_CFLAGS=
+PYTHON_LIBS=
+PYTHON_INCLUDE=
+if test "${host_plat}" = "mingw32" ; then
+	PYTHON_LIBS="-L/mingw/libs -lpython35"
+else
+	PYTHON_DEF=
+	AM_PATH_PYTHON(3.5,
+				PYTHON_DEF="yes",
+				PYTHON_DEF="")
+	if test "${PYTHON_DEF}" = "yes" ; then
+		PYTHON_CFLAGS=`python3m-config --cflags`
+		PYTHON_LIBS=`python3m-config --libs`
+		PYTHON_INCLUDE=`python3m-config --includes`
+	fi
+fi
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_LIBS)
+AC_SUBST(PYTHON_INCLUDE)
+
+# check json-c and setting json-c flags
+JSON_CFLAGS=
+JSON_LIBS=
+if test "${host_plat}" = "mingw32" ; then
+	JSON_LIBS="-ljson"
+else
+	PKG_CHECK_MODULES(JSON,
+					json-c >= 0.9)
+fi
+AC_SUBST(JSON_CFLAGS)
+AC_SUBST(JSON_LIBS)
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lc':
+AC_CHECK_LIB([c], [main])
+# FIXME: Replace `main' with a function in `-liberty':
+#AC_CHECK_LIB([iberty], [main])
+# FIXME: Replace `main' with a function in `-lintl':
+AC_CHECK_LIB([intl], [main])
+# FIXME: Replace `main' with a function in `-lm':
+AC_CHECK_LIB([m], [main])
+# FIXME: Replace `main' with a function in `-ln':
+AC_CHECK_LIB([n], [main])
+
+#AC_CHECK_LIB([bfd], [bfd_openr])
+AC_CHECK_LIB([socket], [socket])
+AC_CHECK_LIB([pthread], [pthread_create])
+AC_CHECK_LIB([ncurses],[tputs])
+
+# check llvm library
+#AC_CHECK_PROGS(LLVM_CONFIG,llvm-config-3.0 llvm-config,"no")
+#AM_CONDITIONAL([LLVM_EXIST], [test x$LLVM_CONFIG != xno && test "${ENABLE_DYNCOM}" = "yes"])
+#LLVM_CFLAGS=
+#LLVM_LDFLAGS=
+#LLVM_LIBDIR=
+#if test x$LLVM_CONFIG != xno ; then
+#	#AC_CACHE_CHECK(for llvm version, version_cv_, ${LLVM_CONFIG} --version)
+#	case `${LLVM_CONFIG} --version` in
+#	3.0)
+#		LLVM_CFLAGS="`${LLVM_CONFIG} --cflags | sed -e 's/-DNDEBUG//g'`"
+#		LLVM_LDFLAGS="`${LLVM_CONFIG} --libs`"
+#		LLVM_LIBDIR="`${LLVM_CONFIG} --libdir`"
+#	;;
+#	*)
+#		AC_MSG_WARN(llvm should be 3.0 If you want to compile skyeye with other version!)
+#	;;
+#	esac
+#fi
+AC_SUBST(LLVM_CFLAGS)
+AC_SUBST(LLVM_LDFLAGS)
+AC_SUBST(LLVM_LIBDIR)
+
+#AC_CONFIG_SUBDIRS([third-party/libiberty])
+#AC_CONFIG_SUBDIRS([third-party/bfd])
+#AC_CONFIG_SUBDIRS([third-party/readline])
+#AC_CONFIG_SUBDIRS([third-party/opcodes])
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([fcntl.h inttypes.h limits.h locale.h netdb.h netinet/in.h stddef.h stdint.h stdlib.h string.h sys/file.h sys/ioctl.h sys/socket.h sys/time.h termios.h unistd.h bfd.h dlfcn.h Python.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_INT8_T
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+AC_TYPE_UID_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+AC_TYPE_UINT8_T
+AC_C_VOLATILE
+
+dnl copied from configure.in of bochs-2.4.1
+
+dnl------------ libtool configuration
+dnl Configure libtool, and default to shared libraries.  Libtool will only be
+dnl used for compiling and linking plugins.
+AC_DISABLE_STATIC
+dnl Check for dlopen support
+AC_LIBTOOL_DLOPEN
+dnl Configure libtool
+AC_PROG_LIBTOOL
+dnl Configure the ltdl library.  This must go after AC_PROG_LIBTOOL or
+dnl else it disables shared libraries somehow.  The values from this macro
+dnl are written to ltdlconf.h.
+dnl AC_LIB_LTDL
+LT_CONFIG_LTDL_DIR([libltdl])
+#LTDL_INIT
+
+
+AC_PATH_XTRA
+
+AC_C_BIGENDIAN
+AC_C_INLINE
+AC_CHECK_SIZEOF(unsigned char)
+AC_CHECK_SIZEOF(unsigned short)
+AC_CHECK_SIZEOF(unsigned int)
+AC_CHECK_SIZEOF(unsigned long)
+AC_CHECK_SIZEOF(unsigned long long)
+AC_CHECK_SIZEOF(int *)
+AC_CHECK_FUNCS(getenv)
+AC_CHECK_FUNCS(setenv)
+AC_CHECK_FUNCS(select)
+AC_CHECK_FUNCS(snprintf)
+AC_CHECK_FUNCS(vsnprintf)
+AC_CHECK_FUNCS(strtoull)
+AC_CHECK_FUNCS(strtouq)
+AC_CHECK_FUNCS(strdup)
+AC_CHECK_FUNCS(strrev)
+AC_CHECK_FUNCS(stricmp)
+AC_CHECK_FUNCS(strcasecmp)
+AC_CHECK_FUNCS(sleep)
+AC_CHECK_FUNCS(usleep)
+AC_CHECK_FUNCS(nanosleep)
+AC_CHECK_FUNCS(abort)
+AC_CHECK_FUNCS(gettimeofday)
+AC_CHECK_TYPE(socklen_t, , ,[#include <sys/types.h> #include <sys/socket.h>])
+AC_CHECK_MEMBER(struct sockaddr_in.sin_len, , , [#include <sys/socket.h>
+#include <netinet/in.h> ])
+AC_CHECK_FUNCS(mkstemp)
+AC_CHECK_HEADER(sys/mman.h)
+AC_CHECK_FUNCS(timelocal)
+AC_CHECK_FUNCS(gmtime)
+AC_CHECK_FUNCS(mktime)
+
+
+AC_CHECK_HEADER(zlib.h)
+
+AC_DEFINE([BX_CPU_LEVEL], [], [Description])
+AC_MSG_CHECKING(for cpu level)
+AC_ARG_ENABLE(cpu-level,
+  AS_HELP_STRING([--enable-cpu-level], [select cpu level (3,4,5,6 - default is 6)]),
+  [case "$enableval" in
+     3)
+       AC_MSG_RESULT(3)
+       AC_DEFINE(BX_CPU_LEVEL, 3)
+       ;;
+     4)
+       AC_MSG_RESULT(4)
+       AC_DEFINE(BX_CPU_LEVEL, 4)
+       ;;
+     5)
+       AC_MSG_RESULT(5)
+       AC_DEFINE(BX_CPU_LEVEL, 5)
+       ;;
+     6)
+       AC_MSG_RESULT(6)
+       AC_DEFINE(BX_CPU_LEVEL, 6)
+       ;;
+     *)
+       echo " "
+       echo "ERROR: you must supply a valid CPU level to --enable-cpu-level"
+       exit 1
+       ;;
+   esac
+   bx_cpu_level=$enableval
+   if test "$use_smp" = 1 -a "$enableval" -lt 5; then
+     echo "ERROR: with >1 processor, use --enable-cpu-level=5 or more"
+     exit 1
+   fi
+   if test "$use_x86_64" = 1 -a "$enableval" -lt 6; then
+     echo "ERROR: --enable-cpu-level=6 required for x86-64 emulation"
+     exit 1
+   fi
+  ],
+  [
+    AC_MSG_RESULT(6)
+    AC_DEFINE(BX_CPU_LEVEL, 6)
+    bx_cpu_level=6
+  ]
+  )
+
+  AC_DEFINE([BX_HAVE_GETTIMEOFDAY], [], [Description])
+  AC_CHECK_FUNCS(gettimeofday, AC_DEFINE(BX_HAVE_GETTIMEOFDAY))
+
+  AC_DEFINE([BX_SUPPORT_E1000], [], [Description])
+  AC_DEFINE(BX_SUPPORT_E1000, 1)
+dnl end of configure.in from bochs
+
+# Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MALLOC
+AC_FUNC_MEMCMP
+AC_FUNC_MMAP
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_TYPE_SIGNAL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([atexit bzero getpagesize gettimeofday memmove memset munmap select setlocale socket sqrt strcasecmp strchr strdup strerror strspn strtol strtoul])
+
+dnl Check for __attribute__(())
+AC_CACHE_CHECK([for __attribute__((packed))],
+		  [ac_cv_c_attribute_packed],
+		    [ac_cv_c_attribute_packed=no
+			   AC_TRY_COMPILE(, [struct __attribute__((__packed__)) foo { int a; } b;],
+				                       [ac_cv_c_attribute_packed=yes])])
+if test "${ac_cv_c_attribute_packed}" != "no"; then
+  AC_DEFINE(HAVE_ATTRIBUTE_PACKED, 1, Support for __attribute__((packed)) for structs)
+fi
+
+AH_TEMPLATE([HAVE_ATTRIBUTE_ALIGNED], [Has __attribute__((aligned))])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+				        [[char testchar[4] __attribute__((aligned));]])],
+			        [AC_DEFINE(HAVE_ATTRIBUTE_ALIGNED, 1)],
+			        [])
+# librt
+AC_CHECK_LIB(rt,sem_init,[have_librt=yes],[have_librt=no])
+if test "${have_librt}" != "no"; then
+  AC_DEFINE(HAVE_LIBRT, 1, Check LIBRT)
+fi
+
+AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES(device/Makefile)
+AC_CONFIG_FILES(common/Makefile)
+AC_CONFIG_FILES(soc/arm/Makefile)
+AC_CONFIG_FILES(soc/c6k/Makefile)
+AC_CONFIG_FILES(soc/c28/Makefile)
+AC_CONFIG_FILES(soc/ppc/Makefile)
+AC_CONFIG_FILES(soc/c55/Makefile)
+AC_CONFIG_FILES(soc/sparc/Makefile)
+AC_CONFIG_FILES(soc/c6kplus/Makefile)
+AC_CONFIG_FILES(soc/c54/Makefile)
+AC_CONFIG_FILES(soc/base_mach/Makefile)
+AC_CONFIG_FILES(soc/sopc/Makefile)
+AC_CONFIG_FILES(utils/Makefile)
+AC_CONFIG_FILES(android/objs/emulator_common/Makefile)
+AC_CONFIG_FILES(android/objs/emulator_libui/Makefile)
+#AC_CONFIG_FILES(android/objs/emulator_libqemu/Makefile)
+AC_CONFIG_FILES(android/objs/android/Makefile)
+#AC_CONFIG_FILES(android/objs/android_common/Makefile)
+#AC_CONFIG_FILES(android/objs/setup/Makefile)
+
+if test ["${ENABLE_TARGETS}" = "all"] ;then
+    AC_CONFIG_FILES(arch/arm/Makefile)
+    AC_CONFIG_FILES(arch/coldfire/Makefile)
+    AC_CONFIG_FILES(arch/bfin/Makefile)
+    AC_CONFIG_FILES(arch/ppc/Makefile)
+    AC_CONFIG_FILES(arch/mips/Makefile)
+    AC_CONFIG_FILES(arch/x86/Makefile)
+    AC_CONFIG_FILES(arch/sparc/Makefile)
+    AC_CONFIG_FILES(arch/c28/Makefile)
+    AC_CONFIG_FILES(arch/c55/Makefile)
+    AC_CONFIG_FILES(arch/c6kplus/Makefile)
+    AC_CONFIG_FILES(arch/c54/Makefile)
+    AC_CONFIG_FILES(arch/tricore/Makefile)
+else
+    if test "x${ENABLE_TARGETS}" = "xdefault_arch" ; then
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_1}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_2}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_3}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_4}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_5}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_6}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_7}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_8}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_9}/Makefile)
+        AC_CONFIG_FILES(arch/${DEFAULT_TARGET_10}/Makefile)
+        #AC_MSG_ERROR([???? value ${ENABLE_TARGETS} for --enable-targets])
+        #AC_MSG_WARN([???? value ${DEFAULT_TARGET_1} for --enable-targets])
+    else
+        #AC_MSG_ERROR([!!! value ${ENABLE_TARGETS} for --enable-targets])
+        AC_CONFIG_FILES(arch/${ENABLE_TARGETS}/Makefile)
+    fi
+fi
+AC_OUTPUT
+AM_PROG_CC_C_O

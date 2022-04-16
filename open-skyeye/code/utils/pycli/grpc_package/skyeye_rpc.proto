@@ -1,0 +1,15 @@
+syntax = "proto3";
+service JSONTransmission {
+    rpc CallSkyEye (JSONRequest) returns (JSONResponse){};
+
+    rpc SkyEyeLogReport (JSONRequest) returns (stream JSONResponse){};
+}
+
+
+message JSONRequest {
+    string request = 1;
+}
+
+message JSONResponse {
+    string response = 1;
+}

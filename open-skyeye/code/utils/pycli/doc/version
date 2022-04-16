@@ -1,0 +1,49 @@
+Version 0.1    2002年12月1日
+SkyEye项目创建；
+
+
+Version 1.0    2005年7月7日
+
+支持ARM的动态二进制翻译；
+支持RT8019网卡
+支持LCD模拟，并且可以运行MiniGUI
+支持串口模拟
+
+Version 1.2    2006年1月
+支持Blackfin处理器的模拟
+支持GDB远程调试
+支持声卡模拟
+增加了GUI
+
+Version 2.0    2006年8月
+支持Coldfire处理器
+支持MIPS处理器
+支持PowerPC处理器
+
+Version 3.0   2009年8月
+支持X86处理器
+支持NandFlash和NorFlash
+支持多虚拟机的网络通信
+
+Version 3.1 2010年5月
+支持Sparc处理器
+支持多核模拟
+支持快照和反向调试功能
+
+Version 3.2 2011年2月
+支持Can总线支持
+支持LLVM的动态二进制翻译
+支持TI的DSP指令集
+
+Version 3.3 2012年1月
+支持DML语言建模
+支持python语言的脚本
+
+Version 3.4 2013年3月
+支持json格式的配置文件
+支持多板模型
+支持和真实Can总线互联
+
+Version 3.5 2014年4月
+支持多板互联
+支持多线程的仿真性能加速

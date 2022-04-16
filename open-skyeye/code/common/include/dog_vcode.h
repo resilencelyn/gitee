@@ -1,0 +1,19 @@
+/* SuperDog vendor code for demo keys */
+
+unsigned char vendor_code[] =
+
+    "BiMLG0ftlMBzoJKCzvUJgo84om+GoF9xuPpXEO/aDNs+xFN4yEiRe/VQc4Pg4885qwTYk"
+	"Or4btZnbfdMmCYeU6sPYOW4qDCVoUX8JJQsHxvi8gtTFqp3nYvLfbg9glxAdLg6K29h75O"
+	"6wbrJaTIc3DQAYitB2p2K/E9m4J86U4J0Pf3ZjL2H5KjlZp0vOPh62UCVcA82UMbrZUB21"
+	"in5FcHLmzj+TdJuNMcyMjhqXKonEDGQoQErDizm56fyAZXKXb2sB6Oas4s03srlBPhsGhV"
+	"qA4o98j0q2tJCmhRV2H5tY0mdIhFZXB4EfwYv7SfQuO1+yxdWSQxUpQfdiqeirxWvbWvAw"
+	"yKpXwPSbNgJ/fwmSZ5FC8t0Ra8z38tux2ORl9tCOFSgKGuFrugD4f8xVjNxaYb9Cb3DQT/"
+	"P8Hqb11jJ/Ad7wwcZ8s8ZANNodcJQt/5QZZbzUpeZQBYWIHAml0UZQ+vLwESBzUsrF5eNu"
+	"med9Itlg62qSBG3VSKXrqROkPOxg9TSJzo0sixGrQagJV5owPxkWW3oltVmD5cNDOJmuq/"
+	"GccOgB6fqAloaJ6ITLShNnfxAqsCFS6FDAirRYk/MM8C7J8NnATOyR1OryBOMofAE2zRWh"
+	"ZWzo+kyjT0RLYXlHgnvXEecs1IiCb8PbJIn5WDCTBrSxxHDfF/1sAGbDqoSh6ngrmQzKNK"
+	"lKjXKIXMU8YQEhmasTR2+jLfPuKnPDMbIaNPxznKPS1eDajDQcA4NuQ/8ffS/4Z/TkmKSt"
+	"sCbTP6LrrkI6Mfx0JnBr6MJCnwsgV7GfwXrd2IhBUlL0R6kloxeaEQYPFW+2JjfV0xkp7z"
+	"PN0lazVu0vzhBJQ8j+F85XI1vJsaq+nN1TyHE15O4erqahqqYg7HBN7pMyMMGwpLv94GlB"
+	"eG9jkeHqZEUOPrKZ0q6/N0VUlAtwZmtiWgpwvI+JPqMstKddoxFVTxno2Az20HF5TZ6qfR"
+	"gWw==";

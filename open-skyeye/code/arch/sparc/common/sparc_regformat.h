@@ -1,0 +1,27 @@
+#ifndef __SPARC_REGFORMAT_H__
+#define __SPARC_REGFORMAT_H__
+/*
+ * Define the index of sparc registers, must match with the below sparc_regstr
+ */
+#if 0
+enum sparc_regno
+{
+    /* should add more general registers for sparc */
+};
+#endif
+/*
+ * Define string of register name
+ */
+const char *sparc_regstr[] = {
+    "g0", "g1", "g2", "g3", "g4", "g5", "g6", "g7",
+    "o0", "o1", "o2", "o3", "o4", "o5", "sp", "o7",
+    "l0", "l1", "l2", "l3", "l4", "l5", "l6", "l7",
+    "i0", "i1", "i2", "i3", "i4", "i5", "fp", "i7",
+    "f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7",
+    "f8", "f9", "f10", "f11", "f12", "f13", "f14", "f15",
+    "f16", "f17", "f18", "f19", "f20", "f21", "f22", "f23",
+    "f24", "f25", "f26", "f27", "f28", "f29", "f30", "f31",
+    "y", "psr", "wim", "tbr", "pc", "npc", "fsr", "csr", "CWP",
+    "CANRESTORE", NULL
+};
+#endif
