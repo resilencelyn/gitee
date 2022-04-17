@@ -1,1 +1,3 @@
-./src/mock/regexp/parser.js
+
+src/**/*.json
+dist/**

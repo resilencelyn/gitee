@@ -1,0 +1,10 @@
+{
+	"path": "",
+	"db": "",
+	"url": "https://opensca.xmirror.cn",
+	"token": "",
+	"out": "output.json",
+	"cache": true,
+	"vuln": false,
+	"progress": true
+}
