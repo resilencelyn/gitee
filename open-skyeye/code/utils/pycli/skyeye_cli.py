@@ -20,9 +20,6 @@ import pytimer
 import functools
 import operator
 import fault_inject as sfi
-import skyeye_license as se_lic
-import coverage
-import network_control as NetCtrl
 import readline
 import argparse
 
@@ -55,10 +52,6 @@ class SkyEyeCli(cmd.Cmd):
         cmd.Cmd.__init__(self)
         self.args_list = args
         welcome_message()
-        ret=se_lic.license_verify()
-        if ret[0]==False:
-            print (ret[1])
-            #exit()
         # log=output_log()
         # se.log=log
         self.open_conf_flag = False
@@ -1024,13 +1017,9 @@ class SkyEyeCli(cmd.Cmd):
             ns = parser.parse_args(arg.split())
         except:
             return
-
         self.postloop()
-
         if mips.mips_thread != None:
             mips.mips_thread.stop()
-        coverage.kill_objdump_thread()
-        NetCtrl.server_stop()
         try:
             SkyEyeQuit()
         except Exception as e:

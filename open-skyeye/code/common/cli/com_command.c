@@ -17,8 +17,6 @@
 #include <skyeye_pref.h>
 #include <json_conf.h>
 #include "skyeye_readline_cli.h"
-#include "lic.h"
-
 #include <libgen.h>
 
 int com_run(arg)
@@ -263,7 +261,6 @@ int com_cd(arg)
 int com_quit(arg)
     char *arg;
 {
-    close_network_lic();
     SIM_quit();
 
     return 0;

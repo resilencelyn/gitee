@@ -300,7 +300,7 @@ void start_all_thread()
 {
     int i;
 
-    skyeye_log(Debug_log, __FUNCTION__, "SkyEye is running\n");
+    //skyeye_log(Debug_log, __FUNCTION__, "SkyEye is running\n");
     for (i = 0; i < MAX_THREAD_NUMBER; i++)
     {
         /*
@@ -318,7 +318,7 @@ void start_all_thread()
 */
 void stop_all_thread()
 {
-    skyeye_log(Debug_log, __FUNCTION__, "SkyEye is stoped\n");
+    //skyeye_log(Debug_log, __FUNCTION__, "SkyEye is stoped\n");
     int i;
 
     for (i = 0; i < MAX_THREAD_NUMBER; i++)

@@ -48,7 +48,6 @@
 #include "skyeye_mach.h"
 #include "skyeye_internal.h"
 #include "skyeye_system.h"
-#include "lic.h"
 #include "parse_symbol.h"
 #ifdef __WIN32__
 #include <tchar.h>
@@ -332,7 +331,6 @@ void SIM_init()
     }
     if (pref->autoboot == True)
     {
-        license_verify();
         char cmdstr[256] = { '\0' };
 #ifdef __WIN32__
         char lib_path[1024] = { '\0' };
@@ -350,12 +348,10 @@ void SIM_init()
     }
     if (pref->autotest == True)
     {
-        license_verify();
         RunAutotest();
     }
     if (pref->autoload == True)
     {
-        license_verify();
         char cmdstr[256] = { '\0' };
 #ifdef __WIN32__
         char lib_path[1024] = { '\0' };

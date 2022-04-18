@@ -39,7 +39,6 @@ import errormessage
 import conf as se_conf
 import custom_dialog as CDialog
 import win_workspace as WS
-import skyeye_license as se_lic
 import network_control as NetCtrl
 
 from sky_log import *
@@ -1205,11 +1204,6 @@ class SkyEyeGUI(wx.App):
 		wx.App.__init__(self,redirect=False)
 	def OnInit(self):
 		#self.locale = wx.Locale(wx.LANGUAGE_CHINESE_SIMPLIFIED)
-		ret = CheckKEY()
-		if ret == False:
-			return False
-		else:
-			pass
 		init_gui_log_view()
 		self.frame = MainFrame(parent = None)
 		self.frame.Show()
@@ -1224,15 +1218,6 @@ class SkyEyeGUI(wx.App):
 			pass
 		return True
 
-def CheckKEY():
-	ret = se_lic.license_verify()
-	if ret[0] == False:
-		lic = lic_gui.LicDialog()
-		lic.ShowModal()
-		ret = se_lic.license_verify()
-		if ret[0] == False:
-			return False
-	return True
 
 def Main():
 	global AppRestart

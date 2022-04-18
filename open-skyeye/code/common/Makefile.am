@@ -13,7 +13,7 @@ common_log = log/Ring_fifo.c log/skyeye_log.c log/skyeye_log_group.cpp
 common_loader = loader/loader_elf.c loader/loader_file.c loader/loader_coff.c loader/loader_elf_by_space.c loader/loader_hex.c
 common_mm = mm/skyeye_mm.c
 common_cli = cli/skyeye_command.c cli/skyeye_cli.c cli/default_command.c cli/com_command.c cli/skyeye_new_api.c
-common_lic = lic/verify.c lic/lic_local.c lic/lic_network.c lic/lic_dog.c
+
 common_portable = portable/mman.c portable/usleep.c portable/gettimeofday.c
 common_preference = preference/skyeye_pref.c
 common_profile = profile/symbol.c profile/bfd_target.c profile/skyeye_stat.c
@@ -33,7 +33,7 @@ common_return_msg = return_msg/return_msg.c
 
 pkglib_LTLIBRARIES = libcommon.la
 
-libcommon_la_SOURCES = $(common_module) $(common_misc) $(common_breakpoint) $(common_ctrl) $(common_portable) $(common_preference) $(common_core) $(common_conf_parser) $(common_log) $(common_cli) $(common_lic) $(common_mm) $(common_mach) $(common_device) $(common_memory) $(common_loader) $(common_callback) $(common_profile) $(common_checkpoint) $(common_disas) $(common_json_conf) $(common_disassemble) $(common_fault_injection) $(common_parse_symbol) $(common_return_msg)
+libcommon_la_SOURCES = $(common_module) $(common_misc) $(common_breakpoint) $(common_ctrl) $(common_portable) $(common_preference) $(common_core) $(common_conf_parser) $(common_log) $(common_cli) $(common_mm) $(common_mach) $(common_device) $(common_memory) $(common_loader) $(common_callback) $(common_profile) $(common_checkpoint) $(common_disas) $(common_json_conf) $(common_disassemble) $(common_fault_injection) $(common_parse_symbol) $(common_return_msg)
 
 libcommon_la_LIBADD =
 

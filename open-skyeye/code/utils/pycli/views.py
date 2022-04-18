@@ -16,7 +16,6 @@ import regs
 import mips
 import tools
 import net_api_func as naf
-import skyeye_license as sky_lic
 
 def SE_get_workspace(request):
 	error = None
@@ -765,82 +764,11 @@ def SE_get_cpu_address_width(request):
 		error = str(e)
 	return response(request, result,error)
 
-def SE_set_local_license(request):
-	result = 'false'
-	error = None
-	lic_path = request["args"]["path"]
-	try:
-		ret = sky_lic.set_local_license(lic_path)
-		if ret[0] == True:
-			result="true"
-		else:
-			error = ret[1]
-	except Exception as e:
-		error = str(e)
-	return response(request, result,error)
-
-def SE_set_network_license(request):
-	result='false'
-	error=None
-	ip = request["args"]["ip"]
-	port = request["args"]["port"]
-	try:
-		ret=sky_lic.set_network_license(ip,port)
-		if ret==True:
-			result="true"
-	except Exception as e:
-		error = str(e)
-	return response(request, result,error)
-
-def SE_read_license_info(request):
-	result='false'
-	error=None
-	lic_path = request["args"]["path"]
-	try:
-		ret=sky_lic.read_license_info(lic_path)
-		if ret!=None:
-			result=ret
-		else:
-			error = 'license 文件读取失败，可能产生此问题的原因：\n 1.文件名称或路径包含中文。\n 2.生成license文件的密钥不匹配。\n 3.无效的license文件。'
-	except Exception as e:
-		error = str(e)
-	return response(request, result,error)
-
-def SE_license_verify(request):
-	result='false'
-	error=None
-	try:
-		ret=sky_lic.license_verify()
-		if ret[0]==False:
-			error=ret[1]
-		else:
-			result="true"
-	except Exception as e:
-		error = str(e)
-	return response(request, result,error)
-
 def SE_get_mac_list(request):
 	result = 'false'
 	error = None
 	try:
 		result = sky_lic.get_mac_info()
-	except Exception as e:
-		error = str(e)
-	return response(request, result,error)
-
-def SE_get_hardware_info(request):
-	result = 'false'
-	error = None
-	try:
-		mac_addr = request["args"]["mac_addr"]
-	except:
-		mac_addr = None
-	try:
-		ret = sky_lic.get_hardware_info(mac_addr)
-		if ret[0] == False:
-			error = ret[1]
-		else:
-			result = ret[1:]
 	except Exception as e:
 		error = str(e)
 	return response(request, result,error)
@@ -880,10 +808,6 @@ def SE_get_abort_gui_info(request):
 	error = None
 	try:
 		ver_ret = naf.get_version_info()
-		lic_ret = sky_lic.gui_get_license_info()
-		if lic_ret != None:
-			result = ver_ret
-			result["lic_info"] = lic_ret.get_info()
 	except Exception as e:
 		error = str(e)
 	return response(request, result,error)
@@ -996,12 +920,7 @@ cmd_patterns = {
 		"SE_get_cpu_register_info":SE_get_cpu_register_info,
 		"SE_get_cpu_mips":SE_get_cpu_mips,
 		"SE_get_cpu_address_width":SE_get_cpu_address_width,
-		"SE_set_local_license":SE_set_local_license,
-		"SE_set_network_license":SE_set_network_license,
-		"SE_read_license_info":SE_read_license_info,
-		"SE_license_verify":SE_license_verify,
 		"SE_get_mac_list":SE_get_mac_list,
-		"SE_get_hardware_info":SE_get_hardware_info,
 		"SE_get_simulation_run_time":SE_get_simulation_run_time,
 		"SE_get_simulation_insn_number":SE_get_simulation_insn_number,
 		"SE_get_binary_file_type":SE_get_binary_file_type,

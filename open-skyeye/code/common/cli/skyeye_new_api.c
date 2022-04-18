@@ -1,11 +1,30 @@
 /*************************************************************************
-	> File Name    : skyeye_new_api.c
-	> Author       : jiachao
-	> Mail         : jiachao@digiproto.com
-	> Created Time : 2021/3/24 14:19:08
+    > File Name    : skyeye_new_api.c
+    > Author       : jiachao
+    > Mail         : jiachao@digiproto.com
+    > Created Time : 2021/3/24 14:19:08
 ************************************************************************/
 
 #include "skyeye_new_api.h"
+
+enum
+{
+    OUTPUT_2_LOG = 0,
+    OUTPUT_2_PYTHON = 1,
+    OUTPUT_2_LOG_PY = 2
+} put_msg_range;
+
+static char *msg[128] = {0};
+
+#define output_msg(log_level, err_code, ret_msg, range, ...)                             \
+    do                                                                                   \
+    {                                                                                    \
+        sprintf(msg, __VA_ARGS__);                                                       \
+        if (range == OUTPUT_2_PYTHON || range == OUTPUT_2_LOG_PY)                        \
+            ret_msg = getErrorMessage("%x %s %d %s", err_code, __func__, __LINE__, msg); \
+        if (range == OUTPUT_2_LOG || range == OUTPUT_2_LOG_PY)                           \
+            skyeye_log(log_level, __FUNCTION__, "s", msg);                               \
+    } while (0)
 
 char **getErrorMessage(char *format, ...)
 {
@@ -17,30 +36,30 @@ char **getErrorMessage(char *format, ...)
 
     va_start(args, format);
 
-    while((c = *format++) > 0)
+    while ((c = *format++) > 0)
     {
-        if(c == '%')
+        if (c == '%')
         {
-            switch(c = *format++)
+            switch (c = *format++)
             {
-                case 's':
-                    assert(i < MAX_PARM_NUM);
-                    retPtr[i++] = va_arg(args, char*);
-                    break;
-                case 'd':
-                    num = va_arg(args, int);
-                    assert(i < MAX_PARM_NUM);
-                    sprintf(tmpStr[i], "%d", num);
-                    retPtr[i] = tmpStr[i];
-                    i++;
-                    break;
-               case 'x':
-                    num = va_arg(args, int);
-                    assert(i < MAX_PARM_NUM);
-                    sprintf(tmpStr[i], "0x%x", num);
-                    retPtr[i] = tmpStr[i];
-                    i++;
-                    break;
+            case 's':
+                assert(i < MAX_PARM_NUM);
+                retPtr[i++] = va_arg(args, char *);
+                break;
+            case 'd':
+                num = va_arg(args, int);
+                assert(i < MAX_PARM_NUM);
+                sprintf(tmpStr[i], "%d", num);
+                retPtr[i] = tmpStr[i];
+                i++;
+                break;
+            case 'x':
+                num = va_arg(args, int);
+                assert(i < MAX_PARM_NUM);
+                sprintf(tmpStr[i], "0x%x", num);
+                retPtr[i] = tmpStr[i];
+                i++;
+                break;
             }
         }
     }
@@ -50,60 +69,79 @@ char **getErrorMessage(char *format, ...)
 
 /*
  * 1.仿真控制相关API接口
-*/
+ */
 
-//SkyEye运行
-SkyEyeAPIRetST skyeye_run()
+// SkyEye运行
+SkyEyeAPIRetST skyeye_run(void)
 {
     SkyEyeAPIRetST ApiRet;
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (!SIM_run())
     {
+        output_msg(Debug_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG,
+                   "Open-SkyEye running!\n");
         ApiRet.result = API_OK;
-    } else
+    }
+    else
     {
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "No load machine %s!\n");
         ApiRet.result = API_ERROR;
     }
 
     return ApiRet;
 }
 
-//SkyEye暂停
-SkyEyeAPIRetST skyeye_stop()
+// SkyEye暂停
+SkyEyeAPIRetST skyeye_stop(void)
 {
     SkyEyeAPIRetST ApiRet;
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
-    SIM_stop(NULL);
-    ApiRet.result = API_OK;
+    if (!SIM_stop(NULL))
+    {
+        output_msg(Debug_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG,
+                   "Open-SkyEye stoped!\n");
+        ApiRet.result = API_OK;
+    }
+    else
+    {
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "No load machine!\n");
+        ApiRet.result = API_ERROR;
+    }
 
     return ApiRet;
 }
 
-//SkyEye退出
-SkyEyeAPIRetST skyeye_quit()
+// SkyEye退出
+SkyEyeAPIRetST skyeye_quit(void)
 {
     SkyEyeAPIRetST ApiRet;
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     close_network_lic();
+    output_msg(Debug_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG,
+               "Open-SkyEye quit!\n");
     SIM_quit();
     ApiRet.result = API_OK;
 
     return ApiRet;
 }
 
-//SkyEye重置
-SkyEyeAPIRetST skyeye_reset()
+// SkyEye重置
+SkyEyeAPIRetST skyeye_reset(void)
 {
     SkyEyeAPIRetST ApiRet;
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
+    output_msg(Debug_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG,
+               "Open-SkyEye reset!\n");
     SIM_reset();
     ApiRet.result = API_OK;
 
     return ApiRet;
 }
 
-//SkyEye获取运行状态
-SkyEyeAPIRetST skyeye_running_status()
+// SkyEye获取运行状态
+SkyEyeAPIRetST skyeye_running_status(void)
 {
     SkyEyeAPIRetST ApiRet;
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
@@ -113,7 +151,7 @@ SkyEyeAPIRetST skyeye_running_status()
     return ApiRet;
 }
 
-//SkyEye init-ok命令实现，创建线程来调度执行处理器指令
+// SkyEye init-ok命令实现，创建线程来调度执行处理器指令
 SkyEyeAPIRetST skyeye_prepare_running()
 {
     SkyEyeAPIRetST ApiRet;
@@ -122,11 +160,15 @@ SkyEyeAPIRetST skyeye_prepare_running()
     /* Call prepare_to_run to create cell to run instructions*/
     if (0 == (unsigned int)prepare_to_run())
     {
+        output_msg(Debug_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG,
+                   "Open-SkyEye Init OK!\n");
         ApiRet.result = API_OK;
-    } else
+    }
+    else
     {
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call prepare_to_run Failed!\n");
         ApiRet.result = API_ERROR;
-        skyeye_log(Error_log, __FUNCTION__, "Call prepare_to_run Failed!\n");
     }
 
     return ApiRet;
@@ -134,9 +176,9 @@ SkyEyeAPIRetST skyeye_prepare_running()
 
 /*
  * 2.快照功能API接口
-*/
+ */
 
-//SkyEye加载快照
+// SkyEye加载快照
 SkyEyeAPIRetST skyeye_load_checkpoint(char *checkpoint_path)
 {
     SkyEyeAPIRetST ApiRet;
@@ -144,7 +186,8 @@ SkyEyeAPIRetST skyeye_load_checkpoint(char *checkpoint_path)
 
     if (0 != save_chp(checkpoint_path))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call save_chp Failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call save_chp Failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -154,7 +197,7 @@ SkyEyeAPIRetST skyeye_load_checkpoint(char *checkpoint_path)
     return ApiRet;
 }
 
-//SkyEye保存快照
+// SkyEye保存快照
 SkyEyeAPIRetST skyeye_save_checkpoint(char *checkpoint_path)
 {
     SkyEyeAPIRetST ApiRet;
@@ -162,7 +205,8 @@ SkyEyeAPIRetST skyeye_save_checkpoint(char *checkpoint_path)
 
     if (0 != load_chp(checkpoint_path))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call load_chp Failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call load_chp Failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -173,9 +217,9 @@ SkyEyeAPIRetST skyeye_save_checkpoint(char *checkpoint_path)
 
 /*
  * 3.断点功能API接口
-*/
+ */
 
-//SkyEye创建断点
+// SkyEye创建断点
 SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint32_t addr)
 {
     SkyEyeAPIRetST ApiRet;
@@ -185,7 +229,8 @@ SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint32_t addr)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -194,8 +239,8 @@ SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint32_t addr)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "can not get %s interface from %s\n", CORE_BREAKPOINT_OP_INTF_NAME,
-                   cpuname);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "can not get %s interface from %s\n", CORE_BREAKPOINT_OP_INTF_NAME, cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -203,7 +248,8 @@ SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint32_t addr)
 
     if (ret != 0)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Call %s insert_bp iface Failed!\n", cpuname);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call %s insert_bp iface Failed!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -212,7 +258,7 @@ SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint32_t addr)
     return ApiRet;
 }
 
-//SkyEye删除断点-通过ID
+// SkyEye删除断点-通过ID
 SkyEyeAPIRetST skyeye_delete_breakpoint_by_id(char *cpuname, int id)
 {
     SkyEyeAPIRetST ApiRet;
@@ -222,7 +268,8 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_id(char *cpuname, int id)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -231,8 +278,8 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_id(char *cpuname, int id)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "can not get %s interface from %s\n", CORE_BREAKPOINT_OP_INTF_NAME,
-                   cpuname);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "can not get %s interface from %s\n", CORE_BREAKPOINT_OP_INTF_NAME, cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -240,7 +287,8 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_id(char *cpuname, int id)
     address = iface->get_bp_addr_by_id(core, id);
     if (0 != iface->delete_bp(core, address))
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Call %s delete_bp iface Failed!\n", cpuname);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call %s delete_bp iface Failed!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -249,7 +297,7 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_id(char *cpuname, int id)
     return ApiRet;
 }
 
-//SkyEye删除断点-通过地址
+// SkyEye删除断点-通过地址
 SkyEyeAPIRetST skyeye_delete_breakpoint_by_addr(char *cpuname, uint32_t address)
 {
     SkyEyeAPIRetST ApiRet;
@@ -258,7 +306,8 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_addr(char *cpuname, uint32_t address)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -267,14 +316,16 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_addr(char *cpuname, uint32_t address)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
     if (0 != iface->delete_bp(core, address))
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Call %s delete_bp iface Failed!\n", cpuname);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call %s delete_bp iface Failed!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -283,7 +334,7 @@ SkyEyeAPIRetST skyeye_delete_breakpoint_by_addr(char *cpuname, uint32_t address)
     return ApiRet;
 }
 
-//SkyEye获取断点地址-通过ID
+// SkyEye获取断点地址-通过ID
 SkyEyeAPIRetST skyeye_get_breakpoint_address_by_id(char *cpuname, int id)
 {
     SkyEyeAPIRetST ApiRet;
@@ -292,7 +343,8 @@ SkyEyeAPIRetST skyeye_get_breakpoint_address_by_id(char *cpuname, int id)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -301,7 +353,8 @@ SkyEyeAPIRetST skyeye_get_breakpoint_address_by_id(char *cpuname, int id)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -311,7 +364,7 @@ SkyEyeAPIRetST skyeye_get_breakpoint_address_by_id(char *cpuname, int id)
     return ApiRet;
 }
 
-//SkyEye获取断点数量
+// SkyEye获取断点数量
 SkyEyeAPIRetST skyeye_get_bp_numbers(char *cpuname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -320,7 +373,8 @@ SkyEyeAPIRetST skyeye_get_bp_numbers(char *cpuname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -329,7 +383,8 @@ SkyEyeAPIRetST skyeye_get_bp_numbers(char *cpuname)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -339,7 +394,7 @@ SkyEyeAPIRetST skyeye_get_bp_numbers(char *cpuname)
     return ApiRet;
 }
 
-//SkyEye检查断点是否触发
+// SkyEye检查断点是否触发
 SkyEyeAPIRetST skyeye_check_bp_hit(char *cpuname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -348,7 +403,8 @@ SkyEyeAPIRetST skyeye_check_bp_hit(char *cpuname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -357,7 +413,8 @@ SkyEyeAPIRetST skyeye_check_bp_hit(char *cpuname)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -367,7 +424,7 @@ SkyEyeAPIRetST skyeye_check_bp_hit(char *cpuname)
     return ApiRet;
 }
 
-//SkyEye获取触发断点ID
+// SkyEye获取触发断点ID
 SkyEyeAPIRetST skyeye_get_bp_hit_id(char *cpuname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -376,7 +433,8 @@ SkyEyeAPIRetST skyeye_get_bp_hit_id(char *cpuname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -385,7 +443,8 @@ SkyEyeAPIRetST skyeye_get_bp_hit_id(char *cpuname)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -395,7 +454,7 @@ SkyEyeAPIRetST skyeye_get_bp_hit_id(char *cpuname)
     return ApiRet;
 }
 
-//SkyEye清除断点
+// SkyEye清除断点
 SkyEyeAPIRetST skyeye_clear_bp_hit(char *cpuname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -405,7 +464,8 @@ SkyEyeAPIRetST skyeye_clear_bp_hit(char *cpuname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -414,7 +474,8 @@ SkyEyeAPIRetST skyeye_clear_bp_hit(char *cpuname)
 
     if (iface == NULL)
     {
-        skyeye_log(Warning_log, __FUNCTION__, "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
+        output_msg(Warning_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", cpuname, CORE_BREAKPOINT_OP_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -426,9 +487,9 @@ SkyEyeAPIRetST skyeye_clear_bp_hit(char *cpuname)
 
 /*
  *3.SkyEye创建目标系统各模块API接口
-*/
+ */
 
-//SkyEye实例化模块,实际返回object对象指针
+// SkyEye实例化模块,实际返回object对象指针
 SkyEyeAPIRetST skyeye_add_pre_obj(char *objname, char *classname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -437,7 +498,8 @@ SkyEyeAPIRetST skyeye_add_pre_obj(char *objname, char *classname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (conf_obj == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -447,7 +509,7 @@ SkyEyeAPIRetST skyeye_add_pre_obj(char *objname, char *classname)
     return ApiRet;
 }
 
-//SkyEye创建mach
+// SkyEye创建mach
 SkyEyeAPIRetST skyeye_create_mach(char *objname, char *classname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -456,7 +518,8 @@ SkyEyeAPIRetST skyeye_create_mach(char *objname, char *classname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (conf_obj == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Create <mach>:%s object fail.", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Create <mach>:%s object fail.", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -466,7 +529,7 @@ SkyEyeAPIRetST skyeye_create_mach(char *objname, char *classname)
     return ApiRet;
 }
 
-//SkyEye创建linker设备
+// SkyEye创建linker设备
 SkyEyeAPIRetST skyeye_create_linker(char *objname, char *classname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -475,7 +538,8 @@ SkyEyeAPIRetST skyeye_create_linker(char *objname, char *classname)
 
     if (conf_obj == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Create <linker>:%s object fail.", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Create <linker>:%s object fail.", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -485,7 +549,7 @@ SkyEyeAPIRetST skyeye_create_linker(char *objname, char *classname)
     return ApiRet;
 }
 
-//SkyEye创建cpu
+// SkyEye创建cpu
 SkyEyeAPIRetST skyeye_create_cpu(char *machname, char *objname, char *classname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -495,7 +559,8 @@ SkyEyeAPIRetST skyeye_create_cpu(char *machname, char *objname, char *classname)
     //检查cpu是否授权，返回0表示失败
     if (0 == check_cpu(classname))
     {
-        skyeye_log(Error_log, __FUNCTION__, "The Core:%s is not in the permit! Please Check License.\n", classname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "The Core:%s is not in the permit! Please Check License.\n", classname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -504,7 +569,8 @@ SkyEyeAPIRetST skyeye_create_cpu(char *machname, char *objname, char *classname)
     conf_object_t *cpu = pre_conf_obj(objname, classname);
     if (cpu == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Create <cpu>:%s object fail.\n", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Create <cpu>:%s object fail.\n", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -512,7 +578,8 @@ SkyEyeAPIRetST skyeye_create_cpu(char *machname, char *objname, char *classname)
     conf_object_t *mach_obj = get_conf_obj(machname);
     if (mach_obj == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s object\n", machname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s object\n", machname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -523,7 +590,7 @@ SkyEyeAPIRetST skyeye_create_cpu(char *machname, char *objname, char *classname)
     return ApiRet;
 }
 
-//SkyEye创建device
+// SkyEye创建device
 SkyEyeAPIRetST skyeye_create_device(char *machname, char *objname, char *classname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -535,7 +602,8 @@ SkyEyeAPIRetST skyeye_create_device(char *machname, char *objname, char *classna
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Create <device>:%s object fail.\n", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Create <device>:%s object fail.\n", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -547,10 +615,10 @@ SkyEyeAPIRetST skyeye_create_device(char *machname, char *objname, char *classna
         sys_soc_t *sys_soc = mach_obj->sys_struct;
 
         core = sys_soc->cpus[0].cpu;
-        core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+        core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
         endian_t endianess = core_info->get_endian(core);
 
-        attr_after_making = make_new_attr(Val_UInteger, (void *) endianess);
+        attr_after_making = make_new_attr(Val_UInteger, (void *)endianess);
         set_conf_attr(device, "endian", attr_after_making);
     }
 
@@ -560,7 +628,7 @@ SkyEyeAPIRetST skyeye_create_device(char *machname, char *objname, char *classna
     return ApiRet;
 }
 
-//SkyEye虚拟系统所有模块初始化配置接口
+// SkyEye虚拟系统所有模块初始化配置接口
 SkyEyeAPIRetST skyeye_config_obj()
 {
     SkyEyeAPIRetST ApiRet;
@@ -568,7 +636,8 @@ SkyEyeAPIRetST skyeye_config_obj()
 
     if (0 == system_config_conf_obj())
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call system_config_conf_obj fail!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call system_config_conf_obj fail!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -577,7 +646,7 @@ SkyEyeAPIRetST skyeye_config_obj()
     return ApiRet;
 }
 
-//SkyEye模块初始化配置接口
+// SkyEye模块初始化配置接口
 SkyEyeAPIRetST skyeye_config_module(char *objname)
 {
     SkyEyeAPIRetST ApiRet;
@@ -587,7 +656,8 @@ SkyEyeAPIRetST skyeye_config_module(char *objname)
 
     if (module == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Create <module>:%s object fail.\n", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Create <module>:%s object fail.\n", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -598,7 +668,7 @@ SkyEyeAPIRetST skyeye_config_module(char *objname)
     return ApiRet;
 }
 
-//SkyEye获取soc数量
+// SkyEye获取soc数量
 SkyEyeAPIRetST skyeye_get_soc_num()
 {
     SkyEyeAPIRetST ApiRet;
@@ -612,7 +682,7 @@ SkyEyeAPIRetST skyeye_get_soc_num()
     return ApiRet;
 }
 
-//SkyEye获取指定SOC上的CPU数量
+// SkyEye获取指定SOC上的CPU数量
 SkyEyeAPIRetST skyeye_get_cpu_num_by_soc_name(char *soc_name)
 {
     SkyEyeAPIRetST ApiRet;
@@ -621,19 +691,20 @@ SkyEyeAPIRetST skyeye_get_cpu_num_by_soc_name(char *soc_name)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (soc == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s object\n", soc_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s object\n", soc_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    sys_soc_t * sys_soc = (sys_soc_t *)soc->sys_struct;
+    sys_soc_t *sys_soc = (sys_soc_t *)soc->sys_struct;
     ApiRet.retIntValue = sys_soc->cpu_cnt;
 
     ApiRet.result = API_OK;
     return ApiRet;
 }
 
-//SkyEye获取整个虚拟系统所有模块对象名称
+// SkyEye获取整个虚拟系统所有模块对象名称
 SkyEyeAPIRetST skyeye_get_current_system_module_name()
 {
     SkyEyeAPIRetST ApiRet;
@@ -644,7 +715,7 @@ SkyEyeAPIRetST skyeye_get_current_system_module_name()
     return ApiRet;
 }
 
-//SkyEye添加设备在内存总线上的地址映射
+// SkyEye添加设备在内存总线上的地址映射
 SkyEyeAPIRetST skyeye_add_map(char *memory_space_name, char *device_name, uint64_t address, uint32_t length)
 {
     SkyEyeAPIRetST ApiRet;
@@ -653,7 +724,8 @@ SkyEyeAPIRetST skyeye_add_map(char *memory_space_name, char *device_name, uint64
     //返回1表示成功，0表示失败
     if (0 == WIN_memory_space_add_map(memory_space_name, device_name, address, length))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_memory_space_add_map Failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_memory_space_add_map Failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -662,9 +734,9 @@ SkyEyeAPIRetST skyeye_add_map(char *memory_space_name, char *device_name, uint64
     return ApiRet;
 }
 
-//SkyEye添加设备到内存空间组
+// SkyEye添加设备到内存空间组
 SkyEyeAPIRetST skyeye_add_map_group(char *memory_space_name, char *device_name,
-        uint64_t address, uint32_t length, uint32_t index)
+                                    uint64_t address, uint32_t length, uint32_t index)
 {
     SkyEyeAPIRetST ApiRet;
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
@@ -672,7 +744,8 @@ SkyEyeAPIRetST skyeye_add_map_group(char *memory_space_name, char *device_name,
     //返回1表示成功，0表示失败
     if (0 == WIN_memory_space_add_map_group(memory_space_name, device_name, address, length, index))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_memory_space_add_map_group Failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_memory_space_add_map_group Failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -683,7 +756,7 @@ SkyEyeAPIRetST skyeye_add_map_group(char *memory_space_name, char *device_name,
 
 /*
  *4.SkyEye处理器相关API接口
-*/
+ */
 //获取PC地址-通过处理器名称
 SkyEyeAPIRetST skyeye_get_pc_by_cpuname(char *cpuname)
 {
@@ -694,16 +767,18 @@ SkyEyeAPIRetST skyeye_get_pc_by_cpuname(char *cpuname)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+    core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
 
     if (core_info == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -723,7 +798,8 @@ SkyEyeAPIRetST skyeye_step_run(char *cpuname, const char *arg)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -731,7 +807,8 @@ SkyEyeAPIRetST skyeye_step_run(char *cpuname, const char *arg)
     if (arg == NULL || *arg == '\0')
     {
         steps = 1;
-    } else
+    }
+    else
     {
         steps = strtoul(arg, NULL, 10);
     }
@@ -739,9 +816,9 @@ SkyEyeAPIRetST skyeye_step_run(char *cpuname, const char *arg)
     if (SIM_get_core_mode(core) == DYNCOM_RUN)
     {
         SIM_stop(NULL);
-        //TODO(wshen): can't stop the simulator thread competely
+        // TODO(wshen): can't stop the simulator thread competely
 #ifdef __WIN32__
-        Sleep(50000);  //sleep 50s
+        Sleep(50000); // sleep 50s
 #else
         usleep(50000);
 #endif
@@ -764,16 +841,18 @@ SkyEyeAPIRetST skyeye_disassemble_by_addr(char *cpuname, uint32_t addr)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+    core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
 
     if (core_info == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -799,16 +878,18 @@ SkyEyeAPIRetST skyeye_get_cpu_address_width(char *cpuname)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+    core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
 
     if (core_info == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -828,16 +909,18 @@ SkyEyeAPIRetST skyeye_get_cpu_steps(char *cpuname)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+    core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
 
     if (core_info == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -858,7 +941,8 @@ SkyEyeAPIRetST skyeye_set_cpu_run_mode(char *cpuname, int mode)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -869,9 +953,11 @@ SkyEyeAPIRetST skyeye_set_cpu_run_mode(char *cpuname, int mode)
         SKY_set_attribute(core, "mode", &value);
         ApiRet.result = API_OK;
         return ApiRet;
-    } else
+    }
+    else
     {
-        skyeye_log(Error_log, __FUNCTION__, "cpu_name: %s not have mode attribute!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "cpu_name: %s not have mode attribute!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -887,16 +973,18 @@ SkyEyeAPIRetST skyeye_get_cpu_architecture(char *cpuname)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+    core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
 
     if (core_info == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -926,7 +1014,8 @@ SkyEyeAPIRetST skyeye_get_simulation_time(char *cpuname)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -940,7 +1029,8 @@ SkyEyeAPIRetST skyeye_get_simulation_time(char *cpuname)
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", idle_obj->objname, IDLE_DEV_API_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", idle_obj->objname, IDLE_DEV_API_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -961,21 +1051,23 @@ SkyEyeAPIRetST skyeye_get_simulation_insn_num(char *cpuname)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    core_info_intf *core_info = (core_info_intf *) SKY_get_iface(core, CORE_INFO_INTF_NAME);
+    core_info_intf *core_info = (core_info_intf *)SKY_get_iface(core, CORE_INFO_INTF_NAME);
 
     if (core_info == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, CORE_INFO_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    uint32_t cpu_freq = 10000000;       //默认是10MHZ
+    uint32_t cpu_freq = 10000000; //默认是10MHZ
     uint64_t insn_num = 0;
 
     core_info->get_cpu_run_status(core, &cpu_freq, &insn_num);
@@ -997,7 +1089,8 @@ SkyEyeAPIRetST skyeye_get_cpu_freq(char *cpuname)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1010,9 +1103,9 @@ SkyEyeAPIRetST skyeye_get_cpu_freq(char *cpuname)
 
 /*
  *5.SkyEye内存读写API接口
-*/
+ */
 
-//SkyEye内存读
+// SkyEye内存读
 SkyEyeAPIRetST skyeye_memory_read(char *cpuname, uint32_t addr, int count)
 {
     SkyEyeAPIRetST ApiRet;
@@ -1022,16 +1115,18 @@ SkyEyeAPIRetST skyeye_memory_read(char *cpuname, uint32_t addr, int count)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(core, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(core, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, MEMORY_SPACE_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1040,7 +1135,8 @@ SkyEyeAPIRetST skyeye_memory_read(char *cpuname, uint32_t addr, int count)
 
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Read addr:%x Failed!\n", addr);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Read addr:%x Failed!\n", addr);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1049,7 +1145,7 @@ SkyEyeAPIRetST skyeye_memory_read(char *cpuname, uint32_t addr, int count)
     return ApiRet;
 }
 
-//SkyEye内存写
+// SkyEye内存写
 SkyEyeAPIRetST skyeye_memory_write(char *cpuname, uint32_t addr, char *val, int count)
 {
     SkyEyeAPIRetST ApiRet;
@@ -1059,16 +1155,18 @@ SkyEyeAPIRetST skyeye_memory_write(char *cpuname, uint32_t addr, char *val, int 
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(core, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(core, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", cpuname, MEMORY_SPACE_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", cpuname, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1076,7 +1174,8 @@ SkyEyeAPIRetST skyeye_memory_write(char *cpuname, uint32_t addr, char *val, int 
     exception_t ret = iface->write(core, addr, val, count);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Write addr:%x Failed!\n", addr);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Write addr:%x Failed!\n", addr);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1084,7 +1183,7 @@ SkyEyeAPIRetST skyeye_memory_write(char *cpuname, uint32_t addr, char *val, int 
     return ApiRet;
 }
 
-//SkyEye设备读
+// SkyEye设备读
 SkyEyeAPIRetST skyeye_device_read(char *device_name, uint32_t offset, int count)
 {
     SkyEyeAPIRetST ApiRet;
@@ -1094,16 +1193,18 @@ SkyEyeAPIRetST skyeye_device_read(char *device_name, uint32_t offset, int count)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get device_name: %s object!\n", device_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get device_name: %s object!\n", device_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(device, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(device, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", device_name, MEMORY_SPACE_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", device_name, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1111,7 +1212,8 @@ SkyEyeAPIRetST skyeye_device_read(char *device_name, uint32_t offset, int count)
     exception_t ret = iface->read(device, offset, &data, count);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Read offset:%x Failed!\n", offset);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Read offset:%x Failed!\n", offset);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1121,7 +1223,7 @@ SkyEyeAPIRetST skyeye_device_read(char *device_name, uint32_t offset, int count)
     return ApiRet;
 }
 
-//SkyEye设备写
+// SkyEye设备写
 SkyEyeAPIRetST skyeye_device_write(char *device_name, uint32_t offset, char *buf, int count)
 {
     SkyEyeAPIRetST ApiRet;
@@ -1130,16 +1232,18 @@ SkyEyeAPIRetST skyeye_device_write(char *device_name, uint32_t offset, char *buf
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get device_name: %s object!\n", device_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get device_name: %s object!\n", device_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(device, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(device, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", device_name, MEMORY_SPACE_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", device_name, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1147,7 +1251,8 @@ SkyEyeAPIRetST skyeye_device_write(char *device_name, uint32_t offset, char *buf
     exception_t ret = iface->write(device, offset, buf, count);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Write offset:%x Failed!\n", offset);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Write offset:%x Failed!\n", offset);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1155,7 +1260,7 @@ SkyEyeAPIRetST skyeye_device_write(char *device_name, uint32_t offset, char *buf
     return ApiRet;
 }
 
-//SkyEye激励设备读
+// SkyEye激励设备读
 SkyEyeAPIRetST skyeye_inject_device_read(char *device_name, char *data)
 {
     SkyEyeAPIRetST ApiRet;
@@ -1164,16 +1269,18 @@ SkyEyeAPIRetST skyeye_inject_device_read(char *device_name, char *data)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get device_name: %s object!\n", device_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get device_name: %s object!\n", device_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    data_inject_intf *iface = (data_inject_intf *) SKY_get_iface(device, DATA_INJECT_INTF);
+    data_inject_intf *iface = (data_inject_intf *)SKY_get_iface(device, DATA_INJECT_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", device_name, DATA_INJECT_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", device_name, DATA_INJECT_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1183,7 +1290,7 @@ SkyEyeAPIRetST skyeye_inject_device_read(char *device_name, char *data)
     return ApiRet;
 }
 
-//SkyEye激励设备写
+// SkyEye激励设备写
 SkyEyeAPIRetST skyeye_inject_device_write(char *device_name, char *data, int size)
 {
     SkyEyeAPIRetST ApiRet;
@@ -1192,16 +1299,18 @@ SkyEyeAPIRetST skyeye_inject_device_write(char *device_name, char *data, int siz
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get device_name: %s object!\n", device_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get device_name: %s object!\n", device_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    data_inject_intf *iface = (data_inject_intf *) SKY_get_iface(device, DATA_INJECT_INTF);
+    data_inject_intf *iface = (data_inject_intf *)SKY_get_iface(device, DATA_INJECT_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", device_name, DATA_INJECT_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface\n", device_name, DATA_INJECT_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1213,7 +1322,7 @@ SkyEyeAPIRetST skyeye_inject_device_write(char *device_name, char *data, int siz
 
 /*
  *6.SkyEye其他API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_set_min_syn_time(double s, double delay)
 {
@@ -1234,7 +1343,8 @@ SkyEyeAPIRetST skyeye_set_attr(char *objname, char *key, char *attr_type, char *
 
     if (0 == WIN_set_attr(objname, key, attr_type, value))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_set_attr failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_set_attr failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1251,7 +1361,8 @@ SkyEyeAPIRetST skyeye_connect_device(char *con_objname, char *iface_objname, cha
 
     if (0 == WIN_connect(con_objname, iface_objname, name, index))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_connect failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_connect failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1277,7 +1388,8 @@ SkyEyeAPIRetST skyeye_get_module_type(char *objname)
 
     if (obj == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get module_name: %s object!\n", objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get module_name: %s object!\n", objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1489,7 +1601,8 @@ SkyEyeAPIRetST skyeye_license_verify()
 
     if (ApiRet.retIntValue != 3)
     {
-        skyeye_log(Error_log, __FUNCTION__, "License Check failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "License Check failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1509,7 +1622,8 @@ SkyEyeAPIRetST skyeye_read_license_info(char *filename)
     {
         strcpy(ApiRet.retStrValue, tmpStrValue);
         ApiRet.result = API_OK;
-    } else
+    }
+    else
     {
         ApiRet.result = API_ERROR;
     }
@@ -1528,7 +1642,8 @@ SkyEyeAPIRetST skyeye_get_cpuid()
     {
         strcpy(ApiRet.retStrValue, tmpStrValue);
         ApiRet.result = API_OK;
-    } else
+    }
+    else
     {
         ApiRet.result = API_ERROR;
     }
@@ -1543,7 +1658,8 @@ SkyEyeAPIRetST skyeye_check_usbKey_connect()
 
     if (0 == check_usb_lic_connect())
     {
-        skyeye_log(Error_log, __FUNCTION__, "usbKey connect failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "usbKey connect failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1560,7 +1676,8 @@ SkyEyeAPIRetST skyeye_set_script_path(char *path)
 
     if (-1 == WIN_set_script_path(path))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_set_script_path failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_set_script_path failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1605,7 +1722,7 @@ SkyEyeAPIRetST skyeye_get_work_path()
 
 /*
  *7.SkyEye数据激励功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_parse_symbol(char *cpuname, char *hex_file_name)
 {
@@ -1616,7 +1733,8 @@ SkyEyeAPIRetST skyeye_parse_symbol(char *cpuname, char *hex_file_name)
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1647,7 +1765,8 @@ SkyEyeAPIRetST skyeye_get_symbol_addr(char *cpu_name, char *sym_str)
 
     if (SYM_OK != SkyEye_GetSymbol_Addr(cpu_name, sym_str, &global_addr))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Get Symobl:%s Addr Failed!\n", sym_str);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Get Symobl:%s Addr Failed!\n", sym_str);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1701,7 +1820,8 @@ SkyEyeAPIRetST skyeye_set_symbol_value(char *cpu_name, char *sym_str, uint64_t v
 
     if (SYM_OK != result)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Set Symobl:%s Value Failed!\n", sym_str);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Set Symobl:%s Value Failed!\n", sym_str);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1721,7 +1841,8 @@ SkyEyeAPIRetST skyeye_set_float_symbol_value(char *cpu_name, char *sym_str, floa
 
     if (SYM_OK != result)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Set Float Symobl:%s Value Failed!\n", sym_str);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Set Float Symobl:%s Value Failed!\n", sym_str);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1741,7 +1862,8 @@ SkyEyeAPIRetST skyeye_set_double_symbol_value(char *cpu_name, char *sym_str, dou
 
     if (SYM_OK != result)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Set Float Symobl:%s Value Failed!\n", sym_str);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Set Float Symobl:%s Value Failed!\n", sym_str);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1761,7 +1883,8 @@ SkyEyeAPIRetST skyeye_get_func_addr(char *cpu_name, char *func_str)
 
     if (ApiRet.retIntValue == 0)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Get Function Addr:%s Failed!\n", func_str);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Get Function Addr:%s Failed!\n", func_str);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1780,7 +1903,8 @@ SkyEyeAPIRetST skyeye_get_func_length(char *cpu_name, char *func_str)
 
     if (ApiRet.retIntValue == 0)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Get Function Length:%s Failed!\n", func_str);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Get Function Length:%s Failed!\n", func_str);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -1791,7 +1915,7 @@ SkyEyeAPIRetST skyeye_get_func_length(char *cpu_name, char *func_str)
 
 /*
  *8.SkyEye寄存器API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_get_register_num(char *devicename)
 {
@@ -1803,26 +1927,29 @@ SkyEyeAPIRetST skyeye_get_register_num(char *devicename)
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, " Can't get device_name: %s object!\n", devicename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   " Can't get device_name: %s object!\n", devicename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
-    //First check if have SKYEYE_REG64_INTF
+    // First check if have SKYEYE_REG64_INTF
     skyeye_reg64_intf *iface64 = SKY_get_iface(device, SKYEYE_REG64_INTF);
 
     if (iface64 == NULL)
     {
-        //if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
+        // if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
         skyeye_reg_intf *iface = SKY_get_iface(device, SKYEYE_REG_INTF);
 
         if (iface == NULL)
         {
-            skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
+            output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                       "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
             ApiRet.result = API_ERROR;
             return ApiRet;
         }
         reg_num = iface->get_regnum(device);
-    } else
+    }
+    else
     {
         reg_num = iface64->get_regnum(device);
     }
@@ -1841,26 +1968,29 @@ SkyEyeAPIRetST skyeye_get_regvalue_by_id(char *devicename, uint32_t id)
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, " Can't get device_name: %s object!\n", devicename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   " Can't get device_name: %s object!\n", devicename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
-    //First check if have SKYEYE_REG64_INTF
+    // First check if have SKYEYE_REG64_INTF
     skyeye_reg64_intf *iface64 = SKY_get_iface(device, SKYEYE_REG64_INTF);
 
     if (iface64 == NULL)
     {
-        //if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
+        // if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
         skyeye_reg_intf *iface = SKY_get_iface(device, SKYEYE_REG_INTF);
 
         if (iface == NULL)
         {
-            skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
+            output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                       "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
             ApiRet.result = API_ERROR;
             return ApiRet;
         }
         ApiRet.retLongValue = iface->get_regvalue_by_id(device, id);
-    } else
+    }
+    else
     {
         ApiRet.retLongValue = iface64->get_regvalue_by_id(device, id);
     }
@@ -1879,26 +2009,29 @@ SkyEyeAPIRetST skyeye_get_regname_by_id(char *devicename, uint32_t id)
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, " Can't get device_name: %s object!\n", devicename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   " Can't get device_name: %s object!\n", devicename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
-    //First check if have SKYEYE_REG64_INTF
+    // First check if have SKYEYE_REG64_INTF
     skyeye_reg64_intf *iface64 = SKY_get_iface(device, SKYEYE_REG64_INTF);
 
     if (iface64 == NULL)
     {
-        //if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
+        // if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
         skyeye_reg_intf *iface = SKY_get_iface(device, SKYEYE_REG_INTF);
 
         if (iface == NULL)
         {
-            skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
+            output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                       "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
             ApiRet.result = API_ERROR;
             return ApiRet;
         }
         tmpStrValue = iface->get_regname_by_id(device, id);
-    } else
+    }
+    else
     {
         tmpStrValue = iface64->get_regname_by_id(device, id);
     }
@@ -1922,21 +2055,23 @@ SkyEyeAPIRetST skyeye_get_regoffset_by_id(char *devicename, uint32_t id)
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, " Can't get device_name: %s object!\n", devicename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   " Can't get device_name: %s object!\n", devicename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
-    //First check if have SKYEYE_REG64_INTF
+    // First check if have SKYEYE_REG64_INTF
     skyeye_reg64_intf *iface64 = SKY_get_iface(device, SKYEYE_REG64_INTF);
 
     if (iface64 == NULL)
     {
-        //if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
+        // if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
         skyeye_reg_intf *iface = SKY_get_iface(device, SKYEYE_REG_INTF);
 
         if (iface == NULL)
         {
-            skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
+            output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                       "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
             ApiRet.result = API_ERROR;
             return ApiRet;
         }
@@ -1948,7 +2083,8 @@ SkyEyeAPIRetST skyeye_get_regoffset_by_id(char *devicename, uint32_t id)
             return ApiRet;
         }
         ApiRet.retIntValue = iface->get_regoffset_by_id(device, id);
-    } else
+    }
+    else
     {
         if (iface64->get_regoffset_by_id == NULL)
         {
@@ -1974,27 +2110,30 @@ SkyEyeAPIRetST skyeye_set_regvalue_by_id(char *devicename, uint64_t value, uint3
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, " Can't get device_name: %s object!\n", devicename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   " Can't get device_name: %s object!\n", devicename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
-    //First check if have SKYEYE_REG64_INTF
+    // First check if have SKYEYE_REG64_INTF
     skyeye_reg64_intf *iface64 = SKY_get_iface(device, SKYEYE_REG64_INTF);
 
     if (iface64 == NULL)
     {
-        //if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
+        // if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
         skyeye_reg_intf *iface = SKY_get_iface(device, SKYEYE_REG_INTF);
 
         if (iface == NULL)
         {
-            skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
+            output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                       "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
             ApiRet.result = API_ERROR;
             return ApiRet;
         }
 
         iface->set_regvalue_by_id(device, (uint32_t)value, id);
-    } else
+    }
+    else
     {
         iface64->set_regvalue_by_id(device, value, id);
     }
@@ -2013,27 +2152,30 @@ SkyEyeAPIRetST skyeye_get_regid_by_name(char *devicename, char *name)
 
     if (device == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, " Can't get device_name: %s object!\n", devicename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   " Can't get device_name: %s object!\n", devicename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
-    //First check if have SKYEYE_REG64_INTF
+    // First check if have SKYEYE_REG64_INTF
     skyeye_reg64_intf *iface64 = SKY_get_iface(device, SKYEYE_REG64_INTF);
 
     if (iface64 == NULL)
     {
-        //if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
+        // if no SKYEYE_REG64_INTF, check SKYEYE_REG_INTF
         skyeye_reg_intf *iface = SKY_get_iface(device, SKYEYE_REG_INTF);
 
         if (iface == NULL)
         {
-            skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
+            output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                       "Can't get %s %s iface\n", devicename, SKYEYE_REG_INTF);
             ApiRet.result = API_ERROR;
             return ApiRet;
         }
 
         ApiRet.retIntValue = iface->get_regid_by_name(device, name);
-    } else
+    }
+    else
     {
         ApiRet.retIntValue = iface64->get_regid_by_name(device, name);
     }
@@ -2044,7 +2186,7 @@ SkyEyeAPIRetST skyeye_get_regid_by_name(char *devicename, char *name)
 
 /*
  *9.SkyEye GDB调试功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_create_remote_gdb(char *cpuname, int port, char *ip)
 {
@@ -2054,7 +2196,8 @@ SkyEyeAPIRetST skyeye_create_remote_gdb(char *cpuname, int port, char *ip)
 
     if (0 == WIN_create_remote_gdb(cpuname, port, ip))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_create_remote_gdb iface Failed\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_create_remote_gdb iface Failed\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2070,7 +2213,8 @@ SkyEyeAPIRetST skyeye_delete_remote_gdb(char *cpuname)
 
     if (0 == WIN_delete_remote_gdb(cpuname))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_delete_remote_gdb iface Failed\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_delete_remote_gdb iface Failed\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2086,7 +2230,8 @@ SkyEyeAPIRetST skyeye_remote_gdb_check_link(char *cpuname)
 
     if (0 == WIN_remote_gdb_check_link(cpuname))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_remote_gdb_check_link iface Failed\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_remote_gdb_check_link iface Failed\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2113,7 +2258,7 @@ SkyEyeAPIRetST skyeye_remote_gdb_get_client_ip(char *cpuname)
 }
 /*
  *10.SkyEye加载功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_load_file(char *cpuname, const char *filename, generic_address_t load_addr)
 {
@@ -2123,10 +2268,10 @@ SkyEyeAPIRetST skyeye_load_file(char *cpuname, const char *filename, generic_add
 
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
 
-
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2134,20 +2279,20 @@ SkyEyeAPIRetST skyeye_load_file(char *cpuname, const char *filename, generic_add
     ret = load_file(core, filename, load_addr);
     if (ret == File_open_exp)
     {
-        errCode = 0x90000001; //error_message_data.json define errCode
-        ApiRet.errMsg = getErrorMessage("%x %s %d %s", errCode, __func__, __LINE__, filename);
+        // error_message_data.json define errCode
+        output_msg(Warning_log, 0x90000001, ApiRet.errMsg, OUTPUT_2_PYTHON, "%s", filename);
         ApiRet.result = API_ERROR;
         return ApiRet;
-    } else if (ret == Not_found_exp)
+    }
+    else if (ret == Not_found_exp)
     {
-        errCode = 0x90000002;
-        ApiRet.errMsg = getErrorMessage("%x %s %d %s %s", errCode, __func__, __LINE__, cpuname, MEMORY_SPACE_INTF_NAME);
+        output_msg(Warning_log, 0x90000002, ApiRet.errMsg, OUTPUT_2_PYTHON, "%s %s", cpuname, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
-    } else if (ret == Excess_range_exp)
+    }
+    else if (ret == Excess_range_exp)
     {
-        errCode = 0x90000003;
-        ApiRet.errMsg = getErrorMessage("%x %s %d", errCode, __func__, __LINE__);
+        output_msg(Warning_log, 0x90000003, ApiRet.errMsg, OUTPUT_2_PYTHON, " ");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2166,18 +2311,17 @@ SkyEyeAPIRetST skyeye_load_binary(char *cpuname, char *elfname)
 
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
 
-
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
     if (access(elfname, F_OK))
     {
-        errCode = 0x90000001;
-        ApiRet.errMsg = getErrorMessage("%x %s %d %s", errCode, __func__, __LINE__, elfname);
+        output_msg(Warning_log, 0x90000001, ApiRet.errMsg, OUTPUT_2_PYTHON, "%s", elfname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2185,22 +2329,24 @@ SkyEyeAPIRetST skyeye_load_binary(char *cpuname, char *elfname)
     if (is_elf(elfname))
     {
         exp = get_elf_start_addr(elfname, &start_addr, &code_start_addr, &code_end_addr);
-    } else if (is_coff(elfname))
+    }
+    else if (is_coff(elfname))
     {
         exp = get_coff_start_addr(elfname, &start_addr, &code_start_addr, &code_end_addr);
-    } else if (is_hex(elfname))
+    }
+    else if (is_hex(elfname))
     {
         exp = get_hex_start_addr(elfname, &start_addr, &code_start_addr, &code_end_addr);
-    } else
+    }
+    else
     {
         exp = Invarg_exp;
     }
 
     if (exp != No_exp)
     {
-        errCode = 0x90000004;
-        skyeye_log(Error_log, __FUNCTION__, "Get Binary Start Address Failed!\n");
-        ApiRet.errMsg = getErrorMessage("%x %s %d", errCode, __func__, __LINE__);
+        output_msg(Error_log, 0x90000004, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Get Binary Start Address Failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2234,16 +2380,15 @@ SkyEyeAPIRetST skyeye_load_binary(char *cpuname, char *elfname)
 
     if (exp != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Load binary File Failed!\n");
-        errCode = 0x90000005;
-        ApiRet.errMsg = getErrorMessage("%x %s %d", errCode, __func__, __LINE__);
+        output_msg(Error_log, 0x90000005, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Load binary File Failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
     SIM_set_pc(core, start_addr, code_start_addr, code_end_addr);
 
-    sys_cpu_t *cpu = (sys_cpu_t *) (core->sys_struct);
+    sys_cpu_t *cpu = (sys_cpu_t *)(core->sys_struct);
     sys_soc_t *soc = cpu->sys_soc;
 
     sprintf(soc->binary_path, "%s", elfname);
@@ -2260,7 +2405,8 @@ SkyEyeAPIRetST skyeye_load_bin_binary(char *cpuname, const char *filename, gener
 
     if (core == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get cpu_name: %s object!\n", cpuname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get cpu_name: %s object!\n", cpuname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2290,16 +2436,18 @@ SkyEyeAPIRetST skyeye_new_load_file(char *memoryspace_name, const char *filename
 
     if (memory_space == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get memory_space name: %s object!\n", memoryspace_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get memory_space name: %s object!\n", memoryspace_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(memory_space, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(memory_space, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Get memory_space interface from %s error!!!\n", memory_space->objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Get memory_space interface from %s error!!!\n", memory_space->objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2307,7 +2455,8 @@ SkyEyeAPIRetST skyeye_new_load_file(char *memoryspace_name, const char *filename
     f = fopen(filename, "rb");
     if (f == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not open file %s.\n", filename);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not open file %s.\n", filename);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2333,7 +2482,7 @@ SkyEyeAPIRetST skyeye_new_load_file(char *memoryspace_name, const char *filename
 }
 /*
  *11.SkyEye故障注入功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint32_t addr, uint32_t bit, uint32_t mode, uint32_t count)
 {
@@ -2346,7 +2495,8 @@ SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint32_t addr, uint32_t
 
     if (memory_space == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get memory_space_name: %s object!\n", memory_space_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get memory_space_name: %s object!\n", memory_space_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2355,17 +2505,19 @@ SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint32_t addr, uint32_t
 
     if (plug_iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_SET_PLUG_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_SET_PLUG_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
     ret = plug_iface->set_plug(memory_space, addr, bit, mode);
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(memory_space, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(memory_space, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2373,29 +2525,35 @@ SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint32_t addr, uint32_t
     ret = iface->read(memory_space, addr, &buf, count);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Read address:0x%x failed!\n", addr);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Read address:0x%x failed!\n", addr);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
     if (mode == 0)
     {
-        buf &= ~(0x1 << bit);           //set bit : 0
-    } else if (mode == 1)
+        buf &= ~(0x1 << bit); // set bit : 0
+    }
+    else if (mode == 1)
     {
-        buf |= (0x1 << bit);            //set bit : 1
-    } else if (mode == 2)
-    {                                   //reverse bit :if 0: set 1; if 1: set 0
+        buf |= (0x1 << bit); // set bit : 1
+    }
+    else if (mode == 2)
+    { // reverse bit :if 0: set 1; if 1: set 0
         if (buf & (0x1 << bit))
         {
             buf &= ~(0x1 << bit);
-        } else
+        }
+        else
         {
             buf |= (0x1 << bit);
         }
-    } else
+    }
+    else
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not set mode %d.\n", mode);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not set mode %d.\n", mode);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2403,7 +2561,8 @@ SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint32_t addr, uint32_t
     ret = iface->write(memory_space, addr, &buf, count);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Write address:0x%x failed!\n", addr);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Write address:0x%x failed!\n", addr);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2422,16 +2581,18 @@ SkyEyeAPIRetST skyeye_get_fault(char *memory_space_name, uint32_t addr)
 
     if (memory_space == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get memory_space_name: %s object!\n", memory_space_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get memory_space_name: %s object!\n", memory_space_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
     memory_space_set_plug_intf *iface =
-        (memory_space_set_plug_intf *) SKY_get_iface(memory_space, MEMORY_SPACE_SET_PLUG_INTF_NAME);
+        (memory_space_set_plug_intf *)SKY_get_iface(memory_space, MEMORY_SPACE_SET_PLUG_INTF_NAME);
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_SET_PLUG_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_SET_PLUG_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2454,7 +2615,8 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
 
     if (memory_space == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get memory_space_name: %s object!\n", memory_space_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get memory_space_name: %s object!\n", memory_space_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2463,7 +2625,8 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
 
     if (plug_iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_SET_PLUG_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_SET_PLUG_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2471,17 +2634,17 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
 
     if (ret != No_exp)
     {
-        errCode = 0x90000006;
-        ApiRet.errMsg = getErrorMessage("%x %s %d", errCode, __func__, __LINE__);
+        output_msg(Error_log, 0x90000006, ApiRet.errMsg, OUTPUT_2_LOG_PY, "clear_plug failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    memory_space_intf *iface = (memory_space_intf *) SKY_get_iface(memory_space, MEMORY_SPACE_INTF_NAME);
+    memory_space_intf *iface = (memory_space_intf *)SKY_get_iface(memory_space, MEMORY_SPACE_INTF_NAME);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_INTF_NAME);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", memory_space_name, MEMORY_SPACE_INTF_NAME);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2489,7 +2652,8 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
     ret = iface->read(memory_space, addr, &buf, 4);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Read address:0x%x failed!\n", addr);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Read address:0x%x failed!\n", addr);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2497,23 +2661,28 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
     if (mode == 0)
     {
         buf |= (1 << bit);
-    } else if (mode == 1)
+    }
+    else if (mode == 1)
     {
         buf &= ~(1 << bit);
         if ((buf >> 31) & 0x1)
             buf = 0;
-    } else if (mode == 2)
-    {                                   //reverse bit :if 0: set 1; if 1: set 0
+    }
+    else if (mode == 2)
+    { // reverse bit :if 0: set 1; if 1: set 0
         if (buf & (0x1 << bit))
         {
             buf &= ~(0x1 << bit);
-        } else
+        }
+        else
         {
             buf |= (0x1 << bit);
         }
-    } else
+    }
+    else
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not set mode %d.\n", mode);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not set mode %d.\n", mode);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2521,7 +2690,8 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
     ret = iface->write(memory_space, addr, &buf, 4);
     if (ret != No_exp)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Write address:0x%x failed!\n", addr);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Write address:0x%x failed!\n", addr);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2531,7 +2701,7 @@ SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32
 
 /*
  *12.SkyEye代码覆盖率功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_get_executed_pc_file(char *instr_process_name, char *filename)
 {
@@ -2542,16 +2712,18 @@ SkyEyeAPIRetST skyeye_get_executed_pc_file(char *instr_process_name, char *filen
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2587,7 +2759,8 @@ SkyEyeAPIRetST skyeye_enable_cpu_codecov(char *machname)
 
     if (0 == WIN_enable_cpu_codecov(machname))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_enable_cpu_codecov iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_enable_cpu_codecov iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2598,7 +2771,7 @@ SkyEyeAPIRetST skyeye_enable_cpu_codecov(char *machname)
 
 /*
  *13.SkyEye指令流记录功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_get_pc_record_size(char *instr_process_name)
 {
@@ -2609,16 +2782,18 @@ SkyEyeAPIRetST skyeye_get_pc_record_size(char *instr_process_name)
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2638,16 +2813,18 @@ SkyEyeAPIRetST skyeye_set_pc_record_size(char *instr_process_name, int size)
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2667,16 +2844,18 @@ SkyEyeAPIRetST skyeye_get_pc_record_nums(char *instr_process_name)
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2696,16 +2875,18 @@ SkyEyeAPIRetST skyeye_get_pc_record_index(char *instr_process_name)
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2725,16 +2906,18 @@ SkyEyeAPIRetST skyeye_get_pc_record_overflow(char *instr_process_name)
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2754,16 +2937,18 @@ SkyEyeAPIRetST skyeye_get_pc_by_index(char *instr_process_name, int id)
 
     if (instr_process == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get instr_process_name: %s object!\n", instr_process_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get instr_process_name: %s object!\n", instr_process_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    instr_process_intf *iface = (instr_process_intf *) SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
+    instr_process_intf *iface = (instr_process_intf *)SKY_get_iface(instr_process, INSTR_PROCESS_INTF);
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s %s iface!\n", instr_process_name, INSTR_PROCESS_INTF);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2782,7 +2967,8 @@ SkyEyeAPIRetST skyeye_open_instr_record(char *cpu_name, char *filename)
 
     if (0 == WIN_open_instr_record(cpu_name, filename))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_open_instr_record iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_open_instr_record iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2798,7 +2984,8 @@ SkyEyeAPIRetST skyeye_close_instr_record(char *cpu_name)
 
     if (0 == WIN_close_instr_record(cpu_name))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_close_instr_record iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_close_instr_record iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2809,7 +2996,7 @@ SkyEyeAPIRetST skyeye_close_instr_record(char *cpu_name)
 
 /*
  *14.SkyEye异常触发功能API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_get_cpu_exception_num(char *cpu_name)
 {
@@ -2820,7 +3007,8 @@ SkyEyeAPIRetST skyeye_get_cpu_exception_num(char *cpu_name)
 
     if (0 == ApiRet.retIntValue)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call SkyEye_GetCpuExceptionNum iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call SkyEye_GetCpuExceptionNum iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2836,7 +3024,8 @@ SkyEyeAPIRetST skyeye_set_cpu_exception(char *cpu_name, int exception_id)
 
     if (No_exp != SkyEye_SetCpuException(cpu_name, exception_id))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call SkyEye_SetCpuException iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call SkyEye_SetCpuException iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2853,7 +3042,8 @@ SkyEyeAPIRetST skyeye_set_ext_interrupt(char *intc_name, int interrupt_num)
 
     if (No_exp != SkyEye_SetExtInterrupt(intc_name, interrupt_num))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call SkyEye_SetExtInterrupt iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call SkyEye_SetExtInterrupt iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2881,7 +3071,7 @@ SkyEyeAPIRetST skyeye_get_cpu_exception_name_by_id(char *cpu_name, int exception
 
 /*
  *15.SkyEye使能和禁用设备API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_disable_device_work(char *device_name)
 {
@@ -2891,7 +3081,8 @@ SkyEyeAPIRetST skyeye_disable_device_work(char *device_name)
 
     if (0 == WIN_disable_device_work(device_name))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_disable_device_work iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_disable_device_work iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2908,7 +3099,8 @@ SkyEyeAPIRetST skyeye_enable_device_work(char *device_name)
 
     if (0 == WIN_enable_device_work(device_name))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_enable_device_work iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_enable_device_work iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2918,7 +3110,7 @@ SkyEyeAPIRetST skyeye_enable_device_work(char *device_name)
 
 /*
  *16.设置和获取CPU PC API接口
-*/
+ */
 
 SkyEyeAPIRetST skyeye_set_pc(char *cpu_name, unsigned int pc)
 {
@@ -2928,7 +3120,8 @@ SkyEyeAPIRetST skyeye_set_pc(char *cpu_name, unsigned int pc)
 
     if (0xffffffff == WIN_setPC(cpu_name, pc))
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_setPC iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_setPC iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2945,7 +3138,8 @@ SkyEyeAPIRetST skyeye_get_pc(char *cpu_name)
 
     if (0xffffffff == ApiRet.retIntValue)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Call WIN_getPC iface failed!\n");
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Call WIN_getPC iface failed!\n");
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -2968,12 +3162,13 @@ SkyEyeAPIRetST skyeye_enable_debug(char *soc_name)
     memset(&ApiRet, 0, sizeof(SkyEyeAPIRetST));
     if (soc == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can't get %s object\n", soc_name);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can't get %s object\n", soc_name);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
 
-    sys_soc_t * sys_soc = (sys_soc_t *)soc->sys_struct;
+    sys_soc_t *sys_soc = (sys_soc_t *)soc->sys_struct;
     for (i = 0; i < sys_soc->cpu_cnt; i++)
     {
         sys_cpu = &(sys_soc->cpus[i]);
@@ -3022,7 +3217,8 @@ SkyEyeAPIRetST skyeye_term_wait_for_string(char *termname, const char *string)
 
     if (term == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not get %s object.", termname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not get %s object.", termname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -3030,7 +3226,8 @@ SkyEyeAPIRetST skyeye_term_wait_for_string(char *termname, const char *string)
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not get %s interface from %s", SKYEYE_UART_INTF, term->objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not get %s interface from %s", SKYEYE_UART_INTF, term->objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -3051,7 +3248,8 @@ SkyEyeAPIRetST skyeye_term_write(char *termname, const char *string)
 
     if (term == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not get %s object.", termname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not get %s object.", termname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -3059,7 +3257,8 @@ SkyEyeAPIRetST skyeye_term_write(char *termname, const char *string)
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not get %s interface from %s", SKYEYE_UART_INTF, term->objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not get %s interface from %s", SKYEYE_UART_INTF, term->objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -3079,7 +3278,8 @@ SkyEyeAPIRetST skyeye_term_wait_then_write(char *termname, const char *wait_stri
 
     if (term == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not get %s object.", termname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not get %s object.", termname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }
@@ -3087,7 +3287,8 @@ SkyEyeAPIRetST skyeye_term_wait_then_write(char *termname, const char *wait_stri
 
     if (iface == NULL)
     {
-        skyeye_log(Error_log, __FUNCTION__, "Can not get %s interface from %s", SKYEYE_UART_INTF, term->objname);
+        output_msg(Error_log, 0xffffffff, ApiRet.errMsg, OUTPUT_2_LOG_PY,
+                   "Can not get %s interface from %s", SKYEYE_UART_INTF, term->objname);
         ApiRet.result = API_ERROR;
         return ApiRet;
     }

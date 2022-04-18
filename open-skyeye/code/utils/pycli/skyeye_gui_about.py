@@ -3,7 +3,6 @@ import wx, sys, os
 from skyeye_common_module import *
 import se_path
 import tools
-import skyeye_license as se_lic
 
 fname =  'Segoe UI'
 
@@ -111,12 +110,7 @@ class main_panel(wx.Panel):
 		sizer.Add(static_sizer2, 1, wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT|wx.BOTTOM, 10)
 		self.SetSizer(sizer)
 		self.Fit()
-		########################################
-		lic_data=se_lic.gui_get_license_info()
-		LicMode=lic_data.get_license_mode()
-		LicTime=lic_data.get_license_time()
-		LicCpus=lic_data.get_license_cpus()
-
+        
 		########################################
 
 		package_config = tools.GetPackageConfig()

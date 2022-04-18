@@ -60,19 +60,24 @@ go get && go build
 + 其他命令
   参考 [配置文档](./docs/config.md)
 
-## 客户端
-[GoFound Python客户端](https://github.com/newpanjing/gofound-python)
+## 多语言SDK
+
+[Python](https://github.com/newpanjing/gofound-python)
+
+其他语言的SDK，正在陆续完善中。
+
+## 待办
+
+[TODO](./TODO.md)
 
 ## 使用GoFound的用户
 
-[Simple社区](https://simpleui.72wo.com)
+[Simple社区](https://simpleui.72wo.com)｜ [贝塔博客](https://www.88cto.com) ｜ [Book360](https://www.book360.cn)
 
-[贝塔博客](https://www.88cto.com)
-
-[Book360](https://www.book360.cn)
-
-[深圳市十二点科技有限公司](https://www.72wo.com)
-
-[深圳市恒一博科技有限公司](http://www.hooebo.com)
+[深圳市十二点科技有限公司](https://www.72wo.com)｜[深圳市恒一博科技有限公司](http://www.hooebo.com)
 
 [西安易神网络信息系统服务有限公司](http://www.hansonvip.com/)
+
+[影视资源搜索](https://movie.nginx.fun/)｜[酷易物联](https://cooleiot.tech)｜[French博客](https://hoime.cn/)
+
+[好咪二次元之家](http://hoime.space)

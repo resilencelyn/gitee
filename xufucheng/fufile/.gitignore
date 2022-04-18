@@ -1,0 +1,10 @@
+# Except this file !
+target
+.idea
+.DS_Store
+*.log
+*.iml
+.workflow
+
+# generated
+message/generated/src/main/java/org/fufile/generated

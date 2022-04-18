@@ -46,7 +46,7 @@
 #include "systemc_exec.h"
 #include "skyeye_misc.h"
 #include "mm_monitor.h"
-#include "lic.h"
+
 #include "parse_symbol.h"
 #ifdef __WIN32__
 #include <windows.h>

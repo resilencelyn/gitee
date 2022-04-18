@@ -1060,25 +1060,6 @@ def SkyEyeSetX86Slow(cpu, isLow):
 	return [True, True, None]
 
 @swtich_try
-def SkyEyeLicenseVerify():
-	libcommon.skyeye_license_verify.restype = skyeye_api_result
-	ret = libcommon.skyeye_license_verify()
-	return [ret.result, ret.retIntValue, ret.errMsg]
-
-@swtich_try
-def SkyEyeReadLicenseInfo(filename):
-	libcommon.skyeye_read_license_info.restype = skyeye_api_result
-	libcommon.skyeye_read_license_info.argtypes = [c_char_p]
-	ret = libcommon.skyeye_read_license_info(filename.encode("utf-8"))
-	return [ret.result, ret.retStrValue, ret.errMsg]
-
-@swtich_try
-def SkyEyeGetCpuId():
-	libcommon.skyeye_get_cpuid.restype = skyeye_api_result
-	ret = libcommon.skyeye_get_cpuid()
-	return [ret.result, ret.retStrValue, ret.errMsg]
-
-@swtich_try
 def SkyEyeCheckUsbLicConnect():
 	libcommon.skyeye_check_usbKey_connect.restype = skyeye_api_result
 	ret = libcommon.skyeye_check_usbKey_connect()

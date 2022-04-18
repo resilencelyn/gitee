@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2021 The Fufile Project
+  ~
+  ~ The Fufile Project licenses this file to you under the Apache License,
+  ~ version 2.0 (the "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at:
+  ~
+  ~   https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  ~ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="localeLanguage" value="en"/>
+
+    <!-- Checks that there are no tab characters ('\t') in the source code. -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <module name="LineLength">
+        <property name="max" value="140"/>
+        <property name="fileExtensions" value="java"/>
+    </module>
+
+    <!-- Check license -->
+    <module name="RegexpHeader">
+        <property name="headerFile" value="${checkstyle.header.file}"/>
+        <property name="multiLines" value="1, 2, 3, 17"/>
+    </module>
+
+    <!-- Filters -->
+    <!-- See https://checkstyle.org/config_filters.html -->
+    <module name="SuppressionFilter">
+        <property name="file" value="${suppressions.file}"/>
+    </module>
+
+    <module name="TreeWalker">
+        <!-- Annotations -->
+        <!-- See https://checkstyle.org/config_annotation.html -->
+        <module name="MissingOverride"/>
+
+        <!-- Block Checks -->
+        <!-- See https://checkstyle.org/config_blocks.html -->
+        <module name="LeftCurly"/>
+        <module name="RightCurly"/>
+        <module name="EmptyBlock">
+            <property name="option" value="text"/>
+        </module>
+        <module name="NeedBraces"/>
+        <module name="AvoidNestedBlocks">
+            <property name="allowInSwitchCase" value="true"/>
+        </module>
+
+        <!-- Class Design -->
+        <!-- See https://checkstyle.org/config_design.html -->
+        <module name="FinalClass"/>
+
+        <!-- Coding -->
+        <!-- See https://checkstyle.org/config_coding.html -->
+        <module name="EqualsHashCode"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="OneStatementPerLine"/>
+        <module name="UnnecessaryParentheses"/>
+        <module name="SimplifyBooleanReturn"/>
+        <module name="DefaultComesLast"/>
+        <module name="EmptyStatement"/>
+
+        <!-- Imports -->
+        <!-- See https://checkstyle.org/config_imports.html -->
+        <module name="UnusedImports"/>
+        <module name="RedundantImport"/>
+        <module name="IllegalImport" />
+        <module name="AvoidStarImport"/>
+        <module name="ImportControl">
+            <property name="file" value="${import.control}"/>
+        </module>
+
+        <!-- Javadoc comments -->
+        <!-- See https://checkstyle.org/config_javadoc.html -->
+        <module name="NonEmptyAtclauseDescription"/>
+        <module name="JavadocStyle">
+            <property name="checkFirstSentence" value="false"/>
+        </module>
+
+        <!-- Miscellaneous -->
+        <!-- See https://checkstyle.org/config_misc.html -->
+        <module name="ArrayTypeStyle"/>
+        <module name="UpperEll"/>
+        <module name="Indentation"/>
+
+        <!-- Naming Conventions -->
+        <!-- See https://checkstyle.org/config_naming.html -->
+        <module name="ConstantName">
+            <property name="format"
+                      value="^logger$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+        </module>
+        <module name="LocalVariableName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="MemberName"/>
+        <module name="ClassTypeParameterName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+        </module>
+        <module name="MethodTypeParameterName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+        </module>
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+        </module>
+        <module name="PackageName">
+            <property name="format" value="^org\.fufile(\.[a-z][a-zA-Z0-9]*)*$"/>
+        </module>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
+
+        <!-- Regexp -->
+        <!-- See https://checkstyle.org/config_regexp.html -->
+        <module name="RegexpSinglelineJava">
+            <property name="id" value="dontUseSystemOutPrint(ln)"/>
+            <property name="format" value="System\.out\.print(ln)?"/>
+            <property name="message" value="Prohibit invoking System.out.println !"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.exit"/>
+            <property name="message" value="Prohibit invoking System.exit !"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="@(author|version)"/>
+            <property name="ignoreCase" value="true"/>
+            <property name="message" value="Prohibit Javadoc tags: @author, @version"/>
+        </module>
+
+        <!-- Size Violations -->
+        <!-- See https://checkstyle.org/config_sizes.html -->
+        <module name="MethodLength"/>
+
+        <!-- Whitespace -->
+        <!-- See https://checkstyle.org/config_whitespace.html -->
+        <module name="GenericWhitespace"/>
+        <module name="NoWhitespaceBefore"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+        </module>
+        <module name="ParenPad"/>
+        <module name="MethodParamPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+        </module>
+    </module>
+</module>
