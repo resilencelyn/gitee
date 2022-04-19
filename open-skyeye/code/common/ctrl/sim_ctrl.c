@@ -392,28 +392,28 @@ void SIM_reset(void)
 
     free_core_symbol_info_list();
 
-    /*stop all cell */
+    /* stop all cell */
     stop_all_cell();
 
-    /*destroy all thread */
+    /* destroy all thread */
     destroy_threads();
 
-    /*destroy all objects */
+    /* destroy all objects */
     SKY_delete_all_obj();
 
-    /*clear system struct */
+    /* clear system struct */
     system_clear();
 
-    /*init new thread fuction */
+    /* init new thread fuction */
     init_threads();
 
-    /*init new thread scheduler thread */
+    /* init new thread scheduler thread */
     init_thread_scheduler();
 
-    /*init system struct */
+    /* init system struct */
     system_init();
 
-    /*clear load machine info */
+    /* clear load machine info */
     sim_reset_machine();
 }
 

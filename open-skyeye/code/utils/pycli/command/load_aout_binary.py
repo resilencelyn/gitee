@@ -6,7 +6,6 @@ import tools
 import errormessage
 from conf import *
 from exception import *
-import coverage
 
 def str_to_int(stri):
 	if stri[:2] == '0x':
@@ -42,15 +41,15 @@ def LoadAOutBinaryRun(args):
 		raise
 	bin_file = os.path.abspath(args[1]) + ".bin"
 	tools.get_bin_file(args[0], args[1], bin_file)
-	coverage_replace_file = os.path.abspath(args[1]) + ".replace"
-	tools.get_objcopy_file(args[0], args[1], coverage_replace_file, py_address_str)
+	#coverage_replace_file = os.path.abspath(args[1]) + ".replace"
+	#tools.get_objcopy_file(args[0], args[1], coverage_replace_file, py_address_str)
 	
 	if not os.path.exists(bin_file):
 		errormessage.SetErrorInfo(0x400b0002, False, bin_file)
 		raise
-	if not os.path.exists(coverage_replace_file):
-		errormessage.SetErrorInfo(0x400b0002, False, coverage_replace_file)
-		raise
+	#if not os.path.exists(coverage_replace_file):
+	#	errormessage.SetErrorInfo(0x400b0002, False, coverage_replace_file)
+	#	raise
 	try:
 		ret = SkyEyeLoadBinBinary(args[0], bin_file, py_address_uint, py_length_uint, py_pc_uint)
 	except Exception as e:
@@ -59,9 +58,9 @@ def LoadAOutBinaryRun(args):
 	if ret == False:
 		errormessage.SetErrorInfo(0x400b0005, False)
 		raise
-	binary_l[args[0]] = coverage_replace_file
-	coverage.replace_binary = coverage_replace_file
-	coverage.binary_offset = py_address_uint
+	#binary_l[args[0]] = coverage_replace_file
+	#coverage.replace_binary = coverage_replace_file
+	#coverage.binary_offset = py_address_uint
 
 def LoadAOutBinarySynopses():
 	return  "load-aout-binary  <cpuname>  <filename>  <offset>  <start_pc>"

@@ -34,7 +34,7 @@
 #include "parse_symbol.h"
 #include "sim_control.h"
 #include "skyeye_misc.h"
-#include "lic.h"
+
 
 #ifdef __WIN32__
 #include <windows.h>
@@ -59,19 +59,19 @@ typedef struct
     double            retDoubleValue;                  //返回double类型数据
     uint64_t          retLongValue;                    //返回uint64类型数据
     conf_object_t     *conf_obj;                       //返回conf_object_t指针
-    char              **list;                          //返回列表类型数据
-    char              **errMsg;                        //返回错误码和错误信息参数
+    const char        **list;                          //返回列表类型数据
+    const char        **errMsg;                        //返回错误码和错误信息参数
     dev_fi_t          *fault_inject;                   //返回故障注入结构体指针
 }SkyEyeAPIRetST;
 
 /*仿真控制API接口*/
-SkyEyeAPIRetST skyeye_run();
-SkyEyeAPIRetST skyeye_stop();
-SkyEyeAPIRetST skyeye_quit();
-SkyEyeAPIRetST skyeye_reset();
-SkyEyeAPIRetST skyeye_running_status();
-SkyEyeAPIRetST skyeye_prepare_running();
-int prepare_to_run();
+SkyEyeAPIRetST skyeye_run(void);
+SkyEyeAPIRetST skyeye_stop(void);
+SkyEyeAPIRetST skyeye_quit(void);
+SkyEyeAPIRetST skyeye_reset(void);
+SkyEyeAPIRetST skyeye_running_status(void);
+SkyEyeAPIRetST skyeye_prepare_running(void);
+int prepare_to_run(void);
 
 /*快照功能API接口*/
 SkyEyeAPIRetST skyeye_load_checkpoint(char *checkpoint_path);
@@ -80,9 +80,9 @@ int load_chp(char *arg);
 int save_chp(char *arg);
 
 /*断点功能API接口*/
-SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint32_t addr);
+SkyEyeAPIRetST skyeye_create_breakpoint(char *cpuname, uint64_t addr);
 SkyEyeAPIRetST skyeye_delete_breakpoint_by_id(char *cpuname, int id);
-SkyEyeAPIRetST skyeye_delete_breakpoint_by_addr(char *cpuname, uint32_t address);
+SkyEyeAPIRetST skyeye_delete_breakpoint_by_addr(char *cpuname, uint64_t address);
 SkyEyeAPIRetST skyeye_get_breakpoint_address_by_id(char *cpuname, int id);
 SkyEyeAPIRetST skyeye_get_bp_numbers(char *cpuname);
 SkyEyeAPIRetST skyeye_check_bp_hit(char *cpuname);
@@ -95,15 +95,15 @@ SkyEyeAPIRetST skyeye_create_mach(char *objname, char *classname);
 SkyEyeAPIRetST skyeye_create_linker(char *objname, char *classname);
 SkyEyeAPIRetST skyeye_create_cpu(char *machname, char *objname, char *classname);
 SkyEyeAPIRetST skyeye_create_device(char *machname, char *objname, char *classname);
-SkyEyeAPIRetST skyeye_config_obj();
+SkyEyeAPIRetST skyeye_config_obj(void);
 SkyEyeAPIRetST skyeye_config_module(char *objname);
-int system_config_conf_obj();
+int system_config_conf_obj(void);
 SkyEyeAPIRetST skyeye_get_soc_num(void);
 SkyEyeAPIRetST skyeye_get_cpu_num_by_soc_name(char *soc_name);
-SkyEyeAPIRetST skyeye_get_current_system_module_name();
+SkyEyeAPIRetST skyeye_get_current_system_module_name(void);
 
 SkyEyeAPIRetST skyeye_add_map(char *memory_space_name, char *device_name, uint64_t address, uint32_t length);
-SkyEyeAPIRetST skyeye_add_map_group(char *memory_space_name, char *device_name,uint64_t address, uint32_t length, uint32_t index);
+SkyEyeAPIRetST skyeye_add_map_group(char *memory_space_name, char *device_name, uint64_t address, uint32_t length, uint32_t index);
 int WIN_memory_space_add_map(char *memory_space_name, char *device_name, uint64_t address, uint32_t length);
 int WIN_memory_space_add_map_group(char *memory_space_name, char *device_name, uint64_t address, uint32_t length, uint32_t index);
 
@@ -112,7 +112,7 @@ int WIN_memory_space_add_map_group(char *memory_space_name, char *device_name, u
 SkyEyeAPIRetST skyeye_get_pc_by_cpuname(char *cpuname);
 SkyEyeAPIRetST skyeye_step_run(char *cpuname, const char *arg);
 SkyEyeAPIRetST skyeye_get_memory_value_by_cpuname(char *cpuname, char *addr); //该接口已不适用当前架构
-SkyEyeAPIRetST skyeye_disassemble_by_addr(char *cpuname, uint32_t addr);
+SkyEyeAPIRetST skyeye_disassemble_by_addr(char *cpuname, uint64_t addr);
 SkyEyeAPIRetST skyeye_get_cpu_address_width(char *cpuname);
 SkyEyeAPIRetST skyeye_get_cpu_steps(char *cpuname);
 SkyEyeAPIRetST skyeye_set_cpu_run_mode(char *cpuname, int mode);
@@ -122,10 +122,10 @@ SkyEyeAPIRetST skyeye_get_simulation_insn_num(char *cpu_name);
 SkyEyeAPIRetST skyeye_get_cpu_freq(char *cpu_name);
 
 /*内存读写API接口*/
-SkyEyeAPIRetST skyeye_memory_read(char *cpuname, uint32_t addr, int count);
-SkyEyeAPIRetST skyeye_memory_write(char *cpuname, uint32_t addr, char *val, int count);
-SkyEyeAPIRetST skyeye_device_read(char *device_name, uint32_t offset, int count);
-SkyEyeAPIRetST skyeye_device_write(char *device_name, uint32_t offset, char *buf, int count);
+SkyEyeAPIRetST skyeye_memory_read(char *cpuname, uint64_t addr, int count);
+SkyEyeAPIRetST skyeye_memory_write(char *cpuname, uint64_t addr, char *val, int count);
+SkyEyeAPIRetST skyeye_device_read(char *device_name, uint64_t offset, int count);
+SkyEyeAPIRetST skyeye_device_write(char *device_name, uint64_t offset, char *buf, int count);
 SkyEyeAPIRetST skyeye_inject_device_read(char *device_name, char *data);
 SkyEyeAPIRetST skyeye_inject_device_write(char *device_name, char *data, int size);
 
@@ -147,23 +147,19 @@ SkyEyeAPIRetST skyeye_module_get_value_by_name(char *modulename, char *key);
 SkyEyeAPIRetST skyeye_module_get_path_by_name(char *modulename);
 SkyEyeAPIRetST skyeye_load_module_fromdir(char *dir);
 
-SkyEyeAPIRetST skyeye_get_next_logMsg();
+SkyEyeAPIRetST skyeye_get_next_logMsg(void);
 SkyEyeAPIRetST skyeye_list_dir(char *arg);
 SkyEyeAPIRetST skyeye_list_modules(char *arg);
 SkyEyeAPIRetST skyeye_get_mm_info(char *args);
-SkyEyeAPIRetST skyeye_license_verify();
-int check_cpu(char *cpuname);
-SkyEyeAPIRetST skyeye_read_license_info(char *filename);
-SkyEyeAPIRetST skyeye_get_cpuid();
-SkyEyeAPIRetST skyeye_check_usbKey_connect();
+SkyEyeAPIRetST skyeye_get_cpuid(void);
 
 SkyEyeAPIRetST skyeye_set_script_path(char *path);
-SkyEyeAPIRetST skyeye_get_work_full_path();
-SkyEyeAPIRetST skyeye_get_work_path();
+SkyEyeAPIRetST skyeye_get_work_full_path(void);
+SkyEyeAPIRetST skyeye_get_work_path(void);
 
 /*数据激励功能API接口*/
 SkyEyeAPIRetST skyeye_parse_symbol(char *cpuname, char *hex_file_name);
-SkyEyeAPIRetST skyeye_debug_symbol();
+SkyEyeAPIRetST skyeye_debug_symbol(void);
 SkyEyeAPIRetST skyeye_get_symbol_addr(char *cpu_name, char *sym_str);
 SkyEyeAPIRetST skyeye_get_symbol_value(char *cpu_name, char *sym_str, sym_type_t count);
 SkyEyeAPIRetST skyeye_get_float_symbol_value(char *cpu_name, char *sym_strvoid, sym_type_t count);
@@ -189,15 +185,15 @@ SkyEyeAPIRetST skyeye_remote_gdb_check_link(char *cpuname);
 SkyEyeAPIRetST skyeye_remote_gdb_get_client_ip(char *cpuname);
 
 /*加载功能API接口*/
-SkyEyeAPIRetST skyeye_load_file(char *cpuname, const char *filename, generic_address_t load_addr);
+SkyEyeAPIRetST skyeye_load_file(char *cpuname, const char *filename, uint64_t load_addr);
 SkyEyeAPIRetST skyeye_load_binary(char *cpuname, char *elfname);
-SkyEyeAPIRetST skyeye_load_bin_binary(char *cpuname, const char *filename, generic_address_t load_addr, int length, int start_pc);
-SkyEyeAPIRetST skyeye_new_load_file(char *memoryspace_name, const char *filename, generic_address_t load_addr);
+SkyEyeAPIRetST skyeye_load_bin_binary(char *cpuname, const char *filename, uint64_t load_addr, int length, int start_pc);
+SkyEyeAPIRetST skyeye_new_load_file(char *memoryspace_name, const char *filename, uint64_t load_addr);
 
 /*故障注入功能API接口*/
-SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint32_t addr, uint32_t bit, uint32_t mode, uint32_t count);
-SkyEyeAPIRetST skyeye_get_fault(char *memory_space_name, uint32_t addr);
-SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint32_t addr, uint32_t bit, uint32_t mode);
+SkyEyeAPIRetST skyeye_set_fault(char *memory_space_name, uint64_t addr, uint32_t bit, uint32_t mode, uint32_t count);
+SkyEyeAPIRetST skyeye_get_fault(char *memory_space_name, uint64_t addr);
+SkyEyeAPIRetST skyeye_clear_fault(char *memory_space_name, uint64_t addr, uint32_t bit, uint32_t mode);
 
 /*代码覆盖率功能API接口*/
 SkyEyeAPIRetST skyeye_get_executed_pc_file(char *instr_process_name, char *filename);
@@ -251,16 +247,16 @@ int get_device_module_type(char *classname);
 char *SKY_module_get_value_by_name(char *modulename, char *key);
 char *SKY_module_get_path_by_name(char *modulename);
 void SKY_load_all_modules(char *lib_dir, char *suffix);
-char *skyeye_get_next_log();
+char *skyeye_get_next_log(void);
 int com_list(char *arg);
 int com_list_modules(char *arg);
 void mm_info_cmd(char *args);
-int license_verify();
+int license_verify(void);
 const char *read_lic_info(char *filename);
-const bool_t check_usb_lic_connect();
+const bool_t check_usb_lic_connect(void);
 int WIN_set_script_path(char *path);
-char *WIN_get_work_full_path();
-char *WIN_get_work_path();
+char *WIN_get_work_full_path(void);
+char *WIN_get_work_path(void);
 void parse_symbol_xml(char *cpu_name, char *xml_filename);
 int SkyEye_GetSymbol_Addr(char *cpu_name, char *sym_str, uint32_t * global_addr);
 uint64_t SkyEye_GetSymbol_Value_By_Py(char *cpu_name, char *sym_str, sym_type_t count);
@@ -302,6 +298,6 @@ int WIN_enable_device_work(char *device_name);
 int WIN_setPC(char *cpu_name, unsigned int pc);
 uint32_t WIN_getPC(char *cpu_name);
 
-char **get_current_system_module_name();
-int parse_xml_output();
+char **get_current_system_module_name(void);
+int parse_xml_output(void);
 #endif
