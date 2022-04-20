@@ -22,6 +22,7 @@ import operator
 import fault_inject as sfi
 import readline
 import argparse
+import network_control as NetCtrl
 
 cli_init.InitCommandList()
 sys.path.append(se_path.SkyEyeBin)
@@ -96,7 +97,7 @@ class SkyEyeCli(cmd.Cmd):
         readline.read_history_file(self.history_file)
 
     def postloop(self):
-        print('in postloop')
+        #print('in postloop')
         readline.write_history_file(self.history_file)
 
     def precmd(self, arg):
@@ -196,7 +197,6 @@ class SkyEyeCli(cmd.Cmd):
         return parser
 
     def do_list_modules(self, arg):
-        '''list-modules : List all the loaded module.'''
         parser = self.get_argparser('list_modules')
         try:
             ns = parser.parse_args(arg.split())
@@ -216,7 +216,6 @@ class SkyEyeCli(cmd.Cmd):
         return parser
 
     def do_list_machines(self, arg):
-        '''List all the supported machines for SkyEye.'''
         parser = self.get_argparser('list_machines')
         try:
             arg_ns = parser.parse_args(arg.split())
@@ -325,12 +324,13 @@ class SkyEyeCli(cmd.Cmd):
 
         try:
             SkyEyeCreateBreakpoint(ns.cpu, ns.bp_addr)
-        except:
+        except Exception as e:
+            print(e)
             print ("Insert breakpoint error")
 
     def create_argparser_bp_delete(self):
-        parser = self.cmd_parsers['bp_create'] = argparse.ArgumentParser(
-                prog='bp_create',
+        parser = self.cmd_parsers['bp_delete'] = argparse.ArgumentParser(
+                prog='bp_delete',
                 description='Delete a break-point on a cpu-core.',
                 add_help=False)
         
@@ -339,7 +339,6 @@ class SkyEyeCli(cmd.Cmd):
                 metavar='<cpu-core>',
                 help='cpu-core name',
                 )
-
 
         parser.add_argument(
                 'bp_addr', 
@@ -358,8 +357,8 @@ class SkyEyeCli(cmd.Cmd):
 
         try:
             SkyEyeDeleteBreakpointByAddr(ns.cpu, ns.bp_addr)
-        except:
-            print ("Delete breakpoint error")
+        except SkyeyeAPIException as e:
+            print(e)
 
     def create_argparser_bp_list(self):
         parser = self.cmd_parsers['bp_list'] = argparse.ArgumentParser(
@@ -382,13 +381,14 @@ class SkyEyeCli(cmd.Cmd):
 
         try:
             temp = []
-            ret = SkyEyeGetBpNumbers(ns.cpu)
-            for i in range(0, ret):
+            n = SkyEyeGetBpNumbers(ns.cpu)
+            for i in range(n):
                 temp.append(SkyEyeGetBreakpointAddrById(ns.cpu, i))
             print ("%-25s%-25s"%("CPU","Address(HEX)"))
             for i in temp:
                 print ("%-25s0x%-25x"%(ns.cpu, i))
-        except:
+        except SkyeyeAPIException as e:
+            print(e)
             print ("Breakpoint get error")
 
     def create_argparser_list_cpu(self):
@@ -560,7 +560,6 @@ class SkyEyeCli(cmd.Cmd):
         try:
             cls_l = SkyEyeGetClassList()
             cls_l.sort()
-            #formot_output(cls_l)
             table_print(cls_l)
         except Exception as e:
             print (e)
@@ -623,7 +622,6 @@ class SkyEyeCli(cmd.Cmd):
                 return 
             connect_l = SkyEyeGetClassConnectList(ns.cls)
             connect_l.sort()
-            #formot_output(connect_l)
             table_print(connect_l)
         except Exception as e:
             print (e)
@@ -666,6 +664,7 @@ class SkyEyeCli(cmd.Cmd):
             print (e)
             return
         print ("%-20s%-20s%s" % ("AttrName", "Type", "Description"))
+        #BUG len(info_l) == 4
         for info_l in attr_info_l:
             if len(info_l) != 3:
                 destription = 'NULL'
@@ -873,9 +872,12 @@ class SkyEyeCli(cmd.Cmd):
         if not config:
             return
 
-        disas_str =SkyEyeDisassemble(ns.cpu, ns.addr)
-        print ("%-20s%-20s" % ("Addr(HEX)", "Value"))
-        print ("%-20x%-20s" % (ns.addr, disas_str))
+        try:
+            disas_str =SkyEyeDisassemble(ns.cpu, ns.addr)
+            print ("%-20s%-20s" % ("Addr(HEX)", "Value"))
+            print ("%-20x%-20s" % (ns.addr, disas_str))
+        except SkyeyeAPIException as e:
+            print(e)
 
     def create_argparser_remote_gdb(self):
         parser = self.cmd_parsers['remote_gdb'] = argparse.ArgumentParser(
@@ -1001,7 +1003,7 @@ class SkyEyeCli(cmd.Cmd):
         try:
             SkyEyeListDir(arg)
         except Exception as e:
-            print (e)
+            print(e)
 
     def create_argparser_quit(self):
         parser = self.cmd_parsers['quit'] = argparse.ArgumentParser(
@@ -1017,9 +1019,12 @@ class SkyEyeCli(cmd.Cmd):
             ns = parser.parse_args(arg.split())
         except:
             return
+
         self.postloop()
+
         if mips.mips_thread != None:
             mips.mips_thread.stop()
+        NetCtrl.server_stop()
         try:
             SkyEyeQuit()
         except Exception as e:
@@ -1066,7 +1071,8 @@ class SkyEyeCli(cmd.Cmd):
             SkyEyeStop()
             pytimer.set_running(False)
         except Exception as e:
-            print (e)
+            print(e)
+            input()
 
     def create_argparser_stepi(self):
         parser = self.cmd_parsers['stepi'] = argparse.ArgumentParser(
@@ -1121,7 +1127,7 @@ class SkyEyeCli(cmd.Cmd):
             pytimer.set_running(False)
             self.open_conf_flag = False
         except Exception as e:
-            print (e)
+            print(e)
 
     def create_argparser_reverse(self):
         parser = self.cmd_parsers['reverse'] = argparse.ArgumentParser(
@@ -1426,9 +1432,10 @@ class SkyEyeCli(cmd.Cmd):
             ret = SkyEyeSetPC(ns.cpu, ns.value)
             if ret == 0:
                 print ("SkyEyeSetPC Failed!")
-        except:
+        except SkyeyeAPIException as e:
+            print(e)
             print("set-pc: SkyEyeSetPC CALL ERROR!")
-            raise
+            raise e
 
     def create_argparser_get_pc(self):
         parser = self.cmd_parsers['get_pc'] = argparse.ArgumentParser(
@@ -1494,6 +1501,17 @@ class SkyEyeCli(cmd.Cmd):
         except:
             import traceback
             print(traceback.format_exc())
+
+    # def do_t(self, arg):
+    #     args = arg.split()
+    #     print(args)
+    #     try:
+    #         #res = SkyEyeGetPC(*args)
+    #         res = SkyEyeGetSocNum()
+    #         print(res)
+    #     except Exception as e:
+    #         print(e)
+    #         raise e
 
 ################################################################################
 # util func

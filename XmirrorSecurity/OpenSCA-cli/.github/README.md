@@ -1,7 +1,7 @@
 
 
 <p align="center">
-	<img alt="logo" src="https://opensca.xmirror.cn/static/media/OpenSCAlogo.e980a0f9.svg">
+	<img alt="logo" src="../logo.svg">
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">OpenSCA-Cli</h1>
 
@@ -29,17 +29,19 @@ OpenSCA is now capable of parsing configuration files in the listed programming 
 | `PHP`        | `Composer`      | `composer.json`                                |
 | `Ruby`       | `gem`           | `gemfile.lock`                                 |
 | `Golang`     | `gomod`         | `go.mod` `go.sum`                              |
+| `Rust`       | `cargo`         | `Cargo.lock`                                   |
 
 ## Download and Deployment
 
 1. Download the appropriate executable file according to your system architecture from [release](https://github.com/XmirrorSecurity/OpenSCA-cli/releases).  
 
-2. Or download the source code and compile (go 1.11 and above is needed)
+2. Or download the source code and compile (go 1.18 and above is needed)
 
    ```
    git clone https://github.com/XmirrorSecurity/OpenSCA-cli.git opensca
    cd opensca
-   go build -o opensca-cli cmd/opensca-cli/main.go
+   go work init cli analyzer util
+   go build -o opensca-cli cli
    ```
 
    The default option is to generate the program of the current system architecture. If you want to try it for other system architectures, you can set the following environment variables before compiling.
@@ -72,17 +74,17 @@ opensca-cli -db db.json -path ${project_path}
 
 **You can either configure the parameters in configuration files or input the parameters in the command-line. When the two conflict with each other, the input parameters will be prioritized.**
 
-| PARAMETER  | TYPE     | DESCRIPTION                                                  | SAMPLE                            |
-| ---------- | -------- | ------------------------------------------------------------ | --------------------------------- |
-| `config`   | `string` | Set the configuration file path, when the program runs, the parameter of the configuration file will be used as the startup parameters. If the configuration parameter conflicts with the command-line input parameter, the latter will be taken. | `-config config.json`             |
-| `path`     | `string` | Set the file or directory path to be detected.               | `-path ./foo`                     |
-| `url`      | `string` | Check the vulnerabilities from the cloud vulnerability database, set the address of the cloud service. It needs to be used with the `token` parameter. | `-url https://opensca.xmirror.cn` |
-| `token`    | `string` | Cloud service verification. You have to apply for it on the cloud service platform and use it with the `url` parameter. | `-token xxxxxxx`                  |
-| `cache`    | `bool`   | This option is recommended. It can cache the downloaded files, for example, the `.pom` file, and save your time when detecting the same component next time. The downloaded files are saved in `.cache` under the same directory as opensca-cli. | `-cache`                          |
-| `vuln`     | `bool`   | Show the vulnerabilities info only. Using this parameter, the component hierarchical architecture will **NOT** be included in the result. | `-vuln`                           |
-| `out`      | `string` | Set the output file. The result is json format.              | `-out output.json`                |
+| PARAMETER  | TYPE     | DESCRIPTION                                                                                                                                                                                                                                                                | SAMPLE                            |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `config`   | `string` | Set the configuration file path, when the program runs, the parameter of the configuration file will be used as the startup parameters. If the configuration parameter conflicts with the command-line input parameter, the latter will be taken.                          | `-config config.json`             |
+| `path`     | `string` | Set the file or directory path to be detected.                                                                                                                                                                                                                             | `-path ./foo`                     |
+| `url`      | `string` | Check the vulnerabilities from the cloud vulnerability database, set the address of the cloud service. It needs to be used with the `token` parameter.                                                                                                                     | `-url https://opensca.xmirror.cn` |
+| `token`    | `string` | Cloud service verification. You have to apply for it on the cloud service platform and use it with the `url` parameter.                                                                                                                                                    | `-token xxxxxxx`                  |
+| `cache`    | `bool`   | This option is recommended. It can cache the downloaded files, for example, the `.pom` file, and save your time when detecting the same component next time. The downloaded files are saved in `.cache` under the same directory as opensca-cli.                           | `-cache`                          |
+| `vuln`     | `bool`   | Show the vulnerabilities info only. Using this parameter, the component hierarchical architecture will **NOT** be included in the result.                                                                                                                                  | `-vuln`                           |
+| `out`      | `string` | Set the output file. The result defaults to json format.                                                                                                                                                                                                                            | `-out output.json`                |
 | `db`       | `string` | Set the local vulnerability database file. It helps when you prefer to use your own vulnerability database. The format of the vulnerability database is shown below. If the cloud and local vulnerability databases are both set, the result of detection will merge both. | `-db db.json`                     |
-| `progress` | `bool`   | Show the progress bar.                                       | `-progress`                       |
+| `progress` | `bool`   | Show the progress bar.                                                                                                                                                                                                                                                     | `-progress`                       |
 
 ------
 
@@ -115,25 +117,25 @@ opensca-cli -db db.json -path ${project_path}
 
 #### Explanations of Vulnerability Database Fields
 
-| FIELD               | DESCRIPTION                                                  | REQUIRED OR NOT |
-| ------------------- | ------------------------------------------------------------ | --------------- |
-| `vendor`            | the manufacturer of the component                            | N               |
-| `product`           | the name of the component                                    | Y               |
-| `version`           | the versions of the component affected by the vulnerability  | Y               |
-| `language`          | the programming language of the component                    | Y               |
-| `name`              | the name of the vulnerability                                | N               |
-| `id`                | custom identifier                                            | Y               |
-| `cve_id`            | cve identifier                                               | N               |
-| `cnnvd_id`          | cnnvd identifier                                             | N               |
-| `cnvd_id`           | cnvd identifier                                              | N               |
-| `cwe_id`            | cwe identifier                                               | N               |
-| `description`       | the description of the vulnerability                         | N               |
-| `description_en`    | the description of the vulnerability in English              | N               |
-| `suggestion`        | the suggestion for fixing the vulnerability                  | N               |
-| `attack_type`       | the type of attack                                           | N               |
-| `release_date`      | the release date of the vulnerability                        | N               |
+| FIELD               | DESCRIPTION                                                       | REQUIRED OR NOT |
+| ------------------- | ----------------------------------------------------------------- | --------------- |
+| `vendor`            | the manufacturer of the component                                 | N               |
+| `product`           | the name of the component                                         | Y               |
+| `version`           | the versions of the component affected by the vulnerability       | Y               |
+| `language`          | the programming language of the component                         | Y               |
+| `name`              | the name of the vulnerability                                     | N               |
+| `id`                | custom identifier                                                 | Y               |
+| `cve_id`            | cve identifier                                                    | N               |
+| `cnnvd_id`          | cnnvd identifier                                                  | N               |
+| `cnvd_id`           | cnvd identifier                                                   | N               |
+| `cwe_id`            | cwe identifier                                                    | N               |
+| `description`       | the description of the vulnerability                              | N               |
+| `description_en`    | the description of the vulnerability in English                   | N               |
+| `suggestion`        | the suggestion for fixing the vulnerability                       | N               |
+| `attack_type`       | the type of attack                                                | N               |
+| `release_date`      | the release date of the vulnerability                             | N               |
 | `security_level_id` | the security level of the vulnerability (diminishing from 1 to 4) | N               |
-| `exploit_level_id`  | the exploit level of the vulnerability (0-N/A 1-Available)   | N               |
+| `exploit_level_id`  | the exploit level of the vulnerability (0-N/A 1-Available)        | N               |
 
 ## Contributing 
 
@@ -143,4 +145,4 @@ To contribute, please read our [Contributing Guideline](./docs/Contributing%20Gu
 
 
 
-*For the Chinese version of this document, please check [README](./README-CN.md).
+*For the Chinese version of this document, please check [README](../README.md).

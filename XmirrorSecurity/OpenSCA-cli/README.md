@@ -1,5 +1,5 @@
 <p align="center">
-	<img alt="logo" src="https://opensca.xmirror.cn/static/media/OpenSCAlogo.e980a0f9.svg">
+	<img alt="logo" src="./logo.svg">
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">OpenSCA-Cli</h1>
 
@@ -17,24 +17,26 @@
 ## 检测能力
 `OpenSCA`现已支持以下编程语言相关的配置文件解析及对应的包管理器，后续会逐步支持更多的编程语言，丰富相关配置文件的解析。
 
-|支持语言|包管理器|解析文件|
-|-|-|-|
-|`Java`|`Maven`|`pom.xml`|
-|`JavaScript`|`Npm`|`package-lock.json`</br>`package.json`</br>`yarn.lock`|
-|`PHP`|`Composer`|`composer.json`|
-|`Ruby`|`gem`|`gemfile.lock`|
-|`Golang`|`gomod`|`go.mod`</br>`go.sum`|
+| 支持语言     | 包管理器   | 解析文件                                               |
+| ------------ | ---------- | ------------------------------------------------------ |
+| `Java`       | `Maven`    | `pom.xml`                                              |
+| `JavaScript` | `Npm`      | `package-lock.json`</br>`package.json`</br>`yarn.lock` |
+| `PHP`        | `Composer` | `composer.json`                                        |
+| `Ruby`       | `gem`      | `gemfile.lock`                                         |
+| `Golang`     | `gomod`    | `go.mod`</br>`go.sum`                                  |
+| `Rust`       | `cargo`    | `Cargo.lock`                                           |
 
 ## 下载安装
 
 1. 从 [releases](https://github.com/XmirrorSecurity/OpenSCA-cli/releases) 下载对应系统架构的可执行文件压缩包
 
-2. 或者下载源码编译(需要 `go 1.11` 及以上版本)
+2. 或者下载源码编译(需要 `go 1.18` 及以上版本)
 
    ```shell
    git clone https://github.com/XmirrorSecurity/OpenSCA-cli.git opensca
    cd opensca
-   go build -o opensca-cli cmd/opensca-cli/main.go
+   go work init cli analyzer util
+   go build -o opensca-cli cli/main.go
    ```
 
    默认生成当前系统架构的程序，如需生成其他系统架构可配置环境变量后编译
@@ -74,12 +76,12 @@ opensca-cli -db db.json -path ${project_path}
 | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `config`   | `string` | 指定配置文件路径，程序启动时将配置文件中的参数作为启动参数，配置参数与命令行输入参数冲突时优先使用输入参数                                      | `-config config.json`             |
 | `path`     | `string` | 指定要检测的文件或目录路径                                                                                                                      | `-path ./foo`                     |
-| `url`      | `string` | 从云漏洞库查询漏洞，指定要连接云服务的地址，与 `token` 参数一起使用                                             | `-url https://opensca.xmirror.cn` |
+| `url`      | `string` | 从云漏洞库查询漏洞，指定要连接云服务的地址，与 `token` 参数一起使用                                                                             | `-url https://opensca.xmirror.cn` |
 | `token`    | `string` | 云服务验证 `token`，需要在云服务平台申请，与 `url` 参数一起使用                                                                                 | `-token xxxxxxx`                  |
 | `cache`    | `bool`   | 建议开启，缓存下载的文件(例如 `.pom` 文件)，重复检测相同组件时会节省时间，下载的文件会保存到工具所在目录的.cache 目录下                         | `-cache`                          |
 | `vuln`     | `bool`   | 结果仅保留有漏洞信息的组件，使用该参数将不会保留组件层级结构                                                                                    | `-vuln`                           |
-| `out`      | `string` | 将检测结果保存到指定文件，检测结果为 json 格式                                                                                                  | `-out output.json`                |
-| `db`       | `string` | 指定本地漏洞库文件，希望使用自己漏洞库时可用，漏洞库文件为 json 格式，具体格式会在之后给出;若同时使用云端漏洞库与本地漏洞库，漏洞查询结果取并集 | `-db db.json`                     |
+| `out`      | `string` | 将检测结果保存到指定文件，根据后缀生成不同格式的文件，默认为 `json` 格式                                                                          | `-out output.json`                |
+| `db`       | `string` | 指定本地漏洞库文件，希望使用自己漏洞库时可用，漏洞库文件为 `json` 格式，具体格式会在之后给出;若同时使用云端漏洞库与本地漏洞库，漏洞查询结果取并集 | `-db db.json`                     |
 | `progress` | `bool`   | 显示进度条                                                                                                                                      | `-progress`                       |
 
 ---
