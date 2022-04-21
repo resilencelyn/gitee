@@ -8,7 +8,7 @@ import cli
 from conf import *
 import _thread
 import time
-import coverage
+#import coverage
 import fault_inject as fi
 import win_workspace as ws
 import disassembler_interface_func as dif
@@ -92,28 +92,28 @@ def soc_list(request):
 		error="The config is None"
 	return response(request, result, error)
 
-def get_coverage_file(request):
-	result = 'false'
-	error = None
-	cpu = request["args"]["cpu"]
-	cover_file = coverage.write_coverage_file(cpu)
-	if cover_file == None:
-		error = "Failed to generate the coverage file"
-	else:
-		result = {"file":"%s" % cover_file}
-	return response(request, result, error)
+# def get_coverage_file(request):
+# 	result = 'false'
+# 	error = None
+# 	cpu = request["args"]["cpu"]
+# 	cover_file = coverage.write_coverage_file(cpu)
+# 	if cover_file == None:
+# 		error = "Failed to generate the coverage file"
+# 	else:
+# 		result = {"file":"%s" % cover_file}
+# 	return response(request, result, error)
 
-def get_objdump_file(request):
-	result = 'false'
-	error = None
-	cpu = request["args"]["cpu"]
-	source_dir = request["args"]["source_dir"]
-	objdump_file = coverage.write_objdump_file(cpu, source_dir)
-	if objdump_file ==None:
-		error = "Failed to generate the objdump file"
-	else:
-		result = {"file":"%s" % objdump_file}
-	return response(request, result, error)
+# def get_objdump_file(request):
+# 	result = 'false'
+# 	error = None
+# 	cpu = request["args"]["cpu"]
+# 	source_dir = request["args"]["source_dir"]
+# 	objdump_file = coverage.write_objdump_file(cpu, source_dir)
+# 	if objdump_file ==None:
+# 		error = "Failed to generate the objdump file"
+# 	else:
+# 		result = {"file":"%s" % objdump_file}
+# 	return response(request, result, error)
 
 def get_class_list(request):
 	result = 'false'
@@ -213,7 +213,7 @@ def quit(request):
 	error = None
 	if mips.mips_thread != None:
 		mips.mips_thread.stop()
-	coverage.kill_objdump_thread()
+	# coverage.kill_objdump_thread()
 	_thread.start_new_thread(quit_thread, (0.2, ))
 	return response(request, result, error)
 
@@ -307,72 +307,72 @@ def get_cpu_list(request):
 		error="Config equal to None"
 	return response(request,result,error)
 
-def SE_coverage_init(request):
-	result = "false"
-	error = None
-	cpu = request["args"]["cpu"]
-	source_dir = request["args"]["source_dir"]
-	if SkyEyeRunningStatus() == False:
-		try:
-			result = coverage.cov_init(cpu, source_dir)
-		except Exception as e:
-			error = str(e)
-	else:
-		error = "SkyEye running"
-	return response(request, result, error)
+# def SE_coverage_init(request):
+# 	result = "false"
+# 	error = None
+# 	cpu = request["args"]["cpu"]
+# 	source_dir = request["args"]["source_dir"]
+# 	if SkyEyeRunningStatus() == False:
+# 		try:
+# 			result = coverage.cov_init(cpu, source_dir)
+# 		except Exception as e:
+# 			error = str(e)
+# 	else:
+# 		error = "SkyEye running"
+# 	return response(request, result, error)
 
 def SE_get_running_number(request):
 	result=None
 	error=None
-	if coverage.check_variable() == True:
-		result=coverage.code_running_number()
-	else:
-		error="No init"
+	# if coverage.check_variable() == True:
+	# 	result=coverage.code_running_number()
+	# else:
+	# 	error="No init"
 	return response(request, result, error)
 
 def SE_get_running_path(request):
 	result=None
 	error=None
-	if coverage.check_variable() == True:
-		result=coverage.code_running_path()
-	else:
-		error="No init"
+	# if coverage.check_variable() == True:
+	# 	result=coverage.code_running_path()
+	# else:
+	# 	error="No init"
 	return response(request, result, error)
 
 def SE_get_total_cov(request):
 	result=None
 	error=None
-	if coverage.check_variable() == True:
-		result=coverage.count_total_cov()
-	else:
-		error="No init"
+	# if coverage.check_variable() == True:
+	# 	result=coverage.count_total_cov()
+	# else:
+	# 	error="No init"
 	return response(request, result, error)
 
 def SE_get_all_func_cov(request):
 	result=None
 	error=None
-	if coverage.check_variable() == True:
-		result=coverage.count_all_func_cov()
-	else:
-		error="No init"
+	# if coverage.check_variable() == True:
+	# 	result=coverage.count_all_func_cov()
+	# else:
+	# 	error="No init"
 	return response(request, result, error)
 
 def SE_get_single_func_cov(request):
 	result=None
 	error=None
-	if coverage.check_variable() == True:
-		result=coverage.count_single_func_cov()
-	else:
-		error="No init"
+	# if coverage.check_variable() == True:
+	# 	result=coverage.count_single_func_cov()
+	# else:
+	# 	error="No init"
 	return response(request, result, error)
 
 def SE_get_project_cov_info(request):
 	result=None
 	error=None
-	if coverage.check_variable() == True:
-		result=coverage.get_project_info()
-	else:
-		error="No init"
+	# if coverage.check_variable() == True:
+	# 	result=coverage.get_project_info()
+	# else:
+	# 	error="No init"
 	return response(request, result, error)
 
 def str_to_int(strs):
@@ -864,8 +864,8 @@ cmd_patterns = {
 		'SE_set_workspace':SE_set_workspace,
 		'run_script':run_script,
 		'soc_list':soc_list,
-		'coverage_file':get_coverage_file,
-		'objdump_file':get_objdump_file,
+		# 'coverage_file':get_coverage_file,
+		# 'objdump_file':get_objdump_file,
 		'cpu_list':get_cpu_list,
 		'class_list':get_class_list,
 		'class_type':get_class_type,
@@ -883,7 +883,7 @@ cmd_patterns = {
 		'getPinType':get_pin_type,
 		'readPinState':read_pin_state,
 		'writePinState':write_pin_state,
-		'SE_coverage_init':SE_coverage_init,
+		# 'SE_coverage_init':SE_coverage_init,
 		'SE_get_running_number':SE_get_running_number,
 		'SE_get_running_path':SE_get_running_path,
 		'SE_get_total_cov':SE_get_total_cov,

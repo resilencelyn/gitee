@@ -7,7 +7,7 @@ import _thread
 import threading
 import subprocess
 ####GUI######
-import skyeye_gui_lic as lic_gui
+#import skyeye_gui_lic as lic_gui
 import skyeye_gui_print_log as print_log_gui
 import skyeye_gui_cpu_register as cpu_register_gui
 import skyeye_gui_memory as memory_gui
@@ -34,7 +34,7 @@ import mips
 import fsel
 import se_path
 import pytimer
-import coverage
+#import coverage
 import errormessage
 import conf as se_conf
 import custom_dialog as CDialog
@@ -108,7 +108,7 @@ class MainFrame(wx.Frame):
 		self.cdialog_show = []
 
 		self.set_configure = []
-		self.se_coverage = []
+		#self.se_coverage = []
 		self.help_list = []
 		self.open_conf_flage = 0
 		self.running = False
@@ -824,7 +824,7 @@ class MainFrame(wx.Frame):
 			SkyEyeSetTimeNum(1)
 
 	def stop_t(self):
-		coverage.kill_objdump_thread()
+		#coverage.kill_objdump_thread()
 		self.end_handler()
 		self.Destroy()
 		global AppRestart
@@ -897,7 +897,7 @@ class MainFrame(wx.Frame):
 			self.write_memory_frame.Close()
 		NetCtrl.server_stop()
 		self.close_gp_config()
-		self.close_secoverage()
+		#self.close_secoverage()
 		if len(self.help_list) != 0:
 			for sub in self.help_list:
 				ret = sub.poll()
@@ -905,7 +905,7 @@ class MainFrame(wx.Frame):
 					cmd = "taskkill /f /t /pid %d" % sub.pid
 					subprocess.call(cmd)
 		self.set_configure = []
-		self.se_coverage = []
+		#self.se_coverage = []
 		self.help_list = []
 		self.close_custom_dlg()
 
@@ -1022,13 +1022,13 @@ class MainFrame(wx.Frame):
 		for dic in self.cdialog_show:
 			if dic[1] == custom:
 				self.cdialog_show.remove(dic)
-	def close_secoverage(self):
-		if len(self.se_coverage) != 0:
-			for sub in self.se_coverage:
-				try:
-					subprocess.Popen.kill(sub)
-				except:
-					pass
+	# def close_secoverage(self):
+	# 	if len(self.se_coverage) != 0:
+	# 		for sub in self.se_coverage:
+	# 			try:
+	# 				subprocess.Popen.kill(sub)
+	# 			except:
+	# 				pass
 
 	def close_gp_config(self):
 		if len(self.set_configure) != 0:

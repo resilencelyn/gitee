@@ -1,0 +1,11 @@
+/vendor
+*.log
+/.idea
+/.DS_Store
+*/.DS_Store
+.DS_Store?
+*.exe
+murphysec-cli-simple
+*.bak
+.run
+tt

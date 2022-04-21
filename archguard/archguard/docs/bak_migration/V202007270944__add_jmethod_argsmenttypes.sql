@@ -1,0 +1,1 @@
+alter table code_method add column `argumenttypes` mediumtext;

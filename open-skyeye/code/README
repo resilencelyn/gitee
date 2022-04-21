@@ -1,7 +1,12 @@
-SkyEye-V1.2.x README
+Open-SkyEye 是一个开源软件（OpenSource Software）项目，中文名字是"天目"。
 
-For the instructions of install , please read INSTALL file.
+Open-SkyEye 的目标是在通用的 Linux 、Windows、MacOS等平台上实现一个纯软件集成开发环境，模拟常见的嵌入式计算机系统(这里假定"仿真"和"模拟"的意思基本相同)。
 
-For getting the latest release, please access the sourceforge site of SkyEye.
+可以在 Open-SkyEye 上运行 FreeRTOS、μC/OS-II、RTThread、linux等多种操作系统和各种系统软件（如TCP/IP，图形子系统，文件子系统等），并可对它们进行源码级的分析和测试。
 
-Any question, you can sent to the google group: http://groups.google.com/group/skyeye-simulator
+未来我们将会持续完善 Open-SkyEye, 支持更多的架构、处理器、及其他硬件。
+
+关于 Open-SkyEye 的使用教程，[请点击访问Wiki获取](https://open-skyeye.gitee.io/wiki)
+
+学习 Open-SkyEye，请加QQ群：238612183
+

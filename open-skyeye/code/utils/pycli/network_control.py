@@ -75,9 +75,9 @@ def server_callback(request):
 
 def cancel_callback():
 	global is_cancel
-	import coverage
+	#import coverage
 	is_cancel = True
-	coverage.set_is_cancel(True)
+	#coverage.set_is_cancel(True)
 	tools.kill_all_process()
 
 def server_init():

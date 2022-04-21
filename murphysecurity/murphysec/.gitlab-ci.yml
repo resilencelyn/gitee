@@ -1,0 +1,88 @@
+# This file is a template, and might need editing before it works on your project.
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - internal-pub
+  - release
+
+variables:
+  GOPROXY: https://goproxy.cn,direct
+
+compose-build-saas:
+  image: golang:1.17.7-buster
+  stage: build
+  artifacts:
+    expire_in: 3 day
+    paths:
+      - murphysec-saas-linux-amd64
+      - murphysec-saas-windows-amd64.exe
+      - murphysec-saas-darwin-amd64
+      - murphysec-saas-linux-amd64.sha256
+      - murphysec-saas-windows-amd64.exe.sha256
+      - murphysec-saas-darwin-amd64.sha256
+  script:
+    - export
+    - GOOS=linux GOARCH=amd64 go build -o out/murphysec-saas-linux-amd64 -v .
+    - GOOS=windows GOARCH=amd64 go build -o out/murphysec-saas-windows-amd64.exe -v .
+    - GOOS=darwin GOARCH=amd64 go build -o out/murphysec-saas-darwin-amd64 -v .
+    - cd out
+    - chmod 0755 *
+    - find -type f | xargs -I {} sh -c "sha256sum {} > {}.sha256"
+    - cat *.sha256
+    - sha256sum -c *.sha256
+    - mv * ../
+    - cd ..
+
+compose-build:
+  image: golang:1.17.7-buster
+  stage: build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - murphysec-linux-amd64
+      - murphysec-windows-amd64.exe
+      - murphysec-darwin-amd64
+      - murphysec-linux-amd64.sha256
+      - murphysec-windows-amd64.exe.sha256
+      - murphysec-darwin-amd64.sha256
+  script:
+    - export
+    - GOOS=linux GOARCH=amd64 go build -tags pro -o out/murphysec-linux-amd64 -v .
+    - GOOS=windows GOARCH=amd64 go build -tags pro -o out/murphysec-windows-amd64.exe -v .
+    - GOOS=darwin GOARCH=amd64 go build -tags pro -o out/murphysec-darwin-amd64 -v .
+    - cd out
+    - chmod 0755 *
+    - find -type f | xargs -I {} sh -c "sha256sum {} > {}.sha256"
+    - cat *.sha256
+    - sha256sum -c *.sha256
+    - mv * ../
+    - cd ..
+
+#publish-internal:
+#  stage: internal-pub
+#  image: iseki0/openssh
+#  before_script:
+#    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+#    - eval $(ssh-agent -s) && echo "$SSH_PRIVATE_KEY" | base64 -d | gzip -d | ssh-add -
+#  script:
+#    - ssh -v -o "StrictHostKeyChecking=no" root@10.0.1.17 "echo Hello"
+#    - ssh root@10.0.1.17 "mkdir /srv/cli/$CI_COMMIT_REF_SLUG || true"
+#    - scp murphysec-linux-amd64 root@10.0.1.17:/srv/cli/$CI_COMMIT_REF_SLUG
+#    - scp murphysec-darwin-amd64 root@10.0.1.17:/srv/cli/$CI_COMMIT_REF_SLUG
+#    - scp murphysec-windows-amd64.exe root@10.0.1.17:/srv/cli/$CI_COMMIT_REF_SLUG
+#    - scp murphysec-saas-linux-amd64 root@10.0.1.17:/srv/cli/$CI_COMMIT_REF_SLUG
+#    - scp murphysec-saas-darwin-amd64 root@10.0.1.17:/srv/cli/$CI_COMMIT_REF_SLUG
+#    - scp murphysec-saas-windows-amd64.exe root@10.0.1.17:/srv/cli/$CI_COMMIT_REF_SLUG
