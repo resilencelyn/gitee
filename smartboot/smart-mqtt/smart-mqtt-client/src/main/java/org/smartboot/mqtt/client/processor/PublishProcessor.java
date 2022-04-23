@@ -25,7 +25,7 @@ public class PublishProcessor implements MqttProcessor<MqttPublishMessage> {
 
     @Override
     public void process(MqttClient session, MqttPublishMessage mqttPublishMessage) {
-        MqttQoS mqttQoS = mqttPublishMessage.getMqttFixedHeader().getQosLevel();
+        MqttQoS mqttQoS = mqttPublishMessage.getFixedHeader().getQosLevel();
         switch (mqttQoS) {
             case AT_MOST_ONCE:
                 processQos0(session, mqttPublishMessage);
@@ -49,8 +49,8 @@ public class PublishProcessor implements MqttProcessor<MqttPublishMessage> {
     }
 
     private void processPublishMessage(MqttPublishMessage mqttPublishMessage, MqttClient mqttClient) {
-        MqttPublishVariableHeader header = mqttPublishMessage.getMqttPublishVariableHeader();
-        Subscribe subscribe = mqttClient.getSubscribes().get(header.topicName());
+        MqttPublishVariableHeader header = mqttPublishMessage.getVariableHeader();
+        Subscribe subscribe = mqttClient.getSubscribes().get(header.getTopicName());
         // If unsubscribed, maybe null.
         if (subscribe != null && !subscribe.getUnsubscribed()) {
             subscribe.getConsumer().accept(mqttClient, mqttPublishMessage);
@@ -59,15 +59,15 @@ public class PublishProcessor implements MqttProcessor<MqttPublishMessage> {
 
     private void processQos1(MqttClient mqttClient, MqttPublishMessage mqttPublishMessage) {
         processPublishMessage(mqttPublishMessage, mqttClient);
-        MqttPubAckMessage pubAckMessage = new MqttPubAckMessage(mqttPublishMessage.getMqttPublishVariableHeader().packetId());
+        MqttPubAckMessage pubAckMessage = new MqttPubAckMessage(mqttPublishMessage.getVariableHeader().getPacketId());
         mqttClient.write(pubAckMessage);
     }
 
     private void processQos2(MqttClient session, MqttPublishMessage mqttPublishMessage) {
-        final int messageId = mqttPublishMessage.getMqttPublishVariableHeader().packetId();
+        final int messageId = mqttPublishMessage.getVariableHeader().getPacketId();
         MqttPubRecMessage pubRecMessage = new MqttPubRecMessage(messageId);
         session.write(pubRecMessage, (Consumer<MqttPubRelMessage>) message -> {
-            MqttPubCompMessage pubRelMessage = new MqttPubCompMessage(message.getPacketId());
+            MqttPubCompMessage pubRelMessage = new MqttPubCompMessage(message.getVariableHeader().getPacketId());
             session.write(pubRelMessage);
 
             processPublishMessage(mqttPublishMessage, session);
