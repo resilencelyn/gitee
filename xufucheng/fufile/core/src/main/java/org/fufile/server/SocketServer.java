@@ -20,30 +20,60 @@ import org.fufile.network.FufileSocketChannel;
 import org.fufile.network.SocketSelector;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ *
  */
 public class SocketServer implements Runnable {
 
     private SocketSelector socketSelector;
+    private Queue<InetSocketAddress> remoteAddresses;
+    private Map<String, FufileSocketChannel> connectedChannels;
 
-    public SocketServer() {
-        this.socketSelector = new SocketSelector();
-
+    public SocketServer(Map<String, FufileSocketChannel> connectedChannels) {
+        this.socketSelector = new SocketSelector(connectedChannels);
+        remoteAddresses = new LinkedBlockingQueue();
     }
 
     public boolean allocateNewConnections(FufileSocketChannel channel) throws IOException {
         return socketSelector.allocateNewConnections(channel);
     }
 
+    public boolean allocateConnections(InetSocketAddress address) {
+        return remoteAddresses.offer(address);
+    }
+
     @Override
     public void run() {
-        for (; ; ) {
-            try {
-                socketSelector.doPool(500);
-            } catch (IOException e) {
-                e.printStackTrace();
+        // connect
+        try {
+            while (!remoteAddresses.isEmpty()) {
+                InetSocketAddress address = remoteAddresses.poll();
+                socketSelector.connect(address.getHostName(), address);
             }
+
+
+            for (; ; ) {
+                try {
+
+                    socketSelector.doPool(500);
+                    socketSelector.registerNewConnections();
+                    // write read
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
+
         }
+
     }
+
 }

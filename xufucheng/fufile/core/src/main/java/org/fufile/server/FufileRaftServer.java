@@ -18,41 +18,66 @@ package org.fufile.server;
 
 import org.fufile.network.FufileSocketChannel;
 import org.fufile.network.ServerSocketSelector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * channel接收到的事件要在channel自己的类中处理。
+ * raft server
  */
-public class FufileServer implements Runnable {
+public class FufileRaftServer implements Runnable {
+
+    private final static Logger logger = LoggerFactory.getLogger(FufileRaftServer.class);
 
     private SocketServer[] socketServers;
     private static final int SOCKET_PROCESS_THREAD_NUM;
     private int index;
     private ServerSocketSelector serverSocketSelector;
+    private List<String> remoteAddresses;
+    private List<InetSocketAddress> disconnected;
+    private List<String> connecting;
+    private Map<String, FufileSocketChannel> connectedChannels;
 
     static {
         SOCKET_PROCESS_THREAD_NUM = Math.max(1, Runtime.getRuntime().availableProcessors() * 2);
     }
 
 
-    public FufileServer() throws IOException {
+    public FufileRaftServer(InetSocketAddress socketAddress, List<String> remoteAddresses) throws IOException {
+        serverSocketSelector = new ServerSocketSelector(socketAddress);
+        this.remoteAddresses = remoteAddresses;
+        connectedChannels = new ConcurrentHashMap<>();
         socketServers = new SocketServer[SOCKET_PROCESS_THREAD_NUM];
-        serverSocketSelector = new ServerSocketSelector(new InetSocketAddress(1111));
+        for (SocketServer socketServer : socketServers) {
+            socketServer = new SocketServer(connectedChannels);
+        }
+        connect();
+        for (SocketServer socketServer : socketServers) {
+            socketServer.run();
+        }
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         // 处理新connections
         // 分配新connections
+
+
         for (; ; ) {
+            // 连接：未连接的
 
             try {
                 serverSocketSelector.doPool(500);
                 Iterator<FufileSocketChannel> iterator = serverSocketSelector.getNewConnections().listIterator();
-
                 while (iterator.hasNext()) {
                     FufileSocketChannel channel = iterator.next();
                     boolean allocated = false;
@@ -69,11 +94,22 @@ public class FufileServer implements Runnable {
                     }
                 }
 
+
+
             } catch (Exception e) {
 
             }
 
         }
+
+    }
+
+    public void connect() {
+
+        disconnected.forEach(address -> {
+            SocketServer socketServer = socketServers[Math.abs(index++) % socketServers.length];
+            socketServer.allocateConnections(address);
+        });
 
     }
 }

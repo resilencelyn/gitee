@@ -17,16 +17,19 @@
 package org.fufile.network;
 
 import java.nio.channels.SelectableChannel;
-import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 
 public class FufileServerSocketChannel extends FufileChannel {
 
-    public FufileServerSocketChannel(String channelId, SelectionKey selectionKey, SelectableChannel socketChannel) {
-        super(channelId, selectionKey, socketChannel);
+    public FufileServerSocketChannel(String channelId, SelectableChannel socketChannel) {
+        super(channelId, socketChannel);
     }
 
     public ServerSocketChannel channel() {
         return (ServerSocketChannel) channel;
+    }
+
+    public int getLocalPort() {
+        return channel().socket().getLocalPort();
     }
 }

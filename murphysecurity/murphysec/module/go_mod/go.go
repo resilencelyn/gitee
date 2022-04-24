@@ -1,7 +1,6 @@
 package go_mod
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"github.com/pkg/errors"
@@ -9,7 +8,6 @@ import (
 	"murphysec-cli-simple/logger"
 	"murphysec-cli-simple/module/base"
 	"murphysec-cli-simple/utils"
-	"murphysec-cli-simple/utils/must"
 	"murphysec-cli-simple/utils/simplejson"
 	"os/exec"
 	"path/filepath"
@@ -70,7 +68,7 @@ func ScanGoProject(dir string) ([]base.Module, error) {
 		PackageFile:    "go.mod",
 		Name:           root.Get("Module", "Path").String(filepath.Base(dir)),
 		Version:        "",
-		RelativePath:   "go.mod",
+		FilePath:       filepath.Join(dir, "go.mod"),
 		Dependencies:   deps,
 		RuntimeInfo:    map[string]interface{}{"go_version": version},
 	}
@@ -142,27 +140,16 @@ func execGoList(dir string) ([]base.Dependency, error) {
 func execGoModTidy(dir string) error {
 	cmd := exec.Command("go", "mod", "tidy", "-v")
 	cmd.Dir = dir
-	r, w := io.Pipe()
-	defer must.Close(w)
-	cmd.Stdout = w
-	go func() {
-		buf := bufio.NewScanner(r)
-		buf.Split(bufio.ScanLines)
-		buf.Buffer(make([]byte, 24*1024), 24*2014)
-		for buf.Scan() {
-			logger.Err.Println("go mod tidy:", buf.Text())
-		}
-	}()
-	if e := cmd.Start(); e != nil {
-		logger.Err.Println("Execute go mod tidy failed.", e.Error())
-		return e
-	}
-	if e := cmd.Wait(); e != nil {
-		logger.Err.Println("go mod tidy exit with errors.", e.Error())
-	} else {
+	logger.Debug.Println("Execute:", cmd.String(), cmd.Dir)
+	output, e := cmd.CombinedOutput()
+	if e == nil {
 		logger.Info.Println("go mod tidy exit with no error.")
+		return nil
+	} else {
+		logger.Err.Println("go mod tidy exit with errors.", e.Error())
+		logger.Debug.Println("Output:", string(output))
+		return errors.Wrap(e, "Go mod tidy execution failed.")
 	}
-	return nil
 }
 
 func execGoVersion() (string, error) {

@@ -11,13 +11,14 @@ USER spring:spring
 
 WORKDIR /home/spring
 
-ARG SCAN_VERSION_ARG
+ARG SCAN_VERSION_ARG=1.6.2
 ENV SCAN_VERSION=$SCAN_VERSION_ARG
 
 ARG JAR_FILE=./build/libs/*.jar
 
 COPY ${JAR_FILE} /home/spring/app.jar
 
+ADD https://github.com/archguard/scanner/releases/download/v${SCAN_VERSION}/analyser_sca-${SCAN_VERSION}-all.jar .
 ADD https://github.com/archguard/scanner/releases/download/v${SCAN_VERSION}/diff_changes-${SCAN_VERSION}-all.jar .
 ADD https://github.com/archguard/scanner/releases/download/v${SCAN_VERSION}/scan_git-${SCAN_VERSION}-all.jar .
 ADD https://github.com/archguard/scanner/releases/download/v${SCAN_VERSION}/scan_sourcecode-${SCAN_VERSION}-all.jar .

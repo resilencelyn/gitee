@@ -4,6 +4,7 @@ package display
 
 import "github.com/muesli/termenv"
 
-func EnableANSI() {
+var _ = func() int {
 	termenv.EnableWindowsANSIConsole()
-}
+	return 0
+}()

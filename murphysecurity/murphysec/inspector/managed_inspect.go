@@ -62,6 +62,15 @@ func managedInspectScan(ctx *ScanContext) error {
 			return nil
 		})
 	}
+	for i := range ctx.ManagedModules {
+		if ctx.ManagedModules[i].FilePath == "" {
+			continue
+		}
+		relPath, e := filepath.Rel(ctx.ProjectDir, ctx.ManagedModules[i].FilePath)
+		if e == nil {
+			ctx.ManagedModules[i].FilePath = "/" + relPath
+		}
+	}
 	endTime := time.Now()
 	logger.Info.Println("Scan terminated. Cost time:", endTime.Sub(startTime))
 	logger.Info.Println("Total modules:", len(ctx.ManagedModules))

@@ -1,6 +1,7 @@
 package inspector
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
 	"murphysec-cli-simple/api"
@@ -20,20 +21,21 @@ func Scan(ctx *ScanContext) (interface{}, error) {
 	}
 	ui.Display(display.MsgInfo, fmt.Sprint("项目名称：", ctx.ProjectName))
 	if ctx.GitInfo != nil {
-		ui.UpdateStatus(display.StatusRunning, "正在获取贡献者信息......")
 		list, e := CollectContributor(ctx.ProjectDir)
-		if e != nil {
-			ui.Display(display.MsgWarn, "获取贡献者信息失败："+e.Error())
-		} else {
+		if e == nil {
 			ctx.ContributorList = list
-			ui.Display(display.MsgInfo, fmt.Sprint("共发现", len(ctx.ContributorList), "位仓库贡献者"))
 		}
 	}
 	ui.UpdateStatus(display.StatusRunning, "正在创建扫描任务，请稍候······")
 	if e := createTask(ctx); e != nil {
-		ui.Display(display.MsgError, fmt.Sprint("项目创建失败：", e.Error()))
 		logger.Err.Println("Create task failed.", e.Error())
 		logger.Debug.Printf("%+v", e)
+		ui.Display(display.MsgError, fmt.Sprint("项目创建失败"))
+		if errors.Is(api.ErrTokenInvalid, e) {
+			ui.Display(display.MsgError, "当前 Token 无效")
+		} else {
+			ui.Display(display.MsgError, e.Error())
+		}
 		return nil, e
 	}
 	ui.Display(display.MsgInfo, fmt.Sprint("项目创建成功，项目唯一标识：", ctx.TaskId))

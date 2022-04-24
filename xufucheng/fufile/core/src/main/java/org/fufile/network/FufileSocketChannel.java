@@ -17,6 +17,8 @@
 package org.fufile.network;
 
 import org.fufile.errors.IllegalNetDataException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -35,14 +37,16 @@ import java.nio.channels.SocketChannel;
  */
 public class FufileSocketChannel extends FufileChannel {
 
+    private final static Logger logger = LoggerFactory.getLogger(FufileSocketChannel.class);
+
     private final ByteBuffer size;
     private ByteBuffer payload;
     private final ReceivedDataHandler receivedDataHandler;
     private Sender sender;
     private Receiver receiver;
 
-    public FufileSocketChannel(String channelId, SelectionKey selectionKey, SelectableChannel socketChannel) {
-        super(channelId, selectionKey, socketChannel);
+    public FufileSocketChannel(String channelId, SelectableChannel socketChannel) {
+        super(channelId, socketChannel);
         size = ByteBuffer.allocate(4);
         receivedDataHandler = new ReceivedDataHandler();
     }
@@ -81,8 +85,7 @@ public class FufileSocketChannel extends FufileChannel {
     }
 
     public void register(Selector sel, int ops) throws IOException {
-        SelectionKey selectionKey = channel.register(sel, ops);
-        selectionKey.attach(this);
+        selectionKey = channel.register(sel, ops, this);
     }
 
     private boolean readRequestBytes() throws IOException {
@@ -113,7 +116,11 @@ public class FufileSocketChannel extends FufileChannel {
     }
 
     public void completeConnection() {
-        selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_CONNECT | SelectionKey.OP_READ);
+        selectionKey.interestOps(selectionKey.interestOps() & ~SelectionKey.OP_CONNECT);
+    }
+
+    public void interestOps(int ops) {
+        selectionKey.interestOps(selectionKey.interestOps() | ops);
     }
 
     public SocketChannel channel() {

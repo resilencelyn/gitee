@@ -88,9 +88,6 @@ func (c *Client) DoJson(req *http.Request, resBody interface{}) error {
 	}
 	logger.Info.Println("API response:", res.StatusCode, res.Status)
 	data, e := io.ReadAll(res.Body)
-	defer func() {
-
-	}()
 	if e != nil {
 		return errors.Wrap(ErrServerRequest, "read response body failed:"+e.Error())
 	}
@@ -121,7 +118,7 @@ func (c *Client) DoJson(req *http.Request, resBody interface{}) error {
 		baseErr := ErrServerRequest
 		httpMsg := fmt.Sprintf("http status %d - %s", res.StatusCode, res.Status)
 		if res.StatusCode == 401 {
-			baseErr = ErrTokenInvalid
+			return ErrTokenInvalid
 		}
 		if mimeType == "" {
 			return errors.Wrap(baseErr, httpMsg)
@@ -130,7 +127,7 @@ func (c *Client) DoJson(req *http.Request, resBody interface{}) error {
 			var m CommonApiErr
 			if e := json.Unmarshal(data, &m); e != nil {
 				logger.Debug.Println("Server data:", string(data))
-				return errors.Wrap(baseErr, fmt.Sprint(httpMsg, "illegal json"))
+				return errors.Wrap(baseErr, httpMsg)
 			}
 			return &m
 		}

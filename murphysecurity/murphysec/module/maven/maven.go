@@ -25,8 +25,8 @@ func ScanMavenProject(dir string) ([]base.Module, error) {
 	moduleFileMapping := map[Coordinate]string{}
 	var e error
 	// check maven version, skip maven scan if check fail
-	skipMvnScan, mvnVer := checkMvnEnv()
-	if skipMvnScan {
+	doMvnScan, mvnVer := checkMvnEnv()
+	if doMvnScan {
 		deps, e = scanMvnDependency(dir)
 		if e != nil {
 			logger.Err.Printf("mvn scan failed: %+v\n", e)
@@ -46,8 +46,7 @@ func ScanMavenProject(dir string) ([]base.Module, error) {
 				if pf == nil {
 					continue
 				}
-				relPath, _ := filepath.Rel(dir, pf.path)
-				moduleFileMapping[pf.coordinate] = relPath
+				moduleFileMapping[pf.coordinate] = pf.path
 				if len(deps[pf.coordinate]) > 0 {
 					continue
 				}
@@ -74,12 +73,12 @@ func ScanMavenProject(dir string) ([]base.Module, error) {
 			PackageFile:    "pom.xml",
 			Name:           coordinate.Name(),
 			Version:        coordinate.Version,
-			RelativePath:   filepath.Join(moduleFileMapping[coordinate], "pom.xml"),
+			FilePath:       filepath.Join(moduleFileMapping[coordinate], "pom.xml"),
 			Dependencies:   convDeps(dependencies),
 			RuntimeInfo:    mvnVer,
 		})
 	}
-	if len(modules) == 0 && skipMvnScan {
+	if len(modules) == 0 && !doMvnScan {
 		return nil, MvnSkipped
 	}
 	return modules, nil
