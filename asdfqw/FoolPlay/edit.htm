@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>傻瓜弹曲</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="manifest" href="manifest.json" />
+</head>
+<body>
+	<div class="window loading on destroy" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:block">
+		<div class="content"><h1>傻瓜弹曲</h1><p align="right">正在加载<span id="loadfile">......</span>…… </p></div>
+	</div>	<div class="window loading nojs" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:block;opacity:1">
+		<div class="content"><h1>傻瓜弹曲</h1><p align="right">JavaScript已被禁用，因此本程序无法运行。 </p></div>
+	</div>
+
+	<script>loadfile.innerHTML = "网页内容布局"</script>
+	
+<script>document.querySelector('.nojs').outerHTML = '';</script>
+
+<div class="menu line" style="position:fixed">
+	<div class="item">
+		文件
+		<div class="menu">
+			<a href="javascript:UI.new();">新建</a>
+			<a href="javascript:UI.open();">打开...</a>
+			<a href="javascript:UI.saveAs();">另存为...</a>
+			<hr>
+			<a href="javascript:Player.saveWav();">导出音频...</a>
+			<hr>
+			<a href="javascript:window.print();">打印...</a>
+		</div>
+	</div>
+	<div class="item">
+		编辑
+		<div class="menu">
+			<a href="javascript:UI.cut();">剪切</a>
+			<a href="javascript:UI.copy();">复制</a>
+			<a href="javascript:UI.paste();">粘贴</a>
+			<hr>
+			<div class="item">
+				输入
+				<div class="menu">
+					<label><input onclick="UI.defaultLength = parseInt(this.value)" type="radio" value="4" name="eightorfore"/>输入默认八分音符</label>
+					<label><input onclick="UI.defaultLength = parseInt(this.value)" type="radio" selected value="8" name="eightorfore"/>输入默认四分音符</label>
+				</div>
+			</div>
+			<div class="item">
+				音符操作
+				<div class="menu">
+					<a href="javascript:(function(){for(var i=UI.selStart;i<UI.selEnd;i++){Music.music[i].octave = Math.min(Music.music[i].octave+1,1)};UI.render();}())">升高八度</a>
+					<a href="javascript:(function(){for(var i=UI.selStart;i<UI.selEnd;i++){Music.music[i].octave = Math.max(Music.music[i].octave-1,-1)};UI.render();})()">降低八度</a>
+					<a href="javascript:(function(){if(UI.selStart == -1){UI.selStart = UI.senEnd};Music.music[UI.selEnd].fx.triplets = true;UI.render()})();">制作三连音...</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="item">
+		播放
+		<div class="menu">
+			<a href="javascript:(function(){Player.play();})();">播放</a>
+			<a href="javascript:(function(){Player.stop();})();">停止</a>
+			<hr>
+			<a href="javascript:(function(){Player.showVoiceWindow()})();">选择音源</a>
+			<a id="loadme" href="javascript:(function(){})();">英语支持未加载...</a>
+			<hr>
+			<label><input type="checkbox" checked onclick="Player.enableSMPlay = this.checked"/>编辑时奏音乐</label>
+			<hr>
+			<label><input type="checkbox" checked onclick="Player.enableMusic = this.checked"/>奏旋律</label>
+			<label><input type="checkbox" checked onclick="Player.enableVoice = this.checked"/>唱人声</label>
+			<label><input type="checkbox" checked onclick="Player.enableChord = this.checked"/>奏伴奏</label>
+
+		</div>
+	</div>
+	<div class="item">
+		视图
+		<div class="menu">
+			<label><input type="checkbox" onclick="document.body.className=( this.checked?'fensanalign':'');UI.layout();"/>对齐最后一行</label>
+			<label><input type="checkbox" onclick="UI.touchEnabled = this.checked"/>触摸启用选择</label>
+			<a onclick="UI.render()">重新渲染</a>
+		</div>
+	</div>
+	<div class="item">
+		帮助
+		<div class="menu">
+			<a href="javascript:UI.about('faq.html');" >FAQ...</a>
+			<a href="javascript:UI.about('index.html');" >关于...</a>
+		</div>
+	</div>
+	<div class="item">和弦
+		<div class="menu">
+			<a onclick="PopupWindow.open(chordWindow)" target="help">手动输入</a>
+			<a onclick="Music.music = Music.flat();Music.loops = [];UI.render()" target="help">展开循环</a>
+			<a onclick="转换为C调()" target="help">转换为C调</a>
+			<a onclick="输出()" target="help">输出</a>
+			<a onclick="tagCur()" target="help">机械结果</a>
+		</div>
+	</div>
+</div>
+<div class="header">
+	<center><input class="title" type="text" onchange="Music.title = this.value;document.title = this.value + ' - 傻瓜弹曲'" placeholder="请输入标题..."/></center>
+	<br/><label>1 =
+	<select class="arpeggio" size="1" style="max-width:1.7em;" onchange="Music.arpeggio = +this.value;">
+	  <optgroup label="低八度⬇️">
+		<option value="-16">Ab</option>
+		<option value="-15">A</option>
+		<option value="-14">Bb</option>
+		<option value="-13">B&emsp;（ bC ）</option>
+		<option value="-12">C</option>
+		<option value="-11">Db&emsp;（ C# ）</option>
+		<option value="-10">D</option>
+		<option value="-9">Eb</option>
+		<option value="-8">E</option>
+		<option value="-7">F</option>
+		<option value="-6">F#&emsp;（ bG ）</option>
+		<option value="-5">G</option>
+		</optgroup>
+		<optgroup label="⬇️标准|低八度⬆️">
+		<option value="-4">Ab</option>
+		<option value="-3">A</option>
+		<option value="-2">Bb</option>
+		<option value="-1">B&emsp;（ bC ）</option>
+		<option selected value="0">C</option>
+		<option value="1">Db&emsp;（ C# ）</option>
+		<option value="2">D</option>
+		<option value="3">Eb</option>
+		<option value="4">E</option>
+		<option value="5">F</option>
+		<option value="6">F#&emsp;（ bG ）</option>
+		<option value="7">G</option>
+		</optgroup>
+		<optgroup label="⬆️标准|高八度⬇️">
+		<option value="8">Ab</option>
+		<option value="9">A</option>
+		<option value="10">Bb</option>
+		<option value="11">B&emsp;（ bC ）</option>
+		<option value="12">C</option>
+		<option value="13">Db&emsp;（ C# ）</option>
+		<option value="14">D</option>
+		<option value="15">Eb</option>
+		<option value="16">E</option>
+		<option value="17">F</option>
+		<option value="18">F#&emsp;（ bG ）</option>
+		<option value="19">G</option>
+		</optgroup>
+	</select>
+	</label><table style="display:inline-table">
+	<tr>
+		<td style="border-bottom:solid 1px">
+			<input type="number" class="tempo1" onchange="Music.tempo[1] = parseInt(this.value);UI.render();" required value="4" max="12" min="1">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="number" class="tempo0" onchange="Music.tempo[0] = parseInt(this.value);UI.render();" required value="4" max="8" min="1" >
+		</td>
+	</tr>
+	</table>
+	&emsp;<label id="speedLabel" for="speed">速度：</label><input id="speed" required value="120" min="10" max="400" size="3" step="1" oninput="Music.speed=this.value" style="text-align:left" type="number">
+	<textarea class="author" style="font-family: '宋体',monospace;float:right;text-align:right;overflow:hidden;" oninput='Music.author = this.value;' rows="3" cols="19"></textarea>
+</div>
+<div style="clear:both"></div>
+<br>
+<div id="coverOn" class="coverOn">
+	<div id="caret" class="caret"></div>
+	<textarea class="editbox"></textarea>
+	<span id="imetip" ></span>
+</div>
+<div class="container">
+</div>
+<div class="status">
+  <div>就绪</div>
+  
+</div>
+<div class="menu" id="contextMenu" style="display:none;position:fixed;">
+	<a href="javascript:UI.copy()">复制</a>
+	<a href="javascript:UI.paste()">粘贴</a>
+	<a href="javascript:UI.selStart = 0;UI.selEnd = 999999999999;UI.redraw();">全选</a>
+	<a href="javascript:UI.delete();">删除</a>
+	<hr>
+	<a href="javascript:(function(){for(var i=UI.selStart;i<UI.selEnd;i++){Music.music[i].octave = Math.min(Music.music[i].octave+1,1)};UI.render();}())">升高八度</a>
+	<a href="javascript:(function(){for(var i=UI.selStart;i<UI.selEnd;i++){Music.music[i].octave = Math.max(Music.music[i].octave-1,-1)};UI.render();})()">降低八度</a>
+	<a href="javascript:(function(){if(UI.selStart == -1){UI.selStart = UI.selEnd};Music.music[UI.selStart].fx.triplets = true;UI.render()})();">制作三连音...</a>
+</div>
+<form style="display:none">
+<input type="file" id="openFile" onchange="UI.openListener(this)"/>
+</form>
+<script>
+	//if(! "eruda" in window)
+	window.onerror = function(message, source, lineno, colno, error) {
+		var ele2 = document.createElement("div");
+		var ele = document.createElement("pre");
+		ele2.appendChild(ele);
+		ele2.className = "error";
+		ele.style.overflow = "auto"
+		ele.style.clear = "both"
+		ele.innerHTML += "程序内部错误：<br />"+error+"<br />";
+		ele.innerHTML += message;
+		ele.innerHTML += "<br />在脚本文件 " + source + " 中<br /><br />";
+		ele.innerHTML += "<br />第 " + lineno + " 行，第 " + colno + " 列<br /><br />";
+		try{
+		  ele.innerHTML += error.stack;
+		}catch(e){};
+		ele2.innerHTML = '错误<div style="float:right;" ><input type="button" value="关闭全部" onclick="var a;while(a = document.querySelector(`.error`))a.remove();"><input type="button" value="关闭" onclick="this.parentNode.parentNode.remove()"></div>' + ele2.innerHTML;
+		document.body.appendChild(ele2);
+		ele.scrollIntoView();
+	}
+</script>
+<script>loadfile.innerHTML = "调试器"</script>
+<script src="js/eruda.js"></script>
+<script>eruda.init();setTimeout("document.querySelectorAll('c-toggler').forEach((a)=>{a.style.display = 'none';});",1000)</script>
+<script>loadfile.innerHTML = "程序主逻辑"</script>
+<script src="js/Music.js"></script>
+<script>loadfile.innerHTML = "拼音数据"</script>
+<script src="js/TinyPY.js"></script>
+<script>loadfile.innerHTML = "缓存库"</script>
+<script src="js/yux-storage.js"></script>
+<script>loadfile.innerHTML = "播放器"</script>
+<script src="js/Player.js"></script>
+<script>loadfile.innerHTML = "自动和弦器"</script>
+<script src="js/Chord.js"></script>
+<script>loadfile.innerHTML = "触摸兼容程序"</script>
+<script src="js/touchShim.js"></script>
+<script>loadfile.innerHTML = "meSpeak 适配器"</script>
+<script src="js/mespeak/transplant.js"></script>
+<script>
+	var classlist = ['Music','Player','yuxStorage','Chord','Pinyin'];
+	classlist.forEach(function(a){
+	  if(!(a in window)){
+	    confirm(`${a} 没有正常加载。`) && location.reload(true);
+	  }
+	})
+	PopupWindow.close(document.querySelector(".loading"));
+</script>
+	<div class="window on" id="chordWindow">
+		<div class="windowtitle">手动输入和弦<button class="close"><b>×</b></button></div>
+		<div class="content">
+			<input id="chordinput" oninput=""/>
+		</div>
+	</div>
+	<div class="window on" id="voiceWindow">
+		<div class="windowtitle">加载音源文件<button class="close"><b>×</b></button></div>
+		<div class="content">
+		  <p>本程序使用袅袅中文音源，但不附带音源文件。你可以到<a href="https://dsailab.com/voice/">https://dsailab.com/voice/</a>下载</p>
+		  <hr>
+		  <button id="b_inf" onclick="f_inf.click()">inf.d?</button>
+		  <button id="b_voi" onclick="f_voi.click()">voice.d?</button>|
+		  <label><input type="checkbox" id="c_man" style="vertical-align:middle" />我是男生</label>|<button id="b_app">应用</button>
+		  <input type="file" hidden onchange="(this.files[0] && (this.files[0].name.toLowerCase().indexOf('inf')==-1) && alert('您选择的文件名是' + this.files[0].name + '，这应该是你想要加载的 inf.d 文件吧？')),b_inf.className = this.files[0]?'append-yes':''" id="f_inf"/>
+		  <input type="file" hidden onchange="(this.files[0] && (this.files[0].name.toLowerCase().indexOf('voice')==-1) && alert('您选择的文件名是' + this.files[0].name + '，这应该是你想要加载的 voice.d 文件吧？')),b_voi.className = this.files[0]?'append-yes':''" id="f_voi"/>
+		</div>
+	</div>
+	<div style="font-family:nds; position:fixed; left: -999px;">预加载字体</div>
+</body>
+</html>

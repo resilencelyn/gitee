@@ -1,0 +1,36 @@
+
+BeeCP-2.4.2
+ 1:add maxLifeTime controll
+
+BeeCP-2.4.3
+ 1:add safe synchronization on connection.close()
+ 2:some source code optimize
+
+
+BeeCP-2.5.1
+ 1:Connection retrieve source code optimization 
+ 2:fix Connction reanonly not reset issue(#18)
+ 3:fix Connction networtimeout check worning(#16)
+ 
+ 
+BeeCP-2.5.2,BeeCP-2.5.3
+1：调整DataSource取连接写锁代码位置
+2：优化PreparedStatement缓存(采用LinkedHashMap作为LRU缓存)
+3：优化getConnection处代码,降低代码嵌套层数(性能少量提升)
+
+ BeeCP-2.5.4 
+ 1:增加MonitorVo以及连接池增加MonitorVo的get方法
+ 2:解决CPU核心数大于默认最大连数导致检查失败
+ 3:配置属性项borrowConcurrentSize名称调整为borrowSemaphoreSize 
+ 
+ BeeCP-2.5.4.1
+ 1:修复spring cloud 启动时会加载两次上下文，在切换上下文时产生的关闭异常(#20)
+ 
+  BeeCP-3.0.0
+  1: 移除PreparedStatement缓存（一般驱动都提供）
+  2：增加XADataSource支持
+
+BeeCP-3.0.1
+1: Connection transfer 效率优化
+BeeCP-3.0.2
+1: Connection transfer 效率优化

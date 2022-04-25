@@ -1,0 +1,6 @@
+.DS_Store
+docker/container-data
+!docker/container-data/.keep
+.vscode
+tmp
+build

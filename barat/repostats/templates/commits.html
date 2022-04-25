@@ -1,0 +1,96 @@
+{{define "commits.html" -}}
+{{template "header.html" .}}
+{{template "admin-left-menu.html" .}}
+<div id="admin-right-content">
+  <div class="ui basic segment">
+    <h3 class="ui header">Commit 列表</h3>
+    <div class="ui grid stackable padded">      
+      <div class="column" style="max-width: 100%; overflow-x: auto;">
+        <table class="ui celled striped small table">
+          <thead>
+            <tr>
+              <th colspan="12">
+                <p>共计 <span style="color: red;">{{.total_item}}</span> 条记录，当前 <span style="color: red;">{{.current_page}} </span> / <span style="color: red;">{{add (div .total_item .page_size) 1}}</span> 页</p>                
+                <p>
+                  <form id="search-commit-form" class="ui mini form" method="GET" accept="/admin/commits">
+                    <div class="inline fields">
+                      <div class="ui field">  
+                        <label>Commit Sha</label>                      
+                        <input type="text" name="sha" placeholder="Commit Sha" value="{{.sha}}">
+                      </div>
+                      <div class="ui field">
+                        <label>Author Email</label>                      
+                        <input type="text" name="author_email" placeholder="Author Email" value="{{.author_email}}">
+                      </div>
+                      <div class="ui field">
+                        <label>Committer Email</label>                      
+                        <input type="text" name="committer_email" placeholder="Committer Email" value="{{.committer_email}}">
+                      </div>
+                      <div class="ui field">
+                        <a class="ui mini positive button" onclick="javascript:searchCommits()">查询</a>
+                        <a target="_self" href="/admin/commits" class="ui mini button">重置</a>
+                      </div>                    
+                    </div>                    
+                    <div id="search-commit-message" class="ui error message"></div>                    
+                  </form>                  
+                  </form>
+                </p>
+              </th>
+            </tr>
+            <tr>       
+              <th class="center aligned collapsing">序号</th> 
+              <th class="center aligned collapsing">平台</th>     
+              <th class="center aligned collapsing">仓库编号</th>
+              <th class="center aligned collapsing">Sha</th>              
+              <th>提交信息</th>
+              <th class="center aligned collapsing">Author</th>  
+              <th class="center aligned collapsing">Author Email</th>
+              <th class="center aligned collapsing">Author Date</th>                                
+              <th class="center aligned collapsing">Committer</th>  
+              <th class="center aligned collapsing">Committer Email</th>           
+              <th class="center aligned collapsing">Committer Date</th>                                                              
+              <th class="center aligned">操作</th>       
+            </tr>
+          </thead>
+          <tbody>             
+            {{range $i,$c := .commits}} 
+            <tr>
+              <td class="center aligned collapsing">{{add $i 1}}</td>
+              <td class="center aligned collapsing">Gitee</td>
+              <td class="center aligned collapsing"><a target="_blank" href="/admin/repos?id={{$c.RepoID}}">{{$c.RepoID}}</a></td>
+              <td class="center aligned collapsing">{{$c.Sha}}</td>              
+              <td><a href="{{$c.HtmlUrl}}" target="_blank">{{$c.Detail.Message}}</a></td>              
+              <td class="center aligned collapsing">{{$c.Detail.Author.Name}}</td>
+              <td class="center aligned collapsing">{{$c.Detail.Author.Email}}</td> 
+              <td class="center aligned collapsing">{{$c.Detail.Author.Date | date "2006-01-02 15:04:05"}}</td>                            
+              <td class="center aligned collapsing">{{$c.Detail.Committer.Name}}</td>
+              <td class="center aligned collapsing">{{$c.Detail.Committer.Email}}</td>              
+              <td class="center aligned collapsing">{{$c.Detail.Committer.Date | date "2006-01-02 15:04:05"}}</td>    
+              <td class="center aligned collapsing"> 
+                <a href="javascript:deleteCommit('{{$c.Sha}}')">删除</a>
+              </td>
+            </tr>
+            {{end}}  
+          </tbody>
+          <tfoot>
+            {{if .total_item}}
+            <tr>
+              <td colspan="12" class="center aligned">
+                <div class="ui tiny pagination menu"> 
+                  <a  class="item" target="_self"  href="{{.current_url}}?page=1&size={{.page_size}}&sha={{.sha}}&author_email={{.author_email}}&committer_email={{.committer_email}}">首页</a>
+                  <a  class="{{if .first_page}}disabled{{end}} item" target="_self"  href="{{.current_url}}?page={{sub .current_page 1}}&size={{.page_size}}&author_email={{.author_email}}&committer_email={{.committer_email}}"><<</a>
+                  <div class="active item">{{.current_page}}</div>
+                  <a class="{{if .last_page}}disabled{{end}} item" target="_self" href="{{.current_url}}?page={{add .current_page 1}}&size={{.page_size}}&author_email={{.author_email}}&committer_email={{.committer_email}}">>></a>
+                  <a  class="item" target="_self"  href="{{.current_url}}?page={{add (div .total_item .page_size) 1}}&size={{.page_size}}&author_email={{.author_email}}&committer_email={{.committer_email}}">末页</a>
+                </div>   
+              </td>                         
+            </tr>
+            {{end}}
+          </tfoot>
+        </table>
+      </div>
+    </div><!--end fo grid-->
+  </div>  <!--end of basic segment-->  
+</div><!--end of admin-right-content-->
+{{template "footer.html" .}}
+{{end -}}

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/star_mountain"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#7F2A2A2A" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#00ffff"
+                    android:text="QPython"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#00ff00"
+                    android:text="2022"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/icon_margin_top"
+                android:text="@string/proj_scri"
+                android:background="#7F2A2A2A"
+                android:textColor="#FFF"/>
+
+            <ImageView
+                android:id="@+id/ll_qpy_app"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_home_qpyapp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1.2"
+            android:background="#7F2A2A2A"
+            android:elevation="2dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_terminal"
+                    style="@style/grid_item">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_terminal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/terminal"
+                        android:textColor="#FFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/can_long_press"
+                        android:textSize="11sp"
+                        android:textColor="#FF7F7F" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_editor"
+                    style="@style/grid_item">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_editor"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/editor"
+                        android:textColor="#FFF"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_file"
+                    style="@style/grid_item">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_file"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/file"
+                        android:textColor="#FFF"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/iv_scan"
+                    style="@style/grid_item">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_scan"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/scan"
+                        android:textColor="#FFF"/>
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/ll_library"
+                    style="@style/grid_item">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_library"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/qpypi_up"
+                        android:textColor="#FFF"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/about"
+                    style="@style/row_ll">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_gist"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/about"
+                        android:textColor="#FFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/feed_contribute"
+                        android:textSize="11sp"
+                        android:textColor="#FF7F7F" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_setting"
+                    style="@style/grid_item">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_more"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/more"
+                        android:textColor="#FFF"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_record"
+                    style="@style/row_ll">
+
+                    <!-- ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_record" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/screen_record"
+                        android:textColor="#FFF" / -->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_community"
+                    style="@style/grid_item">
+
+                    <!--ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_home_club"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/icon_margin_top"
+                        android:text="@string/community"
+                        android:textColor="#FFF"/-->
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

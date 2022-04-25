@@ -1,0 +1,21 @@
+{
+  "dir": "ltr",
+  "lang": "zh",
+  "name": "傻瓜弹曲",
+  "short_name": "傻瓜弹曲",
+  "scope": "./edit.htm",
+  "display": "standalone",
+  "start_url": "./edit.htm",
+  "background_color": "#00abff",
+  "theme_color": "#3db8ff",
+  "orientation": "natural",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./images/1024x1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "any"
+    }
+  ]
+}

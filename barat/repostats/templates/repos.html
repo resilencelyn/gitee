@@ -1,0 +1,132 @@
+{{define "repos.html" -}}
+{{template "header.html" .}}
+{{template "admin-left-menu.html" .}}
+<div id="admin-right-content">
+  <div class="ui basic segment">
+    <h3 class="ui header">代码仓库列表</h3>
+    <div class="ui grid stackable padded">      
+      <div class="column" style="max-width: 100%; overflow-x: auto;">
+        <table class="ui celled striped small table">
+          <thead>
+            <tr>
+              <th colspan="4">                
+                <p>共计 <span style="color: red;">{{.total_item}}</span> 条记录，当前 <span style="color: red;">{{.current_page}}</span> / <span style="color: red;">{{add (div .total_item .page_size) 1}}</span> 页 </p>
+                <p>                  
+                  <form id="search-repo-form" class="ui mini form" method="GET" action="/admin/repos">
+                    <div class="inline fields">
+                      <div class="field">  
+                        <label>仓库名称</label>                      
+                        <input type="text" name="repo_name" placeholder="仓库名称" value="{{.repo_name}}">
+                      </div>
+                      <div class="field">
+                        <a class="ui mini positive button" onclick="javascript:searchRepos()">查询</a>
+                        <a target="_self" href="/admin/repos" class="ui mini button">重置</a>                        
+                      </div>                                          
+                    </div>                     
+                  </form>                                    
+                </p>
+              </th>
+              <th colspan="8">
+                <p>新增、删除或禁止爬取仓库数据，不会删除 Gitee 数据，但会影响 RepoStats 统计结果</p>
+                <p>
+                  <button onclick="showAddRepoModal()" class="ui mini positive button">添加仓库</button>
+                  <button onclick="startToGrabRepos()" class="ui mini red button">开始爬取</button>
+                </p>                  
+              </th>
+            </tr>
+            <tr>       
+              <th class="center aligned collapsing">序号</th>  
+              <th class="center aligned collapsing">平台</th>   
+              <th class="center aligned collapsing">仓库ID</th>
+              <th>仓库名</th>
+              <th class="center aligned collapsing">Star数</th>  
+              <th class="center aligned collapsing">Fork数</th>                
+              <th class="center aligned collapsing">Watch数</th>  
+              <th class="center aligned collapsing">开源协议</th>                      
+              <th class="center aligned collapsing">是否爬取</th>
+              <th class="center aligned collapsing">创建时间</th>
+              <th class="center aligned collapsing">更新时间</th>              
+              <th class="center aligned">操作</th>       
+            </tr>
+          </thead>
+          <tbody>             
+            {{range $i,$r := .repos}} 
+            {{if not $r.EnableCrawl}}
+            <tr class="error">
+            {{else}}
+            <tr>
+            {{end}}            
+              <td class="center aligned collapsing">{{add $i 1}}</td>
+              <td class="center aligned collapsing">Gitee</td>
+              <td class="center aligned collapsing">{{$r.ID}}</td>              
+              <td><a href="{{$r.HTMLURL}}" target="_blank">{{$r.HumanName}}</a></td>
+              <td class="center aligned collapsing">{{$r.StargazersCount}}</td>
+              <td class="center aligned collapsing">{{$r.ForksCount}}</td>              
+              <td class="center aligned collapsing">{{$r.WatchersCount}}</td>
+              <td class="center aligned collapsing">{{$r.License}}</td>
+              <td class="center aligned collapsing">{{$r.EnableCrawl}}</td>
+              <td class="center aligned collapsing">{{$r.CreatedAt | date "2006-01-02 15:04:05"}}</td>
+              <td class="center aligned collapsing">{{$r.UpdatedAt | date "2006-01-02 15:04:05"}}</td>              
+              <td class="center aligned collapsing"> 
+                {{if $r.EnableCrawl}} 
+                <a href="javascript:disableCrawl('{{$r.ID}}','{{$r.HumanName}}')">禁止爬取</a>
+                {{else}}
+                <a href="javascript:enableCrawl('{{$r.ID}}','{{$r.HumanName}}')">开启爬取</a>
+                {{end}}
+                | <a href="javascript:CreateOrUpdateGrafana('{{$r.ID}}')">更新 Grafana 面板</a> 
+                | <a href="javascript:deleteRepo('{{$r.ID}}','{{$r.HumanName}}')">删除</a></td>
+            </tr>
+            {{end}}  
+          </tbody>
+          <tfoot>
+            {{if .total_item}}
+            <tr>
+              <td colspan="12" class="center aligned">
+                <div class="ui tiny pagination menu"> 
+                  <a  class="item" target="_self"  href="{{.current_url}}?page=1&size={{.page_size}}&repo_name={{.repo_name}}">首页</a>
+                  <a  class="{{if .first_page}}disabled{{end}} item" target="_self"  href="{{.current_url}}?page={{sub .current_page 1}}&size={{.page_size}}&repo_name={{.repo_name}}"><<</a>
+                  <div class="active item">{{.current_page}}</div>
+                  <a class="{{if .last_page}}disabled{{end}} item" target="_self" href="{{.current_url}}?page={{add .current_page 1}}&size={{.page_size}}&repo_name={{.repo_name}}">>></a>
+                  <a  class="item" target="_self"  href="{{.current_url}}?page={{add (div .total_item .page_size) 1}}&size={{.page_size}}&repo_name={{.repo_name}}">末页</a>
+                </div>   
+              </td>                         
+            </tr>
+            {{end}}
+          </tfoot>
+        </table>
+      </div>
+    </div><!--end fo grid-->
+  </div>  <!--end of basic segment-->
+  <div id="add-repo-modal" class="ui compact modal">
+    <div class="header">添加仓库</div>
+    <div class="content">
+    <p>RepoStats 支持添加单个仓库，也支持添加组织或个人页面链接</p>
+    <p>若添加组织或个人页面链接，RepoStats 将会尝试抓取该用户或组织名下所有公开的仓库</p>
+    <p>
+      以下均是有效链接：
+      <ul>
+        <li>http://gitee.com/barat </li>
+        <li>https://gitee.com/openharmony </li>
+        <li>https://gitee.com/barat/ohurlshortener</li>                
+        <li>https://gitee.com/openharmony/community </li>
+      </ul>
+    </p>
+    <form id="add-repo-form" class="ui form">
+      <div class="ui field">
+        <label>仓库链接</label>
+        <input type="text" name="repo_url" placeholder="仓库链接">
+      </div>
+      <div id="add-repo-message" class="ui error message"></div>
+    </form>
+    <div id="add-form-loadder" class="ui inverted dimmer">
+      <div class="ui small text loader">正在尝试抓取仓库信息，请稍后</div>
+    </div>
+    </div>
+    <div class="actions">
+      <div class="ui cancel button">取消</div>
+      <div class="ui positive approve button">添加</div>      
+    </div>
+  </div>
+</div><!--end of admin-right-content-->
+{{template "footer.html" .}}
+{{end -}}
