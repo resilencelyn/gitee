@@ -1,0 +1,8 @@
+mmcls==0.18.0
+ninja
+numpy
+prettytable
+scikit-image
+scipy
+tqdm
+yapf
