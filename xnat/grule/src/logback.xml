@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<property name="log_path" value="${log.path:-../log}" />
+	<property name="log_file_name" value="${log.file.name:-app}" />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%-7thread] [%-40.40C :%-3L] => %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${log_path}/${log_file_name}.log</File>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%-7thread] [%-40.40C :%-3L] => %m%n</pattern>
+			<charset>utf-8</charset>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${log_path}/${log_file_name}.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxHistory>${log.maxHistory:-500}</maxHistory>
+			<maxFileSize>${log.maxFileSize:-50MB}</maxFileSize>
+			<totalSizeCap>${log.totalSizeCap:-100GB}</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<logger name="cn.xnatural.app" level="info"></logger>
+
+	<root level="INFO">
+		<appender-ref ref="console"/>
+		<appender-ref ref="file"/>
+	</root>
+</configuration>

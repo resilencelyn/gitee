@@ -1,0 +1,130 @@
+repositories {
+    mavenLocal()
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+}
+
+version = '2.0.0'
+
+//apply plugin: 'java'
+apply plugin: 'groovy'
+
+
+compileGroovy { // 保留方法参数的名字(非arg0/arg1...)
+    groovyOptions.parameters = true
+}
+
+
+// 修改源目录
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src/static'
+        }
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+ext {
+    groovyVersion = '3.0.8'
+}
+dependencies {
+    implementation fileTree(dir: 'sysLib', include: ['*.jar'])
+    implementation "org.codehaus.groovy:groovy:$groovyVersion"
+    implementation "org.codehaus.groovy:groovy-templates:$groovyVersion"
+    // implementation "org.codehaus.groovy:groovy-sql:$groovyVersion"
+    implementation "org.codehaus.groovy:groovy-json:$groovyVersion"
+    // implementation "org.codehaus.groovy:groovy-jmx:$groovyVersion"
+
+    //implementation 'com.alibaba:fastjson:1.2.73'
+
+    implementation 'cn.xnatural:tiny:1.1.4'
+    implementation 'cn.xnatural:http:1.1.1'
+    implementation 'cn.xnatural:jpa:1.1.0'
+    implementation 'cn.xnatural:sched:1.0.3'
+    implementation 'cn.xnatural:remoter:1.0.5'
+    implementation 'cn.xnatural.task:task:1.0.2'
+
+    // 连接池
+    // implementation 'com.alibaba:druid:1.1.23'
+    // implementation 'com.zaxxer:HikariCP:3.4.1'
+    // implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+    implementation 'mysql:mysql-connector-java:8.0.23'
+    // implementation 'mysql:mysql-connector-java:5.1.49'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.1.2'
+    implementation 'com.h2database:h2:1.4.199'
+
+    // implementation 'org.apache.commons:commons-email:1.5'
+    // implementation 'io.netty:netty-all:4.1.49.Final'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    // implementation('org.apache.httpcomponents:httpclient:4.5.12')
+    // implementation ('org.ehcache:ehcache:3.8.1') {exclude group:'org.slf4j'}
+    implementation 'redis.clients:jedis:3.3.0'
+    implementation 'org.jsoup:jsoup:1.13.1'
+
+    // 分布式数据一致框架
+    // implementation 'io.atomix:atomix:3.1.8'
+    // implementation 'org.apache.zookeeper:zookeeper:3.6.2'
+
+    // 工作流
+//    implementation('org.activiti:activiti-engine:7.0.0.GA') {
+//        exclude group: 'org.mybatis'
+//        exclude group: 'org.springframework'
+//    }
+
+    // 规则引擎
+//    implementation('org.drools:drools-core:7.37.0.Final')
+//    implementation('com.alibaba:QLExpress:3.2.4')
+
+    // jvm 脚本语言
+    // implementation('com.googlecode.aviator:aviator:5.2.3')
+}
+
+
+// 依赖copy
+task deps(type: Copy) {
+    new File('lib').deleteDir()
+    from configurations.runtimeClasspath
+    into 'lib'
+}
+
+
+task tgz(dependsOn: ['deps'], type: Tar) {
+    new File("${buildDir}/grule.tgz").deleteOnExit()
+
+    into("bin") {from("bin")}
+    into("conf") {from "conf"}
+    into("src") {from("src")}
+    into("lib") {from "lib"}
+    from "Dockerfile"
+    from "build.gradle"
+    from "start.bat"
+    from("start.sh")
+
+    archiveFileName = "grule.tgz"
+    compression(Compression.GZIP)
+    destinationDirectory = file("${buildDir}")
+}
+
+
+task tarDir(dependsOn: ['deps'], type: Copy) {
+    new File("${buildDir}/grule").deleteDir()
+
+    into("bin") {from("bin")}
+    into("conf") {from "conf"}
+    into("src") {from("src")}
+    into("lib") {from "lib"}
+    from "Dockerfile"
+    from "build.gradle"
+    from "start.bat"
+    from("start.sh")
+
+    into "${buildDir}/grule"
+}

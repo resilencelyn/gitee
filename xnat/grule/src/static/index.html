@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+<!--    <link type="text/css" rel="stylesheet" href="css/el-plus.css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css" />
+    <style>
+        body {margin: 0; padding: 0}
+    </style>
+</head>
+<body>
+<script src="js/lib/axios.min.js"></script>
+<!--<script src="js/lib/vue.runtime.global.prod.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue@next/dist/vue.runtime.global.prod.js"></script>
+<!--<script src="js/lib/vue3-sfc-loader.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+<script src="js/lib/vue-router.global.prod.js"></script>
+<!--<script src="js/lib/el-plus.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
+<script src="js/common.js"></script>
+<script>
+    axios.defaults.timeout = 1000 * 60;
+    // 添加请求拦截器
+    axios.interceptors.request.use((config) => {
+        // 在发送请求之前做些什么
+        // config.headers['X-web-Token'] = 'xxxx'
+        return config;
+    }, (error) => {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+    });
+    axios.interceptors.response.use((resp) => resp.data)
+    const options = {
+        moduleCache: { vue: Vue },
+        async getFile(url) {
+            if (url.indexOf('@') === 0) return url.replace('@', '.');
+            if (url.startsWith('view/') || url.startsWith('./view/')) {
+                if (!url.endsWith('.vue')) {
+                    url += '.vue'
+                }
+            }
+            const res = await fetch(url);
+            if ( !res.ok )
+                throw Object.assign(new Error(res.statusText + ' ' + url), { res });
+            return {
+                getContentData: asBinary => asBinary ? res.arrayBuffer() : res.text(),
+            }
+        },
+        handleModule(type, getContentData, path, options) {
+            switch (type) {
+                case '.jpg':
+                case '.jpeg':
+                case '.png': return getContentData(true);
+                default: return undefined; // let vue3-sfc-loader handle this
+            }
+        },
+        addStyle(textContent) {
+            textContent = textContent.trim()
+            if (textContent) {
+                const style = Object.assign(document.createElement('style'), { textContent });
+                const ref = document.head.getElementsByTagName('style')[0] || null;
+                document.head.insertBefore(style, ref);
+            }
+        },
+    };
+
+    const { loadModule } = window['vue3-sfc-loader'];
+    const loadingComponent = Vue.defineComponent({
+        template: `
+                <div style="height: 500px; width: 500px; display: flex; justify-content: center; align-items: center;"> 组件加载中... </div>
+            `,
+        beforeDestroy() {
+            // console.log('loadingComponent beforeDestroy', this.loading)
+            // this.loading.close()
+        },
+        mounted() {
+            // this.loading = this.$loading({target: this.$refs.main})
+            // console.log('loadingComponent mounted', this.loading)
+        }
+    })
+
+    const asyncComponent = (path) => Vue.defineAsyncComponent({
+        // 工厂函数
+        loader: () => {
+            // const start = Date.now()
+            // const loading = app.$loading ? app.$loading({target: document}) : null
+            return loadModule(path, options).then(res => {
+                // console.log('=========', path, Date.now() - start)
+                // loading?.close()
+                return res
+            })
+        },
+        loadingComponent,
+        delay: 200,
+    });
+
+    window.app = Vue.createApp(asyncComponent('view/App.vue', options));
+    // app.use(antd); // ant-design-vue3
+    app.use(ElementPlus); // Element Plus
+    const Admin = asyncComponent('view/Admin.vue');
+    // 路由配置
+    const router = VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes: [
+            { path: '/', redirect: '/policy', _menu: false},
+            { path: '/login', name: 'login', component: asyncComponent('view/Login.vue'), _menu: false},
+            {
+                path: '/supervision', name: 'supervision',
+                component: Admin, _menu: true,
+                meta: {title: 'Dashboard', svg: 'SvgHome'},
+                redirect: '/supervision/dashboard',
+                children: [
+                    {
+                        path: 'dashboard', name: 'dashboard', _menu: false,
+                        component: asyncComponent('view/dashboard/index.vue'),
+                    }
+                ],
+            },
+            {
+                path: '/policy', name: 'policy',
+                component: Admin, _menu: true,
+                meta: { title: '策略配置', svg: 'SvgEdit' },
+                redirect: '/policy/decision',
+                children: [
+                    {
+                        path: 'decision', name: 'decision', _menu: true,
+                        meta: { title: '决策管理', },
+                        component: asyncComponent('view/policy/decision/index.vue'),
+                    },
+                    {
+                        path: 'field', name: 'field', _menu: true, _privilegeId: 'Field_Read',
+                        meta: { title: '字段管理', },
+                        component: asyncComponent('view/policy/field/index.vue'),
+                    },
+                    {
+                        path: 'collector', name: 'collector', _menu: true, _privilegeId: 'Collector_Read',
+                        meta: { title: '数据集成', },
+                        component: asyncComponent('view/policy/collector/index.vue'),
+                    },
+                ],
+            },
+            {
+                path: '/system', name: 'system',
+                component: Admin, _menu: true,
+                meta: { title: '系统管理', svg: 'SvgSetting' },
+                redirect: '/system/user',
+                children: [
+                    {
+                        path: 'user', name: 'user', _menu: true,
+                        meta: { title: '用户管理', },
+                        component: asyncComponent('view/system/user/index.vue'),
+                    },
+                    {
+                        path: 'history', name: 'history', _menu: false, _privilegeId: 'OpHistory_Read',
+                        meta: { title: '操作历史', },
+                        component: asyncComponent('view/system/history/index.vue'),
+                    },
+                ],
+            },
+            {
+                path: '/data', name: 'data',
+                component: Admin, _menu: true,
+                meta: { title: '数据中心', svg: 'SvgSearch' },
+                redirect: '/data/decide',
+                children: [
+                    {
+                        path: 'decide', name: 'decide', _menu: true,
+                        meta: { title: '决策数据', },
+                        component: asyncComponent('view/data/decide/index.vue'),
+                    },
+                    {
+                        path: 'collect', name: 'collect', _menu: true,
+                        meta: { title: '收集数据', },
+                        component: asyncComponent('view/data/collect/index.vue'),
+                    },
+                ],
+            },
+            {
+                path: '/analysis', name: 'analysis',
+                component: Admin, _menu: true,
+                meta: { title: '数据分析', svg: 'SvgTrendCharts' },
+                redirect: '/analysis/decideCount',
+                children: [
+                    {
+                        path: 'decideCount', name: 'decideCount', _menu: true,
+                        meta: { title: '决策统计', },
+                        component: asyncComponent('view/analysis/DecideCountChart.vue'),
+                    },
+                    {
+                        path: 'rule', name: 'rule', _menu: true,
+                        meta: { title: '规则统计', },
+                        component: asyncComponent('view/analysis/RuleCountChart.vue'),
+                    },
+                ],
+            },
+        ],
+    })
+    // 路由切换前: 页面标题切换
+    router.afterEach((to, from) => {
+        const baseTitle = app.config.globalProperties.$cfg.title
+        if (baseTitle && to.meta.title) {
+            document.title = baseTitle + '-' + to.meta.title
+        }
+        return true
+    })
+
+
+    // 当前登录的用户信息
+    app.config.globalProperties.$user = Vue.reactive({})
+    // 系统配置
+    const $cfg = app.config.globalProperties.$cfg = Vue.reactive({})
+    $cfg.httpMethod = [
+        { name: 'GET', key: 'GET'},
+        { name: 'POST', key: 'POST' },
+    ];
+    $cfg.httpContentType = [
+        { name: 'json', key: 'application/json'},
+        { name: 'form', key: 'application/x-www-form-urlencoded' },
+        { name: 'text', key: 'text/plain' },
+    ];
+    $cfg.decideResultType = [];
+    $cfg.collectorType = [];
+    $cfg.fieldType = [];
+    $cfg.opHistoryType = [];
+    // 创建用户权限功能函数
+    app.config.globalProperties.$initUserPrivilege = (user) => {
+        user.privileges = {
+            _ids: {}, // 权限id缓存
+            has(privilegeId, force = false) {
+                const has = this._ids[(privilegeId)]
+                if (has && !force) return true;
+                if (has === undefined || force) {
+                    this._ids[(privilegeId)] = false;
+                    (async () => {
+                        axios.get(`user/${user.id}/hasPrivilege/${privilegeId}`).then(resp => {
+                            if (resp.data) this.add(privilegeId)
+                            else this.delete(privilegeId)
+                        })
+                    })()
+                }
+                return false
+            },
+            add(privilegeId) {
+                this._ids[(privilegeId)] = true;
+            },
+            delete(privilegeId) {
+                this._ids[(privilegeId)] = false;
+            }
+        }
+    }
+
+    app.use(router);
+    app.mount(document.body)
+</script>
+
+</body>
+</html>

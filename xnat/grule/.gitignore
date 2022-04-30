@@ -1,0 +1,16 @@
+/build
+/classes
+/out
+.gradle/
+.settings/
+.idea/
+*.iml
+.project
+.classpath
+nohup.out
+/upload
+/log
+/lib
+/h2
+*.log
+hs_err_pid*
