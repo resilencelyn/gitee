@@ -5,6 +5,7 @@ import hashlib
 import hmac
 import time
 import json
+import re
 import voluptuous as vol
 from datetime import timedelta
 from functools import partial
@@ -61,7 +62,7 @@ SERVICE_TO_METHOD = {
         'method': 'async_xiaoai_wakeup',
         'schema': XIAOMI_MIIO_SERVICE_SCHEMA.extend(
             {
-                vol.Optional('text', default=None): cv.string,
+                vol.Optional('text', default=''): vol.Any(cv.string, None),
                 vol.Optional('throw', default=False): cv.boolean,
             },
         ),
@@ -505,7 +506,6 @@ class MitvMediaPlayerEntity(MiotMediaPlayerEntity):
     def __init__(self, config: dict, miot_service: MiotService):
         super().__init__(config, miot_service)
         self._host = self._config.get(CONF_HOST) or ''
-        self._mitv_api = f'http://{self._host}:6095/'
         self._api_key = '881fd5a8c94b4945b46527b07eca2431'
         self._hmac_key = '2840d5f0d078472dbc5fb78e39da123e'
         self._state_attrs['6095_state'] = True
@@ -525,8 +525,36 @@ class MitvMediaPlayerEntity(MiotMediaPlayerEntity):
         self._apps = {}
         self._supported_features |= SUPPORT_PLAY_MEDIA
 
+    @property
+    def device_class(self):
+        return DEVICE_CLASS_TV
+
+    @property
+    def mitv_name(self):
+        nam = self.device_info.get('name', '')
+        if not re.match(r'[^x00-xff]', nam):
+            nam = None
+        nam = self.custom_config('television_name') or nam
+        if not nam:
+            sta = self.hass.states.get(self.entity_id)
+            nam = sta.attributes.get(ATTR_FRIENDLY_NAME) if sta else None
+        return nam or self.device_info.get('name', '电视')
+
+    @property
+    def bind_xiaoai(self):
+        eid = self.custom_config('bind_xiaoai')
+        if not eid or not self.hass:
+            return None
+        return self.hass.states.get(eid)
+
     async def async_added_to_hass(self):
         await super().async_added_to_hass()
+
+        if lip := self.custom_config('mitv_lan_host'):
+            self._host = lip
+            self._config = {**self._config, CONF_HOST: lip}
+            self._device = None
+
         await self.async_update_apps()
 
         sva = self.custom_config_list('sources_via_apps')
@@ -576,7 +604,7 @@ class MitvMediaPlayerEntity(MiotMediaPlayerEntity):
         adt = {}
         pms = self.with_opaque({
             'action': 'capturescreen',
-            'compressrate': 100,
+            'compressrate': self.custom_config_integer('screenshot_compress') or 50,
         })
         prev_6095 = self._state_attrs.get('6095_state')
         rdt = await self.async_request_mitv_api('controller', params=pms)
@@ -644,26 +672,30 @@ class MitvMediaPlayerEntity(MiotMediaPlayerEntity):
         if self._local_state and self._state_attrs.get('6095_state'):
             # tv is on
             pass
-        elif eid := self.custom_config('bind_xiaoai'):
-            nam = self.device_info.get('name')
-            nam = self.custom_config('television_name', nam)
-            sil = self.custom_config_bool('xiaoai_silent', True)
-            if not nam:
-                sta = self.hass.states.get(self.entity_id)
-                nam = sta.attributes.get(ATTR_FRIENDLY_NAME)
-            if nam and self.hass.states.get(eid):
-                txt = f'{nam}亮屏' if self._local_state else f'打开{nam}'
-                self.hass.services.call(DOMAIN, 'intelligent_speaker', {
-                    'entity_id': eid,
-                    'text': txt,
-                    'execute': True,
-                    'silent': sil,
-                })
+        elif xai := self.bind_xiaoai:
+            nam = self.mitv_name
+            txt = f'{nam}亮屏' if self._local_state else f'打开{nam}'
+            self.hass.services.call(DOMAIN, 'intelligent_speaker', {
+                'entity_id': xai.entity_id,
+                'text': txt,
+                'execute': True,
+                'silent': self.custom_config_bool('xiaoai_silent', True),
+            })
         return super().turn_on()
 
-    @property
-    def device_class(self):
-        return DEVICE_CLASS_TV
+    def turn_off(self):
+        if self.custom_config_bool('turn_off_screen'):
+            act = self._message_router.get_action('post') if self._message_router else None
+            if act:
+                return self.call_action(act, ['熄屏'])
+            elif xai := self.bind_xiaoai:
+                return self.hass.services.call(DOMAIN, 'intelligent_speaker', {
+                    'entity_id': xai.entity_id,
+                    'text': f'{self.mitv_name}熄屏',
+                    'execute': True,
+                    'silent': self.custom_config_bool('xiaoai_silent', True),
+                })
+        return super().turn_off()
 
     def play_media(self, media_type, media_id, **kwargs):
         """Play a piece of media."""
@@ -755,11 +787,14 @@ class MitvMediaPlayerEntity(MiotMediaPlayerEntity):
         pms.pop('token', None)
         return pms
 
+    def mitv_api_path(self, path=''):
+        return f'http://{self._host}:6095/{path.lstrip("/")}'
+
     def request_mitv_api(self, path, **kwargs):
         kwargs.setdefault('timeout', 5)
         req = None
         try:
-            req = requests.get(f'{self._mitv_api}{path}', **kwargs)
+            req = requests.get(self.mitv_api_path(path), **kwargs)
             rdt = json.loads(req.content or '{}') or {}
             self._state_attrs['6095_state'] = True
             if 'success' not in rdt.get('msg', ''):

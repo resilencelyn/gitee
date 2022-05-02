@@ -33,7 +33,7 @@
 
 <h2 align="center">🤗在线demo</h2>
 
-❤️ 本项目提供了一个**在线demo**，点击下面的logo，进入**Hugging Face Spaces**中快速体验：
+❤️ 本项目提供了**在线demo**，点击下面的logo，进入**Hugging Face Spaces**中快速体验：
 
 <div align="center" >
 <a href="https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det">
@@ -41,12 +41,12 @@
 </a>
 </div>
 
-### Demo 列表
+### 💡 Demo 列表
 
-| Demo 名称                                                    | 输入类型 | 输出类型   | 状态                                                         |
-| ------------------------------------------------------------ | -------- | ---------- | ------------------------------------------------------------ |
-| [Gradio YOLOv5 Det v1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) | 图片     | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
-| [Gradio YOLOv5 Det v2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) | 图片     | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
+|                          Demo 名称                           | 输入类型 |  输出类型  |                             状态                             |
+| :----------------------------------------------------------: | :------: | :--------: | :----------------------------------------------------------: |
+| [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
+| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
 
 
 
