@@ -236,7 +236,7 @@ def main(args):
     outputs02 = gr.outputs.JSON(label="检测信息")
 
     # 标题
-    title = "基于Gradio的YOLOv5通用目标检测系统"
+    title = "基于Gradio的YOLOv5通用目标检测系统v0.1"
     # 描述
     description = "<div align='center'>可自定义目标检测模型、安装简单、使用方便</div>"
 

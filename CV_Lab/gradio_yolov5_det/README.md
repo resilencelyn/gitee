@@ -160,6 +160,15 @@
 │   └── requirements.txt					# 脚本依赖包
 ```
 
+<h2 align="center">❤️ 版本改进</h2>
+
+🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 采用[Pillow](https://github.com/python-pillow/Pillow)组件绘制图片检测效果
+
+<p align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/opencv_pillow.png">
+</p>
+
+
 <h2 align="center">🔥安装教程</h2>
 
 ### ✅ 第一步：安装Gradio YOLOv5 Det

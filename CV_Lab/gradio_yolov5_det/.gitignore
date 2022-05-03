@@ -17,6 +17,9 @@
 *.txt
 *.csv
 
+# 生成文件
+*.pdf
+
 # 参数文件
 *.yaml
 *.json
@@ -31,6 +34,7 @@
 *.ttc
 *.ttf
 *.otf
+*.pkl
 
 # 模型文件
 *.pt

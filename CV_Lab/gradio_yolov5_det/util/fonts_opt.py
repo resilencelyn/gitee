@@ -11,10 +11,12 @@ from rich.console import Console
 
 ROOT_PATH = sys.path[0]  # 项目根目录
 
-fonts_list = ["SimSun.ttc"]  # 字体列表
+fonts_list = ["SimSun.ttf"]  # 字体列表
 fonts_suffix = ["ttc", "ttf", "otf"]  # 字体后缀
 
-data_url_dict = {"SimSun.ttc": "https://gitee.com/CV_Lab/opencv_webcam/attach_files/959173/download/SimSun.ttc"}
+data_url_dict = {
+    "SimSun.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1049109/download/SimSun.ttf"
+}
 
 console = Console()
 
@@ -40,7 +42,9 @@ def add_fronts(font_diff):
                 sys.exit()
             else:
                 print()
-                console.print(f"{font_name} [bold green]字体文件下载完成！[/bold green] 已保存至：{file_path}")
+                console.print(
+                    f"{font_name} [bold green]字体文件下载完成！[/bold green] 已保存至：{file_path}"
+                )
 
 
 # 判断字体文件
@@ -61,4 +65,3 @@ def is_fonts(fonts_dir):
         # 字体库不存在，创建字体库
         console.print("[bold red]字体库不存在，正在创建。。。[/bold red]")
         add_fronts(fonts_list)  # 创建字体库
-
