@@ -2,7 +2,7 @@
 
 from fpdf import FPDF
 
-# title = 'Gradio YOLOv5 Det v0.2检测报告'
+
 title = "Gradio YOLOv5 Det v0.2"
 
 
@@ -10,16 +10,16 @@ class PDF(FPDF):
     def header(self):
         # 设置中文字体
         self.add_font("SimSun", "", "./fonts/SimSun.ttf", uni=True)
-        self.set_font("SimSun", "", 12)
+        self.set_font("SimSun", "", 16)
         # Calculate width of title and position
         w = self.get_string_width(title) + 6
         self.set_x((210 - w) / 2)
         # Colors of frame, background and text
-        self.set_draw_color(0, 80, 180)
-        self.set_fill_color(230, 230, 0)
-        self.set_text_color(220, 50, 50)
+        self.set_draw_color(255, 255, 255)
+        self.set_fill_color(255, 255, 255)
+        self.set_text_color(0, 0, 0)
         # Thickness of frame (1 mm)
-        self.set_line_width(1)
+        # self.set_line_width(1)
         # Title
         self.cell(w, 9, title, 1, 1, "C", 1)
         # Line break
@@ -57,7 +57,7 @@ class PDF(FPDF):
         self.multi_cell(0, 5, name)
         # Line break
         self.ln()
-        self.cell(0, 5, "(end of excerpt)")
+        self.cell(0, 5, "--------------------------------------")
 
     def print_chapter(self, num, title, name):
         self.add_page()

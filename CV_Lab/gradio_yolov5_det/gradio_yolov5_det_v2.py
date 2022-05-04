@@ -4,6 +4,7 @@
 
 import argparse
 import csv
+import json
 import sys
 from pathlib import Path
 
@@ -14,7 +15,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 from util.fonts_opt import is_fonts
 from util.pdf_opt import pdf_generate
-
 
 ROOT_PATH = sys.path[0]  # 根目录
 
@@ -84,6 +84,27 @@ def parse_args(known=False):
 
     args = parser.parse_known_args()[0] if known else parser.parse_args()
     return args
+
+
+# yaml文件解析
+def yaml_parse(file_path):
+    return yaml.safe_load(open(file_path, encoding="utf-8").read())
+
+
+# yaml csv 文件解析
+def yaml_csv(file_path, file_tag):
+    file_suffix = Path(file_path).suffix
+    if file_suffix == suffix_list[0]:
+        # 模型名称
+        file_names = [i[0] for i in list(csv.reader(open(file_path)))]  # csv版
+    elif file_suffix == suffix_list[1]:
+        # 模型名称
+        file_names = yaml_parse(file_path).get(file_tag)  # yaml版
+    else:
+        print(f"{file_path}格式不正确！程序退出！")
+        sys.exit()
+
+    return file_names
 
 
 #  模型加载
@@ -156,15 +177,7 @@ def pil_draw(img, countdown_msg, textFont, xyxy, font_size, label_opt):
 
 # YOLOv5图片检测函数
 def yolo_det(
-    img,
-    device,
-    model_name,
-    inference_size,
-    conf,
-    iou,
-    label_opt,
-    model_cls,
-    generate_report,
+    img, device, model_name, inference_size, conf, iou, label_opt, model_cls, opt
 ):
 
     global model, model_name_tmp, device_tmp
@@ -224,33 +237,22 @@ def yolo_det(
 
     det_json = export_json(results, model, img.size)[0]  # 检测信息
 
+    # JSON格式化
+    det_json_format = json.dumps(
+        det_json, sort_keys=True, indent=4, separators=(",", ":"), ensure_ascii=False
+    )
+
     # -------pdf-------
     report = "./Det_Report.pdf"
-    if generate_report:
-        pdf_generate(f'{det_json}', report)
-
-    return det_img, det_json, report if generate_report else None
-
-
-# yaml文件解析
-def yaml_parse(file_path):
-    return yaml.safe_load(open(file_path, encoding="utf-8").read())
-
-
-# yaml csv 文件解析
-def yaml_csv(file_path, file_tag):
-    file_suffix = Path(file_path).suffix
-    if file_suffix == suffix_list[0]:
-        # 模型名称
-        file_names = [i[0] for i in list(csv.reader(open(file_path)))]  # csv版
-    elif file_suffix == suffix_list[1]:
-        # 模型名称
-        file_names = yaml_parse(file_path).get(file_tag)  # yaml版
+    if "pdf" in opt:
+        pdf_generate(f"{det_json_format}", report)
     else:
-        print(f"{file_path}格式不正确！程序退出！")
-        sys.exit()
+        report = None
 
-    return file_names
+    if "json" not in opt:
+        det_json = None
+
+    return det_img, det_json, report
 
 
 def main(args):
@@ -300,7 +302,9 @@ def main(args):
     inputs_clsName = gr.inputs.CheckboxGroup(
         choices=model_cls_name, default=model_cls_name, type="index", label="类别"
     )
-    inputs_genpdf = gr.inputs.Checkbox(default=False, label="生成报告")
+    inputs_opt = gr.inputs.CheckboxGroup(
+        choices=["pdf", "json"], default=["pdf"], type="value", label="操作"
+    )
 
     # 输入参数
     inputs = [
@@ -312,13 +316,13 @@ def main(args):
         inputs_iou,  # IoU阈值
         inputs_label,  # 标签显示
         inputs_clsName,  # 类别
-        inputs_genpdf,  # 生成报告
+        inputs_opt,  # 检测操作
     ]
 
     # 输出参数
     outputs_img = gr.outputs.Image(type="pil", label="检测图片")
     outputs02_json = gr.outputs.JSON(label="检测信息")
-    outputs03_pdf = gr.outputs.File(label="检测信息PDF")
+    outputs03_pdf = gr.outputs.File(label="下载检测报告")
 
     outputs = [outputs_img, outputs02_json, outputs03_pdf]
 
@@ -338,7 +342,7 @@ def main(args):
             0.5,
             True,
             ["人", "公交车"],
-            True,
+            ["pdf"],
         ],
         [
             "./img_example/Millenial-at-work.jpg",
@@ -349,7 +353,7 @@ def main(args):
             0.45,
             True,
             ["人", "椅子", "杯子", "笔记本电脑"],
-            False,
+            ["json"],
         ],
         [
             "./img_example/zidane.jpg",
@@ -360,7 +364,7 @@ def main(args):
             0.5,
             False,
             ["人", "领带"],
-            False,
+            ["pdf", "json"],
         ],
     ]
 
@@ -375,7 +379,8 @@ def main(args):
         theme="seafoam",
         # live=True, # 实时变更输出
         flagging_dir="run",  # 输出目录
-        # allow_flagging="auto",
+        # flagging_options=["good", "generally", "bad"],
+        allow_flagging="auto",
         # ).launch(inbrowser=True, auth=['admin', 'admin'])
     ).launch(
         inbrowser=True,  # 自动打开默认浏览器

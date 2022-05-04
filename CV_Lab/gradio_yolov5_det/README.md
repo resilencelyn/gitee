@@ -150,7 +150,8 @@
 │   │   └── cls_name.csv					# 类别名称文件（csv版）
 │   ├── img_example							# 示例图片
 │   ├── __init__.py							# 初始化文件
-│   ├── gradio_yolov5_det.py				# 主运行文件
+│   ├── gradio_yolov5_det_v2.py				# v0.2主运行文件
+│   ├── gradio_yolov5_det.py				# v0.1主运行文件
 │   ├── LICENSE								# 项目许可
 │   ├── CodeCheck.md						# 代码检查
 │   ├── .gitignore							# git忽略文件
@@ -162,7 +163,7 @@
 
 <h2 align="center">❤️ 版本改进</h2>
 
-🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 采用[Pillow](https://github.com/python-pillow/Pillow)组件绘制图片检测效果
+🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 采用[Pillow](https://github.com/python-pillow/Pillow)组件绘制图片检测效果，可**自定义字体**文件。
 
 <p align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/opencv_pillow.png">
@@ -203,6 +204,8 @@ pip install -r requirements.txt -U
 ❗ 注意：yolov5默认采用pip安装PyTorch GPU版，如果采用官网安装**PyTorch GPU**版，参见[YOLOv5 PyTorch GPU安装教程](./yolov5_pytorch_gpu.md)
 
 <h2 align="center">⚡使用教程</h2>
+
+❤️ 注：**Gradio YOLOv5 Det v0.2** 的使用方法和v0.1相同，将`gradio_yolov5_det.py` 改为 `gradio_yolov5_det_v2.py` 即可。
 
 ### 💡 运行YOLOv5模型
 

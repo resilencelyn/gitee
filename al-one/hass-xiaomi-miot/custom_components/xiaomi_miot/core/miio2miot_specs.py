@@ -63,6 +63,30 @@ MIIO_TO_MIOT_SPECS = {
         },
     },
 
+    'cgllc.airmonitor.s1': {
+        'without_props': True,
+        'miio_commands': [
+            {
+                'method': 'get_value',
+                'params': [
+                    'aqi', 'pm25', 'co2', 'tvoc', 'humidity', 'temperature',
+                    'tvoc_unit', 'temperature_unit', 'battery', 'battery_state',
+                ],
+                'template': '{{ results | default({},true) }}',
+            },
+        ],
+        'entity_attrs': ['tvoc_unit', 'temperature_unit', 'battery_state'],
+        'miio_specs': {
+            'prop.2.1': {'prop': 'humidity'},
+            'prop.2.2': {'prop': 'pm25'},
+            'prop.2.3': {'prop': 'temperature'},
+            'prop.2.4': {'prop': 'co2'},
+            'prop.2.5': {'prop': 'tvoc'},
+            'prop.3.1': {'prop': 'battery'},
+            'prop.3.2': {'prop': 'battery_state', 'template': '{{ 1 if value == "charging" else 2 }}'},
+        },
+    },
+
     'chuangmi.plug.hmi205': {
         'miio_specs': {
             'prop.2.1': {'prop': 'power', 'setter': True, 'format': 'onoff'},
@@ -1395,11 +1419,13 @@ MIIO_TO_MIOT_SPECS = {
 
     'yunmi.waterpuri.lx5': {
         'chunk_properties': 1,
-        'miio_props': ['run_status', 'f1_totalflow', 'f1_totaltime', 'f2_totalflow', 'f2_totaltime', 'tds_warn_thd'],
-        'entity_attrs': ['run_status', 'f1_totalflow', 'f1_totaltime', 'f2_totalflow', 'f2_totaltime', 'tds_warn_thd'],
+        'miio_props': ['run_status', 'f1_totalflow', 'f2_totalflow'],
+        'entity_attrs': ['run_status', 'f1_totalflow', 'f2_totalflow'],
         'miio_specs': {
             'prop.2.1': {'prop': 'temperature'},
-            'prop.3.1': {'prop': 'tds_in'},
+            'prop.2.101': {'prop': 'rinse'},
+            'prop.2.102': {'prop': 'lightMode', 'setter': True},
+            'prop.2.103': {'prop': 'tds_warn_thd', 'setter': True},
             'prop.3.2': {'prop': 'tds_out'},
             'prop.4.1': {'prop': 'f1_usedtime'},
             'prop.4.2': {'prop': 'f1_usedflow'},
