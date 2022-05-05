@@ -27,6 +27,26 @@
 	<a href="https://github.com/pyupio/safety"><img src="https://img.shields.io/badge/dependencies-Safety-blue" alt="Safety"></a>
 </p>
 
+
+## 🚀 作者简介
+
+曾逸夫，从事人工智能研究与开发；主研领域：计算机视觉；[YOLOv5官方开源项目代码贡献人](https://github.com/ultralytics/yolov5/graphs/contributors)；[YOLOv5 v6.1代码贡献人](https://github.com/ultralytics/yolov5/releases/tag/v6.1)
+
+❤️  Github：https://github.com/Zengyf-CVer
+
+🔥 YOLOv5 官方开源项目PR ID：
+
+- Save *.npy features on detect.py `--visualize`：https://github.com/ultralytics/yolov5/pull/5701
+- Fix `detect.py --view-img` for non-ASCII paths：https://github.com/ultralytics/yolov5/pull/7093
+- Fix Flask REST API：https://github.com/ultralytics/yolov5/pull/7210
+- Add yesqa to precommit checks：https://github.com/ultralytics/yolov5/pull/7511
+- Add mdformat to precommit checks and update other version：https://github.com/ultralytics/yolov5/pull/7529
+
+💡 YOLOv5 v6.1代码贡献链接：
+
+- https://github.com/ultralytics/yolov5/releases/tag/v6.1
+
+
 <h2 align="center">🚀更新走势</h2>
 
 - `2022-04-30` **⚡ [Gradio YOLOv5 Det v0.1](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.1)正式上线**
@@ -43,10 +63,12 @@
 
 ### 💡 Demo 列表
 
+❤️ 点击列表中的链接，进入对应版本的**Hugging Face Spaces**界面中快速体验：
+
 |                          Demo 名称                           | 输入类型 |  输出类型  |                             状态                             |
 | :----------------------------------------------------------: | :------: | :--------: | :----------------------------------------------------------: |
-| [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
 | [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
+| [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
 
 
 
@@ -91,6 +113,8 @@
 
 ❗ 注：Gradio的滑动条组件的滑块的位置，初始时不跟随默认值变化，但不影响检测
 
+
+
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_ui01.png">
 </div>
@@ -112,8 +136,44 @@
 </div>
 
 <div align="center" >
-功能界面03
+功能界面03（v0.1）
 </div>
+
+❤️ Gradio YOLOv5 Det v0.2 加入**检测报告pdf下载**功能，可以与**JSON**功能组合使用。
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_pdf_json.png">
+</div>
+
+<div align="center" >
+功能界面04（v0.2）
+</div>
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_o_pdf.png">
+</div>
+
+<div align="center" >
+检测报告PDF功能界面（v0.2）
+</div>
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_o_json_pdf.png">
+</div>
+
+<div align="center" >
+检测报告PDF与JSON功能界面（v0.2）
+</div>
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_o_json.png">
+</div>
+
+<div align="center" >
+检测报告JSON功能界面（v0.2）
+</div>
+
+
 
 #### ❤️ 快速体验
 
@@ -124,7 +184,15 @@
 </div>
 
 <div align="center" >
-示例界面
+示例界面 （v0.1）
+</div>
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_examples.png">
+</div>
+
+<div align="center" >
+示例界面 （v0.2）
 </div>
 
 <h2 align="center">💡项目结构</h2>
@@ -168,6 +236,14 @@
 <p align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/opencv_pillow.png">
 </p>
+
+🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 的检测结果可以在图片上**显示中文** （左：v0.1，右：v0.2；点击查看大图）
+
+<div align="center">
+<img src="https://pycver.gitee.io/ows-pics/imgs/grd_v01_detpic.png" width="45%"/>
+ <img src="https://pycver.gitee.io/ows-pics/imgs/grd_v02_detpic.png" width="45%"/>
+</div>
+
 
 
 <h2 align="center">🔥安装教程</h2>
@@ -325,19 +401,41 @@ python gradio_yolov5_det.py -lds
 </div>
 ❗ 注：上述界面仅供参考，具体界面以实际项目为主。
 
+
+
+❤️ 检测报告下载功能：点击`下载检测报告界面`即可下载PDF文件
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_o_pdf.png">
+</div>
+
+`Det_Report.pdf`内容如下：
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_pdf_content.png">
+</div>
+
+
+
+
+
 相关检测数据存储在`run`目录中，结构如下：
 
 ```
 # run目录
 .
 ├── run						# 人脸数据保存目录
-│   ├── 原始图片				# 原始图片目录
+│   ├── 原始图片			# 原始图片目录
 │   │   ├── 0.jpg			# 原始图片
 │   │   ├──	1.jpg			# 原始图片
 │   │   ├──	......
-│   ├── 检测图片				# 检测图片目录
+│   ├── 检测图片			# 检测图片目录
 │   │   ├── 0.png			# 检测图片
 │   │   ├── 1.png			# 检测图片
+│   │   ├──	......
+│   ├── 下载检测报告		# 检测报告目录
+│   │   ├── 0.pdf			# 检测图片
+│   │   ├── 1.pdf			# 检测图片
 │   │   ├──	......
 │   ├── log.csv				# 检测日志
 ```
