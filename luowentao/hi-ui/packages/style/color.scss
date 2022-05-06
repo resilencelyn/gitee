@@ -1,0 +1,109 @@
+@import "config";
+@import "mixins";
+
+/* ==================
+        主题颜色
+ ==================== */
+.bg-color{
+  @include bg_color($bg-color-light);
+}
+
+/* ==================
+        文本颜色
+ ==================== */
+
+/*一级文本颜色*/
+.text-color-one {
+  @include text_color_one($text-color-one-light);
+}
+
+/*二级文本颜色*/
+.text-color-two {
+  @include text_color_two($text-color-two-light);
+}
+
+/*三级文本颜色*/
+.text-color-three {
+  @include text_color_three($text-color-three-light);
+}
+
+/*弹出框文本颜色*/
+.text-color-dialog{
+  @include text_color_one($text-color-one-light);
+}
+
+/*一级文本颜色反色*/
+.text-color-one-contrary {
+  color: rgba(255,255,255,1);
+}
+
+/*二级文本颜色反色*/
+.text-color-two-contrary {
+  color: rgba(255,255,255,0.6);
+}
+
+/*三级文本颜色反色、提示文本颜色*/
+.text-color-three-contrary ,.text-color-tips{
+  color: rgba(255,255,255,0.38);
+}
+
+
+
+/* ==================
+       控件公共色
+ ==================== */
+
+/*控件高亮色、高亮状态点击效果颜色*/
+.widget-bg-highlight,.widget-bg-highlight-click{
+  @include widget_bg_highlight($widget-bg-highlight-light)
+}
+
+/*控件背景色*/
+.widget-bg{
+  @include widget_bg($widget-bg-light);
+}
+
+
+/* ==================
+      卡片颜色
+ ==================== */
+.card{
+  @include card_color($card-bg-light);
+  box-shadow: 0 0.2rem 0.37rem rgba(0,0,0,0.03);
+  border-radius: 0.5rem;
+}
+
+
+/* ==================
+      蒙版颜色
+ ==================== */
+.mask{
+  @include mask_bg($mask-bg-light);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 999;
+}
+
+
+/* ==================
+      状态文字颜色
+ ==================== */
+@for $i from 1 through 11 {
+  .hi-color-#{$i}{
+    @include hi_color(nth($hi-color-light,$i),$i);
+  }
+}
+
+/* ==================
+        按钮颜色
+ ==================== */
+.hi-btn-color-red{
+  color: #e64548;
+}
+
+.hi-btn-color-blue{
+  color: #3f97e9;
+}

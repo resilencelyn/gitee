@@ -1,0 +1,23 @@
+@import "config";
+@import "mixins";
+
+.switch{
+  width: 3.125rem;
+  height: 1.25rem;
+  border-radius: 1.25rem;
+  padding: 0.125rem;
+}
+.switch-btn{
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 1.25rem;
+  background-color: #ffffff;
+}
+.switch-on{
+  @include switch_bg_on($switch-bg-no-light);
+}
+.switch-off{
+  @include switch_bg_off($switch-bg-off-light);
+}
+
+

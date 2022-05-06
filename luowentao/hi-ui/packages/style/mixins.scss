@@ -1,0 +1,196 @@
+@import "config";
+
+@mixin text_color_one($color){
+  color:$color;
+  [data-theme="light"] & {
+    color: $text-color-one-light;
+  }
+  [data-theme="dark"] & {
+    color: $text-color-one-dark;
+  }
+}
+
+@mixin text_color_two($color){
+  color:$color;
+  [data-theme="light"] & {
+    color: $text-color-two-light;
+  }
+  [data-theme="dark"] & {
+    color: $text-color-two-dark;
+  }
+}
+
+@mixin text_color_three($color){
+  color:$color;
+  [data-theme="light"] & {
+    color: $text-color-three-light;
+  }
+  [data-theme="dark"] & {
+    color: $text-color-three-dark;
+  }
+}
+
+@mixin bg_color($color){
+  background-color: $color;
+  [data-theme="light"] & {
+    background-color: $bg-color-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $bg-color-dark;
+  }
+}
+
+@mixin widget_bg($color){
+  background-color: $color;
+  [data-theme="light"] & {
+    background-color: $widget-bg-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $widget-bg-dark;
+  }
+}
+
+@mixin widget_bg_highlight($color){
+  background-color: $color;
+  [data-theme="light"] & {
+    background-color: $widget-bg-highlight-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $widget-bg-highlight-dark;
+  }
+}
+
+@mixin toast($color,$bg){
+  background-color: $bg;
+  color: $color;
+  [data-theme="light"] & {
+    background-color: $toast-bg-err-light;
+    color: $toast-text-color-err-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $toast-bg-err-dark;
+    color: $toast-text-color-err-dark;
+  }
+}
+
+@mixin toast_icon($img){
+  background-image: $img;
+  [data-theme="light"] & {
+    background-image: $toast-icon-light;
+  }
+  [data-theme="dark"] & {
+    background-image: $toast-icon-dark;
+  }
+}
+
+@mixin card_color($color){
+  background-color: $color;
+  [data-theme="light"] & {
+    background-color: $card-bg-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $card-bg-dark;
+  }
+}
+
+@mixin mask_bg($color){
+  background-color: $color;
+  [data-theme="light"] & {
+    background-color: $mask-bg-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $mask-bg-dark;
+  }
+}
+
+@mixin dropdown($bg){
+  background-color: $bg;
+  [data-theme="light"] & {
+    background-color: $dropdown-bg-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $dropdown-bg-dark;
+  }
+}
+
+@mixin dropdown_item($divider){
+  border-bottom: 0.015rem solid $divider;
+  [data-theme="light"] & {
+    border-bottom: 0.015rem solid $dropdown-divider-color-light;
+  }
+  [data-theme="dark"] & {
+    border-bottom: 0.015rem solid $dropdown-divider-color-dark;
+  }
+}
+
+@mixin dropdown_item_select($select){
+  background-color: $select;
+  [data-theme="light"] & {
+    background-color: $dropdown-select-bg-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $dropdown-select-bg-dark;
+  }
+}
+
+@mixin row_left_border($divider){
+  border-left: 0.015625rem solid $divider;
+  [data-theme="light"] & {
+    border-left: 0.015625rem solid $dropdown-divider-color-light;
+  }
+  [data-theme="dark"] & {
+    border-left: 0.015625rem solid $dropdown-divider-color-dark;
+  }
+}
+
+@mixin picker_mask($color-start,$color-end){
+  background-image: linear-gradient(
+                  180deg
+          , $color-start, $color-end), linear-gradient(
+                  0deg
+          , $color-start, $color-end);
+  [data-theme="light"] & {
+    background-image: linear-gradient(
+                    180deg
+            , $picker-mask-bg-light-start-light, $picker-mask-bg-light-end-light), linear-gradient(
+                    0deg
+            , $picker-mask-bg-light-start-light, $picker-mask-bg-light-end-light);
+  }
+  [data-theme="dark"] & {
+    background-image: linear-gradient(
+                    180deg
+            , $picker-mask-bg-light-start-dark, $picker-mask-bg-light-end-dark), linear-gradient(
+                    0deg
+            , $picker-mask-bg-light-start-dark, $picker-mask-bg-light-end-dark);
+  }
+}
+
+@mixin switch_bg_on($bg){
+  background-color: $bg;
+  [data-theme="light"] & {
+    background-color: $switch-bg-no-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $switch-bg-no-dark;
+  }
+}
+
+@mixin switch_bg_off($bg){
+  background-color: $bg;
+  [data-theme="light"] & {
+    background-color: $switch-bg-off-light;
+  }
+  [data-theme="dark"] & {
+    background-color: $switch-bg-off-dark;
+  }
+}
+
+@mixin hi_color($bg,$id){
+  color: $bg;
+  [data-theme="light"] & {
+    color: nth($hi-color-light,$id);
+  }
+  [data-theme="dark"] & {
+    color: nth($hi-color-dark,$id);
+  }
+}

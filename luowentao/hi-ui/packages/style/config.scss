@@ -1,0 +1,84 @@
+/*主题背景*/
+$bg-color-light: #F6F6F5;
+$bg-color-dark: #000000;
+
+/*文本颜色*/
+
+//一级文本颜色
+$text-color-one-light: rgba(0,0,0,0.9);
+$text-color-one-dark: rgba(255,255,255,0.9);
+
+//二级文本颜色
+$text-color-two-light: rgba(0,0,0,0.6);
+$text-color-two-dark: rgba(255,255,255,0.6);
+
+//三级文本颜色
+$text-color-three-light: rgba(0,0,0,0.38);
+$text-color-three-dark: rgba(255,255,255,0.38);
+
+//状态文本色
+$hi-color-light: #3f56ea,#01aaef,#00bfc9,#47cc47,#8bd600,#892be1,#e40079,#fb2b2d,#ff7500,#ff9700,#ffbe00;
+
+$hi-color-dark: #4056eb,#007acc,#00777e,#008900,#4e7800,#8a2be2,#e40078,#e64548,#ba5500,#a56200,#8c6800;
+
+/*控件颜色*/
+
+//控件高亮色
+$widget-bg-highlight-light: rgba(0,125,255,1);
+$widget-bg-highlight-dark: rgba(0,108,223,1);
+
+//控件背景
+$widget-bg-light: rgba(0,0,0,0.1);
+$widget-bg-dark: rgba(255,255,255,0.1);
+
+/*块级背景色*/
+$card-bg-light: #ffffff;
+$card-bg-dark: #262626;
+
+//蒙版颜色
+$mask-bg-light: rgba(0,0,0,0.2);
+$mask-bg-dark: rgba(0,0,0,0.2);
+
+/*toast颜色*/
+
+//背景颜色
+$toast-bg-err-light: rgba(232,64,38,0.15);
+$toast-bg-err-dark: #372222;
+
+//文字颜色
+$toast-text-color-err-light: #fb2a2d;
+$toast-text-color-err-dark: #e64548;
+
+//图标
+$toast-icon-light: url("/img/ic_warn.png");
+$toast-icon-dark: url("/img/ic_warn_dark.png");
+
+//下拉菜单
+$dropdown-bg-light: #ffffff;
+$dropdown-bg-dark: #404040;
+
+$dropdown-divider-color-light: rgba(0,0,0,0.2);
+$dropdown-divider-color-dark: rgba(255,255,255,0.2);
+
+$dropdown-select-bg-light: rgba(0, 125, 255, 0.1);
+$dropdown-select-bg-dark: rgba(0, 108, 222, 0.1);
+
+$picker-mask-bg-light-start-light: rgba(255,255,255,.9);
+$picker-mask-bg-light-end-light: rgba(255,255,255,.4);
+
+$picker-mask-bg-light-start-dark: rgba(38,38,38,.9);
+$picker-mask-bg-light-end-dark: rgba(38,38,38,.4);
+
+//开关背景
+$switch-bg-no-light: #007dff;
+$switch-bg-no-dark: #006cde;
+
+$switch-bg-off-light: rgba(0,0,0,.1);
+$switch-bg-off-dark: rgba(255,255,255,.4);
+
+
+
+
+
+
+

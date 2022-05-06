@@ -1,0 +1,32 @@
+
+@import "config";
+@import "mixins";
+
+.hi-row{
+    display: flex;
+    width: 100%;
+}
+
+
+.hi-col{
+
+}
+.hi-row-line .hi-col{
+    @include row_left_border($dropdown-divider-color-light);
+}
+.hi-row-line .hi-col:first-child{
+    border-left: none;
+}
+.hi-row .hi-col:first-child{
+    padding-left: 0!important;
+}
+.hi-row .hi-col:last-child{
+    padding-right: 0!important;
+}
+
+@for $i from 0 through 6 {
+    .hi-col-#{$i}{
+        flex: $i;
+    }
+}
+
