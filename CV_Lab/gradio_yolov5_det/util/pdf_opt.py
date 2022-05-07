@@ -10,7 +10,7 @@ title = "Gradio YOLOv5 Det v0.2"
 
 # PDF生成类
 class PDF(FPDF):
-# 参考：https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+    # 参考：https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
     def header(self):
         # 设置中文字体
         self.add_font("SimSun", "", "./fonts/SimSun.ttf", uni=True)

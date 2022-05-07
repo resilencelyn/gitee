@@ -49,7 +49,7 @@ def parse_args(known=False):
     parser.add_argument(
         "--cls_name",
         "-cls",
-        default="./cls_name/cls_name.yaml",
+        default="./cls_name/cls_name_zh.yaml",
         type=str,
         help="cls name",
     )
@@ -201,7 +201,12 @@ def yolo_det(
     img_size = img.size  # 帧尺寸
 
     # 加载字体
+    # 中文
     textFont = ImageFont.truetype(str(f"{ROOT_PATH}/fonts/SimSun.ttf"), size=FONTSIZE)
+    # 英文、俄语、西班牙语、阿拉伯语
+    # textFont = ImageFont.truetype(str(f"{ROOT_PATH}/fonts/TimesNewRoman.ttf"), size=FONTSIZE)
+    # 韩语
+    # textFont = ImageFont.truetype(str(f"{ROOT_PATH}/fonts/malgun.ttf"), size=FONTSIZE)
 
     det_img = img.copy()
 
@@ -380,7 +385,7 @@ def main(args):
         # live=True, # 实时变更输出
         flagging_dir="run",  # 输出目录
         # flagging_options=["good", "generally", "bad"],
-        allow_flagging="auto",
+        # allow_flagging="auto",
         # ).launch(inbrowser=True, auth=['admin', 'admin'])
     ).launch(
         inbrowser=True,  # 自动打开默认浏览器

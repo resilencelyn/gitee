@@ -7,7 +7,15 @@ echo " "
 #BASE_DIR=${HUATUO_IL2CPP_SOURCE_DIR}/libil2cpp
 function SearchCppFile()
 {
-    CPP_FILE_NUM=`ls -l $1 | grep "\.cpp$"|wc -l`
+    for f in $(ls $1)
+    do
+        SUB_DIR=$1/$f
+        if [ -d ${SUB_DIR} ]; then
+            SearchCppFile ${SUB_DIR}
+        fi
+    done
+
+    CPP_FILE_NUM=`ls -l $1/ | grep "\.cpp$"|wc -l`
     if (( ${CPP_FILE_NUM} > 0 ))
     then
         for f in $1/*.cpp
@@ -16,7 +24,7 @@ function SearchCppFile()
         done
     fi
 
-    MM_FILE_NUM=`ls -l $1 | grep "\.mm$"|wc -l`
+    MM_FILE_NUM=`ls -l $1/ | grep "\.mm$"|wc -l`
     if (( ${MM_FILE_NUM} > 0 ))
     then
         for f in $1/*.mm
@@ -24,14 +32,6 @@ function SearchCppFile()
             echo "#include \""$f"\"" >> ${OBJECTIVE_FILE_NAME}
         done
     fi
-    
-    for f in $(ls $1)
-    do
-        SUB_DIR=$1/$f
-        if [ -d ${SUB_DIR} ]; then
-            SearchCppFile ${SUB_DIR}
-        fi
-    done
 }
 
 rm -rf ${GEN_SOURCE_DIR}/lump_cpp
@@ -47,6 +47,10 @@ for FOLDER in huatuo vm pch utils vm-utils codegen metadata os debugger mono gc 
 do
     OUTPUT_FILE_NAME=${GEN_SOURCE_DIR}/lump_cpp/lump_libil2cpp_${FOLDER}.cpp
     echo "#include \"${BASE_DIR}/il2cpp-config.h\"" > ${OUTPUT_FILE_NAME}
+    if  [ $FOLDER = huatuo ] || [ $FOLDER = vm ]
+    then
+        echo "#include \"${BASE_DIR}/codegen/il2cpp-codegen.h\"" >> ${OUTPUT_FILE_NAME}
+    fi
     SearchCppFile ${BASE_DIR}/${FOLDER}
     echo gen file: ${OUTPUT_FILE_NAME}
 done

@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0-windows;netcoreapp3.1;net462;</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <Version>1.2.0</Version>
+    <Authors>Lvwl</Authors>
+    <PackageIcon>Logo.png</PackageIcon>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://gitee.com/Lvwl-CN/FCSVisualChart.git</RepositoryUrl>
+    <PackageProjectUrl>https://gitee.com/Lvwl-CN/FCSVisualChart</PackageProjectUrl>
+    <Description>流式细胞术数据文件FCS图表显示控件</Description>
+    <PackageTags>流式细胞术;FlowCytometer;图表;Chart;门;Gate;多数据源;FCS;WPF;</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\doc\Logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

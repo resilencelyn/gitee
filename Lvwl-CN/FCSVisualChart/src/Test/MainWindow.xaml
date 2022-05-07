@@ -1,0 +1,61 @@
+﻿<Window x:Class="Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Test"
+        xmlns:chart="clr-namespace:FCSVisualChart;assembly=FCSVisualChart"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <chart:Chart x:Name="chart" Margin="10" CanChangeGate="True" GainXCanChange="False" GainYCanChange="False" ThresholdVisibility="Collapsed" 
+                     GateChangedCommand="{Binding GateChangedCommand,Mode=OneWay}" GateGotFocusCommand="{Binding GateFocusedCommand,Mode=OneWay}" GateLostFocusCommand="{Binding GateLostFocusedCommand,Mode=OneWay}" 
+                     ShowGateAreaGeometry="True">
+            <chart:Chart.Series>
+                <chart:PseudoColorSeries ExcessDisplayAtEdge="False" FillColorA="100" StrokeColorA="100" ShowStroke="True"/>
+
+            </chart:Chart.Series>
+            <chart:Chart.XAxis>
+                <chart:NegativeLogAxis LogBase="12"/>
+            </chart:Chart.XAxis>
+            <chart:Chart.YAxis>
+                <chart:NegativeLogAxis/>
+            </chart:Chart.YAxis>
+        </chart:Chart>
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="LineX" Click="Axis_Click" CommandParameter="LineX"/>
+                <Button Content="LogX" Click="Axis_Click" CommandParameter="LogX"/>
+                <Button Content="LineY" Click="Axis_Click" CommandParameter="LineY"/>
+                <Button Content="LogY" Click="Axis_Click" CommandParameter="LogY"/>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="散点图" Click="Series_Click" CommandParameter="Scatter"/>
+                <Button Content="直方图" Click="Series_Click" CommandParameter="HistogramX"/>
+                <Button Content="密度图" Click="Series_Click" CommandParameter="Density"/>
+                <Button Content="伪彩图" Click="Series_Click" CommandParameter="PseudoColor"/>
+                <Button Content="等高线图" Click="Series_Click" CommandParameter="Contour"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="LoadData" x:Name="LoadData" Click="LoadData_Click"/>
+                <Button Content="ReadFCS" x:Name="ReadFCS" Click="ReadFCS_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="段选门" Click="Gate_Click" CommandParameter="SegmentX"/>
+                <Button Content="圆形门" Click="Gate_Click" CommandParameter="Ellipse"/>
+                <Button Content="多边形门" Click="Gate_Click" CommandParameter="Polygon"/>
+                <Button Content="四边形门" Click="Gate_Click" CommandParameter="Rectangle"/>
+                <Button Content="四象限门" Click="Gate_Click" CommandParameter="Quadrant"/>
+                <Button Content="横线门" Click="Gate_Click" CommandParameter="LineHorizontal"/>
+                <Button Content="竖线门" Click="Gate_Click" CommandParameter="LineVertical"/>
+                <Button Content="获取门模型数据" Click="GateModel_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -11,11 +11,14 @@ from rich.console import Console
 
 ROOT_PATH = sys.path[0]  # 项目根目录
 
-fonts_list = ["SimSun.ttf"]  # 字体列表
+# 中文、英文、俄语、西班牙语、阿拉伯语、韩语
+fonts_list = ["SimSun.ttf", "TimesNewRoman.ttf", "malgun.ttf"]  # 字体列表
 fonts_suffix = ["ttc", "ttf", "otf"]  # 字体后缀
 
 data_url_dict = {
-    "SimSun.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1049109/download/SimSun.ttf"
+    "SimSun.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053539/download/SimSun.ttf",
+    "TimesNewRoman.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053537/download/TimesNewRoman.ttf",
+    "malgun": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053538/download/malgun.ttf",
 }
 
 console = Console()

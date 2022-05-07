@@ -179,13 +179,6 @@
 
 本项目提供了三个**示例**，用户可以快速体验检测效果：
 
-<div align="center" >
-<img src="https://pycver.gitee.io/ows-pics/imgs/gradio_yd_examples.png">
-</div>
-
-<div align="center" >
-示例界面 （v0.1）
-</div>
 
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_examples.png">
@@ -213,9 +206,14 @@
 │   │   ├── model_name_p6_all.csv			# YOLOv5 P6 模型名称（csv版）
 │   │   └── model_name_p5_n.csv				# yolov5n 模型名称（csv版）
 │   ├── cls_name							# 类别名称
-│   │   ├── cls_name.yaml					# 类别名称文件（yaml版）
-│   │   ├── cls_name_en.yaml				# 类别英文名称文件（yaml版）
-│   │   └── cls_name.csv					# 类别名称文件（csv版）
+│   │   ├── cls_name_zh.yaml				# 类别名称文件（yaml版-中文）
+│   │   ├── cls_name_en.yaml				# 类别名称文件（yaml版-英文）
+│   │   ├── cls_name_ru.yaml				# 类别名称文件（yaml版-俄语）
+│   │   ├── cls_name_es.yaml				# 类别名称文件（yaml版-西班牙语）
+│   │   ├── cls_name_ar.yaml				# 类别名称文件（yaml版-阿拉伯语）
+│   │   ├── cls_name_ko.yaml				# 类别名称文件（yaml版-韩语）
+│   │   ├── cls_name.yaml					# 类别名称文件（yaml版-中文-v0.1）
+│   │   └── cls_name.csv					# 类别名称文件（csv版-中文）
 │   ├── img_example							# 示例图片
 │   ├── __init__.py							# 初始化文件
 │   ├── gradio_yolov5_det_v2.py				# v0.2主运行文件
@@ -237,12 +235,19 @@
 <img src="https://pycver.gitee.io/ows-pics/imgs/opencv_pillow.png">
 </p>
 
-🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 的检测结果可以在图片上**显示中文** （左：v0.1，右：v0.2；点击查看大图）
+🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 的检测结果可以在图片上**显示ID、自定义字体标签以及置信度**，同时提供了**6**种语言：**中文、英文、俄语、西班牙语、阿拉伯语以及韩语**，具体效果如下图所示。（点击图片，可查看大图）
 
-<div align="center">
-<img src="https://pycver.gitee.io/ows-pics/imgs/grd_v01_detpic.png" width="45%"/>
- <img src="https://pycver.gitee.io/ows-pics/imgs/grd_v02_detpic.png" width="45%"/>
-</div>
+
+|     版本-语言     |                            效果图                            |
+| :---------------: | :----------------------------------------------------------: |
+|     v0.1-英文     | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v01_en.png" width="45%"/> |
+|   **v0.2-中文**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_zh.png" width="45%"/> |
+|   **v0.2-英文**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_en.png" width="45%"/> |
+|   **v0.2-俄语**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ru.png" width="45%"/> |
+| **v0.2-西班牙语** | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_es.png" width="45%"/> |
+| **v0.2-阿拉伯语** | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ar.png" width="45%"/> |
+|   **v0.2-韩语**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ko.png" width="45%"/> |
+
 
 
 
@@ -313,7 +318,7 @@ python gradio_yolov5_det.py -mc ./model_config/model_name_p6_all.yaml （yaml版
 # python gradio_yolov5_det.py -mc ./model_config/model_name_p6_all.csv （csv版）
 ```
 
-❗ 注：默认类别文件[cls_name.yaml](./cls_name/cls_name.yaml)|[cls_name.csv](./cls_name/cls_name.csv)
+❗ 注：默认类别文件[cls_name_zh.yaml](./cls_name/cls_name_zh.yaml)|[cls_name.csv](./cls_name/cls_name.csv)
 
 ### 💡 运行自定义模型
 
