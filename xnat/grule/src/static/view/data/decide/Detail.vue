@@ -129,17 +129,19 @@ export default {
       axios.get(`decision/decideResultDetail/${this.item.id}`).then(resp => {
         this.item._loadingDetail = false
         if (resp.code === '00') {
-          let id = 0; // el-table 需要一个 row-key
-          resp.data.detail.policies.forEach(p => {
-            if (!p['_id']) p['_id'] = (++id) + '';
-            if (p.items && p.items.length > 0) {
-              let idd = 0;
-              p.items.forEach(o => {
-                if (!o._id) o._id = p._id + "_" + (++idd);
-              })
-              p.children = p.items
-            }
-          });
+          if (resp.data.detail && resp.data.detail.policies) {
+            let id = 0; // el-table 需要一个 row-key
+            resp.data.detail.policies.forEach(p => {
+              if (!p['_id']) p['_id'] = (++id) + '';
+              if (p.items && p.items.length > 0) {
+                let idd = 0;
+                p.items.forEach(o => {
+                  if (!o._id) o._id = p._id + "_" + (++idd);
+                })
+                p.children = p.items
+              }
+            });
+          }
           clone(resp.data, this.item)
         }
       }).catch(e => this.item._loadingDetail = false)

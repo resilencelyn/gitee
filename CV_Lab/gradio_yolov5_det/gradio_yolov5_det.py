@@ -30,9 +30,7 @@ suffix_list = [".csv", ".yaml"]
 
 def parse_args(known=False):
     parser = argparse.ArgumentParser(description="Gradio YOLOv5 Det v0.1")
-    parser.add_argument(
-        "--model_name", "-mn", default="yolov5s", type=str, help="model name"
-    )
+    parser.add_argument("--model_name", "-mn", default="yolov5s", type=str, help="model name")
     parser.add_argument(
         "--model_cfg",
         "-mc",
@@ -54,9 +52,7 @@ def parse_args(known=False):
         type=float,
         help="model NMS confidence threshold",
     )
-    parser.add_argument(
-        "--nms_iou", "-iou", default=0.45, type=float, help="model NMS IoU threshold"
-    )
+    parser.add_argument("--nms_iou", "-iou", default=0.45, type=float, help="model NMS IoU threshold")
 
     parser.add_argument(
         "--label_dnt_show",
@@ -66,11 +62,13 @@ def parse_args(known=False):
         help="label show",
     )
     parser.add_argument(
-        "--device", "-dev", default="cpu", type=str, help="cuda or cpu",
+        "--device",
+        "-dev",
+        default="cpu",
+        type=str,
+        help="cuda or cpu",
     )
-    parser.add_argument(
-        "--inference_size", "-isz", default=640, type=int, help="model inference size"
-    )
+    parser.add_argument("--inference_size", "-isz", default=640, type=int, help="model inference size")
 
     args = parser.parse_known_args()[0] if known else parser.parse_args()
     return args
@@ -111,17 +109,11 @@ def export_json(results, model, img_size):
                     "x0": round(result[i][:4].tolist()[0], 6),
                     "y0": round(result[i][:4].tolist()[1], 6),
                     "x1": round(result[i][:4].tolist()[2], 6),
-                    "y1": round(result[i][:4].tolist()[3], 6),
-                },
+                    "y1": round(result[i][:4].tolist()[3], 6),},
                 "confidence": round(float(result[i][4]), 2),
                 "fps": round(1000 / float(results.t[1]), 2),
                 "width": img_size[0],
-                "height": img_size[1],
-            }
-            for i in range(len(result))
-        ]
-        for result in results.xyxyn
-    ]
+                "height": img_size[1],} for i in range(len(result))] for result in results.xyxyn]
 
 
 # YOLOv5图片检测函数
@@ -200,25 +192,13 @@ def main(args):
 
     # -------------------输入组件-------------------
     inputs_img = gr.inputs.Image(type="pil", label="原始图片")
-    inputs_device = gr.inputs.Dropdown(
-        choices=["0", "cpu"], default=device, type="value", label="设备"
-    )
-    inputs_model = gr.inputs.Dropdown(
-        choices=model_names, default=model_name, type="value", label="模型"
-    )
-    inputs_size = gr.inputs.Radio(
-        choices=[320, 640], default=inference_size, label="推理尺寸"
-    )
-    input_conf = gr.inputs.Slider(
-        0, 1, step=slider_step, default=nms_conf, label="置信度阈值"
-    )
-    inputs_iou = gr.inputs.Slider(
-        0, 1, step=slider_step, default=nms_iou, label="IoU 阈值"
-    )
+    inputs_device = gr.inputs.Dropdown(choices=["0", "cpu"], default=device, type="value", label="设备")
+    inputs_model = gr.inputs.Dropdown(choices=model_names, default=model_name, type="value", label="模型")
+    inputs_size = gr.inputs.Radio(choices=[320, 640], default=inference_size, label="推理尺寸")
+    input_conf = gr.inputs.Slider(0, 1, step=slider_step, default=nms_conf, label="置信度阈值")
+    inputs_iou = gr.inputs.Slider(0, 1, step=slider_step, default=nms_iou, label="IoU 阈值")
     inputs_label = gr.inputs.Checkbox(default=(not label_opt), label="标签显示")
-    inputs_clsName = gr.inputs.CheckboxGroup(
-        choices=model_cls_name, default=model_cls_name, type="index", label="类别"
-    )
+    inputs_clsName = gr.inputs.CheckboxGroup(choices=model_cls_name, default=model_cls_name, type="index", label="类别")
 
     # 输入参数
     inputs = [
@@ -242,7 +222,15 @@ def main(args):
 
     # 示例图片
     examples = [
-        ["./img_example/bus.jpg", "cpu", "yolov5s", 640, 0.6, 0.5, True, ["人", "公交车"],],
+        [
+            "./img_example/bus.jpg",
+            "cpu",
+            "yolov5s",
+            640,
+            0.6,
+            0.5,
+            True,
+            ["人", "公交车"],],
         [
             "./img_example/Millenial-at-work.jpg",
             "0",
@@ -251,8 +239,7 @@ def main(args):
             0.5,
             0.45,
             True,
-            ["人", "椅子", "杯子", "笔记本电脑"],
-        ],
+            ["人", "椅子", "杯子", "笔记本电脑"],],
         [
             "./img_example/zidane.jpg",
             "0",
@@ -261,9 +248,7 @@ def main(args):
             0.25,
             0.5,
             False,
-            ["人", "领带"],
-        ],
-    ]
+            ["人", "领带"],],]
 
     # 接口
     gr.Interface(

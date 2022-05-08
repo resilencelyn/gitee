@@ -34,9 +34,9 @@ app.addSource(
         new HttpSrv().ctrls( // 接口层
                 TestCtrl, MainCtrl, UserCtrl, DecisionCtrl, CollectorCtrl, FieldCtrl
         ),
-        new FileUploader(), new CollectorManager(), new TestService(),
-        new FieldManager(), new DecisionSrv(), new DecisionManager(),
-        new OpHistorySrv(), new UserSrv(), new TestService(), this
+        new DecisionManager(), new CollectorManager(), new FieldManager(),
+        new DecisionSrv(), new OpHistorySrv(), new UserSrv(),
+        new TestService(), new FileUploader(), this
 ).start() // 启动系统
 
 

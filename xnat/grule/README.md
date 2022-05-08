@@ -397,6 +397,7 @@ IntelliJ IDEA 运行 main.groovy 启动
 
 
 # v2.0.1 ing...
+- [x] feat: 容器镜像 Dockerfile
 - [ ] feat: 重新执行决策(自动/手动)
 - [ ] opt: 实体关联(无外键)
 - [ ] opt: 深入优化决策DSL变量作用域

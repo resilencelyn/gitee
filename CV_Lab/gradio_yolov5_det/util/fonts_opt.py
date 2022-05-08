@@ -18,8 +18,7 @@ fonts_suffix = ["ttc", "ttf", "otf"]  # 字体后缀
 data_url_dict = {
     "SimSun.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053539/download/SimSun.ttf",
     "TimesNewRoman.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053537/download/TimesNewRoman.ttf",
-    "malgun": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053538/download/malgun.ttf",
-}
+    "malgun.ttf": "https://gitee.com/CV_Lab/gradio_yolov5_det/attach_files/1053538/download/malgun.ttf",}
 
 console = Console()
 
@@ -45,9 +44,7 @@ def add_fronts(font_diff):
                 sys.exit()
             else:
                 print()
-                console.print(
-                    f"{font_name} [bold green]字体文件下载完成！[/bold green] 已保存至：{file_path}"
-                )
+                console.print(f"{font_name} [bold green]字体文件下载完成！[/bold green] 已保存至：{file_path}")
 
 
 # 判断字体文件

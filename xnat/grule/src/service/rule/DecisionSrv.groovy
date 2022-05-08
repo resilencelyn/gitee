@@ -185,7 +185,7 @@ class DecisionSrv extends ServerTpl {
                 cleanTotal += count
                 // 持续更新锁时间
                 if (cleanTotal % 20 == 0) repo.saveOrUpdate(lock)
-                log.info("Deleted expire decideRecord data: {}", JSON.toJSONString(dr))
+                log.info("Deleted expire decideRecord: {}", JSON.toJSONString(dr))
             }
 
             //保留多少条数据

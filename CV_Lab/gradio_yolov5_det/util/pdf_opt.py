@@ -4,7 +4,6 @@
 
 from fpdf import FPDF
 
-
 title = "Gradio YOLOv5 Det v0.2"
 
 
@@ -48,7 +47,7 @@ class PDF(FPDF):
         self.set_fill_color(200, 220, 255)
         # Title
         # self.cell(0, 6, 'Chapter %d : %s' % (num, label), 0, 1, 'L', 1)
-        self.cell(0, 6, f"检测结果：", 0, 1, "L", 1)
+        self.cell(0, 6, "检测结果：", 0, 1, "L", 1)
         # Line break
         self.ln(4)
 

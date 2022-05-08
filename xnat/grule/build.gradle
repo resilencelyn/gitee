@@ -5,7 +5,7 @@ repositories {
     mavenCentral()
 }
 
-version = '2.0.0'
+version = '2.0.1'
 
 //apply plugin: 'java'
 apply plugin: 'groovy'
@@ -39,7 +39,6 @@ dependencies {
     implementation fileTree(dir: 'sysLib', include: ['*.jar'])
     implementation "org.codehaus.groovy:groovy:$groovyVersion"
     implementation "org.codehaus.groovy:groovy-templates:$groovyVersion"
-    // implementation "org.codehaus.groovy:groovy-sql:$groovyVersion"
     implementation "org.codehaus.groovy:groovy-json:$groovyVersion"
     // implementation "org.codehaus.groovy:groovy-jmx:$groovyVersion"
 
@@ -51,6 +50,8 @@ dependencies {
     implementation 'cn.xnatural:sched:1.0.3'
     implementation 'cn.xnatural:remoter:1.0.5'
     implementation 'cn.xnatural.task:task:1.0.2'
+
+    // implementation 'jakarta.mail:jakarta.mail-api:2.1.0'
 
     // 连接池
     // implementation 'com.alibaba:druid:1.1.23'

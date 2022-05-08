@@ -13,10 +13,11 @@
 </p>
 <p align="center">
 <a href="./CodeCheck.md"><img src="https://img.shields.io/badge/CodeCheck-passing-success" alt="code check" /></a>
-<a href="https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.1"><img src="https://img.shields.io/badge/Releases-v0.1-green" alt="Releases Version" /></a>
+<a href="https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2"><img src="https://img.shields.io/badge/Releases-v0.2-green" alt="Releases Version" /></a>
 <a href="https://github.com/ultralytics/yolov5"><img src="https://img.shields.io/badge/YOLOv5-v6.1-blue" alt="YOLOv5 Version" /></a>
 <a href="https://github.com/gradio-app/gradio"><img src="https://img.shields.io/badge/Gradio-2.9.4+-orange" alt="Gradio Version" /></a>
-<a href="https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det"><img src="https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face-blue" alt="Hugging Face Spaces" /></a>
+<a href="https://huggingface.co/"><img src="https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face-blue" alt="Hugging Face Spaces" /></a>
+<a href="https://huggingface.co/spaces"><img src="https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue" alt="Hugging Face Spaces" /></a>
 <a href="https://gitee.com/CV_Lab/gradio_yolov5_det/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
 <p align="center">
@@ -36,7 +37,7 @@
 
 🔥 YOLOv5 官方开源项目PR ID：
 
-- Save *.npy features on detect.py `--visualize`：https://github.com/ultralytics/yolov5/pull/5701
+- Save \*.npy features on detect.py `--visualize`：https://github.com/ultralytics/yolov5/pull/5701
 - Fix `detect.py --view-img` for non-ASCII paths：https://github.com/ultralytics/yolov5/pull/7093
 - Fix Flask REST API：https://github.com/ultralytics/yolov5/pull/7210
 - Add yesqa to precommit checks：https://github.com/ultralytics/yolov5/pull/7511
@@ -46,9 +47,9 @@
 
 - https://github.com/ultralytics/yolov5/releases/tag/v6.1
 
-
 <h2 align="center">🚀更新走势</h2>
 
+- `2022-05-08` **⚡ [Gradio YOLOv5 Det v0.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2)正式上线**
 - `2022-04-30` **⚡ [Gradio YOLOv5 Det v0.1](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.1)正式上线**
 
 <h2 align="center">🤗在线demo</h2>
@@ -56,7 +57,7 @@
 ❤️ 本项目提供了**在线demo**，点击下面的logo，进入**Hugging Face Spaces**中快速体验：
 
 <div align="center" >
-<a href="https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det">
+<a href="https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2">
 <img src="https://pycver.gitee.io/ows-pics/imgs/huggingface_logo.png">
 </a>
 </div>
@@ -65,12 +66,10 @@
 
 ❤️ 点击列表中的链接，进入对应版本的**Hugging Face Spaces**界面中快速体验：
 
-|                          Demo 名称                           | 输入类型 |  输出类型  |                             状态                             |
-| :----------------------------------------------------------: | :------: | :--------: | :----------------------------------------------------------: |
-| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
-| [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |   图片   | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
-
-
+|                                         Demo 名称                                          | 输入类型 |  输出类型   |                                                                                                            状态                                                                                                             |
+| :--------------------------------------------------------------------------------------: | :--: | :-----: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |  图片  | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
+|  [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)   |  图片  | 图片，JSON |    [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)    |
 
 <h2 align="center">💎项目流程与用途</h2>
 
@@ -79,7 +78,6 @@
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_workflow.png">
 </div>
-
 
 ### 📌 项目示例
 
@@ -112,8 +110,6 @@
 包括**图片上传**、**设备切换**、**模型切换**、**推理尺寸**、**置信度阈值**、**IoU阈值**、**标签显示**、**类别选择**等
 
 ❗ 注：Gradio的滑动条组件的滑块的位置，初始时不跟随默认值变化，但不影响检测
-
-
 
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_ui01.png">
@@ -173,12 +169,9 @@
 检测报告JSON功能界面（v0.2）
 </div>
 
-
-
 #### ❤️ 快速体验
 
 本项目提供了三个**示例**，用户可以快速体验检测效果：
-
 
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_examples.png">
@@ -237,19 +230,15 @@
 
 🔥 [Gradio-YOLOv5-Det v0.2](./gradio_yolov5_det_v2.py) 的检测结果可以在图片上**显示ID、自定义字体标签以及置信度**，同时提供了**6**种语言：**中文、英文、俄语、西班牙语、阿拉伯语以及韩语**，具体效果如下图所示。（点击图片，可查看大图）
 
-
-|     版本-语言     |                            效果图                            |
-| :---------------: | :----------------------------------------------------------: |
-|     v0.1-英文     | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v01_en.png" width="45%"/> |
-|   **v0.2-中文**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_zh.png" width="45%"/> |
-|   **v0.2-英文**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_en.png" width="45%"/> |
-|   **v0.2-俄语**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ru.png" width="45%"/> |
+|     版本-语言     |                                      效果图                                      |
+| :-----------: | :---------------------------------------------------------------------------: |
+|    v0.1-英文    | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v01_en.png" width="45%"/> |
+|  **v0.2-中文**  | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_zh.png" width="45%"/> |
+|  **v0.2-英文**  | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_en.png" width="45%"/> |
+|  **v0.2-俄语**  | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ru.png" width="45%"/> |
 | **v0.2-西班牙语** | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_es.png" width="45%"/> |
 | **v0.2-阿拉伯语** | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ar.png" width="45%"/> |
-|   **v0.2-韩语**   | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ko.png" width="45%"/> |
-
-
-
+|  **v0.2-韩语**  | <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v02_ko.png" width="45%"/> |
 
 <h2 align="center">🔥安装教程</h2>
 
@@ -406,8 +395,6 @@ python gradio_yolov5_det.py -lds
 </div>
 ❗ 注：上述界面仅供参考，具体界面以实际项目为主。
 
-
-
 ❤️ 检测报告下载功能：点击`下载检测报告界面`即可下载PDF文件
 
 <div align="center" >
@@ -419,10 +406,6 @@ python gradio_yolov5_det.py -lds
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_v2_pdf_content.png">
 </div>
-
-
-
-
 
 相关检测数据存储在`run`目录中，结构如下：
 
