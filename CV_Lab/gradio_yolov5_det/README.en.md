@@ -21,12 +21,12 @@
 <a href="https://gitee.com/CV_Lab/gradio_yolov5_det/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License" /></a>
 </p>
 <p align="center">
+<a href="https://github.com/pre-commit/pre-commit"><img src="https://img.shields.io/badge/checks-pre--commit-brightgreen" alt="pre-commit"></a>
 <a href="#"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?logo=python" alt="Python Version" /></a>
-<a href="https://pycqa.github.io/isort/"><img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336" alt="Imports: isort"></a>
-<a href="https://github.com/PyCQA/flake8"><img src="https://img.shields.io/badge/PyCQA-flake8-brightgreen" alt="flake8"></a>
-    <a href="https://github.com/executablebooks/mdformat"><img src="https://img.shields.io/badge/markdown-mdformat-blue" alt="markdown format"></a>
-	<a href="https://github.com/pyupio/safety"><img src="https://img.shields.io/badge/dependencies-Safety-blue" alt="Safety"></a>
+<a href='https://gitee.com/CV_Lab/gradio_yolov5_det/stargazers'><img src='https://gitee.com/CV_Lab/gradio_yolov5_det/badge/star.svg?theme=dark' alt='star'></img></a>
+<a href='https://gitee.com/CV_Lab/gradio_yolov5_det/members'><img src='https://gitee.com/CV_Lab/gradio_yolov5_det/badge/fork.svg?theme=dark' alt='fork'></img></a>
 </p>
+
 
 
 
@@ -203,6 +203,9 @@ Sample interface (v0.2)
 │   │   ├── cls_name_ko.yaml				# Category name file (yaml version - Korean)
 │   │   ├── cls_name.yaml					# Category name file (yaml version-Chinese-v0.1)
 │   │   └── cls_name.csv					# Category name file (csv version - Chinese)
+│   ├── util								# Toolkit
+│   │   ├── fonts_opt.py					# font management
+│   │   └── pdf_opt.py						# PDF management
 │   ├── img_example							# example image
 │   ├── __init__.py							# Initialization file
 │   ├── gradio_yolov5_det_v2.py				# v0.2 main run file

@@ -268,23 +268,12 @@ namespace FCSVisualChart
                 if (e.OldValue is ObservableCollection<ChartDataSource> olddatasources)
                 {
                     olddatasources.CollectionChanged -= chart.DataSources_CollectionChanged;
-                    foreach (var dataSource in olddatasources)
-                    {
-                        dataSource.PropertyChanged -= chart.DataSource_PropertyChanged;
-                        dataSource.AreaIndexs.CollectionChanged -= chart.AreaIndexs_CollectionChanged;
-                        if (chart.Series != null) chart.Series.RemoveChartDataStream(dataSource);
-                    }
+                    chart.RemoveChartDataSource(olddatasources.ToArray());
                 }
                 if (e.NewValue is ObservableCollection<ChartDataSource> newdatasources)
                 {
                     newdatasources.CollectionChanged += chart.DataSources_CollectionChanged;
-                    foreach (var dataSource in newdatasources)
-                    {
-                        dataSource.PropertyChanged += chart.DataSource_PropertyChanged;
-                        dataSource.AreaIndexs.CollectionChanged += chart.AreaIndexs_CollectionChanged;
-                        if (chart.Series != null) chart.Series.UpdateChartDataStream(dataSource);
-                        if (chart.Gates != null && chart.Gates.Count > 0) foreach (var gate in chart.Gates) gate.RefreshAreaIndexs(dataSource);
-                    }
+                    chart.AddChartDataSource(newdatasources.ToArray());
                 }
             }
         }));
@@ -296,64 +285,50 @@ namespace FCSVisualChart
                 switch (e.Action)
                 {
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                        foreach (var item in e.NewItems)
-                        {
-                            if (item is ChartDataSource dataSource)
-                            {
-                                dataSource.PropertyChanged += DataSource_PropertyChanged;
-                                dataSource.AreaIndexs.CollectionChanged += AreaIndexs_CollectionChanged;
-                                this.Series.UpdateChartDataStream(dataSource);
-                                if (Gates != null && Gates.Count > 0) foreach (var gate in Gates) gate.RefreshAreaIndexs(dataSource);
-                            }
-                        }
+                        foreach (var item in e.NewItems) if (item is ChartDataSource dataSource) AddChartDataSource(dataSource);
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                        foreach (var item in e.OldItems)
-                        {
-                            if (item is ChartDataSource dataSource)
-                            {
-                                dataSource.PropertyChanged -= DataSource_PropertyChanged;
-                                dataSource.AreaIndexs.CollectionChanged -= AreaIndexs_CollectionChanged;
-                                this.Series.RemoveChartDataStream(dataSource);
-                            }
-                        }
+                        foreach (var item in e.OldItems) if (item is ChartDataSource dataSource) RemoveChartDataSource(dataSource);
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                        foreach (var item in e.OldItems)
-                        {
-                            if (item is ChartDataSource dataSource)
-                            {
-                                dataSource.PropertyChanged -= DataSource_PropertyChanged;
-                                dataSource.AreaIndexs.CollectionChanged -= AreaIndexs_CollectionChanged;
-                                this.Series.RemoveChartDataStream(dataSource);
-                            }
-                        }
-                        foreach (var item in e.NewItems)
-                        {
-                            if (item is ChartDataSource dataSource)
-                            {
-                                dataSource.PropertyChanged += DataSource_PropertyChanged;
-                                dataSource.AreaIndexs.CollectionChanged += AreaIndexs_CollectionChanged;
-                                this.Series.UpdateChartDataStream(dataSource);
-                                if (Gates != null && Gates.Count > 0) foreach (var gate in Gates) gate.RefreshAreaIndexs(dataSource);
-                            }
-                        }
+                        foreach (var item in e.OldItems) if (item is ChartDataSource dataSource) RemoveChartDataSource(dataSource);
+                        foreach (var item in e.NewItems) if (item is ChartDataSource dataSource) AddChartDataSource(dataSource);
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
                         this.Series.Draw(this.Series.ChartDataStreams);
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                        var temps = this.Series.ChartDataStreams.Keys.ToArray();
-                        foreach (var dataSource in temps)
-                        {
-                            dataSource.PropertyChanged -= DataSource_PropertyChanged;
-                            dataSource.AreaIndexs.CollectionChanged -= AreaIndexs_CollectionChanged;
-                            this.Series.RemoveChartDataStream(dataSource);
-                        }
+                        RemoveChartDataSource(ChartDataSourceRegistions.ToArray());
                         break;
                     default:
                         break;
                 }
+            }
+        }
+
+        private List<ChartDataSource> ChartDataSourceRegistions { get; } = new List<ChartDataSource>();
+
+        private void AddChartDataSource(params ChartDataSource[] chartDataSources)
+        {
+            foreach (var chartDataSource in chartDataSources)
+            {
+                if (ChartDataSourceRegistions.Contains(chartDataSource)) continue;
+                ChartDataSourceRegistions.Add(chartDataSource);
+                chartDataSource.PropertyChanged += DataSource_PropertyChanged;
+                chartDataSource.AreaIndexs.CollectionChanged += AreaIndexs_CollectionChanged;
+                if (this.Series != null) this.Series.UpdateChartDataStream(chartDataSource);
+                if (Gates != null && Gates.Count > 0) foreach (var gate in Gates) gate.RefreshAreaIndexs(chartDataSource);
+            }
+        }
+        private void RemoveChartDataSource(params ChartDataSource[] chartDataSources)
+        {
+            foreach (var chartDataSource in chartDataSources)
+            {
+                if (!ChartDataSourceRegistions.Contains(chartDataSource)) continue;
+                ChartDataSourceRegistions.Remove(chartDataSource);
+                chartDataSource.PropertyChanged -= DataSource_PropertyChanged;
+                chartDataSource.AreaIndexs.CollectionChanged -= AreaIndexs_CollectionChanged;
+                if (this.Series != null) this.Series.RemoveChartDataStream(chartDataSource);
             }
         }
 
@@ -365,21 +340,21 @@ namespace FCSVisualChart
                 {
                     switch (e.PropertyName)
                     {
-                        case "XSource":
-                        case "YSource":
-                        case "Indexs":
-                        case "XSourceConverter":
-                        case "YSourceConverter":
+                        case nameof(ChartDataSource.XSource):
+                        case nameof(ChartDataSource.YSource):
+                        case nameof(ChartDataSource.Indexs):
+                        case nameof(ChartDataSource.XSourceConverter):
+                        case nameof(ChartDataSource.YSourceConverter):
                             this.Series.UpdateChartDataStream(dataSource);
                             if (Gates != null && Gates.Count > 0) foreach (var gate in Gates) gate.RefreshAreaIndexs(dataSource);
                             break;
-                        case "DisplayIndexs":
+                        case nameof(ChartDataSource.DisplayIndexs):
                             this.Series.UpdateChartDataStream(dataSource);
                             break;
-                        case "DisplayColor":
+                        case nameof(ChartDataSource.DisplayColor):
                             this.Series.Draw(this.Series.ChartDataStreams);
                             break;
-                        case "AreaIndexs":
+                        case nameof(ChartDataSource.AreaIndexs):
                             dataSource.AreaIndexs.CollectionChanged += AreaIndexs_CollectionChanged;
                             break;
                         default:
@@ -399,25 +374,44 @@ namespace FCSVisualChart
                 {
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
                         {
-                            foreach (var item in e.NewItems) if (item is KeyValuePair<GateArea, IList<int>> kv) await this.Series.UpdateGateAreaStream(dataSource, kv.Key);
+                            foreach (var item in e.NewItems)
+                                if (item is KeyValuePair<GateArea, IList<int>> kv)
+                                {
+                                    RegisterGateAreaPropertyChanged(dataSource, kv.Key);
+                                    await this.Series.UpdateGateAreaStream(dataSource, kv.Key);
+                                }
                             this.Series.Draw(this.Series.ChartDataStreams);
                         }
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                         {
-                            foreach (var item in e.OldItems) if (item is KeyValuePair<GateArea, IList<int>> kv) this.Series.RemoveGateAreaStream(dataSource, kv.Key);
+                            foreach (var item in e.OldItems)
+                                if (item is KeyValuePair<GateArea, IList<int>> kv)
+                                {
+                                    UnregisterGateAreaPropertyChanged(dataSource, kv.Key);
+                                    this.Series.RemoveGateAreaStream(dataSource, kv.Key);
+                                }
                             this.Series.Draw(this.Series.ChartDataStreams);
                         }
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                         {
-                            foreach (var item in e.NewItems) if (item is KeyValuePair<GateArea, IList<int>> kv) await this.Series.UpdateGateAreaStream(dataSource, kv.Key);
+                            foreach (var item in e.OldItems)
+                                if (item is KeyValuePair<GateArea, IList<int>> kv) UnregisterGateAreaPropertyChanged(dataSource, kv.Key);
+                            foreach (var item in e.NewItems)
+                                if (item is KeyValuePair<GateArea, IList<int>> kv)
+                                {
+                                    RegisterGateAreaPropertyChanged(dataSource, kv.Key);
+                                    await this.Series.UpdateGateAreaStream(dataSource, kv.Key);
+                                }
                             this.Series.Draw(this.Series.ChartDataStreams);
                         }
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
                         break;
                     case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                        if (GateAreaPropertyChangedRegistrations.ContainsKey(dataSource) && GateAreaPropertyChangedRegistrations[dataSource] != null)
+                            UnregisterGateAreaPropertyChanged(dataSource, GateAreaPropertyChangedRegistrations[dataSource].ToArray());
                         this.Series.ClearGateAreaStream(dataSource);
                         this.Series.Draw(this.Series.ChartDataStreams);
                         break;
@@ -608,6 +602,7 @@ namespace FCSVisualChart
         }
         #endregion
 
+        #region 门划分区域内数据显示
         /// <summary>
         /// 显示门划分区域的数据图形
         /// </summary>
@@ -623,13 +618,63 @@ namespace FCSVisualChart
                 foreach (var dataSource in chart.DataSource)
                 {
                     if (dataSource == null) continue;
-                    if (b) await chart.Series.UpdateGateAreaStream(dataSource);
-                    else chart.Series.ClearGateAreaStream(dataSource);
+                    if (b)
+                    {
+                        chart.RegisterGateAreaPropertyChanged(dataSource, dataSource.AreaIndexs.Keys.ToArray());
+                        await chart.Series.UpdateGateAreaStream(dataSource);
+                    }
+                    else
+                    {
+                        chart.UnregisterGateAreaPropertyChanged(dataSource, dataSource.AreaIndexs.Keys.ToArray());
+                        chart.Series.ClearGateAreaStream(dataSource);
+                    }
                 }
                 chart.Series.Draw(chart.Series.ChartDataStreams);
             }
         }));
 
+        /// <summary>
+        /// 已经注册的门区域属性变化事件
+        /// </summary>
+        private Dictionary<ChartDataSource, List<GateArea>> GateAreaPropertyChangedRegistrations { get; } = new Dictionary<ChartDataSource, List<GateArea>>();
+
+        private void RegisterGateAreaPropertyChanged(ChartDataSource chartDataSource, params GateArea[] gateAreas)
+        {
+            if (!GateAreaPropertyChangedRegistrations.ContainsKey(chartDataSource)) GateAreaPropertyChangedRegistrations[chartDataSource] = new List<GateArea>();
+            var list = GateAreaPropertyChangedRegistrations[chartDataSource];
+            foreach (var gateArea in gateAreas)
+                if (!list.Contains(gateArea))
+                {
+                    list.Add(gateArea);
+                    gateArea.PropertyChanged += GateArea_PropertyChanged;
+                }
+        }
+
+        private void UnregisterGateAreaPropertyChanged(ChartDataSource chartDataSource, params GateArea[] gateAreas)
+        {
+            if (!GateAreaPropertyChangedRegistrations.ContainsKey(chartDataSource) || GateAreaPropertyChangedRegistrations[chartDataSource] == null) return;
+            var list = GateAreaPropertyChangedRegistrations[chartDataSource];
+            foreach (var gateArea in gateAreas)
+                if (list.Contains(gateArea))
+                {
+                    list.Remove(gateArea);
+                    gateArea.PropertyChanged -= GateArea_PropertyChanged;
+                }
+        }
+
+        /// <summary>
+        /// 门内区域的显示颜色改变
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GateArea_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (nameof(GateArea.DisplayColor).Equals(e.PropertyName) && this.Series != null)
+            {
+                this.Series.Draw(this.Series.ChartDataStreams);
+            }
+        }
+        #endregion
         #endregion
 
         #region 增益控制

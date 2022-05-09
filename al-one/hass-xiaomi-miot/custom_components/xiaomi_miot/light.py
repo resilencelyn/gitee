@@ -72,7 +72,8 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
         for srv in spec.get_services(ENTITY_DOMAIN, 'light_bath_heater'):
             if not srv.get_property('on'):
                 continue
-            elif srv.name in ['light_bath_heater'] and spec.get_service('ptc_bath_heater'):
+            elif spec.get_service('ptc_bath_heater'):
+                # only sub light
                 continue
             entities.append(MiotLightEntity(config, srv))
     for entity in entities:
@@ -270,7 +271,8 @@ class MiotLightSubEntity(MiotLightEntity, ToggleSubEntity):
             **parent.miot_config,
             'name': f'{parent.device_name}',
         }, miot_service, device=parent.miot_device)
-        self.entity_id = miot_service.generate_entity_id(self)
+
+        self.entity_id = miot_service.generate_entity_id(self, domain=ENTITY_DOMAIN)
         self._prop_power = prop_power
         if parent_power:
             self._prop_power = parent_power

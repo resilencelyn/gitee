@@ -20,10 +20,11 @@ namespace Test
     /// </summary>
     public partial class MainWindow : Window
     {
+        ChartDataContext CDC = new ChartDataContext();
         public MainWindow()
         {
             InitializeComponent();
-            this.chart.DataContext = new ChartDataContext();
+            this.chart.DataContext = CDC;
             this.Loaded += MainWindow_Loaded;
         }
 
@@ -199,6 +200,25 @@ namespace Test
                 return default;
             }
         }
+
+        private void GateAreaDisplayColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (CDC.FocusedGate != null)
+            {
+                foreach (var area in CDC.FocusedGate.Areas)
+                {
+                    area.DisplayColor = ChartDataSource.RandomColor();
+                }
+            }
+        }
+
+        private void DeleteGate_Click(object sender, RoutedEventArgs e)
+        {
+            if (CDC.FocusedGate != null)
+            {
+                CDC.FocusedGate.Dispose();
+            }
+        }
     }
 
     public class ChartDataContext : INotifyPropertyChanged
@@ -221,8 +241,10 @@ namespace Test
             //Debug.WriteLine("门发生变化");
         }
 
+        public BaseGate? FocusedGate { get; private set; }
         private void GateFocused(object? obj)
         {
+            if (obj != null && obj is BaseGate g) FocusedGate = g;
             //Debug.WriteLine("门获取焦点");
         }
 

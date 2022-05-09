@@ -17,11 +17,11 @@
                      GateChangedCommand="{Binding GateChangedCommand,Mode=OneWay}" GateGotFocusCommand="{Binding GateFocusedCommand,Mode=OneWay}" GateLostFocusCommand="{Binding GateLostFocusedCommand,Mode=OneWay}" 
                      ShowGateAreaGeometry="True">
             <chart:Chart.Series>
-                <chart:PseudoColorSeries ExcessDisplayAtEdge="False" FillColorA="100" StrokeColorA="100" ShowStroke="True"/>
+                <chart:HistogramXStatisticsSeries ExcessDisplayAtEdge="False" FillColorA="60" StrokeColorA="100" ShowStroke="True" OffsetX="30" OffsetY="30"/>
 
             </chart:Chart.Series>
             <chart:Chart.XAxis>
-                <chart:NegativeLogAxis LogBase="12"/>
+                <chart:NegativeLogAxis/>
             </chart:Chart.XAxis>
             <chart:Chart.YAxis>
                 <chart:NegativeLogAxis/>
@@ -46,7 +46,7 @@
                 <Button Content="LoadData" x:Name="LoadData" Click="LoadData_Click"/>
                 <Button Content="ReadFCS" x:Name="ReadFCS" Click="ReadFCS_Click"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <WrapPanel Orientation="Horizontal">
                 <Button Content="段选门" Click="Gate_Click" CommandParameter="SegmentX"/>
                 <Button Content="圆形门" Click="Gate_Click" CommandParameter="Ellipse"/>
                 <Button Content="多边形门" Click="Gate_Click" CommandParameter="Polygon"/>
@@ -55,7 +55,9 @@
                 <Button Content="横线门" Click="Gate_Click" CommandParameter="LineHorizontal"/>
                 <Button Content="竖线门" Click="Gate_Click" CommandParameter="LineVertical"/>
                 <Button Content="获取门模型数据" Click="GateModel_Click"/>
-            </StackPanel>
+                <Button Content="改变选中门颜色" Click="GateAreaDisplayColor_Click"/>
+                <Button Content="删除选中门" Click="DeleteGate_Click"/>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>

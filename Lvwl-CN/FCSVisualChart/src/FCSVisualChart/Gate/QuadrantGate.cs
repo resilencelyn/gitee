@@ -20,6 +20,12 @@ namespace FCSVisualChart
         public double Angle3 { get; private set; }
         public double Angle4 { get; private set; }
         #endregion
+
+        const double HalfPI = Math.PI / 2;
+        const double OnePI = Math.PI;
+        const double OneHalfPI = Math.PI * 1.5d;
+        const double DoublePI = Math.PI * 2;
+
         public QuadrantGate() { }
         public QuadrantGate(QuadrantGateModel model) : base(model)
         {
@@ -67,16 +73,16 @@ namespace FCSVisualChart
                     switch (index)
                     {
                         case 0:
-                            this.Angle1 = Math.Atan((tempy - point.Y) / (tempx - point.X)) * 180d / Math.PI;
+                            this.Angle1 = Math.Atan2((tempy - point.Y), (tempx - point.X));
                             break;
                         case 1:
-                            this.Angle2 = Math.Atan((point.X - tempx) / (tempy - point.Y)) * 180d / Math.PI;
+                            this.Angle2 = Math.Atan2((point.X - tempx), (tempy - point.Y));
                             break;
                         case 2:
-                            this.Angle3 = Math.Atan((point.Y - tempy) / (point.X - tempx)) * 180d / Math.PI;
+                            this.Angle3 = Math.Atan2((point.Y - tempy), (point.X - tempx));
                             break;
                         case 3:
-                            this.Angle4 = Math.Atan((tempx - point.X) / (point.Y - tempy)) * 180d / Math.PI;
+                            this.Angle4 = Math.Atan2((tempx - point.X), (point.Y - tempy));
                             break;
                         case 4:
                             Center = new Point(OwnerChart.XAxis.GetLocationValue(point.X, px), OwnerChart.YAxis.GetLocationValue(point.Y, py));
@@ -132,13 +138,13 @@ namespace FCSVisualChart
             using (var sgc = geometry.Open())
             {
                 sgc.BeginFigure(new Point(tempx, tempy), false, false);
-                sgc.LineTo(new Point(0, tempy - tempx * Math.Tan(Math.PI * this.Angle1 / 180d)), true, true);
+                sgc.LineTo(new Point(0, tempy - tempx * Math.Tan(this.Angle1)), true, true);
                 sgc.BeginFigure(new Point(tempx, tempy), false, false);
-                sgc.LineTo(new Point(tempx + tempy * Math.Tan(Math.PI * this.Angle2 / 180d), 0), true, true);
+                sgc.LineTo(new Point(tempx + tempy * Math.Tan(this.Angle2), 0), true, true);
                 sgc.BeginFigure(new Point(tempx, tempy), false, false);
-                sgc.LineTo(new Point(px.Length, tempy + subtempx * Math.Tan(Math.PI * this.Angle3 / 180d)), true, true);
+                sgc.LineTo(new Point(px.Length, tempy + subtempx * Math.Tan(this.Angle3)), true, true);
                 sgc.BeginFigure(new Point(tempx, tempy), false, false);
-                sgc.LineTo(new Point(tempx - subtempy * Math.Tan(Math.PI * this.Angle4 / 180d), py.Length), true, true);
+                sgc.LineTo(new Point(tempx - subtempy * Math.Tan(this.Angle4), py.Length), true, true);
             }
             geometry.Freeze();
             group.Children.Add(geometry);
@@ -163,10 +169,10 @@ namespace FCSVisualChart
             var tempy = OwnerChart.YAxis.GetValueLocation(Center.Y, py);
             var subtempx = px.Length - tempx;
             var subtempy = py.Length - tempy;
-            var g1 = CreateControlGeometry(new Point(5, tempy - tempx * Math.Tan(Math.PI * this.Angle1 / 180)));
-            var g2 = CreateControlGeometry(new Point(tempx + tempy * Math.Tan(Math.PI * this.Angle2 / 180), 5));
-            var g3 = CreateControlGeometry(new Point(px.Length - 5, tempy + subtempx * Math.Tan(Math.PI * this.Angle3 / 180)));
-            var g4 = CreateControlGeometry(new Point(tempx - subtempy * Math.Tan(Math.PI * this.Angle4 / 180), py.Length - 5));
+            var g1 = CreateControlGeometry(new Point(5, tempy - tempx * Math.Tan(this.Angle1)));
+            var g2 = CreateControlGeometry(new Point(tempx + tempy * Math.Tan(this.Angle2), 5));
+            var g3 = CreateControlGeometry(new Point(px.Length - 5, tempy + subtempx * Math.Tan(this.Angle3)));
+            var g4 = CreateControlGeometry(new Point(tempx - subtempy * Math.Tan(this.Angle4), py.Length - 5));
             var g5 = CreateControlGeometry(new Point(tempx, tempy));
             if (ControlPaths.Count == 0)
             {
@@ -220,15 +226,15 @@ namespace FCSVisualChart
         {
             if (param is QuadrantAreaIndexsFuncParam p)
             {
-                var tempx = p.XAxisValue(x, p.XParam);
-                var tempy = p.YAxisValue(y, p.YParam);
-                var angle = Math.Atan2(tempy - p.AxisCenter.Y, tempx - p.AxisCenter.X) * 180d / Math.PI;
-                while (angle < 0) angle = 360d + angle;
-                angle = angle % 360d;
+                var tempx = p.XValueLocation(x, p.XParam);
+                var tempy = p.YValueLocation(y, p.YParam);
+                var angle = Math.Atan2(p.AxisCenter.Y - tempy, tempx - p.AxisCenter.X);
+                while (angle < 0) angle = DoublePI + angle;
+                angle = angle % DoublePI;
                 if (angle >= p.Angle2 && angle < p.Angle1) return p.Areas[0];
                 else if (angle >= p.Angle1 && angle < p.Angle4) return p.Areas[3];
-                else if (angle >= p.Angle4 && angle < p.Angle3 && p.Angle3 > 180d) return p.Areas[2];
-                else if ((angle >= p.Angle4 || angle < p.Angle3) && p.Angle3 < 180d) return p.Areas[2];
+                else if (angle >= p.Angle4 && angle < p.Angle3 && p.Angle3 > HalfPI) return p.Areas[2];
+                else if ((angle >= p.Angle4 || angle < p.Angle3) && p.Angle3 < HalfPI) return p.Areas[2];
                 else return p.Areas[1];
             }
             return null;
@@ -240,19 +246,20 @@ namespace FCSVisualChart
         public override AreaIndexsFuncParam GetAreaIndexsFuncParam()
         {
             if (Areas == null || Areas.Length != 4) return null;
-            return new QuadrantAreaIndexsFuncParam()
+            var param = new QuadrantAreaIndexsFuncParam()
             {
                 Areas = this.Areas,
-                AxisCenter = new Point(OwnerChart.XAxis.ValueToAxisValue(Center.X), OwnerChart.YAxis.ValueToAxisValue(Center.Y)),
-                Angle1 = 180d - this.Angle1,
-                Angle2 = 90d - this.Angle2,
-                Angle3 = (360d - this.Angle3) % 360d,
-                Angle4 = 270d - this.Angle4,
-                XParam = OwnerChart.XAxis.GetValueAxisConvertParam(),
-                YParam = OwnerChart.YAxis.GetValueAxisConvertParam(),
-                XAxisValue = OwnerChart.XAxis.ValueToAxisValue,
-                YAxisValue = OwnerChart.YAxis.ValueToAxisValue
+                Angle1 = OnePI - this.Angle1,
+                Angle2 = HalfPI - this.Angle2,
+                Angle3 = (DoublePI - this.Angle3) % DoublePI,
+                Angle4 = OneHalfPI - this.Angle4,
+                XParam = OwnerChart.XAxis.GetConvertParam(),
+                YParam = OwnerChart.YAxis.GetConvertParam(),
+                XValueLocation = OwnerChart.XAxis.GetValueLocation,
+                YValueLocation = OwnerChart.YAxis.GetValueLocation
             };
+            param.AxisCenter = new Point(param.XValueLocation(Center.X, param.XParam), param.YValueLocation(Center.Y, param.YParam));
+            return param;
         }
         /// <summary>
         /// 部分图形在轴更换后需要重新绘制和更新区域数据
@@ -299,10 +306,10 @@ namespace FCSVisualChart
         internal double Angle3 { get; set; }
         internal double Angle4 { get; set; }
 
-        internal ValueAxisConvertParamBase XParam { get; set; }
-        internal ValueAxisConvertParamBase YParam { get; set; }
+        internal ValueLocationConvertParam XParam { get; set; }
+        internal ValueLocationConvertParam YParam { get; set; }
 
-        internal Func<double, ValueAxisConvertParamBase, double> XAxisValue { get; set; }
-        internal Func<double, ValueAxisConvertParamBase, double> YAxisValue { get; set; }
+        internal Func<double, ValueLocationConvertParam, double> XValueLocation { get; set; }
+        internal Func<double, ValueLocationConvertParam, double> YValueLocation { get; set; }
     }
 }

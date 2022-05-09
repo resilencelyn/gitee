@@ -14,14 +14,14 @@ namespace FCSVisualChart
         public string Name
         {
             get { return name; }
-            set { name = value; OnPropertyChanged("Name"); }
+            set { name = value; OnPropertyChanged(); }
         }
 
         private Color displayColor;
         /// <summary>
         /// 显示的颜色，含透明度
         /// </summary>
-        public Color DisplayColor { get { return displayColor; } set { displayColor = value; OnPropertyChanged("DisplayColor"); } }
+        public Color DisplayColor { get { return displayColor; } set { displayColor = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// 所属门

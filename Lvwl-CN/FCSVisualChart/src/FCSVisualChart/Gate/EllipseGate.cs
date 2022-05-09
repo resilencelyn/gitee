@@ -252,13 +252,13 @@ namespace FCSVisualChart
         {
             if (param is EllipseAreaIndexsFuncParam p)
             {
-                var tempx = p.XAxisValue(x, p.XParam);
-                var tempy = p.YAxisValue(y, p.YParam);
-                var subx = tempx - p.AxisCenter.X;
-                var suby = tempy - p.AxisCenter.Y;
-                tempx = subx * p.CosRadian - suby * p.SinRadian + p.AxisCenter.X;
-                tempy = suby * p.CosRadian + subx * p.SinRadian + p.AxisCenter.Y;
-                return (Math.Pow(tempx - p.AxisCenter.X, 2) / p.HalfAxisWidthPow + Math.Pow(tempy - p.AxisCenter.Y, 2) / p.HalfAxisHeightPow) <= 1 ? p.Areas[0] : null;
+                var tempx = p.XValueLocation(x, p.XParam);
+                var tempy = p.YValueLocation(y, p.YParam);
+                var subx = tempx - p.ViewCenter.X;
+                var suby = p.ViewCenter.Y - tempy;
+                tempx = subx * p.CosRadian - suby * p.SinRadian + p.ViewCenter.X;
+                tempy = suby * p.CosRadian + subx * p.SinRadian + p.ViewCenter.Y;
+                return (Math.Pow(tempx - p.ViewCenter.X, 2) / p.HalfViewWidthPow + Math.Pow(tempy - p.ViewCenter.Y, 2) / p.HalfViewHeightPow) <= 1 ? p.Areas[0] : null;
             }
             else return null;
         }
@@ -269,22 +269,22 @@ namespace FCSVisualChart
         public override AreaIndexsFuncParam GetAreaIndexsFuncParam()
         {
             if (Areas == null || Areas.Length != 1 || OwnerChart == null || OwnerChart.XAxis == null || OwnerChart.YAxis == null) return null;
-            var px = OwnerChart.XAxis.GetValueAxisConvertParam();
-            var py = OwnerChart.YAxis.GetValueAxisConvertParam();
-            Func<double, ValueAxisConvertParamBase, double> fx = OwnerChart.XAxis.ValueToAxisValue;
-            Func<double, ValueAxisConvertParamBase, double> fy = OwnerChart.YAxis.ValueToAxisValue;
+            var px = OwnerChart.XAxis.GetConvertParam();
+            var py = OwnerChart.YAxis.GetConvertParam();
+            Func<double, ValueLocationConvertParam, double> fx = OwnerChart.XAxis.GetValueLocation;
+            Func<double, ValueLocationConvertParam, double> fy = OwnerChart.YAxis.GetValueLocation;
             return new EllipseAreaIndexsFuncParam()
             {
                 Areas = this.Areas,
-                HalfAxisWidthPow = Math.Pow(this.HalfWidth, 2),
-                HalfAxisHeightPow = Math.Pow(this.HalfHeight, 2),
+                HalfViewWidthPow = Math.Pow(this.ViewHalfWidth, 2),
+                HalfViewHeightPow = Math.Pow(this.ViewHalfHeight, 2),
                 SinRadian = Math.Sin(this.Radian),
                 CosRadian = Math.Cos(this.Radian),
-                AxisCenter = new Point(fx(this.Center.X, px), fy(this.Center.Y, py)),
+                ViewCenter = new Point(fx(this.Center.X, px), fy(this.Center.Y, py)),
                 XParam = px,
                 YParam = py,
-                XAxisValue = fx,
-                YAxisValue = fy
+                XValueLocation = fx,
+                YValueLocation = fy
             };
         }
         /// <summary>
@@ -350,23 +350,23 @@ namespace FCSVisualChart
         /// <summary>
         /// 图中实际坐标点位
         /// </summary>
-        internal Point AxisCenter { get; set; }
+        internal Point ViewCenter { get; set; }
         /// <summary>
-        /// 长轴半径平方
+        /// 图中长轴半径平方
         /// </summary>
-        internal double HalfAxisWidthPow { get; set; }
+        internal double HalfViewWidthPow { get; set; }
         /// <summary>
-        /// 短轴半径平方
+        /// 图中短轴半径平方
         /// </summary>
-        internal double HalfAxisHeightPow { get; set; }
+        internal double HalfViewHeightPow { get; set; }
         internal double SinRadian { get; set; }
         internal double CosRadian { get; set; }
 
-        internal ValueAxisConvertParamBase XParam { get; set; }
-        internal ValueAxisConvertParamBase YParam { get; set; }
+        internal ValueLocationConvertParam XParam { get; set; }
+        internal ValueLocationConvertParam YParam { get; set; }
 
-        internal Func<double, ValueAxisConvertParamBase, double> XAxisValue { get; set; }
-        internal Func<double, ValueAxisConvertParamBase, double> YAxisValue { get; set; }
+        internal Func<double, ValueLocationConvertParam, double> XValueLocation { get; set; }
+        internal Func<double, ValueLocationConvertParam, double> YValueLocation { get; set; }
 
     }
 }

@@ -24,7 +24,7 @@ namespace FCSVisualChart
         public Brush Fill
         {
             get { return fill; }
-            set { fill = value; OnPropertyChanged("Fill"); }
+            set { fill = value; OnPropertyChanged(); }
         }
         private Brush stroke = Brushes.Black;
         /// <summary>
@@ -33,7 +33,7 @@ namespace FCSVisualChart
         public Brush Stroke
         {
             get { return stroke; }
-            set { stroke = value; OnPropertyChanged("Stroke"); }
+            set { stroke = value; OnPropertyChanged(); }
         }
         private double strokeThickness = 1;
         /// <summary>
@@ -42,7 +42,7 @@ namespace FCSVisualChart
         public double StrokeThickness
         {
             get { return strokeThickness; }
-            set { strokeThickness = value; OnPropertyChanged("StrokeThickness"); }
+            set { strokeThickness = value; OnPropertyChanged(); }
         }
         private double areaNameFontSize = 14d;
         /// <summary>
@@ -95,7 +95,7 @@ namespace FCSVisualChart
                 for (int i = 0; i < AreaCount; i++) Areas[i] = new GateArea() { OwnerGate = this };
             }
             //区域名称发生变化时，需要重新绘制门图形
-            foreach (var area in Areas) area.PropertyChanged += (d, e) => { if ("Name".Equals(e.PropertyName)) Draw(); };
+            foreach (var area in Areas) area.PropertyChanged += (d, e) => { if (nameof(GateArea.Name).Equals(e.PropertyName)) Draw(); };
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace FCSVisualChart
             protected set
             {
                 isCreating = value;
-                OnPropertyChanged("IsCreating");
+                OnPropertyChanged();
                 if (!value)
                 {
                     if (OwnerChart != null) GatePath.Focus();

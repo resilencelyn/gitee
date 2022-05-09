@@ -141,6 +141,8 @@
  | StrokeColorA | 边框不透明度 | byte | 默认0xff |
  | ExcessDisplayAtEdge | 超出边界是否压边显示 | bool | 默认true |
  | MaxDegreeOfParallelism | 计算图形时使用的线程数 | int | 默认4 |
+ | GetModel（） | 获取图的模型 | BaseSeriesModel | 可用于序列化反序列化存储的数据模型 |
+ | CreateByModel（BaseSeriesModel） | 从模型创建一个新的图 | ISeries |  |
 
  ### ContourSeries 等高线图，继承自ISeries
  | 属性 | 含义 | 类型 | 说明 |
@@ -168,7 +170,7 @@
  | Smooth | 是否平滑 | bool | 默认false |
  | SmoothPointCount | 简单平滑算法点数 | int | 默认2 |
  | OffsetX | x轴方向偏移量 | ushort | 多数据源显示时，对每个数据源显示的图形进行偏移 |
- | OffsetY | y轴方向偏移量 | ushort | 多数据源显示时，对每个数据源显示的图形进行偏移 |
+ | OffsetY | y轴方向偏移量 | ushort | 门的绘制只在最前方的数据源坐标系上绘制 |
  
  ### PseudoColorSeries 伪彩图，继承自ISeries
  | 属性 | 含义 | 类型 | 说明 |
@@ -217,8 +219,8 @@
  | Center | 椭圆的中心点 | Point | 实际值，只读 |
  | HalfWidth | 椭圆宽度 | double | 坐标值，只读 |
  | HalfHeight | 椭圆高度 | double | 坐标值，只读 |
- | Angle | 旋转角度 | double |  |
- | Radian | 旋转弧度 | double |  |
+ | Angle | 旋转角度 | double | 只读 |
+ | Radian | 旋转弧度 | double | 只读 |
 
  ### EllipseGateModel 椭圆门模型，继承自BaseGateModel
  | 属性 | 含义 | 类型 | 说明 |
@@ -231,32 +233,32 @@
  ### LineHorizontalGate 横线门，继承自BaseGate
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
- | Y | 横线Y真实值 | double | 只读 |
+ | Y | 横线Y实际值 | double | 只读 |
 
  ### LineHorizontalGateModel 横线门模型，继承自BaseGateModel
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
- | Y | 横线Y真实值 | double |  |
+ | Y | 横线Y实际值 | double |  |
 
  ### LineVerticalGate 竖线门，继承自BaseGate
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
- | X | 竖线X真实值 | double | 只读 |
+ | X | 竖线X实际值 | double | 只读 |
 
  ### LineVerticalGateModel 竖线门模型，继承自BaseGateModel
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
- | X | 竖线X真实值 | double |  |
+ | X | 竖线X实际值 | double |  |
  
  ### PolygonGate 多边形门，继承自BaseGate
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
- | Points | 多边形点位试剂值 | List< Point > | 只读 |
+ | Points | 多边形点位实际值 | List< Point > | 只读 |
 
  ### PolygonGateModel 多边形门模型，继承自BaseGateModel
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
- | Points | 多边形点位试剂值 | List< Point > |  |
+ | Points | 多边形点位实际值 | List< Point > |  |
 
  ### RectangleGate 四边形门，继承自BaseGate
  | 属性 | 含义 | 类型 | 说明 |
@@ -331,8 +333,9 @@ chart.DataSource = new System.Collections.ObjectModel.ObservableCollection<Chart
 ```
 
 ## 更新说明
-### 1.2.0
-1、添加门内数据以不同颜色显示功能  
+### 1.2.1
+1、添加门内数据以不同颜色显示功能，该功能尽量不启用，影响速度，尤其是采样过程中  
+2、修复一些bug
 ### 1.1.5
 1、修复一些bug
 ### 1.1.4

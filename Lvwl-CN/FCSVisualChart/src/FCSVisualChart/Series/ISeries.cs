@@ -213,12 +213,23 @@ namespace FCSVisualChart
         #endregion
 
         #region 门区域划分的数据显示
+        /// <summary>
+        /// 更新所有门划分区域的显示矢量数据
+        /// </summary>
+        /// <param name="chartDataSource"></param>
+        /// <returns></returns>
         internal virtual async Task UpdateGateAreaStream(ChartDataSource chartDataSource)
         {
             if (chartDataSource == null || !ChartDataStreams.ContainsKey(chartDataSource)) return;
             var gateAreas = chartDataSource.AreaIndexs.Keys.ToArray();
             foreach (var gateArea in gateAreas) await UpdateGateAreaStream(chartDataSource, gateArea);
         }
+        /// <summary>
+        /// 更新门划分区域的显示矢量数据
+        /// </summary>
+        /// <param name="chartDataSource"></param>
+        /// <param name="gateArea"></param>
+        /// <returns></returns>
         internal virtual async Task UpdateGateAreaStream(ChartDataSource chartDataSource, GateArea gateArea)
         {
             if (chartDataSource == null || !ChartDataStreams.ContainsKey(chartDataSource) || ChartDataStreams[chartDataSource] == null || !chartDataSource.AreaIndexs.ContainsKey(gateArea) || chartDataSource.AreaIndexs[gateArea] == null) return;
@@ -238,13 +249,20 @@ namespace FCSVisualChart
             if (streams != null) sdg.GateAreaGeometries[gateArea] = streams;
             else if (sdg.GateAreaGeometries.ContainsKey(gateArea)) sdg.GateAreaGeometries.Remove(gateArea);
         }
-
+        /// <summary>
+        /// 删除门划分区域的矢量数据
+        /// </summary>
+        /// <param name="chartDataSource"></param>
+        /// <param name="gateArea"></param>
         internal virtual void RemoveGateAreaStream(ChartDataSource chartDataSource, GateArea gateArea)
         {
             if (!ChartDataStreams.ContainsKey(chartDataSource) || !ChartDataStreams[chartDataSource].GateAreaGeometries.ContainsKey(gateArea)) return;
             ChartDataStreams[chartDataSource].GateAreaGeometries.Remove(gateArea);
         }
-
+        /// <summary>
+        /// 清除门划分区域的矢量数据
+        /// </summary>
+        /// <param name="chartDataSource"></param>
         internal virtual void ClearGateAreaStream(ChartDataSource chartDataSource)
         {
             if (!ChartDataStreams.ContainsKey(chartDataSource)) return;

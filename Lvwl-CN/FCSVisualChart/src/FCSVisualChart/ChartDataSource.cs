@@ -13,43 +13,43 @@ namespace FCSVisualChart
         /// <summary>
         /// x轴数据源
         /// </summary>
-        public IList XSource { get { return xSource; } set { xSource = value; OnPropertyChanged("XSource"); } }
+        public IList XSource { get { return xSource; } set { xSource = value; OnPropertyChanged(); } }
 
         private IList ySource;
         /// <summary>
         /// y轴数据源
         /// </summary>
-        public IList YSource { get { return ySource; } set { ySource = value; OnPropertyChanged("YSource"); } }
+        public IList YSource { get { return ySource; } set { ySource = value; OnPropertyChanged(); } }
 
         private IList<int> indexs;
         /// <summary>
         /// 有效数据的索引
         /// </summary>
-        public IList<int> Indexs { get { return indexs; } set { indexs = value; OnPropertyChanged("Indexs"); } }
+        public IList<int> Indexs { get { return indexs; } set { indexs = value; OnPropertyChanged(); } }
 
         private IList<int> displayIndexs;
         /// <summary>
         /// 显示数据的索引，整体数据不一定全部显示
         /// </summary>
-        public IList<int> DisplayIndexs { get { return displayIndexs == null ? indexs : displayIndexs; } set { displayIndexs = value; OnPropertyChanged("DisplayIndexs"); } }
+        public IList<int> DisplayIndexs { get { return displayIndexs == null ? indexs : displayIndexs; } set { displayIndexs = value; OnPropertyChanged(); } }
 
         private ObservableDictionary<GateArea, IList<int>> areaIndexs = new ObservableDictionary<GateArea, IList<int>>();
         /// <summary>
         /// 门划分的区域集合
         /// </summary>
-        public ObservableDictionary<GateArea, IList<int>> AreaIndexs { get { return areaIndexs; } set { areaIndexs = value; OnPropertyChanged("AreaIndexs"); } }
+        public ObservableDictionary<GateArea, IList<int>> AreaIndexs { get { return areaIndexs; } set { areaIndexs = value; OnPropertyChanged(); } }
 
         private Func<object, double> xSourceConverter = DefaultConverter;
         /// <summary>
         /// x值转换方法
         /// </summary>
-        public Func<object, double> XSourceConverter { get { return xSourceConverter; } set { xSourceConverter = value; OnPropertyChanged("XSourceConverter"); } }
+        public Func<object, double> XSourceConverter { get { return xSourceConverter; } set { xSourceConverter = value; OnPropertyChanged(); } }
 
         private Func<object, double> ySourceConverter = DefaultConverter;
         /// <summary>
         /// y值转换方法
         /// </summary>
-        public Func<object, double> YSourceConverter { get { return ySourceConverter; } set { ySourceConverter = value; OnPropertyChanged("YSourceConverter"); } }
+        public Func<object, double> YSourceConverter { get { return ySourceConverter; } set { ySourceConverter = value; OnPropertyChanged(); } }
 
         private static double DefaultConverter(object o)
         {
@@ -62,7 +62,7 @@ namespace FCSVisualChart
         /// <summary>
         /// 显示的颜色，含透明度
         /// </summary>
-        public Color DisplayColor { get { return displayColor; } set { displayColor = value; OnPropertyChanged("DisplayColor"); } }
+        public Color DisplayColor { get { return displayColor; } set { displayColor = value; OnPropertyChanged(); } }
 
         static readonly Random random = new Random();
         /// <summary>
