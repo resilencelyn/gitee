@@ -63,6 +63,25 @@ MIIO_TO_MIOT_SPECS = {
         },
     },
 
+    'air.fan.ca23ad9': {
+        'without_props': True,
+        'ignore_result': True,
+        'miio_commands': [
+            {
+                'method': 'get_prop',
+                'params': ['on'],
+                'values': ['power', 'mode', 'speed', 'lrWind', 'udWind', 'onTime', 'offTime'],
+            },
+        ],
+        'miio_specs': {
+            'prop.2.1': {'prop': 'power', 'setter': 'SetSwitch'},
+            'prop.2.2': {'prop': 'speed', 'setter': 'SetLevel'},
+            'prop.2.3': {'prop': 'lrWind', 'setter': 'SetH_Swing'},
+            'prop.2.4': {'prop': 'udWind', 'setter': 'SetV_Swing'},
+            'prop.2.5': {'prop': 'mode', 'setter': 'SetMode'},
+        },
+    },
+
     'cgllc.airmonitor.s1': {
         'without_props': True,
         'miio_commands': [
@@ -246,6 +265,31 @@ MIIO_TO_MIOT_SPECS = {
         'extend_model': 'deerma.humidifier.jsq1',
         'miio_specs': {
             'prop.3.3': {'prop': 'HumiSet_Value', 'setter': 'Set_HumiValue'},
+        },
+    },
+
+    'dmaker.fan.p5': {
+        """
+        https://github.com/rytilahti/python-miio/blob/31c5d740d403c6f45f1e7e0d4a8a6276684a8ecd/miio/integrations/fan/dmaker/fan.py#L28
+        {'power': False, 'mode': 'normal', 'speed': 35, 'roll_enable': False, 'roll_angle': 140,
+        'time_off': 0, 'light': True, 'beep_sound': False, 'child_lock': False}
+        """
+        'miio_specs': {
+            'prop.2.1': {'prop': 'power', 'setter': 's_power'},
+            'prop.2.2': {'prop': 'roll_enable', 'setter': 's_roll'},
+            'prop.2.3': {'prop': 'mode', 'setter': 's_mode', 'dict': {
+                'nature': 0,
+                'normal': 1,
+            }},
+            'prop.2.4': {
+                'prop': 'speed',
+                'setter': 's_speed',
+                'template': '{{ (value/25)|round }}',
+                'set_template': '{{ (value*25)|round }}',
+            },
+            'prop.3.1': {'prop': 'child_lock', 'setter': 's_lock'},
+            'prop.4.1': {'prop': 'light', 'setter': 's_light'},
+            'prop.5.1': {'prop': 'beep_sound', 'setter': 's_sound'},
         },
     },
 

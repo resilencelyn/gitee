@@ -251,6 +251,7 @@ namespace FCSVisualChart
             return new RectangleGateModel()
             {
                 AreaNames = this.Areas.Select(p => p.Name).ToArray(),
+                AreaColors = this.Areas.Select(p => string.Concat(p.DisplayColor.A.ToString("X2"), p.DisplayColor.R.ToString("X2"), p.DisplayColor.G.ToString("X2"), p.DisplayColor.B.ToString("X2"))).ToArray(),
                 X1 = Math.Min(this.X1, this.X2),
                 X2 = Math.Max(this.X1, this.X2),
                 Y1 = Math.Min(this.Y1, this.Y2),

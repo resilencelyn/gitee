@@ -185,6 +185,7 @@ namespace FCSVisualChart
             return new LineHorizontalGateModel()
             {
                 AreaNames = this.Areas.Select(p => p.Name).ToArray(),
+                AreaColors = this.Areas.Select(p => string.Concat(p.DisplayColor.A.ToString("X2"), p.DisplayColor.R.ToString("X2"), p.DisplayColor.G.ToString("X2"), p.DisplayColor.B.ToString("X2"))).ToArray(),
                 Y = this.Y
             };
         }

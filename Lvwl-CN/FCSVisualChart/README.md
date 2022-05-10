@@ -212,6 +212,7 @@
  | 属性 | 含义 | 类型 | 说明 |
  | --- | --- | --- | --- |
  | AreaNames | 区域名称集合 | string[] |  |
+ | AreaColors | 区域显示颜色集合 | string[] | FFFFFFFF：ARGB格式 |
 
  ### EllipseGate 椭圆门，继承自BaseGate
  | 属性 | 含义 | 类型 | 说明 |

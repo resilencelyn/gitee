@@ -11,11 +11,7 @@ namespace FCSVisualChart
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-            set { name = value; OnPropertyChanged(); }
-        }
+        public string Name { get { return name; } set { name = value; OnPropertyChanged(); } }
 
         private Color displayColor;
         /// <summary>

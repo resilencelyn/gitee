@@ -217,6 +217,7 @@ namespace FCSVisualChart
             return new SegmentXGateModel()
             {
                 AreaNames = this.Areas.Select(p => p.Name).ToArray(),
+                AreaColors = this.Areas.Select(p => string.Concat(p.DisplayColor.A.ToString("X2"), p.DisplayColor.R.ToString("X2"), p.DisplayColor.G.ToString("X2"), p.DisplayColor.B.ToString("X2"))).ToArray(),
                 X1 = this.X1,
                 X2 = this.X2,
                 Y = this.Y

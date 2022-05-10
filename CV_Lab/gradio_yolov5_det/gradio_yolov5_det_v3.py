@@ -21,6 +21,9 @@ ROOT_PATH = sys.path[0]  # 根目录
 # 本地模型路径
 local_model_path = f"{ROOT_PATH}/yolov5"
 
+# Gradio YOLOv5 Det版本
+GYD_VERSION = "Gradio YOLOv5 Det v0.3"
+
 # 模型名称临时变量
 model_name_tmp = ""
 
@@ -178,7 +181,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, mode
 
     # -----------模型调参-----------
     model.conf = conf  # NMS 置信度阈值
-    model.iou = iou  # NMS IOU阈值
+    model.iou = iou  # NMS IoU阈值
     model.max_det = 1000  # 最大检测框数
     model.classes = model_cls  # 模型类别
 
@@ -240,7 +243,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, mode
     # -------pdf-------
     report = "./Det_Report.pdf"
     if "pdf" in opt:
-        pdf_generate(f"{det_json_format}", report)
+        pdf_generate(f"{det_json_format}", report, GYD_VERSION)
     else:
         report = None
 
@@ -271,8 +274,8 @@ def main(args):
     # 模型加载
     model = model_loading(model_name, device)
 
-    model_names = yaml_csv(model_cfg, "model_names")
-    model_cls_name = yaml_csv(cls_name, "model_cls_name")
+    model_names = yaml_csv(model_cfg, "model_names")  # 模型名称
+    model_cls_name = yaml_csv(cls_name, "model_cls_name")  # 类别名称
 
     model_cls_name_cp = model_cls_name.copy()  # 类别名称
 
@@ -353,16 +356,18 @@ def main(args):
         outputs=outputs,
         title=title,
         description=description,
+        article="",
         examples=examples,
         theme="seafoam",
         # live=True, # 实时变更输出
         flagging_dir="run",  # 输出目录
         # flagging_options=["good", "generally", "bad"],
         # allow_flagging="auto",
-        # ).launch(inbrowser=True, auth=['admin', 'admin'])
     ).launch(
         inbrowser=True,  # 自动打开默认浏览器
         show_tips=True,  # 自动显示gradio最新功能
+        # auth=['admin', 'admin'] # 登录界面
+        # share=True, # 项目共享，其他设备可以访问
         # favicon_path="./icon/logo.ico",
     )
 

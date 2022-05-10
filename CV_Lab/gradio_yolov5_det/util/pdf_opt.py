@@ -4,7 +4,6 @@
 
 from fpdf import FPDF
 
-title = "Gradio YOLOv5 Det v0.2"
 
 
 # PDF生成类
@@ -69,7 +68,10 @@ class PDF(FPDF):
 
 
 # pdf生成函数
-def pdf_generate(input_file, output_file):
+def pdf_generate(input_file, output_file, title_):
+    global title
+    
+    title = title_
     pdf = PDF()
     pdf.set_title(title)
     pdf.set_author("Zeng Yifu")

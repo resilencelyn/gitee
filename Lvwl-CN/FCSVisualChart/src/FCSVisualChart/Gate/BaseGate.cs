@@ -78,15 +78,26 @@ namespace FCSVisualChart
             IsCreating = true;
             Init();
             Areas = new GateArea[AreaCount];
-            for (int i = 0; i < AreaCount; i++) Areas[i] = new GateArea() { OwnerGate = this };
+            for (int i = 0; i < AreaCount; i++)
+            {
+                var area = new GateArea() { OwnerGate = this };
+                area.PropertyChanged += Area_PropertyChanged;
+                Areas[i] = area;
+            }
         }
 
         public BaseGate(BaseGateModel model)
         {
             Init();
-            if (model.AreaNames != null && model.AreaNames.Length == AreaCount)
+            if (model.AreaNames != null && model.AreaNames.Length == AreaCount && model.AreaColors.Length == AreaCount)
             {
-                Areas = model.AreaNames.Select(p => new GateArea() { Name = p, OwnerGate = this }).ToArray();
+                Areas = new GateArea[AreaCount];
+                for (int i = 0; i < AreaCount; i++)
+                {
+                    var colorString = model.AreaColors[i];
+                    var color = new Color() { A = Convert.ToByte(colorString.Substring(0, 2), 16), R = Convert.ToByte(colorString.Substring(2, 2), 16), G = Convert.ToByte(colorString.Substring(4, 2), 16), B = Convert.ToByte(colorString.Substring(6, 2), 16) };
+                    Areas[i] = new GateArea() { Name = model.AreaNames[i], DisplayColor = color, OwnerGate = this };
+                }
                 Chart.AddExistedGraphicalName(this.ShortName, model.AreaNames.ToArray());
             }
             else
@@ -95,7 +106,17 @@ namespace FCSVisualChart
                 for (int i = 0; i < AreaCount; i++) Areas[i] = new GateArea() { OwnerGate = this };
             }
             //区域名称发生变化时，需要重新绘制门图形
-            foreach (var area in Areas) area.PropertyChanged += (d, e) => { if (nameof(GateArea.Name).Equals(e.PropertyName)) Draw(); };
+            foreach (var area in Areas) area.PropertyChanged += Area_PropertyChanged;
+        }
+
+        /// <summary>
+        /// 区域名称改变，重新绘制门图形
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Area_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (nameof(GateArea.Name).Equals(e.PropertyName)) Draw();
         }
 
         /// <summary>
@@ -582,7 +603,14 @@ namespace FCSVisualChart
     [XmlInclude(typeof(RectangleGateModel))]
     public abstract class BaseGateModel
     {
+        /// <summary>
+        /// 区域名称
+        /// </summary>
         public string[] AreaNames { get; set; }
+        /// <summary>
+        /// 区域颜色
+        /// </summary>
+        public string[] AreaColors { get; set; }
     }
 
     /// <summary>
