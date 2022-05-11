@@ -52,3 +52,6 @@ test*.py
 
 !requirements.txt
 !.pre-commit-config.yaml
+
+gradio_yolov5_det_img.py
+gradio_yolov5_det_video.py

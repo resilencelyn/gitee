@@ -89,13 +89,17 @@ namespace FCSVisualChart
         public BaseGate(BaseGateModel model)
         {
             Init();
-            if (model.AreaNames != null && model.AreaNames.Length == AreaCount && model.AreaColors.Length == AreaCount)
+            if (model.AreaNames != null && model.AreaNames.Length == AreaCount)
             {
                 Areas = new GateArea[AreaCount];
                 for (int i = 0; i < AreaCount; i++)
                 {
-                    var colorString = model.AreaColors[i];
-                    var color = new Color() { A = Convert.ToByte(colorString.Substring(0, 2), 16), R = Convert.ToByte(colorString.Substring(2, 2), 16), G = Convert.ToByte(colorString.Substring(4, 2), 16), B = Convert.ToByte(colorString.Substring(6, 2), 16) };
+                    Color color = ChartDataSource.RandomColor();
+                    if (model.AreaColors != null && model.AreaColors.Length > i)
+                    {
+                        var colorString = model.AreaColors[i];
+                        color = new Color() { A = Convert.ToByte(colorString.Substring(0, 2), 16), R = Convert.ToByte(colorString.Substring(2, 2), 16), G = Convert.ToByte(colorString.Substring(4, 2), 16), B = Convert.ToByte(colorString.Substring(6, 2), 16) };
+                    }
                     Areas[i] = new GateArea() { Name = model.AreaNames[i], DisplayColor = color, OwnerGate = this };
                 }
                 Chart.AddExistedGraphicalName(this.ShortName, model.AreaNames.ToArray());

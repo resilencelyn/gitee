@@ -21,6 +21,9 @@ ROOT_PATH = sys.path[0]  # 根目录
 # 本地模型路径
 local_model_path = f"{ROOT_PATH}/yolov5"
 
+# Gradio YOLOv5 Det版本
+GYD_VERSION = "Gradio YOLOv5 Det v0.3"
+
 # 模型名称临时变量
 model_name_tmp = ""
 
@@ -240,7 +243,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, mode
     # -------pdf-------
     report = "./Det_Report.pdf"
     if "pdf" in opt:
-        pdf_generate(f"{det_json_format}", report)
+        pdf_generate(f"{det_json_format}", report, GYD_VERSION)
     else:
         report = None
 

@@ -1,6 +1,9 @@
-# Gradio YOLOv5 Det v0.3
+# Gradio YOLOv5 Det v0.2.2
 # 创建人：曾逸夫
-# 创建时间：2022-05-09
+# 创建时间：2022-05-11
+
+import os
+os.system("pip install gradio==2.9b40")
 
 import argparse
 import csv
@@ -22,7 +25,7 @@ ROOT_PATH = sys.path[0]  # 根目录
 local_model_path = f"{ROOT_PATH}/yolov5"
 
 # Gradio YOLOv5 Det版本
-GYD_VERSION = "Gradio YOLOv5 Det v0.3"
+GYD_VERSION = "Gradio YOLOv5 Det v0.2.2"
 
 # 模型名称临时变量
 model_name_tmp = ""
@@ -38,7 +41,7 @@ FONTSIZE = 25
 
 
 def parse_args(known=False):
-    parser = argparse.ArgumentParser(description="Gradio YOLOv5 Det v0.3")
+    parser = argparse.ArgumentParser(description="Gradio YOLOv5 Det v0.2.2")
     parser.add_argument("--model_name", "-mn", default="yolov5s", type=str, help="model name")
     parser.add_argument(
         "--model_cfg",
@@ -309,7 +312,7 @@ def main(args):
     outputs = [outputs_img, outputs02_json, outputs03_pdf]
 
     # 标题
-    title = "基于Gradio的YOLOv5通用目标检测系统v0.3"
+    title = "基于Gradio的YOLOv5通用目标检测系统v0.2.2"
 
     # 描述
     description = "<div align='center'>可自定义目标检测模型、安装简单、使用方便</div>"
@@ -356,17 +359,13 @@ def main(args):
         description=description,
         article="",
         examples=examples,
-        theme="seafoam",
-        # live=True, # 实时变更输出
         flagging_dir="run",  # 输出目录
-        # flagging_options=["good", "generally", "bad"],
-        # allow_flagging="auto",
+        allow_flagging="never", # 禁用flag
     ).launch(
         inbrowser=True,  # 自动打开默认浏览器
         show_tips=True,  # 自动显示gradio最新功能
         # auth=['admin', 'admin'] # 登录界面
         # share=True, # 项目共享，其他设备可以访问
-        # favicon_path="./icon/logo.ico",
     )
 
 

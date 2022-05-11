@@ -64,10 +64,11 @@
 
 ❤️ 点击列表中的链接，进入对应版本的**Hugging Face Spaces**界面中快速体验：
 
-|                                         Demo 名称                                          | 输入类型 |  输出类型   |                                                                                                            状态                                                                                                             |
-| :--------------------------------------------------------------------------------------: | :--: | :-----: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |  图片  | 图片，JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
-|  [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)   |  图片  | 图片，JSON |    [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)    |
+|                          Demo 名称                           | 输入类型 |    输出类型     |                             状态                             |
+| :----------------------------------------------------------: | :------: | :-------------: | :----------------------------------------------------------: |
+| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |   图片   | 图片，JSON，PDF | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
+| [Gradio YOLOv5 Det v0.2.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) |   图片   | 图片，JSON，PDF | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) |
+| [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |   图片   |   图片，JSON    | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
 
 <h2 align="center">💎项目流程与用途</h2>
 
