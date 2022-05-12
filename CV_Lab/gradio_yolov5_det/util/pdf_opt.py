@@ -5,7 +5,6 @@
 from fpdf import FPDF
 
 
-
 # PDF生成类
 class PDF(FPDF):
     # 参考：https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
@@ -70,7 +69,7 @@ class PDF(FPDF):
 # pdf生成函数
 def pdf_generate(input_file, output_file, title_):
     global title
-    
+
     title = title_
     pdf = PDF()
     pdf.set_title(title)

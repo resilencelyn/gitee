@@ -317,19 +317,7 @@ if (ARR->max_length <= (il2cpp_array_size_t)INDEX) { \
 			}
 			klass = il2cpp::vm::Class::GetNullableArgument(klass);
 		}
-		else
-		{
-			if (obj == nullptr)
-			{
-				il2cpp::vm::Exception::RaiseNullReferenceException();
-			}
-		}
-
-		if (klass != obj->klass)
-		{
-			il2cpp::vm::Exception::Raise(il2cpp::vm::Exception::GetInvalidCastException("cast fail"), nullptr);
-		}
-		return il2cpp::vm::Object::Unbox(obj);
+		return UnBox(obj, klass);
 	}
 
 	inline void HiUnboxAny(Il2CppObject* obj, Il2CppClass* klass, void* data)
@@ -341,11 +329,7 @@ if (ARR->max_length <= (il2cpp_array_size_t)INDEX) { \
 		else
 		{
 			CHECK_NOT_NULL_THROW(obj);
-			if (klass != obj->klass)
-			{
-				il2cpp::vm::Exception::Raise(il2cpp::vm::Exception::GetInvalidCastException("cast fail"), nullptr);
-			}
-			std::memcpy(data, il2cpp::vm::Object::Unbox(obj), klass->instance_size - sizeof(Il2CppObject));
+			std::memcpy(data, UnBox(obj, klass), klass->instance_size - sizeof(Il2CppObject));
 		}
 	}
 
@@ -588,6 +572,7 @@ if (ARR->max_length <= (il2cpp_array_size_t)INDEX) { \
 
 	inline void HiCallDelegate(Il2CppMulticastDelegate* del, uint16_t invokeParamCount, Managed2NativeCallMethod staticM2NMethod, Managed2NativeCallMethod instanceM2NMethod, uint16_t* argIdxs, StackObject* localVarBase, void* ret)
 	{
+		CHECK_NOT_NULL_THROW(del);
 		if (del->delegates == nullptr)
 		{
 			CallDelegateMethod(invokeParamCount, del->delegate.method, del->delegate.target, staticM2NMethod, instanceM2NMethod, argIdxs, localVarBase, ret);
@@ -4802,11 +4787,7 @@ else \
 				    IL2CPP_ASSERT(__obj < __ctorFrameBase);
 				    StackObject* _frameBasePtr = (StackObject*)(void*)(localVarBase + __ctorFrameBase);
 				    std::memcpy(_frameBasePtr + 1, (void*)(localVarBase + __argBase), __argStackObjectNum * sizeof(StackObject)); // move arg
-				#if VALUE_TYPE_METHOD_POINTER_IS_ADJUST_METHOD
-				    _frameBasePtr->ptr = ((StackObject*)(void*)(localVarBase + __obj)) - 1;
-				#else
 				    _frameBasePtr->ptr = (StackObject*)(void*)(localVarBase + __obj);
-				#endif
 				    int32_t _typeSize = GetTypeValueSize(__method->klass);
 				    InitDefaultN((void*)(localVarBase + __obj), _typeSize); // init after move
 				    CALL_INTERP_VOID((ip + 18), __method, _frameBasePtr);
@@ -7303,7 +7284,7 @@ else \
 				    CHECK_NOT_NULL_THROW(_arr);
 				    CHECK_NOT_NULL_AND_ARRAY_BOUNDARY(_arr, (*(int32_t*)(localVarBase + __index)));
 				    int32_t _eleSize = il2cpp::vm::Array::GetElementSize(_arr->klass);
-				    il2cpp_array_setrefwithsize(_arr, _eleSize, __index, (void*)(localVarBase + __ele));
+				    il2cpp_array_setrefwithsize(_arr, _eleSize, (*(int32_t*)(localVarBase + __index)), (void*)(localVarBase + __ele));
 				    ip += 8;
 				    continue;
 				}
@@ -7429,7 +7410,7 @@ else \
 				    CHECK_NOT_NULL_THROW(_arr);
 				    CHECK_NOT_NULL_AND_ARRAY_BOUNDARY(_arr, (*(int64_t*)(localVarBase + __index)));
 				    int32_t _eleSize = il2cpp::vm::Array::GetElementSize(_arr->klass);
-				    il2cpp_array_setrefwithsize(_arr, _eleSize, __index, (void*)(localVarBase + __ele));
+				    il2cpp_array_setrefwithsize(_arr, _eleSize, (*(int64_t*)(localVarBase + __index)), (void*)(localVarBase + __ele));
 				    ip += 8;
 				    continue;
 				}
@@ -7644,7 +7625,7 @@ else \
 					uint16_t __obj = *(uint16_t*)(ip + 2);
 					uint16_t __x = *(uint16_t*)(ip + 4);
 					uint16_t __y = *(uint16_t*)(ip + 6);
-				    *(HtVector2*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y))};
+				    *(HtVector2f*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y))};
 				    ip += 8;
 				    continue;
 				}
@@ -7653,7 +7634,7 @@ else \
 					uint16_t __obj = *(uint16_t*)(ip + 2);
 					uint16_t __x = *(uint16_t*)(ip + 4);
 					uint16_t __y = *(uint16_t*)(ip + 6);
-				    *(HtVector3*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), 0};
+				    *(HtVector3f*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), 0};
 				    ip += 8;
 				    continue;
 				}
@@ -7663,7 +7644,7 @@ else \
 					uint16_t __x = *(uint16_t*)(ip + 4);
 					uint16_t __y = *(uint16_t*)(ip + 6);
 					uint16_t __z = *(uint16_t*)(ip + 8);
-				    *(HtVector3*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), (*(float*)(localVarBase + __z))};
+				    *(HtVector3f*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), (*(float*)(localVarBase + __z))};
 				    ip += 10;
 				    continue;
 				}
@@ -7672,7 +7653,7 @@ else \
 					uint16_t __obj = *(uint16_t*)(ip + 2);
 					uint16_t __x = *(uint16_t*)(ip + 4);
 					uint16_t __y = *(uint16_t*)(ip + 6);
-				    *(HtVector4*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), 0, 0};
+				    *(HtVector4f*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), 0, 0};
 				    ip += 8;
 				    continue;
 				}
@@ -7682,7 +7663,7 @@ else \
 					uint16_t __x = *(uint16_t*)(ip + 4);
 					uint16_t __y = *(uint16_t*)(ip + 6);
 					uint16_t __z = *(uint16_t*)(ip + 8);
-				    *(HtVector4*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), (*(float*)(localVarBase + __z)), 0};
+				    *(HtVector4f*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), (*(float*)(localVarBase + __z)), 0};
 				    ip += 10;
 				    continue;
 				}
@@ -7693,7 +7674,7 @@ else \
 					uint16_t __y = *(uint16_t*)(ip + 6);
 					uint16_t __z = *(uint16_t*)(ip + 8);
 					uint16_t __w = *(uint16_t*)(ip + 10);
-				    *(HtVector4*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), (*(float*)(localVarBase + __z)), (*(float*)(localVarBase + __w))};
+				    *(HtVector4f*)(*(void**)(localVarBase + __obj)) = {(*(float*)(localVarBase + __x)), (*(float*)(localVarBase + __y)), (*(float*)(localVarBase + __z)), (*(float*)(localVarBase + __w))};
 				    ip += 12;
 				    continue;
 				}

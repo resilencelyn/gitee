@@ -376,7 +376,7 @@ end split
 * api文档地址: http://localhost:9090/api-doc/
 
 ### 环境要求
-jdk8, gradle7+
+jdk8
 
 ### 可以更换自已的数据库 (默认用的h2)
 > 数据库要求: mysql5.7+(最好是8.0.4+), MariaDB10.2+
@@ -398,6 +398,7 @@ IntelliJ IDEA 运行 main.groovy 启动
 
 # v2.0.1 ing...
 - [x] feat: 容器镜像 Dockerfile
+- [ ] upgrade: http 1.1.2
 - [ ] feat: 重新执行决策(自动/手动)
 - [ ] opt: 实体关联(无外键)
 - [ ] opt: 深入优化决策DSL变量作用域
@@ -409,3 +410,6 @@ IntelliJ IDEA 运行 main.groovy 启动
 
 # 参与贡献
 xnatural@msn.cn
+
+
+![Image text](https://gitee.com/xnat/grule/raw/master/docs/img/weixin_money.jpg)

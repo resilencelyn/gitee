@@ -13,7 +13,7 @@
 </p>
 <p align="center">
 <a href="./CodeCheck.md"><img src="https://img.shields.io/badge/CodeCheck-passing-success" alt="code check" /></a>
-<a href="https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2"><img src="https://img.shields.io/badge/Releases-v0.2-green" alt="Releases Version" /></a>
+<a href="https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2.2"><img src="https://img.shields.io/badge/Releases-v0.2.2-green" alt="Releases Version" /></a>
 <a href="https://github.com/ultralytics/yolov5"><img src="https://img.shields.io/badge/YOLOv5-v6.1-blue" alt="YOLOv5 Version" /></a>
 <a href="https://github.com/gradio-app/gradio"><img src="https://img.shields.io/badge/Gradio-2.9.4+-orange" alt="Gradio Version" /></a>
 <a href="https://huggingface.co/"><img src="https://img.shields.io/badge/%F0%9F%A4%97-Hugging%20Face-blue" alt="Hugging Face Spaces" /></a>
@@ -26,6 +26,7 @@
 <a href='https://gitee.com/CV_Lab/gradio_yolov5_det/stargazers'><img src='https://gitee.com/CV_Lab/gradio_yolov5_det/badge/star.svg?theme=dark' alt='star'></img></a>
 <a href='https://gitee.com/CV_Lab/gradio_yolov5_det/members'><img src='https://gitee.com/CV_Lab/gradio_yolov5_det/badge/fork.svg?theme=dark' alt='fork'></img></a>
 </p>
+
 
 ## 🚀 About the author
 
@@ -47,6 +48,7 @@ Zeng Yifu, engaged in artificial intelligence research and development; main res
 
 <h2 align="center">🚀 Update Trend</h2>
 
+- `2022-05-12` **⚡ [Gradio YOLOv5 Det v0.2.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2.2)officially launched**
 - `2022-05-08` **⚡ [Gradio YOLOv5 Det v0.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2)officially launched**
 - `2022-04-30` **⚡ [Gradio YOLOv5 Det v0.1](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.1)officially launched**
 
@@ -64,10 +66,13 @@ Zeng Yifu, engaged in artificial intelligence research and development; main res
 
 ❤️ Click the link in the list to enter the corresponding version of the **Hugging Face Spaces** interface for quick experience:
 
-|                                        Demo name                                         | input type | output type |                                                                                                          status                                                                                                           |
-| :--------------------------------------------------------------------------------------: | :--------: | :---------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |   Image    | Image, JSON | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
-|  [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)   |   Image    | Image, JSON |    [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)    |
+|                                                 Demo name                                                  | input type |   output type   |                                                                           Overall interface                                                                            |                                                                                                            status                                                                                                             |
+| :--------------------------------------------------------------------------------------------------------: | :--------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [Gradio YOLOv5 Det v0.2.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) \[recommend\] |   Image    | Image, JSON,PDF | [Before detection](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_2_screenshot.png) , [After detection](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_2_screenshot02.png) | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) |
+|          [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2)          |   Image    | Image, JSON,PDF |   [Before detection](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_screenshot.png) , [After detection](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot02.png)   |   [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2)   |
+|           [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)            |   Image    |   Image, JSON   |   [Before detection](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot.png) , [After detection](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot02.png)   |      [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)      |
+
+❗Note: Click the `Overall interface` link to view the project **Overall interface picture**
 
 <h2 align="center">💎 Project Process and Purpose</h2>
 
@@ -105,7 +110,11 @@ Detection information (JSON version)
 
 Including **image upload**, **device switching**, **model switching**, **inference size**, **confidence threshold**, **IoU threshold**, **label display** , **category selection**, etc.
 
-❗ Note: The position of the slider of Gradio's slider component does not change with the default value initially, but it does not affect the detection
+❗ Note: The position of the slider of Gradio's slider component does not change with the default value initially, but it does not affect the detection. [Gradio YOLOv5 Det v0.2.2](./gradio_yolov5_det_v2_2.py) solves the problem
+
+<div align="center" >
+<img src="https://pycver.gitee.io/ows-pics/imgs/gyd_ui01.png">
+</div>
 
 <div align="center" >
 <img src="https://pycver.gitee.io/ows-pics/imgs/gyd_ui01.png">
@@ -205,6 +214,7 @@ Sample interface (v0.2)
 │   │   └── pdf_opt.py						# PDF management
 │   ├── img_example							# example image
 │   ├── __init__.py							# Initialization file
+│   ├── gradio_yolov5_det_v2_2.py			# v0.2.2 main run file
 │   ├── gradio_yolov5_det_v2.py				# v0.2 main run file
 │   ├── gradio_yolov5_det.py				# v0.1 main run file
 │   ├── LICENSE								# Project License
@@ -271,7 +281,7 @@ pip install -r requirements.txt -U
 
 <h2 align="center">⚡ Usage</h2>
 
-❤️ Note: The usage of **Gradio YOLOv5 Det v0.2** is the same as v0.1, just change `gradio_yolov5_det.py` to `gradio_yolov5_det_v2.py`.
+❤️ Note: The usage of **Gradio YOLOv5 Det v0.2.x** is the same as v0.1, just change `gradio_yolov5_det.py` to `gradio_yolov5_det_v2_x.py`.
 
 ### 💡 Running the YOLOv5 model
 

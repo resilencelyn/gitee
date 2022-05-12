@@ -2,6 +2,10 @@
 # 创建人：曾逸夫
 # 创建时间：2022-05-01
 
+import os
+
+os.system("pip install gradio==2.9.4")
+
 import argparse
 import csv
 import json

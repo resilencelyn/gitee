@@ -3,7 +3,8 @@
 # 创建时间：2022-05-11
 
 import os
-os.system("pip install gradio==2.9b40")
+
+os.system("pip install gradio==2.9b50")
 
 import argparse
 import csv
@@ -360,7 +361,7 @@ def main(args):
         article="",
         examples=examples,
         flagging_dir="run",  # 输出目录
-        allow_flagging="never", # 禁用flag
+        allow_flagging="never",  # 禁用flag
     ).launch(
         inbrowser=True,  # 自动打开默认浏览器
         show_tips=True,  # 自动显示gradio最新功能
