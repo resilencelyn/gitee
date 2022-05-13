@@ -18,6 +18,7 @@
 
 package com.dtstack.taier.develop.vo.develop.query;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dtstack.taier.common.param.DtInsightAuthParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,6 +51,15 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
     @ApiModelProperty(value = "")
     private Map<String, Object> targetMap;
 
+    @ApiModelProperty(value = "")
+    private List<JSONObject> source;
+
+    @ApiModelProperty(value = "")
+    private List<JSONObject> sink;
+
+    @ApiModelProperty(value = "")
+    private List<JSONObject> side;
+
     @ApiModelProperty(value = "设置")
     private Map<String, Object> settingMap;
 
@@ -80,12 +90,6 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
     @ApiModelProperty(value = "同步模式 0-无增量标识，1-有增量标识", example = "1")
     private Integer syncModel = 0;
 
-    @ApiModelProperty(value = "2-python2.x,3-python3.xD", example = "2")
-    private Integer pythonVersion = 0;
-
-    @ApiModelProperty(value = "0-TensorFlow,1-MXNet", example = "1")
-    private Integer learningType = 0;
-
     @ApiModelProperty(value = "输入数据文件的路径", example = "")
     private String input;
 
@@ -100,12 +104,6 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
 
     @ApiModelProperty(value = "是否是右键编辑任务", example = "false")
     private Boolean isEditBaseInfo = false;
-
-    @ApiModelProperty(value = "工作流父任务版本号  用于子任务获取父任务锁", example = "43")
-    private Integer parentReadWriteLockVersion ;
-
-    @ApiModelProperty(value = "读写锁", example = "")
-    private BatchReadWriteLockBaseVO readWriteLockVO;
 
     @ApiModelProperty(value = "任务名称", example = "test")
     private String name;
@@ -154,6 +152,9 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
 
     @ApiModelProperty(value = "节点 ID", example = "7")
     private Long nodePid;
+
+    @ApiModelProperty(value = "父节点 ID", example = "7")
+    private Long parentId;
     
     @ApiModelProperty(value = "任务描述", example = "tes")
     private String taskDesc;
@@ -172,15 +173,12 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
 
     @ApiModelProperty(value = "租户 ID", hidden = true)
     private Long tenantId;
-
-    @ApiModelProperty(value = "项目 ID",  hidden = true)
-    private Long projectId;
    
     @ApiModelProperty(value = "平台类别", hidden = true)
     private Integer appType;
 
     @ApiModelProperty(value = "ID", hidden = true)
-    private Long id = 0L;
+    private Long id;
     
     @ApiModelProperty(value = "创建时间", hidden = true)
     private Timestamp gmtCreate;
@@ -194,12 +192,31 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
     @ApiModelProperty(value = "组件版本号", example = "111")
     private String componentVersion;
 
+    @ApiModelProperty(value = "是否更新数据源")
+    private Boolean updateSource = true;
+
+    public Boolean getUpdateSource() {
+        return updateSource;
+    }
+
+    public void setUpdateSource(Boolean updateSource) {
+        this.updateSource = updateSource;
+    }
+
     public String getDtToken() {
         return dtToken;
     }
 
     public void setDtToken(String dtToken) {
         this.dtToken = dtToken;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     @Override
@@ -332,22 +349,6 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
         this.syncModel = syncModel;
     }
 
-    public Integer getPythonVersion() {
-        return pythonVersion;
-    }
-
-    public void setPythonVersion(Integer pythonVersion) {
-        this.pythonVersion = pythonVersion;
-    }
-
-    public Integer getLearningType() {
-        return learningType;
-    }
-
-    public void setLearningType(Integer learningType) {
-        this.learningType = learningType;
-    }
-
     public String getInput() {
         return input;
     }
@@ -386,22 +387,6 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
 
     public void setEditBaseInfo(Boolean editBaseInfo) {
         isEditBaseInfo = editBaseInfo;
-    }
-
-    public Integer getParentReadWriteLockVersion() {
-        return parentReadWriteLockVersion;
-    }
-
-    public void setParentReadWriteLockVersion(Integer parentReadWriteLockVersion) {
-        this.parentReadWriteLockVersion = parentReadWriteLockVersion;
-    }
-
-    public BatchReadWriteLockBaseVO getReadWriteLockVO() {
-        return readWriteLockVO;
-    }
-
-    public void setReadWriteLockVO(BatchReadWriteLockBaseVO readWriteLockVO) {
-        this.readWriteLockVO = readWriteLockVO;
     }
 
     public String getName() {
@@ -582,14 +567,6 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
         this.tenantId = tenantId;
     }
 
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
     public Integer getAppType() {
         return appType;
     }
@@ -636,5 +613,28 @@ public class BatchTaskResourceParamVO extends DtInsightAuthParam {
 
     public void setComponentVersion(String componentVersion) {
         this.componentVersion = componentVersion;
+    }
+    public void setSource(List<JSONObject> source) {
+        this.source  = source;
+    }
+
+    public List<JSONObject> getSource() {
+        return source;
+    }
+
+    public void setSink(List<JSONObject> sink) {
+        this.sink  = sink;
+    }
+
+    public List<JSONObject> getSink() {
+        return sink;
+    }
+
+    public void setSide(List<JSONObject> side) {
+        this.side  = side;
+    }
+
+    public List<JSONObject> getSide() {
+        return side;
     }
 }

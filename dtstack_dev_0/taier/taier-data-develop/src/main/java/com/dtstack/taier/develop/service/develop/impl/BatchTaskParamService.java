@@ -20,7 +20,9 @@ package com.dtstack.taier.develop.service.develop.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.dtstack.taier.common.constant.FormNames;
+import com.dtstack.taier.common.enums.Deleted;
 import com.dtstack.taier.common.enums.EParamType;
 import com.dtstack.taier.common.exception.ErrorCode;
 import com.dtstack.taier.common.exception.RdosDefineException;
@@ -32,7 +34,6 @@ import com.dtstack.taier.dao.domain.BatchTaskParamShade;
 import com.dtstack.taier.dao.mapper.DevelopTaskParamDao;
 import com.dtstack.taier.develop.dto.devlop.BatchParamDTO;
 import com.dtstack.taier.develop.utils.develop.sync.job.SyncJob;
-import com.dtstack.taier.scheduler.vo.ScheduleTaskVO;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -41,11 +42,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.sql.Timestamp;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,15 +71,11 @@ public class BatchTaskParamService {
      */
     private static final String[] KERBEROS_IGNORE_KEYS = {"hadoopConfig"};
 
-    public void addOrUpdateTaskParam(final ScheduleTaskVO batchTask) {
-        if (batchTask == null) {
-            throw new RdosDefineException(ErrorCode.CAN_NOT_FIND_TASK);
-        }
-
-        final List<BatchParamDTO> parameterSet = this.paramResolver(batchTask.getTaskVariables());
+    public void addOrUpdateTaskParam(final List<Map> taskVariables ,Long id) {
+        final List<BatchParamDTO> parameterSet = this.paramResolver(taskVariables);
 
         //存储
-        this.saveTaskParams(batchTask.getId(), parameterSet);
+        this.saveTaskParams(id, parameterSet);
     }
 
     /**
@@ -231,22 +225,26 @@ public class BatchTaskParamService {
      * @param batchParamDTOS
      */
     public List<BatchTaskParam> saveTaskParams(final Long taskId, final List<BatchParamDTO> batchParamDTOS) {
-        this.developTaskParamDao.deleteByTaskId(taskId);
+        this.developTaskParamDao.delete(Wrappers.lambdaQuery(BatchTaskParam.class).eq(BatchTaskParam::getTaskId,taskId));
         final List<BatchTaskParam> batchTaskParams = this.buildBatchTaskParams(taskId, batchParamDTOS);
         return batchTaskParams;
     }
 
     public BatchTaskParam addOrUpdate(final BatchTaskParam batchTaskParam) {
         if (batchTaskParam.getId() > 0) {
-            this.developTaskParamDao.update(batchTaskParam);
+            batchTaskParam.setGmtModified(new Timestamp(System.currentTimeMillis()));
+            this.developTaskParamDao.updateById(batchTaskParam);
         } else {
+            batchTaskParam.setIsDeleted(Deleted.NORMAL.getStatus());
+            batchTaskParam.setGmtCreate(new Timestamp(System.currentTimeMillis()));
+            batchTaskParam.setGmtModified(new Timestamp(System.currentTimeMillis()));
             this.developTaskParamDao.insert(batchTaskParam);
         }
         return batchTaskParam;
     }
 
     public void deleteTaskParam(long taskId) {
-        this.developTaskParamDao.deleteByTaskId(taskId);
+        this.developTaskParamDao.delete(Wrappers.lambdaQuery(BatchTaskParam.class).eq(BatchTaskParam::getTaskId,taskId));
     }
 
     public List<BatchTaskParam> buildBatchTaskParams(final long taskId, final List<BatchParamDTO> batchParamDTOS) {
@@ -301,7 +299,9 @@ public class BatchTaskParamService {
     }
 
     public List<BatchTaskParam> getTaskParam(final long taskId) {
-        List<BatchTaskParam> taskParams = developTaskParamDao.listByTaskId(taskId);
+        List<BatchTaskParam> taskParams = developTaskParamDao.selectList(Wrappers.lambdaQuery(BatchTaskParam.class)
+                                .eq(BatchTaskParam::getTaskId,taskId)
+                                .eq(BatchTaskParam::getIsDeleted,Deleted.NORMAL.getStatus()));
         // 特殊处理 TaskParam 系统参数
         for (BatchTaskParam taskParamShade : taskParams) {
             if (!EParamType.SYS_TYPE.getType().equals(taskParamShade.getType())) {

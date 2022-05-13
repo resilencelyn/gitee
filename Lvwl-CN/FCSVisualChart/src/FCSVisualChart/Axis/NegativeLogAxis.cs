@@ -79,7 +79,6 @@ namespace FCSVisualChart
             else if (value >= lineMaxValue) return Math.Log(value, logBase);
             else if (value <= -lineMaxValue) return -Math.Log(-value, logBase);
             else return value * linePowerCount / lineMaxValue;
-
         }
 
         /// <summary>

@@ -22,6 +22,7 @@ const sidebars = {
                 'guides/introduction',
                 'guides/work-deployment',
                 'guides/explain',
+                'guides/taier-architecture',
             ],
         },
         {
@@ -38,6 +39,7 @@ const sidebars = {
                             'quickstart/deploy/pre-operation',
                             'quickstart/deploy/backend',
                             'quickstart/deploy/web',
+                            'quickstart/deploy/docker',
                         ],
                  },
                   'quickstart/start',
@@ -50,7 +52,18 @@ const sidebars = {
             items: [
                 'functions/multi-cluster',
                 'functions/datasource',
-                'functions/task',
+                {
+                    type: 'category',
+                    collapsed: false,
+                    label: '任务类型',
+                    items: [
+                        'functions/task/sync',
+                        'functions/task/data-acquisition',
+                        'functions/task/flink-sql',
+                        'functions/task/spark-sql',
+                        'functions/task/hive-sql',
+                    ],
+                 },
                 'functions/maintenance',
                 'functions/depend',
                 'functions/task-param',
@@ -58,6 +71,7 @@ const sidebars = {
             ],
         },
         'contributing',
+        'faq',
     ],
 
 };

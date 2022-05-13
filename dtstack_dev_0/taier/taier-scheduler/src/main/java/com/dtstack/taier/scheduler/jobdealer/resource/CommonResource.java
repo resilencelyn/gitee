@@ -42,6 +42,8 @@ public class CommonResource {
             CommonResource commonResource = null;
             switch (taskType) {
                 case SYNC:
+                case SQL:
+                case DATA_ACQUISITION:
                     commonResource = new FlinkResource();
                     commonResource.setClusterMapper(clusterMapper);
                     commonResource.setClusterService(clusterService);
@@ -50,6 +52,7 @@ public class CommonResource {
                     break;
                 case SPARK_SQL:
                 case SPARK:
+                case HIVE_SQL:
                     commonResource = this;
                     break;
                 default:
@@ -66,6 +69,7 @@ public class CommonResource {
         switch (taskType) {
             case SPARK_SQL:
             case SPARK:
+            case HIVE_SQL:
                 return ComputeResourceType.Yarn;
             case SYNC:
                 return ComputeResourceType.FlinkYarnSession;

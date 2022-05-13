@@ -23,13 +23,12 @@
 
 #### 易用性
 * 支持大数据作业`Spark`、`Flink`的调度，
-* 支持众多的任务类型，目前支持 Spark SQL、Flinkx
+* 支持众多的任务类型，目前支持 Spark SQL、数据同步
 
 ```
   后续将开源：:
-  SparkMR、PySpark、FlinkMR、Python、Shell、Jupyter、Tersorflow、Pytorch、
-HadoopMR、Kylin、Odps、SQL类任务(MySQL、PostgreSQL、Hive、Impala、Oracle、SQLServer、TiDB、带格式的:突出显示
-greenplum、inceptor、kingbase、presto)
+  SparkMR、PySpark、FlinkMR、Python、Shell、Jupyter、Tersorflow、Pytorch、HadoopMR、Kylin、Odps、
+  SQL类任务(MySQL、PostgreSQL、Hive、Impala、Oracle、SQLServer、TiDB、greenplum、inceptor、kingbase、presto)
 ```
 
 * 可视化工作流配置：支持封装工作流、支持单任务运行，不必封装工作流、支持拖拽模式绘制DAG
@@ -38,7 +37,7 @@ greenplum、inceptor、kingbase、presto)
 * 多集群连接：支持一套调度系统连接多套`Hadoop`集群
 
 #### 多版本引擎
-* 支持`Spark` 、`Flink`等引擎的多个版本共存，例如可同时支持`Flink1.10`、`Flink1.12`（后续开源）
+* 支持`Spark` 、`Flink`等引擎的多个版本共存
 
 #### Kerberos支持
 * `Spark`、`Flink`
@@ -60,6 +59,17 @@ greenplum、inceptor、kingbase、presto)
 ## 快速开始
 请参考官方文档: [快速上手](https://dtstack.github.io/Taier/docs/quickstart/start)
 
+## 问题反馈
+如果在使用上有遇到bug或者优化点，强烈建议你提issue，我们将及时修复
+
+## 贡献代码
+参考[CONTRIBUTING](https://dtstack.github.io/Taier/docs/contributing).   
+
+感谢所有向 Taier 贡献的朋友  
+<a href="https://github.com/DTStack/Taier/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DTStack/Taier" />
+</a>
+
 ## 未来规划
 * 任务类型：支持SparkMR、PySpark、FlinkMR、Python、Shell、Jupyter、Tersorflow、Pytorch、
   HadoopMR、Kylin、Odps、SQL类任务(MySQL、PostgreSQL、Hive、Impala、Oracle、SQLServer、TiDB、greenplum、inceptor、kingbase、presto)
@@ -69,10 +79,6 @@ greenplum、inceptor、kingbase、presto)
 * 功能支持：支持交易日历、事件驱动
 * 外部系统对接：支持Taier系统对接外部调度系统（AZKBAN、Control-M、DS调度）
 
-
-## Contributing
-
-Refer to the [CONTRIBUTING](https://dtstack.github.io/Taier/docs/contributing).
 
 ## License
 

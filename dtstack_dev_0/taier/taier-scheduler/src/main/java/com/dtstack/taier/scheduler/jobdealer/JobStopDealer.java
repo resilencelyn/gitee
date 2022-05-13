@@ -37,7 +37,7 @@ import com.dtstack.taier.pluginapi.util.PublicUtil;
 import com.dtstack.taier.scheduler.WorkerOperator;
 import com.dtstack.taier.scheduler.jobdealer.bo.StoppedJob;
 import com.dtstack.taier.scheduler.jobdealer.cache.ShardCache;
-import com.dtstack.taier.scheduler.service.EngineJobCacheService;
+import com.dtstack.taier.scheduler.service.ScheduleJobCacheService;
 import com.dtstack.taier.scheduler.service.ScheduleJobOperatorRecordService;
 import com.dtstack.taier.scheduler.service.ScheduleJobService;
 import com.google.common.collect.Lists;
@@ -78,7 +78,7 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
     private EnvironmentContext environmentContext;
 
     @Autowired
-    private EngineJobCacheService engineJobCacheService;
+    private ScheduleJobCacheService ScheduleJobCacheService;
 
     @Autowired
     private ScheduleJobOperatorRecordService scheduleJobOperatorRecordService;
@@ -257,7 +257,7 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
                         break;
                     }
                     List<String> jobIds = jobStopRecords.stream().map(ScheduleJobOperatorRecord::getJobId).collect(Collectors.toList());
-                    List<ScheduleEngineJobCache> jobCaches = engineJobCacheService.getByJobIds(jobIds);
+                    List<ScheduleEngineJobCache> jobCaches = ScheduleJobCacheService.getByJobIds(jobIds);
 
                     //为了下面兼容异常状态的任务停止
                     Map<String, ScheduleEngineJobCache> jobCacheMap = new HashMap<>(jobCaches.size());
@@ -278,7 +278,7 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
                             JobElement jobElement = new JobElement(jobCache.getJobId(), jobStopRecord.getId(), forceCancelFlag );
                             asyncDealStopJobService.submit(() -> asyncDealStopJob(new StoppedJob<>(jobElement, jobStoppedRetry, jobStoppedDelay)));
                         } else {
-                            //jobcache表没有记录，可能任务已经停止。在update表时增加where条件不等于stopped
+                            //jobCache表没有记录，可能任务已经停止。在update表时增加where条件不等于stopped
                             ScheduleJob scheduleJob = new ScheduleJob();
                             scheduleJob.setStatus(TaskStatus.CANCELED.getStatus());
                             scheduleJobService.lambdaUpdate()
@@ -328,6 +328,7 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
     private void asyncDealStopJob(StoppedJob<JobElement> stoppedJob) {
         try {
             if (!checkExpired(stoppedJob.getJob())) {
+                ScheduleEngineJobCache jobCache = ScheduleJobCacheService.getByJobId(stoppedJob.getJob().jobId);
                 StoppedStatus stoppedStatus = this.stopJob(stoppedJob.getJob());
                 switch (stoppedStatus) {
                     case STOPPED:
@@ -345,8 +346,14 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
                             stoppedJob.incrCount();
                             stopJobQueue.put(stoppedJob);
                         } else {
-                            removeMemStatusAndJobCache(stoppedJob.getJob().jobId);
-                            LOGGER.warn("jobId:{} retry limited!", stoppedJob.getJob().jobId);
+                            if (ComputeType.STREAM.getType() == jobCache.getComputeType()) {
+                                // stream 任务 超过停止最大限制不更改状态
+                                scheduleJobOperatorRecordService.deleteById(stoppedJob.getJob().stopJobId);
+                                LOGGER.warn("stream jobId:{} retry limited ,job status can not change!", stoppedJob.getJob().jobId);
+                            } else {
+                                removeMemStatusAndJobCache(stoppedJob.getJob().jobId);
+                                LOGGER.warn("jobId:{} retry limited!", stoppedJob.getJob().jobId);
+                            }
                         }
                     default:
                 }
@@ -361,7 +368,7 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
     }
 
     private StoppedStatus stopJob(JobElement jobElement) throws Exception {
-        ScheduleEngineJobCache jobCache = engineJobCacheService.getByJobId(jobElement.jobId);
+        ScheduleEngineJobCache jobCache = ScheduleJobCacheService.getByJobId(jobElement.jobId);
         ScheduleJob scheduleJob = scheduleJobService.lambdaQuery()
                 .eq(ScheduleJob::getJobId, jobElement.jobId)
                 .eq(ScheduleJob::getIsDeleted, Deleted.NORMAL.getStatus())
@@ -421,14 +428,14 @@ public class JobStopDealer implements InitializingBean, DisposableBean {
 
     private void removeMemStatusAndJobCache(String jobId) {
         shardCache.removeIfPresent(jobId);
-        engineJobCacheService.deleteByJobId(jobId);
+        ScheduleJobCacheService.deleteByJobId(jobId);
         //修改任务状态
         scheduleJobService.updateStatusAndLogInfoById(jobId, TaskStatus.CANCELED.getStatus(),"");
         LOGGER.info("jobId:{} delete jobCache and update job status:{}, job set finished.", jobId, TaskStatus.CANCELED.getStatus());
     }
 
     private boolean checkExpired(JobElement jobElement) {
-        ScheduleEngineJobCache jobCache = engineJobCacheService.getByJobId(jobElement.jobId);
+        ScheduleEngineJobCache jobCache = ScheduleJobCacheService.getByJobId(jobElement.jobId);
         ScheduleJobOperatorRecord scheduleJobOperatorRecord = scheduleJobOperatorRecordService.getById(jobElement.stopJobId);
 
         if (jobCache != null && scheduleJobOperatorRecord != null && scheduleJobOperatorRecord.getGmtCreate() != null) {

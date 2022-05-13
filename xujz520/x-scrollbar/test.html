@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>x-scrollbar</title>
+  <link rel="stylesheet" href="./xscrollbar.css">
+  <script src="./xscrollbar.js"></script>
+</head>
+
+<body>
+  <div id="c1" style="width: 300px; height: 300px; overflow: auto; background-color: #eee;">
+    <div style="width: 600px; height: 600px; border:1px solid #000;"></div>
+  </div>
+
+  <hr>
+
+  <div id="c2" style="width: 300px; overflow: auto; background-color: #eee;">
+    <div style="width: 600px; height: 150px; border:1px solid #000;"></div>
+  </div>
+
+  <script>
+    let xscrollbar1 = new XScrollbar(document.querySelector('#c1'), {
+      // 滑块大小
+      thumbSize: '3px',
+      // 轨道颜色
+      trackBackground: '#b1ffa5',
+      // 滑块颜色
+      thumbBackground: '#0e913f',
+      // 滑块圆角大小
+      thumbRadius: '0',
+    });
+    
+    let xscrollbar2 = new XScrollbar(document.querySelector('#c2'), { autoHide: false, onlyHorizontal: true });
+  </script>
+</body>
+
+</html>

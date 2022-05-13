@@ -36,9 +36,32 @@
 				}
 
 				.datasource-title {
+					display: flex;
 					margin-left: 5px;
+					overflow: hidden;
+
+					.title {
+						flex-shrink: 0;
+					}
+
+					.desc {
+						flex: 1;
+						margin-left: 15px;
+						overflow: hidden;
+						color: var(--minimapSlider-background);
+						font-size: 10px;
+						font-style: italic;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}
 				}
 			}
 		}
 	}
+}
+
+.datasource-detail {
+	width: 100%;
+	background: var(--editorGroupHeader-tabsBackground);
+	border: 1px solid var(--panel-border);
 }

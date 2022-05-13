@@ -27,7 +27,6 @@
 <a href='https://gitee.com/CV_Lab/gradio_yolov5_det/members'><img src='https://gitee.com/CV_Lab/gradio_yolov5_det/badge/fork.svg?theme=dark' alt='fork'></img></a>
 </p>
 
-
 ## 🚀 作者简介
 
 曾逸夫，从事人工智能研究与开发；主研领域：计算机视觉；[YOLOv5官方开源项目代码贡献人](https://github.com/ultralytics/yolov5/graphs/contributors)；[YOLOv5 v6.1代码贡献人](https://github.com/ultralytics/yolov5/releases/tag/v6.1)
@@ -48,6 +47,7 @@
 
 <h2 align="center">🚀更新走势</h2>
 
+- `2022-05-13` **🚀\[推荐\] [Gradio YOLOv5 Det 开发版 脚本指令操作](https://gitee.com/CV_Lab/gradio_yolov5_det#-%E8%84%9A%E6%9C%AC%E6%8C%87%E4%BB%A4%E6%93%8D%E4%BD%9C-%E6%8E%A8%E8%8D%90)**
 - `2022-05-12` **⚡ [Gradio YOLOv5 Det v0.2.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2.2)正式上线**
 - `2022-05-08` **⚡ [Gradio YOLOv5 Det v0.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2)正式上线**
 - `2022-04-30` **⚡ [Gradio YOLOv5 Det v0.1](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.1)正式上线**
@@ -197,6 +197,7 @@
 │   ├── model_config						# 模型配置
 │   │   ├── model_name_p5_all.yaml			# YOLOv5 P5 模型名称（yaml版）
 │   │   ├── model_name_p6_all.yaml			# YOLOv5 P6 模型名称（yaml版）
+│   │   ├── model_name_p5_p6_all.yaml		# YOLOv5 P5 & P6 模型名称（yaml版）
 │   │   ├── model_name_p5_n.yaml			# yolov5n 模型名称（yaml版）
 │   │   ├── model_name_p5_all.csv			# YOLOv5 P5 模型名称（csv版）
 │   │   ├── model_name_p6_all.csv			# YOLOv5 P6 模型名称（csv版）
@@ -355,11 +356,23 @@ model_cls_name: ["face"]
 face
 ```
 
-### 💡 其他操作
+### 💡 脚本指令操作 \[推荐\]
+
+❤️ 本项目提供了一些脚本指令，旨在扩展项目的功能。
+
+❗ 注：其中的一些功能是界面组件（按钮、文本框等）无法实现的，需要通过脚本指令完成：
 
 ```shell
+# 输入源切换，默认为图片上传（v0.3）
+python gradio_yolov5_det.py -src upload # 图片上传
+python gradio_yolov5_det.py -src webcam # webcam拍照
+
+# 输入图片操作模式，默认为图片编辑器（v0.3）
+python gradio_yolov5_det.py -it editor # 图片编辑器
+python gradio_yolov5_det.py -it select # 区域选择
+
 # 设备切换（cuda 或者 cpu）
-python gradio_yolov5_det.py -dev 0 # cuda 0
+python gradio_yolov5_det.py -dev cuda:0 # cuda
 python gradio_yolov5_det.py -dev cpu # cpu
 
 # 自定义下拉框默认模型名称
@@ -371,7 +384,13 @@ python gradio_yolov5_det.py -conf 0.8
 # 自定义NMS IoU阈值
 python gradio_yolov5_det.py -iou 0.5
 
-# 设置默认不显示检测标签
+# 设置推理尺寸，默认为640
+python gradio_yolov5_det.py -isz 320
+
+# 设置最大检测数，默认为50（v0.3）
+python gradio_yolov5_det.py -mdn 100
+
+# 设置默认不显示检测标签，注：v0.3弃用
 python gradio_yolov5_det.py -lds
 ```
 

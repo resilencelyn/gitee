@@ -17,22 +17,24 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Badge, Button, message, Modal, Tag } from 'antd';
+import { Badge, Button, Empty, message, Modal, Tag } from 'antd';
 import moment from 'moment';
 import Base64 from 'base-64';
 import molecule from '@dtinsight/molecule';
-import { ActionBar, Icon, Menu, useContextView } from '@dtinsight/molecule/esm/components';
+import { ActionBar, Menu, useContextView } from '@dtinsight/molecule/esm/components';
 import { Content, Header } from '@dtinsight/molecule/esm/workbench/sidebar';
 import { connect } from '@dtinsight/molecule/esm/react';
 import dataSourceService from '@/services/dataSourceService';
 import { API } from '@/api/dataSource';
 import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { getEventPosition } from '@dtinsight/molecule/esm/common/dom';
-import { CREATE_DATASOURCE_PREFIX, EDIT_DATASOURCE_PREFIX } from '@/constant';
+import { ID_COLLECTIONS } from '@/constant';
+import { IDataSourceProps } from '@/interface';
 import LinkInfoCell from './linkInfoCell';
 import Search from './search';
 import Add from './add';
 import classNames from 'classnames';
+import { DataSourceLinkFailed, DataSourceLinkSuccess } from '@/components/icon';
 import './index.scss';
 
 const { confirm } = Modal;
@@ -48,33 +50,6 @@ interface IOther {
 	appTypeList: number[];
 	isMeta: number;
 	status: number[];
-}
-
-export interface IDataSourceProps {
-	dataInfoId: number;
-	dataType: string;
-	// 0 for false, 1 for true
-	isMeta: number;
-	appNames: string;
-	dataDesc: string;
-	dataName: string;
-	dataVersion: string;
-	gmtModified: string;
-	isImport: number;
-	schemaName: string;
-	status: number;
-	linkJson: string | null;
-}
-
-function getCustomHeaderBar() {
-	const { builtInExplorerHeaderToolbar } = molecule.builtin.getModules();
-	const headerBar = builtInExplorerHeaderToolbar;
-	headerBar.contextMenu.push({
-		id: 'add',
-		icon: 'server-process',
-		name: '新增数据源',
-	});
-	return headerBar;
 }
 
 const DataSourceView = () => {
@@ -108,7 +83,7 @@ const DataSourceView = () => {
 		if (typeof requestParams.isMeta === 'boolean') {
 			requestParams.isMeta = Number(requestParams.isMeta);
 		}
-		const { data, success, message: resMessage } = await API.dataSourcepage(requestParams);
+		const { data, success } = await API.dataSourcepage(requestParams);
 		if (success) {
 			const { currentPage, totalCount } = data;
 			setParams({
@@ -138,8 +113,6 @@ const DataSourceView = () => {
 					return nextSources;
 				});
 			}
-		} else {
-			message.error(resMessage);
 		}
 	};
 
@@ -177,23 +150,31 @@ const DataSourceView = () => {
 		contextView.hide();
 		switch (menu.id) {
 			case 'edit':
-				if (molecule.editor.isOpened(EDIT_DATASOURCE_PREFIX)) {
+				if (molecule.editor.isOpened(ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX)) {
 					message.warning('请先保存或关闭编辑数据源');
-					const groupId = molecule.editor.getGroupIdByTab(EDIT_DATASOURCE_PREFIX)!;
-					molecule.editor.setActive(groupId, EDIT_DATASOURCE_PREFIX);
+					const groupId = molecule.editor.getGroupIdByTab(
+						ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX,
+					)!;
+					molecule.editor.setActive(groupId, ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX);
 				} else {
 					molecule.editor.open({
-						id: EDIT_DATASOURCE_PREFIX,
+						id: ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX,
 						name: '编辑数据源',
 						icon: 'edit',
-						renderPane: <Add key={EDIT_DATASOURCE_PREFIX} record={record} />,
+						renderPane: (
+							<Add
+								key={ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX}
+								record={record}
+								onSubmit={handleSubmitDataSource}
+							/>
+						),
 						breadcrumb: [
 							{
 								id: 'root',
 								name: '数据源中心',
 							},
 							{
-								id: EDIT_DATASOURCE_PREFIX,
+								id: ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX,
 								name: '编辑数据源',
 							},
 						],
@@ -255,17 +236,22 @@ const DataSourceView = () => {
 	};
 
 	const handleHeaderBarClick = () => {
-		if (molecule.editor.isOpened(CREATE_DATASOURCE_PREFIX)) {
+		if (molecule.editor.isOpened(ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX)) {
 			message.warning('请先保存或关闭新增数据源');
-			const groupId = molecule.editor.getGroupIdByTab(CREATE_DATASOURCE_PREFIX)!;
-			molecule.editor.setActive(groupId, CREATE_DATASOURCE_PREFIX);
+			const groupId = molecule.editor.getGroupIdByTab(
+				ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
+			)!;
+			molecule.editor.setActive(groupId, ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX);
 		} else {
 			molecule.editor.open({
-				id: CREATE_DATASOURCE_PREFIX,
+				id: ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
 				name: '新增数据源',
 				icon: 'server-process',
 				renderPane: (
-					<Add key={CREATE_DATASOURCE_PREFIX} onSubmit={handleSubmitDataSource} />
+					<Add
+						key={ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX}
+						onSubmit={handleSubmitDataSource}
+					/>
 				),
 				breadcrumb: [
 					{
@@ -273,7 +259,7 @@ const DataSourceView = () => {
 						name: '数据源中心',
 					},
 					{
-						id: CREATE_DATASOURCE_PREFIX,
+						id: ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
 						name: '新增数据源',
 					},
 				],
@@ -285,46 +271,79 @@ const DataSourceView = () => {
 		requestTableData();
 	}, []);
 
-	const headerBar = getCustomHeaderBar();
-
 	return (
 		<div className="datasource-container">
 			<Header
 				title="数据源中心"
-				toolbar={<ActionBar data={[headerBar]} onContextMenuClick={handleHeaderBarClick} />}
+				toolbar={
+					<ActionBar
+						data={[
+							{
+								id: 'add',
+								title: '新增数据源',
+								icon: 'server-process',
+								contextMenu: [],
+								onClick: handleHeaderBarClick,
+							},
+						]}
+					/>
+				}
 			/>
 			<Content>
 				<Search onSearch={handleSearch} />
-				<div tabIndex={0} className="datasource-content">
-					<ul className="datasource-list">
-						{dataSources.map((item) => (
-							<li
-								key={item.dataInfoId}
-								tabIndex={-1}
-								className="datasource-record"
-								onClick={() => handleOpenDetail(item)}
-								onContextMenu={(e) => handleContextmenu(e, item)}
-							>
-								<Icon type="database" />
-								<div className="datasource-title">
-									{item.isMeta === 0 ? (
-										<span title={item.dataName}>{item.dataName}</span>
+				{dataSources.length ? (
+					<div tabIndex={0} className="datasource-content">
+						<ul className="datasource-list">
+							{dataSources.map((item) => (
+								<li
+									key={item.dataInfoId}
+									tabIndex={-1}
+									className="datasource-record"
+									onClick={() => handleOpenDetail(item)}
+									onContextMenu={(e) => handleContextmenu(e, item)}
+								>
+									{item.status === 0 ? (
+										<DataSourceLinkFailed
+											style={{ color: '#ed5b56', fontSize: 0 }}
+										/>
 									) : (
-										<>
-											<span title={item.dataName}>{item.dataName}</span>
-											<Tag>Meta</Tag>
-										</>
+										<DataSourceLinkSuccess
+											style={{ color: '#72c140', fontSize: 0 }}
+										/>
 									)}
-								</div>
-							</li>
-						))}
-					</ul>
-					{total !== dataSources.length && !!total && (
-						<Button block onClick={handleLoadMore}>
-							加载更多...
-						</Button>
-					)}
-				</div>
+									<div className="datasource-title">
+										{item.isMeta === 0 ? (
+											<>
+												<span className="title" title={item.dataName}>
+													{item.dataName}({item.dataType}
+													{item.dataVersion || ''})
+												</span>
+												<span className={classNames('desc')}>
+													{item.dataDesc || '--'}
+												</span>
+											</>
+										) : (
+											<>
+												<span className="title" title={item.dataName}>
+													{item.dataName}({item.dataType}
+													{item.dataVersion || ''})
+												</span>
+												<Tag>Meta</Tag>
+											</>
+										)}
+									</div>
+								</li>
+							))}
+						</ul>
+						{total !== dataSources.length && !!total && (
+							<Button block onClick={handleLoadMore}>
+								加载更多...
+							</Button>
+						)}
+					</div>
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				)}
 				<Modal
 					title="数据源详情"
 					visible={visible}
@@ -337,15 +356,7 @@ const DataSourceView = () => {
 					]}
 				>
 					{detailView ? (
-						<table
-							className={classNames(
-								'ant-table',
-								'border',
-								'border-ddd',
-								'border-solid',
-								'w-full',
-							)}
-						>
+						<table className={classNames('ant-table', 'datasource-detail')}>
 							<tbody className="ant-table-tbody">
 								<tr>
 									<td className="w-1/5">名称</td>

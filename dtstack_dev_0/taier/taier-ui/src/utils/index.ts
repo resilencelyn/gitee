@@ -17,20 +17,29 @@
  */
 
 /* eslint-disable no-bitwise */
-import { debounce, endsWith } from 'lodash';
+import { debounce, endsWith, range } from 'lodash';
 import moment from 'moment';
-import { createLogger } from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
-import { createStore, applyMiddleware, compose } from 'redux';
-import type { TASK_TYPE_ENUM } from '@/constant';
-import { TASK_STATUS } from '@/constant';
+import {
+	FAILED_STATUS,
+	FINISH_STATUS,
+	FROZEN_STATUS,
+	PARENTFAILED_STATUS,
+	RUNNING_STATUS,
+	RUN_FAILED_STATUS,
+	STOP_STATUS,
+	SUBMITTING_STATUS,
+	TASK_STATUS,
+	WAIT_STATUS,
+} from '@/constant';
 import { CATELOGUE_TYPE, ENGINE_SOURCE_TYPE_ENUM, MENU_TYPE_ENUM } from '@/constant';
 import { Utils } from '@dtinsight/dt-utils';
-import { DATA_SOURCE_ENUM, RDB_TYPE_ARRAY } from '@/constant';
+import { DATA_SOURCE_ENUM, RDB_TYPE_ARRAY, OFFSET_RESET_FORMAT } from '@/constant';
 import type { CatalogueDataProps } from '@/interface';
 import { history } from 'umi';
 import { openTaskInTab } from '@/extensions/folderTree';
 import { updateDrawer } from '@/components/customDrawer';
+import type { languages } from '@dtinsight/molecule/esm/monaco';
+import { Keywords, Snippets } from './competion';
 
 /**
  * 返回今日 [00:00:00, 23:59:69]
@@ -109,12 +118,12 @@ export function formatDateTime(timestap: string | number | Date) {
 	return moment(timestap).format('YYYY-MM-DD HH:mm:ss');
 }
 
-export function checkExist(prop: TASK_TYPE_ENUM | string) {
+export function checkExist(prop: any) {
 	return prop !== undefined && prop !== null && prop !== '';
 }
 
-export function formJsonValidator(rule: any, value: any, callback: any) {
-	let msg: any;
+export function formJsonValidator(_: any, value: string) {
+	let msg = '';
 	try {
 		if (value) {
 			const t = JSON.parse(value);
@@ -124,41 +133,12 @@ export function formJsonValidator(rule: any, value: any, callback: any) {
 		}
 	} catch (e) {
 		msg = '请检查JSON格式，确认无中英文符号混用！';
-	} finally {
-		callback(msg);
 	}
-}
 
-declare let window: any;
-
-function configureStoreDev(rootReducer: any) {
-	const store = createStore(
-		rootReducer,
-		compose(
-			applyMiddleware(thunkMiddleware, createLogger()),
-			window.devToolsExtension ? window.devToolsExtension() : (fn: any) => fn,
-		),
-	);
-	return store;
-}
-
-function configureStoreProd(rootReducer: any) {
-	const stroe = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-	return stroe;
-}
-
-/**
- *
- * @param { Object } rootReducer
- */
-export function getStore(rootReducer: any) {
-	const store =
-		process.env.NODE_ENV === 'production'
-			? configureStoreProd(rootReducer)
-			: configureStoreDev(rootReducer);
-	return {
-		store,
-	};
+	if (msg) {
+		return Promise.reject(new Error(msg));
+	}
+	return Promise.resolve();
 }
 
 interface FilterParser {
@@ -596,32 +576,41 @@ export const removePopUpMenu = () => {
 };
 
 export function getVertxtStyle(type: TASK_STATUS): string {
-	switch (type) {
-		case TASK_STATUS.FINISHED: // 完成
-		case TASK_STATUS.SET_SUCCESS:
-			return 'whiteSpace=wrap;fillColor=#F6FFED;strokeColor=#B7EB8F;';
-		case TASK_STATUS.SUBMITTING:
-		case TASK_STATUS.TASK_STATUS_NOT_FOUND:
-		case TASK_STATUS.RUNNING:
-			return 'whiteSpace=wrap;fillColor=#E6F7FF;strokeColor=#90D5FF;';
-		case TASK_STATUS.RESTARTING:
-		case TASK_STATUS.STOPING:
-		case TASK_STATUS.DEPLOYING:
-		case TASK_STATUS.WAIT_SUBMIT:
-		case TASK_STATUS.WAIT_RUN:
-		case TASK_STATUS.SUBMITTED:
-			return 'whiteSpace=wrap;fillColor=#FFFBE6;strokeColor=#FFE58F;';
-		case TASK_STATUS.RUN_FAILED:
-		case TASK_STATUS.PARENT_FAILD:
-		case TASK_STATUS.SUBMIT_FAILED:
-			return 'whiteSpace=wrap;fillColor=#FFF1F0;strokeColor=#FFA39E;';
-		case TASK_STATUS.FROZEN:
-			return 'whiteSpace=wrap;fillColor=#EFFFFE;strokeColor=#26DAD1;';
-		case TASK_STATUS.STOPED: // 已停止
-		default:
-			// 默认
-			return 'whiteSpace=wrap;fillColor=#F3F3F3;strokeColor=#D4D4D4;';
+	// 成功
+	if (FINISH_STATUS.includes(type)) {
+		return 'whiteSpace=wrap;fillColor=rgba(18, 188, 106, 0.06);strokeColor=#12bc6a;';
 	}
+
+	// 运行中
+	if (RUNNING_STATUS.includes(type)) {
+		return 'whiteSpace=wrap;fillColor=rgba(18, 188, 106, 0.06);strokeColor=#12bc6a;';
+	}
+
+	// 等待提交/提交中/等待运行
+	if (
+		[[TASK_STATUS.WAIT_SUBMIT], SUBMITTING_STATUS, WAIT_STATUS].some((collection) =>
+			collection.includes(type),
+		)
+	) {
+		return 'whiteSpace=wrap;fillColor=#fffbe6;strokeColor=#fdb313;';
+	}
+
+	// 失败
+	if (
+		[FAILED_STATUS, PARENTFAILED_STATUS, RUN_FAILED_STATUS].some((collection) =>
+			collection.includes(type),
+		)
+	) {
+		return 'whiteSpace=wrap;fillColor=#fff1f0;strokeColor=#fe615c;';
+	}
+
+	// 冻结/取消
+	if ([STOP_STATUS, FROZEN_STATUS].some((collection) => collection.includes(type))) {
+		return 'whiteSpace=wrap;fillColor=#e6e9f2;strokeColor=#5b6da6;';
+	}
+
+	// 默认
+	return 'whiteSpace=wrap;fillColor=#F3F3F3;strokeColor=#D4D4D4;';
 }
 
 /**
@@ -690,8 +679,8 @@ export function isRDB(type: any) {
  * 是否为HDFS类型
  * @param {*} type
  */
-export function isHdfsType(type: string) {
-	return DATA_SOURCE_ENUM.HDFS === parseInt(type, 10);
+export function isHdfsType(type: DATA_SOURCE_ENUM | undefined) {
+	return DATA_SOURCE_ENUM.HDFS === type;
 }
 
 /**
@@ -706,11 +695,12 @@ export function isEqualArr(arr1: string[], arr2: string[]): boolean {
 }
 
 function formatJSON(str: string) {
-	const standardStr = str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
-	const jsonObj = JSON.parse(standardStr);
+	const jsonObj = JSON.parse(str);
 	Object.keys(jsonObj).forEach((key) => {
 		if (typeof jsonObj[key] === 'string') {
-			jsonObj[key] = formatJSON(jsonObj[key]);
+			try {
+				jsonObj[key] = formatJSON(jsonObj[key]);
+			} catch {}
 		}
 	});
 
@@ -727,4 +717,135 @@ export function prettierJSONstring(str: string) {
 	} catch (error) {
 		return str;
 	}
+}
+
+/**
+ * 生成 SQL 关键字
+ */
+export function createSQLProposals(
+	range: languages.CompletionItem['range'],
+): languages.CompletionItem[] {
+	return Keywords(range).concat(Snippets(range));
+}
+
+export function copyText(text: string) {
+	if (navigator.clipboard) {
+		// clipboard api 复制
+		navigator.clipboard.writeText(text);
+	} else {
+		const textarea = document.createElement('textarea');
+		document.body.appendChild(textarea);
+		// 隐藏此输入框
+		textarea.style.position = 'fixed';
+		textarea.style.clip = 'rect(0 0 0 0)';
+		textarea.style.top = '10px';
+		// 赋值
+		textarea.value = text;
+		// 选中
+		textarea.select();
+		// 复制
+		document.execCommand('copy', true);
+		// 移除输入框
+		document.body.removeChild(textarea);
+	}
+}
+
+/** 去除不同版本的相同数据源，只保留第一个版本，并使用数据源 groupTag 来代替原来带具体版本号的 name */
+export const formatSourceTypes = (
+	sourceTypes: { name: string; value: number; groupTag: string }[],
+) => {
+	if (!sourceTypes.length) {
+		return [];
+	}
+	const result: { name: string; value: number; groupTag: string }[] = [];
+	// 因为不同版本的相同数据源是连续的，可以只一次遍历，与上一个比较即可
+	for (let i = 0; i < sourceTypes.length; i += 1) {
+		if (sourceTypes[i].groupTag !== sourceTypes?.[i - 1]?.groupTag) {
+			const temp = { ...sourceTypes[i] };
+			temp.name = sourceTypes[i].groupTag;
+			result.push(temp);
+		}
+	}
+	return result;
+};
+
+/**
+ * 是否展示OffsetReset的时间
+ * @param {number} type --任务类型
+ */
+export function showTimeForOffsetReset(type: number) {
+	return [
+		DATA_SOURCE_ENUM.KAFKA,
+		DATA_SOURCE_ENUM.KAFKA_2X,
+		DATA_SOURCE_ENUM.KAFKA_10,
+		DATA_SOURCE_ENUM.KAFKA_11,
+		DATA_SOURCE_ENUM.TBDS_KAFKA,
+		DATA_SOURCE_ENUM.KAFKA_HUAWEI,
+	].includes(type);
+}
+
+/**
+ * 格式化时间
+ * @param {number | undefined} timestamp --时间戳
+ */
+export const formatOffsetResetTime = (timestamp: number | undefined): moment.Moment => {
+	const dateString = moment(timestamp).format(OFFSET_RESET_FORMAT);
+	return moment(dateString, OFFSET_RESET_FORMAT);
+};
+
+/**
+ * 创建timepicker disable区间
+ * @param beginDate moment.Moment
+ * @param endDate moment.Moment
+ * @param type string
+ * @param isEnd boolean
+ */
+export function disableRangeCreater(
+	beginDate: moment.Moment | null | undefined,
+	endDate: moment.Moment | null | undefined,
+	type: 'hour' | 'minute' | 'second',
+	isEnd?: boolean,
+): number[] {
+	if (!beginDate || !endDate) {
+		return [];
+	}
+	beginDate = beginDate.clone();
+	endDate = endDate.clone();
+	let compareDate = isEnd ? endDate : beginDate;
+	let otherDate = isEnd ? beginDate : endDate;
+	let max;
+	let rangeValue;
+	switch (type) {
+		case 'hour': {
+			max = 24;
+			compareDate.hours(otherDate.hours());
+			rangeValue = otherDate.hours();
+			break;
+		}
+		case 'minute': {
+			if (otherDate.hours() != compareDate.hours()) {
+				return [];
+			}
+			max = 60;
+			compareDate.minutes(otherDate.minutes());
+			rangeValue = otherDate.minutes();
+			break;
+		}
+		case 'second': {
+			if (
+				otherDate.hours() != compareDate.hours() ||
+				otherDate.minutes() != compareDate.minutes()
+			) {
+				return [];
+			}
+			max = 60;
+			compareDate.seconds(otherDate.seconds());
+			rangeValue = otherDate.seconds();
+			break;
+		}
+	}
+	if (isEnd) {
+		return range(compareDate < otherDate ? rangeValue - 1 : rangeValue);
+	}
+	return range(compareDate > otherDate ? rangeValue : rangeValue + 1, max);
 }

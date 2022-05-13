@@ -1,6 +1,8 @@
 package com.dtstack.taier.develop.sql.formate;
 
-import com.dtstack.taier.common.util.Base64Util;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +43,8 @@ public class SqlFormatter {
 
     private static final String NOTE = "--.*\n|/\\*\\*[\\s\\S]*\\*/";
 
+    public static Pattern notAnnotation = Pattern.compile("'+.*(--)+.*'+");
+
     private static final Pattern note_pattern = Pattern.compile(NOTE);
 
     private static final String NEW_NOTE = "##.*\n";
@@ -59,6 +64,8 @@ public class SqlFormatter {
     private static final String ANNOTATE_LIST = "annotateList";
 
     private static final String SQL = "sql";
+
+    private static final String UUID_STR = UUID.randomUUID().toString();
 
     public static String format(String sql) throws Exception {
         Map<String, Object> map = addSplitWithNote(sql);
@@ -91,7 +98,7 @@ public class SqlFormatter {
         sql = sql + "\n";
         Matcher matcher = note_pattern.matcher(sql);
         while (matcher.find()) {
-            sql = matcher.replaceFirst("##" + Base64Util.baseEncode(matcher.group()) + "\n");
+            sql = matcher.replaceFirst("##" + matcher.group() + "\n");
             matcher = note_pattern.matcher(sql);
         }
         return sql;
@@ -112,7 +119,7 @@ public class SqlFormatter {
             }
             String s = group;
             try {
-                s = Base64Util.baseDecode(group);
+                s = group;
             } catch (IllegalArgumentException e) {
                 logger.warn("baseEncode failed, sql={}, e={}", sql, e);
             }
@@ -154,9 +161,8 @@ public class SqlFormatter {
 
 
     public static String formatSql(String sql) {
-        int allDelimiter = getDelimiterCount(sql);
-        String[] arrSql = com.dtstack.taier.common.util.Strings.splitIgnoreQuotaBrackets(sql, SQL_DELIMITER);
-        StringBuffer sb = new StringBuffer("");
+        String[] arrSql = DtStringUtil.splitIgnoreQuotaNotUsingRegex(sql, SQL_DELIMITER);
+        StringBuilder sb = new StringBuilder();
 
         int index = 0;
         for (String tmpSql : arrSql) {
@@ -170,7 +176,7 @@ public class SqlFormatter {
             } else {
                 sb.append(basicFormat.format(tmpSql));
             }
-            if (index < allDelimiter) {
+            if (index < arrSql.length) {
                 sb.append(SQL_DELIMITER);
             }
             sb.append("\n");
@@ -178,6 +184,67 @@ public class SqlFormatter {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * 格式化sql
+     */
+    public static String sqlFormat(String sql) {
+        if (!com.google.common.base.Strings.isNullOrEmpty(sql)) {
+            boolean isJSON;
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = (JSONObject) JSONObject.parse(sql);
+                isJSON = true;
+            } catch (Exception e) {
+                isJSON = false;
+            }
+            try {
+                if (isJSON) {
+                    sql = JSON.toJSONString(jsonObject, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue,
+                            SerializerFeature.WriteDateUseDateFormat);
+                    return sql;
+
+                } else {
+                    return SqlFormatter.format(sql);
+                }
+
+            } catch (Exception e) {
+                logger.error("failure to format sql, e:{}", e.getMessage(), e);
+            }
+        }
+
+        return sql;
+    }
+
+
+    /**
+     * 去除注释，并排除''中有--被当成注释的情况
+     *
+     * @param sql
+     * @return
+     */
+    public static String removeAnnotation(String sql) {
+        sql = replaceNotAnnotation(sql);
+        sql = sql.replaceAll("(--)+(.)*\\n", "").replaceAll("\\s", " ").replaceAll("\\n", " ").replace(UUID_STR, "--");
+        return sql;
+    }
+
+
+    /**
+     * 替换非注释的--为uuid，避免被当成注释处理 如   'to--'
+     *
+     * @param sql
+     * @return
+     */
+    public static String replaceNotAnnotation(String sql) {
+        Matcher matcher = notAnnotation.matcher(sql);
+        while (matcher.find()) {
+            String group = matcher.group();
+            String groupMod = group.replace("--", UUID_STR);
+            sql = sql.replace(group, groupMod);
+        }
+        return sql;
     }
 
     private static boolean checkIsCreateTable(String sql) {

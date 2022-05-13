@@ -1,0 +1,13 @@
+{
+  "name": "x-scrollbar",
+  "version": "3.1.0",
+  "description": "这是一个自定义滚动条插件",
+  "homepage": "https://gitee.com/null_720_0252/x-scrollbar",
+  "main": "xscrollbar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["滚动条", "自定义滚动条", "scrollbar"],
+  "author": "清晨的阳光(QQ:765550360)",
+  "license": "MIT"
+}

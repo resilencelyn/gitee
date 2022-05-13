@@ -1,0 +1,22 @@
+<div *ngIf="headers.length > 0; else notHasValues">
+  <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="export" style="margin-top: -22px; float: right;">
+    {{'common.export'|translate}}&nbsp;<i class="fa fa-angle-down"></i>
+  </button>
+  <nz-dropdown-menu #export="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item (click)="handlerExportToCSV()">{{'common.csv'|translate}}</li>
+    </ul>
+  </nz-dropdown-menu>
+  <ngx-table [id]="id" [data]="value.columns"
+             [configuration]="configuration" [columns]="headers">
+  </ngx-table>
+</div>
+<ng-template #notHasValues>
+  <nz-empty [nzNotFoundContent]="contentTemplate"
+            [nzNotFoundFooter]="footerTemplate">
+    <ng-template #contentTemplate>
+    </ng-template>
+    <ng-template #footerTemplate>
+    </ng-template>
+  </nz-empty>
+</ng-template>

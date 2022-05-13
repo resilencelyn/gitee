@@ -18,7 +18,8 @@
 
 package com.dtstack.taier.develop.dto.devlop;
 
-import com.dtstack.taier.dao.domain.BatchTask;
+import com.alibaba.fastjson.JSONObject;
+import com.dtstack.taier.dao.domain.Task;
 
 import java.util.List;
 import java.util.Map;
@@ -28,15 +29,32 @@ import java.util.Map;
  * author: toutian
  * create: 2017/6/5
  */
-public class TaskResourceParam extends BatchTask {
+public class TaskResourceParam extends Task {
 
     private Long userId;
+
+    private Long parentId;
 
     private List<Long> resourceIdList;
 
     private List<Long> refResourceIdList;
 
-    private boolean preSave;
+    private boolean preSave= false;
+
+    /**
+     * flinksql 源表
+     */
+    private List<JSONObject> source;
+
+    /**
+     * flinksql 结果表
+     */
+    private List<JSONObject> sink;
+
+    /**
+     * 维表
+     */
+    private List<JSONObject> side;
 
     private Map<String, Object> sourceMap;
 
@@ -44,7 +62,7 @@ public class TaskResourceParam extends BatchTask {
 
     private Map<String, Object> settingMap;
 
-    private List<BatchTask> dependencyTasks;
+    private List<Task> dependencyTasks;
 
     private String publishDesc;
 
@@ -55,11 +73,6 @@ public class TaskResourceParam extends BatchTask {
     private Long dataSourceId;
 
     /**
-     * 0-向导模式,1-脚本模式
-     */
-    private int createModel;
-
-    /**
      * 操作模式 0-资源模式，1-编辑模式
      */
     private int operateModel = 1;
@@ -68,16 +81,6 @@ public class TaskResourceParam extends BatchTask {
      * 同步模式 0-无增量标识，1-有增量标识
      */
     private int syncModel;
-
-    /**
-     * 2-python2.x,3-python3.x
-     */
-    private int pythonVersion;
-
-    /**
-     * 0-TensorFlow,1-MXNet
-     */
-    private int learningType;
 
     /**
      * 输入数据文件的路径
@@ -105,11 +108,25 @@ public class TaskResourceParam extends BatchTask {
     private Boolean isEditBaseInfo = false;
 
     /**
-     * 工作流父任务版本号  用于子任务获取父任务锁
+     * 是否更新数据源
      */
-    private Integer parentReadWriteLockVersion ;
+    private Boolean updateSource = true;
 
-    private ReadWriteLockVO readWriteLockVO;
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Boolean getUpdateSource() {
+        return updateSource;
+    }
+
+    public void setUpdateSource(Boolean updateSource) {
+        this.updateSource = updateSource;
+    }
 
     public Long getUserId() {
         return userId;
@@ -167,11 +184,11 @@ public class TaskResourceParam extends BatchTask {
         this.settingMap = settingMap;
     }
 
-    public List<BatchTask> getDependencyTasks() {
+    public List<Task> getDependencyTasks() {
         return dependencyTasks;
     }
 
-    public void setDependencyTasks(List<BatchTask> dependencyTasks) {
+    public void setDependencyTasks(List<Task> dependencyTasks) {
         this.dependencyTasks = dependencyTasks;
     }
 
@@ -207,14 +224,6 @@ public class TaskResourceParam extends BatchTask {
         this.dataSourceId = dataSourceId;
     }
 
-    public int getCreateModel() {
-        return createModel;
-    }
-
-    public void setCreateModel(int createModel) {
-        this.createModel = createModel;
-    }
-
     public int getOperateModel() {
         return operateModel;
     }
@@ -229,22 +238,6 @@ public class TaskResourceParam extends BatchTask {
 
     public void setSyncModel(int syncModel) {
         this.syncModel = syncModel;
-    }
-
-    public int getPythonVersion() {
-        return pythonVersion;
-    }
-
-    public void setPythonVersion(int pythonVersion) {
-        this.pythonVersion = pythonVersion;
-    }
-
-    public int getLearningType() {
-        return learningType;
-    }
-
-    public void setLearningType(int learningType) {
-        this.learningType = learningType;
     }
 
     public String getInput() {
@@ -287,19 +280,29 @@ public class TaskResourceParam extends BatchTask {
         isEditBaseInfo = editBaseInfo;
     }
 
-    public Integer getParentReadWriteLockVersion() {
-        return parentReadWriteLockVersion;
+
+    public void setSource(List<JSONObject> source) {
+        this.source  = source;
     }
 
-    public void setParentReadWriteLockVersion(Integer parentReadWriteLockVersion) {
-        this.parentReadWriteLockVersion = parentReadWriteLockVersion;
+    public List<JSONObject> getSource() {
+        return source;
     }
 
-    public ReadWriteLockVO getReadWriteLockVO() {
-        return readWriteLockVO;
+    public void setSink(List<JSONObject> sink) {
+        this.sink  = sink;
     }
 
-    public void setReadWriteLockVO(ReadWriteLockVO readWriteLockVO) {
-        this.readWriteLockVO = readWriteLockVO;
+    public List<JSONObject> getSink() {
+        return sink;
     }
+
+    public void setSide(List<JSONObject> side) {
+        this.side  = side;
+    }
+
+    public List<JSONObject> getSide() {
+        return side;
+    }
+
 }

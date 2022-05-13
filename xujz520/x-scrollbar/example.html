@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>x-scrollbar</title>
+  <!-- markdown -->
+  <link rel="stylesheet" href="./markdown/highlight/styles/a11y-light.css">
+  <link rel="stylesheet" href="./markdown/github-markdown.css">
+  <script src="./markdown/marked.min.js"></script>
+  <script src="./markdown/highlight/highlight.min.js"></script>
+  <!-- xscrollbar -->
+  <link rel="stylesheet" href="./xscrollbar.css">
+  <script src="./xscrollbar.js"></script>
+</head>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    font-size: 14px;
+    color: #333;
+    padding: 0;
+    margin: 0;
+  }
+
+  .page_conatiner {
+    height: 100%;
+    padding: 16px;
+    width: 80%;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.99);
+    box-shadow: 0 0 20px #ddd;
+    overflow: auto;
+  }
+
+  .row {
+    display: flex;
+  }
+
+  .row>* {
+    flex: 1;
+  }
+
+  .row>*.flexNone {
+    flex: none;
+  }
+
+  .table {
+    border-collapse: collapse;
+    overflow: visible !important;
+    margin: 0 !important;
+  }
+
+  .table td {
+    min-width: 100px;
+    height: 30px;
+    border: 1px solid #ddd;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    padding: 0 !important;
+  }
+</style>
+
+<body>
+  <div class="page_conatiner markdown-body"></div>
+
+  <textarea id="markdown" style=" display: none; ">
+<h1 style="text-align: center;">x-scrollbar</h1>
+
+版本: v3.0.0  
+作者: 清晨的阳光(QQ:765550360)  
+许可: MIT  
+源码: https://gitee.com/xujz520/x-scrollbar
+
+## 概述
+
+这是一个自定义滚动条插件.  
+
+在现代前端环境下为什么还需要它, 它有什么特点:  
+* 滚动条可以半透明的悬浮于内容上方(类似于移动端).
+* 可以设置仅水平滚动(拨动鼠标滚轮将作用于X轴).
+
+### 支持环境
+| ![](./assets/edge.png) | ![](./assets/chrome.png) | ![](./assets/firefox.png) | ![](./assets/safari.png) |
+| ---- | ---- | ---- | ---- |
+| Edge | Chrome | Firefox | Safari |
+> 若要支持IE请使用2.x版本
+
+## 安装
+
+### 直接在浏览器中使用
+```html
+<link rel="stylesheet" href="./xscrollbar.css">
+```
+```html
+<script src="./xscrollbar.js"></script>
+```
+
+CDN
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/x-scrollbar/xscrollbar.css">
+```
+```html
+<script src="https://cdn.jsdelivr.net/npm/x-scrollbar/xscrollbar.js"></script>
+```
+
+### 通过npm安装
+```bash
+npm i x-scrollbar --save
+```
+> 需要自行引入 ` node_modules/x-scrollbar/xscrollbar.css ` 样式
+```js
+import XScrollbar from 'x-scrollbar';
+```
+
+## 基础示例
+```html
+<!-- 容器 -->
+<div id="div1" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+  <!-- 内容 -->
+  <table></table>
+</div>
+
+<script>
+  let xscrollbar = new XScrollbar(document.querySelector('#div1'));
+</script>
+```
+
+### 常用API
+```js
+let xscrollbar = new XScrollbar(document.querySelector('#div1'));
+
+// 读取
+xscrollbar.$container.scrollLeft
+xscrollbar.$container.scrollTop
+
+// 设置
+xscrollbar.$container.scrollLeft = 100
+xscrollbar.$container.scrollTop = 100
+
+// 监听滚动
+xscrollbar.$container.addEventListener('scroll', function()  {
+    //...
+})
+```
+
+<div id="base"></div>
+
+## 样式
+<div id="style"></div>
+
+
+## API
+### 构造函数
+```js
+new XScrollbar(dom: HTMLElement, options?: object)
+```
+
+### options
+| 选项            | 默认值 | 描述                                                                   |
+| --------------- | ------ | ---------------------------------------------------------------------- |
+| autoUpdate | true | 响应容器和内容大小改变(自动更新滚动条) |
+| preventDefault | true | 阻止向上传递滚动事件|
+| onlyHorizontal | false | 仅水平滚动(拨动鼠标滚轮时将作用于X轴) |
+| autoHide | true | 自动隐藏 |
+| thumbSize | 5px | 滑块大小(激活后是原来的两倍) | 
+| trackBackground | #ddd | 轨道背景 |
+| thumbBackground | #5f5f5f | 滑块背景 |
+| thumbRadius | 5px | 滑块圆角大小 |
+
+### 实例成员
+* **$container** 滚动容器, 用于读写 `scrollLeft/scrollTop` 或用于添加 `scroll` 事件
+* **update()** 更新滚动滚动条的状态(容器或内容大小发生改变), 在 `options.autoUpdate = false` 的情况下使用
+
+## 鼓励
+<p style="color:green; text-shadow: 0px 0px 1px;">如果该插件对您有帮助, 就请把你的小星星(Star)送给我吧^_^ , 您的鼓励是我最大的动力!</p>
+  </textarea>
+
+  <div id="base_content">
+    <div class="row">
+      <div class="flexNone" style="margin-right: 16px;">
+        <div id="example_container" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table example_table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div style="margin-bottom: 16px;">
+          <button type="button" id="new">初始化</button> &nbsp;
+        </div>
+        <div style="margin-bottom: 8px;">
+          <button type="button" id="add_row">[ + ] 添加一行</button> &nbsp;
+          <button type="button" id="remove_row">[ - ] 删除一行</button>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <button type="button" id="add_col">[ + ] 添加一列</button> &nbsp;
+          <button type="button" id="remove_col">[ - ] 删除一列</button>
+        </div>
+        <div style="margin-bottom: 8px;">
+          <button type="button" id="set_scrollLeft">设置 scrollLeft</button> &nbsp;
+          <button type="button" id="set_scrollTop">设置 scrollTop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="style_content">
+    <div class="row" style="margin-bottom: 16px;">
+      <div class="flexNone" style="margin-right: 16px;">
+        <span>红色:</span>
+        <div id="red_container" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table example_table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="flexNone" style="margin-right: 16px;">
+        <span>绿色:</span>
+        <div id="green_container" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table example_table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="flexNone" style="margin-right: 16px;">
+        <span>蓝色:</span>
+        <div id="blue_container" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table example_table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="flexNone" style="margin-right: 16px;">
+        <span>轨道透明 & 直角:</span>
+        <div id="right_container" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table example_table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="flexNone" style="margin-right: 16px;">
+        <span>自动隐藏滚动条(默认):</span>
+        <div id="auto_hide_container" style="width: 300px; height: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table example_table">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="flexNone" style="margin-right: 16px;">
+        <span>仅水平滚动(拨动鼠标滚轮将作用于X轴):</span>
+        <div id="only_x_container" style="width: 300px; overflow: auto; border: 1px solid #000;">
+          <table class="table">
+            <tr>
+              <td>1-1</td>
+              <td>1-2</td>
+              <td>1-3</td>
+              <td>1-4</td>
+            </tr>
+            <tr>
+              <td>2-1</td>
+              <td>2-2</td>
+              <td>3-3</td>
+              <td>4-4</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let $page_conatiner = document.querySelector('.page_conatiner');
+    let md = document.querySelector('#markdown').value;
+    $page_conatiner.innerHTML = marked(md, {
+      highlight: function (code, language) {
+        if (typeof hljs == 'undefined') return;
+        language = hljs.getLanguage(language) ? language : 'plaintext';
+        return hljs.highlight(code, { language: language }).value;
+      }
+    });
+    document.querySelector('#base').appendChild(document.querySelector('#base_content'));
+    document.querySelector('#style').appendChild(document.querySelector('#style_content'));
+
+    // 初始化页面滚动条
+    new XScrollbar(document.querySelector('.page_conatiner'), { thumbBackground: 'linear-gradient(120deg, rgb(240, 147, 251) 0%, rgb(245, 87, 108) 100%)', trackBackground: 'transparent' });
+
+    // 初始化示例表格内容
+    let tbody_list = document.querySelectorAll('.example_table > tbody');
+    Array.prototype.forEach.call(tbody_list, function (tbody) {
+      let example_table_html = '';
+      Array.apply(null, { length: 15 }).forEach(function (row, rowIndex) {
+        let tds = '';
+        Array.apply(null, { length: 4 }).forEach(function (col, colIndex) {
+          tds += '<td>' + (rowIndex + 1) + '-' + (colIndex + 1) + '</td>'
+        });
+        example_table_html += '<tr>' + tds + '</tr>';
+      });
+      tbody.innerHTML = example_table_html;
+    });
+
+    // 样式
+    (function () {
+      new XScrollbar(document.getElementById('red_container'), { trackBackground: '#ffd3d3', thumbBackground: '#fd6969', autoHide: false });
+      new XScrollbar(document.getElementById('green_container'), { trackBackground: '#c8ffd8', thumbBackground: '#44b565', autoHide: false });
+      new XScrollbar(document.getElementById('blue_container'), { trackBackground: '#d1d8ff', thumbBackground: '#4459b5', autoHide: false });
+      new XScrollbar(document.getElementById('right_container'), { trackBackground: 'transparent', thumbRadius: '0px', autoHide: false });
+      new XScrollbar(document.getElementById('auto_hide_container'));
+      new XScrollbar(document.getElementById('only_x_container'), { autoHide: false, onlyHorizontal: true });
+    })();
+
+    // 基础示例
+    (function () {
+      let $example_container = document.querySelector('#example_container');
+      let $example_table_tbody = document.querySelector('.example_table > tbody');
+
+      // 初始化
+      let xscrollbar = null;
+      document.querySelector('#new').addEventListener('click', function () {
+        xscrollbar = new XScrollbar($example_container, { autoHide: false });
+      });
+
+      //添加一行
+      document.querySelector('#add_row').addEventListener('click', function () {
+        let tr = document.createElement('tr');
+        let trIndex = $example_table_tbody.children.length;
+        let tdCount = $example_table_tbody.querySelector('tr').children.length;
+        tr.innerHTML = Array.apply(null, { length: tdCount }).map(function (td, tdIndex) { return '<td>' + (trIndex + 1) + ' - ' + (tdIndex + 1) + '</td>' }).join('');
+        $example_table_tbody.appendChild(tr);
+      });
+
+      //添加一列
+      document.querySelector('#add_col').addEventListener('click', function () {
+        let tdIndex = $example_table_tbody.querySelector('tr').children.length;
+        Array.prototype.forEach.call($example_table_tbody.children, function (tr, trIndex) {
+          let td = document.createElement('td');
+          td.innerText = (trIndex + 1) + ' - ' + (tdIndex + 1);
+          tr.appendChild(td);
+        });
+      });
+
+      //删除一行
+      document.querySelector('#remove_row').addEventListener('click', function () {
+        if ($example_table_tbody.children.length == 1) return;
+        let tr = $example_table_tbody.querySelector('tr:last-child');
+        $example_table_tbody.removeChild(tr);
+      });
+
+      //删除一列
+      document.querySelector('#remove_col').addEventListener('click', function () {
+        let tdCount = $example_table_tbody.querySelector('tr').children.length;
+        if (tdCount == 1) return;
+        let tds = $example_table_tbody.querySelectorAll('td:last-child');
+        Array.prototype.forEach.call(tds, function (td) { td.parentNode.removeChild(td) });
+      });
+
+      //设置 ScrollLeft
+      document.querySelector('#set_scrollLeft').addEventListener('click', function () {
+        let value = window.prompt('请输入要设置的 scrollLeft', xscrollbar.$container.scrollLeft);
+        xscrollbar.$container.scrollLeft = value;
+      });
+
+      //设置 ScrollTop
+      document.querySelector('#set_scrollTop').addEventListener('click', function () {
+        let value = window.prompt('请输入要设置的 scrollTop', xscrollbar.$container.scrollTop);
+        xscrollbar.$container.scrollTop = value;
+      });
+    })();
+  </script>
+</body>
+
+</html>

@@ -2,43 +2,7 @@ package com.dtstack.taier.develop.enums.develop;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.dtstack.dtcenter.loader.dto.source.AdbForPgSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.AwsS3SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.ClickHouseSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Db2SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.DmSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.DorisRestfulSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.ES7SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.ESSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.FtpSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.GBaseSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Greenplum6SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.HbaseSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.HdfsSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Hive1SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Hive3CDPSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Hive3SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.HiveSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.ISourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.ImpalaSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.InceptorSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.InfluxDBSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.KingbaseSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.KuduSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.KylinSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.LibraSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.MongoSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Mysql5SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Mysql8SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.OdpsSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.OpenTSDBSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.OracleSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.Phoenix5SourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.PhoenixSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.PostgresqlSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.RedisSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.SparkSourceDTO;
-import com.dtstack.dtcenter.loader.dto.source.SqlserverSourceDTO;
+import com.dtstack.dtcenter.loader.dto.source.*;
 import com.dtstack.dtcenter.loader.enums.RedisMode;
 import com.dtstack.dtcenter.loader.source.DataSourceType;
 import com.dtstack.taier.common.enums.HadoopConfig;
@@ -46,7 +10,6 @@ import com.dtstack.taier.common.exception.ErrorCode;
 import com.dtstack.taier.common.exception.RdosDefineException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -142,32 +105,6 @@ public enum SourceDTOType {
     },
 
 
-    /**
-     * 达梦数据库
-     */
-    DMDB_For_Oracle(DataSourceType.DMDB_For_Oracle.getVal()) {
-        @Override
-        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
-            return getSourceDTO(dataJson, confMap, null, expandConfig);
-        }
-
-        @Override
-        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
-            String jdbcUrl = dataJson.containsKey(JDBC_URL) ? dataJson.getString(JDBC_URL) : "";
-            String username = dataJson.containsKey(JDBC_USERNAME) ? dataJson.getString(JDBC_USERNAME) : "";
-            String password = dataJson.containsKey(JDBC_PASSWORD) ? dataJson.getString(JDBC_PASSWORD) : "";
-            DmSourceDTO sourceDTO = DmSourceDTO
-                    .builder()
-                    .url(jdbcUrl)
-                    .username(username)
-                    .password(password)
-                    .schema(schema)
-                    .sourceType(DataSourceType.DMDB_For_Oracle.getVal())
-                    .kerberosConfig(confMap)
-                    .build();
-            return sourceDTO;
-        }
-    },
 
     /**
      * CarbonData
@@ -401,6 +338,67 @@ public enum SourceDTOType {
     },
 
     /**
+     * kafka 0.10
+     */
+    KAFKA_10(DataSourceType.KAFKA_10.getVal()) {
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
+            return getSourceDTO(dataJson, confMap, null, expandConfig);
+        }
+
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
+            return buildKafkaSourceDTO(dataJson, confMap);
+        }
+    },
+
+    /**
+     * kafka 0.11
+     */
+    KAFKA_11(DataSourceType.KAFKA_11.getVal()) {
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
+            return getSourceDTO(dataJson, confMap, null, expandConfig);
+        }
+
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
+            return buildKafkaSourceDTO(dataJson, confMap);
+        }
+    },
+
+    /**
+     * kafka 1.x
+     */
+    KAFKA(DataSourceType.KAFKA.getVal()) {
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
+            return getSourceDTO(dataJson, confMap, null, expandConfig);
+        }
+
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
+            return buildKafkaSourceDTO(dataJson, confMap);
+        }
+    },
+
+
+    /**
+     * kafka 2.x
+     */
+    KAFKA_2X(DataSourceType.KAFKA_2X.getVal()) {
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
+            return getSourceDTO(dataJson, confMap, null, expandConfig);
+        }
+
+        @Override
+        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
+            return buildKafkaSourceDTO(dataJson, confMap);
+        }
+    },
+
+    /**
      * SparkThrift2_1
      */
     SparkThrift2_1(DataSourceType.SparkThrift2_1.getVal()) {
@@ -501,44 +499,6 @@ public enum SourceDTOType {
                     .password(password)
                     .schema(schema)
                     .sourceType(DataSourceType.HIVE3X.getVal())
-                    .defaultFS(defaultFS)
-                    .config(hadoopConfig)
-                    .kerberosConfig(confMap)
-                    .build();
-            return hiveSourceDTO;
-        }
-    },
-
-    /**
-     * hive
-     */
-    HIVE3_CDP (DataSourceType.HIVE3_CDP.getVal()) {
-        @Override
-        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
-            return getSourceDTO(dataJson, confMap, null, expandConfig);
-        }
-
-        @Override
-        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
-            String url = dataJson.containsKey(JDBC_URL) ? dataJson.getString(JDBC_URL) : "";
-            String username = dataJson.containsKey(JDBC_USERNAME) ? dataJson.getString(JDBC_USERNAME) : "";
-            String password = dataJson.containsKey(JDBC_PASSWORD) ? dataJson.getString(JDBC_PASSWORD) : "";
-            String defaultFS = null;
-            String hadoopConfig = null;
-            if (dataJson.containsKey(HadoopConfig.HADOOP_CONFIG.getVal()) && StringUtils.isNotBlank(dataJson.getString(HadoopConfig.HADOOP_CONFIG.getVal()))) {
-                defaultFS = dataJson.getString(HadoopConfig.HDFS_DEFAULTFS.getVal());
-                if (!defaultFS.matches(HadoopConfig.DEFAULT_FS_REGEX.getVal())) {
-                    throw new RdosDefineException(ErrorCode.ERROR_DEFAULT_FS_FORMAT);
-                }
-                hadoopConfig = dataJson.getString(HadoopConfig.HADOOP_CONFIG.getVal());
-            }
-            Hive3CDPSourceDTO hiveSourceDTO = Hive3CDPSourceDTO
-                    .builder()
-                    .url(url)
-                    .username(username)
-                    .password(password)
-                    .schema(schema)
-                    .sourceType(DataSourceType.HIVE3_CDP.getVal())
                     .defaultFS(defaultFS)
                     .config(hadoopConfig)
                     .kerberosConfig(confMap)
@@ -1231,30 +1191,6 @@ public enum SourceDTOType {
             return sourceDTO;
         }
     },
-
-    /**
-     * Doris_Restful
-     */
-    DORIS_RESTFUL(DataSourceType.DorisRestful.getVal()) {
-        @Override
-        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, Map<String, Object> expandConfig) {
-            return getSourceDTO(dataJson, confMap, "", new HashMap<>());
-        }
-
-        @Override
-        public ISourceDTO getSourceDTO(JSONObject dataJson, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
-            String jdbcUrl = dataJson.containsKey(URL) ? dataJson.getString(URL) : "";
-            String username = dataJson.containsKey(JDBC_USERNAME) ? dataJson.getString(JDBC_USERNAME) : "";
-            String password = dataJson.containsKey(JDBC_PASSWORD) ? dataJson.getString(JDBC_PASSWORD) : "";
-            DorisRestfulSourceDTO sourceDTO = DorisRestfulSourceDTO
-                    .builder()
-                    .url(jdbcUrl)
-                    .userName(username)
-                    .password(password)
-                    .build();
-            return sourceDTO;
-        }
-    },
     ;
     public static final String JDBC_URL = "jdbcUrl";
     public static final String JDBC_USERNAME = "username";
@@ -1262,6 +1198,9 @@ public enum SourceDTOType {
     // ssl 认证文件路径
     public static final String SSL_LOCAL_DIR = "sslLocalDir";
     public static final String URL = "url";
+    public static final String BROKER_LIST = "brokerList";
+    public static final String ADDRESS = "address";
+
     /**
      * 数据源类型的值
      */
@@ -1318,5 +1257,14 @@ public enum SourceDTOType {
     public static ISourceDTO getSourceDTO(JSONObject dataJson, Integer sourceType, Map<String, Object> confMap, String schema, Map<String, Object> expandConfig) {
         SourceDTOType sourceDTOType = getSourceDTOType(sourceType);
         return sourceDTOType.getSourceDTO(dataJson, confMap, schema,expandConfig);
+    }
+
+    protected KafkaSourceDTO buildKafkaSourceDTO(JSONObject dataJson, Map<String, Object> kerberosConfig) {
+        return KafkaSourceDTO.builder()
+                .brokerUrls(dataJson.getString(BROKER_LIST))
+                .url(dataJson.getString(ADDRESS))
+                .username(dataJson.getString(JDBC_USERNAME))
+                .password(dataJson.getString(JDBC_PASSWORD))
+                .kerberosConfig(kerberosConfig).build();
     }
 }

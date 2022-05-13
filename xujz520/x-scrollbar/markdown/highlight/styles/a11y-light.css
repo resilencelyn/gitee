@@ -1,0 +1,81 @@
+/* a11y-light theme */
+/* Based on the Tomorrow Night Eighties theme: https://github.com/isagalaev/highlight.js/blob/master/src/styles/tomorrow-night-eighties.css */
+/* @author: ericwbailey */
+
+.markdown-body .hljs-comment,
+.markdown-body .hljs-quote {
+  color: #696969;
+}
+.markdown-body .hljs-variable,
+.markdown-body .hljs-template-variable,
+.markdown-body .hljs-tag,
+.markdown-body .hljs-name,
+.markdown-body .hljs-selector-id,
+.markdown-body .hljs-selector-class,
+.markdown-body .hljs-regexp,
+.markdown-body .hljs-deletion {
+  color: #d91e18;
+}
+.markdown-body .hljs-number,
+.markdown-body .hljs-built_in,
+.markdown-body .hljs-builtin-name,
+.markdown-body .hljs-literal,
+.markdown-body .hljs-type,
+.markdown-body .hljs-params,
+.markdown-body .hljs-meta,
+.markdown-body .hljs-link {
+  color: #aa5d00;
+}
+.markdown-body .hljs-attribute {
+  color: #aa5d00;
+}
+.markdown-body .hljs-string,
+.markdown-body .hljs-symbol,
+.markdown-body .hljs-bullet,
+.markdown-body .hljs-addition {
+  color: #008000;
+}
+.markdown-body .hljs-title,
+.markdown-body .hljs-section {
+  color: #007faa;
+}
+.markdown-body .hljs-keyword,
+.markdown-body .hljs-selector-tag {
+  color: #7928a1;
+}
+.markdown-body .hljs {
+  display: block;
+  overflow-x: auto;
+  background: #fefefe;
+  color: #545454;
+  padding: 0.5em;
+}
+.markdown-body .hljs-emphasis {
+  font-style: italic;
+}
+.markdown-body .hljs-strong {
+  font-weight: bold;
+}
+@media screen and (-ms-high-contrast: active) {
+  .markdown-body .hljs-addition,
+.markdown-body .hljs-attribute,
+.markdown-body .hljs-built_in,
+.markdown-body .hljs-builtin-name,
+.markdown-body .hljs-bullet,
+.markdown-body .hljs-comment,
+.markdown-body .hljs-link,
+.markdown-body .hljs-literal,
+.markdown-body .hljs-meta,
+.markdown-body .hljs-number,
+.markdown-body .hljs-params,
+.markdown-body .hljs-string,
+.markdown-body .hljs-symbol,
+.markdown-body .hljs-type,
+.markdown-body .hljs-quote {
+    color: highlight;
+  }
+  .markdown-body .hljs-keyword,
+.markdown-body .hljs-selector-tag {
+    font-weight: bold;
+  }
+}

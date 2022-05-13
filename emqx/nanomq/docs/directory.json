@@ -1,0 +1,78 @@
+{
+  "cn": [
+    {
+      "title": "NanoMQ 介绍",
+      "path": "./"
+    },
+    {
+      "title": "开始使用",
+      "path": "quick-start"
+    },
+    {
+      "title": "功能特性",
+      "path": "features"
+    },
+    {
+      "title": "配置说明",
+      "path": "config-description"
+    },
+    {
+      "title": "编译选项",
+      "path": "build-options"
+    },
+    {
+      "title": "HTTP APIs",
+      "path": "http-api"
+    },
+    {
+      "title": "Web Hook",
+      "path": "web-hook"
+    },
+    {
+      "title": "工具集",
+      "path": "toolkit"
+    },
+    {
+      "title": "测试报告",
+      "path": "test-report"
+    }
+  ],
+  "en": [
+    {
+      "title": "Introduction",
+      "path": "./"
+    },
+    {
+      "title": "Getting Started",
+      "path": "quick-start"
+    },
+    {
+      "title": "Configuration",
+      "path": "config-description"
+    },
+    {
+      "title": "Features",
+      "path": "features"
+    },
+    {
+      "title": "Build Options",
+      "path": "build-options"
+    },
+    {
+      "title": "HTTP APIs",
+      "path": "http-api"
+    },
+    {
+      "title": "Web Hook",
+      "path": "web-hook"
+    },
+    {
+      "title": "TOOLKIT",
+      "path": "toolkit"
+    },
+    {
+      "title": "Test Report",
+      "path": "test-report"
+    }
+  ]
+}

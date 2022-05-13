@@ -38,8 +38,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import type { SCHEDULE_STATUS, TASK_TYPE_ENUM } from '@/constant';
 import { DRAWER_MENU_ENUM, formItemLayout } from '@/constant';
 import Api from '@/api/operation';
-import type { ITaskBasicProps } from '@/interface';
-import { DIRECT_TYPE_ENUM } from '@/interface';
+import { DIRECT_TYPE_ENUM, ITaskProps } from '@/interface';
 import { taskTypeText } from '@/utils/enums';
 import type { ColumnsType } from 'antd/lib/table';
 import type { TableRowSelection } from 'antd/lib/table/interface';
@@ -47,6 +46,8 @@ import type { TableRowSelection } from 'antd/lib/table/interface';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const { confirm } = Modal;
+
+export type ITaskBasicProps = Pick<ITaskProps, 'taskId' | 'name'>;
 
 interface IPatchDataProps {
 	task: ITaskBasicProps | null;
@@ -418,12 +419,12 @@ export default ({ visible, task, handCancel }: IPatchDataProps) => {
 				</FormItem>
 				<FormItem
 					name="rangeDate"
-					label="业务日期"
+					label="计划日期"
 					rules={[
 						{
 							type: 'array',
 							required: true,
-							message: '请选择业务时间!',
+							message: '请选择计划时间!',
 						},
 					]}
 				>

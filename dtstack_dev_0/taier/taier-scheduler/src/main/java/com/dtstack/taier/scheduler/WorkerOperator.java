@@ -24,11 +24,9 @@ import com.dtstack.taier.common.exception.RdosDefineException;
 import com.dtstack.taier.pluginapi.JobClient;
 import com.dtstack.taier.pluginapi.JobIdentifier;
 import com.dtstack.taier.pluginapi.enums.TaskStatus;
-import com.dtstack.taier.pluginapi.pojo.ClusterResource;
-import com.dtstack.taier.pluginapi.pojo.ComponentTestResult;
-import com.dtstack.taier.pluginapi.pojo.JobResult;
-import com.dtstack.taier.pluginapi.pojo.JudgeResult;
+import com.dtstack.taier.pluginapi.pojo.*;
 import com.dtstack.taier.pluginapi.util.PublicUtil;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,6 +111,14 @@ public class WorkerOperator {
         return engineLog;
     }
 
+    public List<String> getRollingLogBaseInfo(JobIdentifier jobIdentifier) {
+        List<String> rollingLogBaseInfo = clientOperator.getRollingLogBaseInfo(this.getPluginInfo(jobIdentifier), jobIdentifier);
+        if (null == rollingLogBaseInfo || rollingLogBaseInfo.size() == 0) {
+            rollingLogBaseInfo = Lists.newArrayList();
+        }
+        return rollingLogBaseInfo;
+    }
+
     public String getCheckpoints(JobIdentifier jobIdentifier) {
         String checkPoints = clientOperator.getCheckpoints(this.getPluginInfo(jobIdentifier), jobIdentifier);
         if (null == checkPoints) {
@@ -145,5 +151,14 @@ public class WorkerOperator {
 
     public ClusterResource clusterResource(String pluginInfo) throws Exception {
         return clientOperator.getClusterResource(pluginInfo);
+    }
+
+    public List<FileResult> listFile(String path,boolean isPathPattern, String pluginInfo) throws Exception{
+        return clientOperator.listFile(path,isPathPattern,pluginInfo);
+    }
+
+    public CheckResult grammarCheck(JobClient jobClient) throws Exception {
+        this.buildPluginInfo(jobClient);
+        return clientOperator.grammarCheck(jobClient);
     }
 }

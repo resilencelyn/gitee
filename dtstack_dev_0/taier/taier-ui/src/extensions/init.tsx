@@ -19,29 +19,30 @@
 import molecule from '@dtinsight/molecule';
 import {
 	CONSOLE,
-	folderMenu,
-	LANGUAGE_STATUS_BAR,
 	OPERATIONS,
-	OUTPUT_LOG,
 	TENANT_MENU,
+	ID_COLLECTIONS,
+	DRAWER_MENU_ENUM,
+	RESOURCE_ACTIONS,
+	FUNCTOIN_ACTIONS,
 } from '@/constant';
 import EditorEntry from '@/components/editorEntry';
-import ResourceManager from '@/components/resourceManager';
+import ResourceManager from '@/pages/resource';
+import { history } from 'umi';
 import classNames from 'classnames';
-import FunctionManager from '@/components/functionManager';
+import FunctionManager from '@/pages/function';
 import type { UniqueId } from '@dtinsight/molecule/esm/common/types';
 import DataSource from '@/pages/dataSource';
 import type { IActivityMenuItemProps, IExtension } from '@dtinsight/molecule/esm/model';
 import { Float } from '@dtinsight/molecule/esm/model';
 import { ColorThemeMode } from '@dtinsight/molecule/esm/model';
-import { FUNCTION_NEW_FUNCTION } from '@/components/functionManager/menu';
-import Markdown from '@/components/markdown';
+import LogEditor from '@/components/logEditor';
 import http from '@/api/http';
 import resourceManagerService from '@/services/resourceManagerService';
 import functionManagerService from '@/services/functionManagerService';
 import { showLoginModal } from '@/pages/login';
 import { getCookie, deleteCookie } from '@/utils';
-import { message } from 'antd';
+import { Button, message } from 'antd';
 import { Logo } from '@/components/icon';
 import Language from '@/components/language';
 import ReactDOM from 'react-dom';
@@ -53,8 +54,10 @@ function loadStyles(url: string) {
 	link.type = 'text/css';
 	link.href = url;
 	link.id = 'antd_dark';
-	const head = document.getElementsByTagName('head')[0];
-	head.appendChild(link);
+	if (!document.getElementById('antd_dark')) {
+		const head = document.getElementsByTagName('head')[0];
+		head.appendChild(link);
+	}
 }
 
 function removeStyles() {
@@ -88,13 +91,17 @@ export default class InitializeExtension implements IExtension {
  * 初始化主题
  */
 function initializeColorTheme() {
-	// 默认主题为亮色
-	molecule.colorTheme.setTheme('Default Light+');
+	// 默认加载 DtStack 主题色
+	molecule.colorTheme.setTheme('DTStack Theme');
+	loadStyles('https://unpkg.com/antd@4.20.3/dist/antd.dark.css');
+	document.documentElement.setAttribute('data-prefers-color', 'dark');
 	molecule.colorTheme.onChange((_, __, themeMode) => {
 		if (themeMode === ColorThemeMode.dark) {
-			loadStyles('https://unpkg.com/antd@4.18.5/dist/antd.dark.css');
+			loadStyles('https://unpkg.com/antd@4.20.3/dist/antd.dark.css');
+			document.documentElement.setAttribute('data-prefers-color', 'dark');
 		} else {
 			removeStyles();
+			document.documentElement.setAttribute('data-prefers-color', 'light');
 		}
 	});
 }
@@ -105,24 +112,77 @@ function initializeColorTheme() {
 function initializeEntry() {
 	molecule.editor.setEntry(<EditorEntry />);
 
+	const handleGoto = (url: string) => {
+		history.push({
+			query: {
+				drawer: url,
+			},
+		});
+	};
+
 	// 设置目录树的入口页面
 	molecule.folderTree.setEntry(
-		<div className={classNames('mt-20px', 'text-center')}>
-			未找到任务开发目录，请联系管理员
+		<div className={classNames('mt-20px', 'text-center', 'text-xs')}>
+			未找到任务开发目录，请先
+			<Button
+				style={{ padding: 0 }}
+				type="link"
+				onClick={() => handleGoto(DRAWER_MENU_ENUM.CLUSTER)}
+			>
+				配置集群
+			</Button>
+			并进行
+			<Button
+				style={{ padding: 0 }}
+				type="link"
+				onClick={() => handleGoto(DRAWER_MENU_ENUM.RESOURCE)}
+			>
+				绑定
+			</Button>
 		</div>,
 	);
 
 	// 设置资源管理的入口页面
 	resourceManagerService.setEntry(
-		<div className={classNames('mt-20px', 'text-center')}>
-			未找到资源开发目录，请联系管理员
+		<div className={classNames('mt-20px', 'text-center', 'text-xs')}>
+			未找到资源开发目录，请先
+			<Button
+				style={{ padding: 0 }}
+				type="link"
+				onClick={() => handleGoto(DRAWER_MENU_ENUM.CLUSTER)}
+			>
+				配置集群
+			</Button>
+			并进行
+			<Button
+				style={{ padding: 0 }}
+				type="link"
+				onClick={() => handleGoto(DRAWER_MENU_ENUM.RESOURCE)}
+			>
+				绑定
+			</Button>
 		</div>,
 	);
 
 	// 设置函数管理的入口页面
 	functionManagerService.setEntry(
-		<div className={classNames('mt-20px', 'text-center')}>
-			未找到函数开发目录，请联系管理员
+		<div className={classNames('mt-20px', 'text-center', 'text-xs')}>
+			未找到函数管理目录，请先
+			<Button
+				style={{ padding: 0 }}
+				type="link"
+				onClick={() => handleGoto(DRAWER_MENU_ENUM.CLUSTER)}
+			>
+				配置集群
+			</Button>
+			并进行
+			<Button
+				style={{ padding: 0 }}
+				type="link"
+				onClick={() => handleGoto(DRAWER_MENU_ENUM.RESOURCE)}
+			>
+				绑定
+			</Button>
 		</div>,
 	);
 }
@@ -148,7 +208,11 @@ function initResourceManager() {
 			id: 'menus',
 			title: '更多操作',
 			icon: 'menu',
-			contextMenu: folderMenu,
+			contextMenu: [
+				RESOURCE_ACTIONS.UPLOAD,
+				RESOURCE_ACTIONS.REPLACE,
+				RESOURCE_ACTIONS.CREATE,
+			],
 		},
 	];
 
@@ -184,7 +248,7 @@ function initFunctionManager() {
 			id: 'menus',
 			title: '更多操作',
 			icon: 'menu',
-			contextMenu: [FUNCTION_NEW_FUNCTION],
+			contextMenu: [FUNCTOIN_ACTIONS.CREATE_FUNCTION],
 		},
 	];
 
@@ -204,12 +268,12 @@ function initializePane() {
 
 	molecule.panel.remove(PANEL_OUTPUT!);
 	molecule.panel.add({
-		id: OUTPUT_LOG,
+		id: ID_COLLECTIONS.OUTPUT_LOG_ID,
 		name: '日志',
 		closable: false,
-		renderPane: () => <Markdown />,
+		renderPane: () => <LogEditor />,
 	});
-	molecule.panel.setActive(OUTPUT_LOG);
+	molecule.panel.setActive(ID_COLLECTIONS.OUTPUT_LOG_ID);
 }
 
 /**
@@ -345,6 +409,10 @@ function initExplorer() {
 			data: explorerData,
 		});
 	}
+
+	molecule.explorer.onCollapseAllFolders(() => {
+		molecule.folderTree.setExpandKeys([]);
+	});
 }
 
 /**
@@ -373,7 +441,7 @@ function initDataSource() {
 function initLanguage() {
 	molecule.statusBar.add(
 		{
-			id: LANGUAGE_STATUS_BAR,
+			id: ID_COLLECTIONS.LANGUAGE_STATUS_BAR,
 			render: () => <Language />,
 		},
 		Float.right,

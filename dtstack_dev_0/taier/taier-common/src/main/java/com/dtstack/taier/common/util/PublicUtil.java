@@ -1,18 +1,23 @@
 package com.dtstack.taier.common.util;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dtstack.taier.common.exception.DtCenterDefException;
 import com.dtstack.taier.common.exception.PubSvcDefineException;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,6 +105,22 @@ public class PublicUtil {
 		} catch (IOException e) {
 			throw new PubSvcDefineException(String.format("对象转换异常:%s", e.getMessage()), e);
 		}
+	}
+
+	public static Properties stringToProperties(String str) throws IOException{
+		Properties properties = new Properties();
+		properties.load(new ByteArrayInputStream(str.getBytes("UTF-8")));
+		return properties;
+	}
+
+	public static String propertiesRemoveEmpty(String propertiesStr) throws IOException {
+		Properties properties = new Properties();
+		properties.load(new ByteArrayInputStream(propertiesStr.getBytes("UTF-8")));
+		StringBuffer stringBuffer = new StringBuffer();
+		for (Object key : properties.keySet()) {
+			stringBuffer.append(key).append("=").append(properties.get(key)).append("\r\n");
+		}
+		return stringBuffer.toString();
 	}
 
 
@@ -230,5 +251,76 @@ public class PublicUtil {
 			}
 		}
 	}
+
+	static {
+		//允许出现不识别的字段
+		objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
+	}
+
+
+
+	public static Object classConvert(Class<?> clazz, Object obj) {
+		if (clazz.equals(Integer.class) || int.class.equals(clazz)) {
+			obj = Integer.parseInt(obj.toString());
+		} else if (clazz.equals(Long.class) || long.class.equals(clazz)) {
+			obj = Long.parseLong(obj.toString());
+		} else if (clazz.equals(Double.class) || double.class.equals(clazz)) {
+			obj = Double.parseDouble(obj.toString());
+		} else if (clazz.equals(Float.class) || float.class.equals(clazz)) {
+			obj = Float.parseFloat(obj.toString());
+		} else if (clazz.equals(Byte.class) || byte.class.equals(clazz)) {
+			obj = Byte.parseByte(obj.toString());
+		} else if (clazz.equals(Short.class) || short.class.equals(clazz)) {
+			obj = Short.parseShort(obj.toString());
+		} else if (clazz.equals(Boolean.class) || boolean.class.equals(clazz)) {
+			obj = Boolean.parseBoolean(obj.toString());
+		} else if (clazz.equals(String.class)) {
+			obj = obj.toString();
+		}
+		return obj;
+	}
+
+	/**
+	 * 格式化double
+	 *
+	 * @param value
+	 * @return
+	 */
+	public static Double formatDouble(Double value) {
+
+		if (value == null) {
+			return 0.0;
+		}
+
+		BigDecimal bg = new BigDecimal(value);
+		/**
+		 * 参数：
+		 newScale - 要返回的 BigDecimal 值的标度。
+		 roundingMode - 要应用的舍入模式。
+		 返回：
+		 一个 BigDecimal，其标度为指定值，其非标度值可以通过此 BigDecimal 的非标度值乘以或除以十的适当次幂来确定。
+		 */
+		double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return f1;
+	}
+
+	public static Long getLongVal(Long value) {
+		if (value == null) {
+			return 0L;
+		}
+		return value;
+	}
+
+	public static boolean checkIntersection(Set<String> firstSet, Set<String> secondSet) {
+		Set<Object> totalSet = Sets.newHashSet();
+		totalSet.addAll(firstSet);
+		totalSet.addAll(secondSet);
+		if (totalSet.size() == firstSet.size() + secondSet.size()) {
+			return false;
+		}
+		return true;
+	}
+
 
 }

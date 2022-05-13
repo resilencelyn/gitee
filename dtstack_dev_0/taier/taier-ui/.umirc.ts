@@ -4,6 +4,8 @@ import MonacoWebpackPlugin from 'monaco-editor-webpack-plugin';
 export default defineConfig({
 	title: 'Taier | DTStack',
 	favicon: 'images/favicon.png',
+	hash: true,
+	ignoreMomentLocale: true,
 	targets: {
 		ios: false,
 	},
@@ -27,9 +29,14 @@ export default defineConfig({
 		memo.entry('sparksql.worker').add(
 			'monaco-sql-languages/out/esm/sparksql/sparksql.worker.js',
 		);
+		memo.entry('hivesql.worker').add('monaco-sql-languages/out/esm/hivesql/hivesql.worker.js');
+		memo.entry('mysql.worker').add('monaco-sql-languages/out/esm/mysql/mysql.worker.js');
+		memo.entry('flinksql.worker').add(
+			'monaco-sql-languages/out/esm/flinksql/flinksql.worker.js',
+		);
 		memo.plugin('monaco-editor').use(MonacoWebpackPlugin, [
 			{
-				languages: ['markdown', 'json'],
+				languages: ['json'],
 			},
 		]);
 		return memo;
@@ -37,14 +44,12 @@ export default defineConfig({
 	esbuild: {},
 	theme: {
 		'primary-color': '#3f87ff',
-		// 'link-color': 'var(--textLink-foreground)',
 		'border-radius-base': '0px',
 	},
 	tailwindcss: {},
 	proxy: {
 		'/taier': {
-			target: 'http://172.16.100.225:7001/proxy/121',
-			// target: 'http://192.168.96.73:8090',
+			target: 'http://localhost:8090',
 			changeOrigin: true,
 			secure: false,
 		},

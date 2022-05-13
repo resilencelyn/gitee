@@ -1,0 +1,24 @@
+<nz-modal (nzOnCancel)="handlerCancel()" [(nzVisible)]="visible" nzMaskClosable="false" [nzFooter]="null"
+          nzTitle="{{'common.column'|translate}}{{'common.action'|translate}}" nzWidth="80%">
+  <div *nzModalContent>
+    <app-component-preview-column *ngIf="menu.command === operation.preview" [config]="config"
+                                  [value]="value?.origin?.key" [database]="database" [table]="table">
+    </app-component-preview-column>
+    <app-component-delete-column *ngIf="menu.command === operation.delete" [config]="config"
+                                 [value]="value?.origin?.key" [database]="database" [table]="table"
+                                 (emitter)="handlerEmitter($event)">
+    </app-component-delete-column>
+    <app-component-rename-column *ngIf="menu.command === operation.rename" [config]=" config"
+                                 [value]="value?.origin?.key" [database]="database" [table]="table"
+                                 (emitter)="handlerEmitter($event)">
+    </app-component-rename-column>
+    <app-component-create-column *ngIf="menu.command === operation.create" [config]="config"
+                                 [value]="value?.origin?.key" [database]="database" [table]="table"
+                                 (emitter)="handlerEmitter($event)">
+    </app-component-create-column>
+    <app-component-comment-column *ngIf="menu.command === operation.comment" [config]="config"
+                                  [value]="value?.origin?.key" [database]="database" [table]="table"
+                                  (emitter)="handlerEmitter($event)">
+    </app-component-comment-column>
+  </div>
+</nz-modal>

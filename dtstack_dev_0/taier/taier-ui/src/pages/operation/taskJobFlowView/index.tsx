@@ -29,9 +29,16 @@ import { taskStatusText } from '@/utils/enums';
 
 import Api from '@/api/operation';
 import JobGraphView, { mergeTreeNodes } from './jobGraphView';
-import { TASK_TYPE_ENUM, TASK_STATUS, RESTART_STATUS_ENUM } from '@/constant';
+import {
+	TASK_TYPE_ENUM,
+	TASK_STATUS,
+	RESTART_STATUS_ENUM,
+	FAILED_STATUS,
+	PARENTFAILED_STATUS,
+	RUN_FAILED_STATUS,
+} from '@/constant';
 import type { IScheduleTaskProps } from '../schedule';
-import type { ITaskStreamProps } from '@/interface';
+import type { IUpstreamJobProps } from '@/interface';
 import { DIRECT_TYPE_ENUM } from '@/interface';
 import { goToTaskDev } from '@/utils';
 import './index.scss';
@@ -78,7 +85,7 @@ class TaskJobFlowView extends React.Component<any, any> {
 	isCurrentProjectTask = (node: any) => {
 		return !node?.existsOnRule || false;
 	};
-	renderGraph = (data: ITaskStreamProps) => {
+	renderGraph = (data: IUpstreamJobProps) => {
 		const originData = this._originData;
 		if (originData) {
 			mergeTreeNodes(originData, data);
@@ -124,7 +131,7 @@ class TaskJobFlowView extends React.Component<any, any> {
 			...params,
 		}).then((res) => {
 			if (res.code === 1 && res.data?.rootNode) {
-				const data = res.data.rootNode as ITaskStreamProps;
+				const data = res.data.rootNode as IUpstreamJobProps;
 				ctx.setState({ selectedJob: data, data });
 				ctx.renderGraph(data);
 			}
@@ -145,41 +152,41 @@ class TaskJobFlowView extends React.Component<any, any> {
 			if (res.code === 1) {
 				!isNext
 					? ctx.setState(
-							{
-								frontPeriodsList: res.data || [],
-							},
-							() => {
-								ctx.state.frontPeriodsList.map((item: any) => {
-									const statusText = taskStatusText(item.status);
-									return menu.addItem(
-										`${item.cycTime} (${statusText})`,
-										null,
-										function () {
-											ctx.loadByJobId(item.jobId);
-										},
-										periodsType,
-									);
-								});
-							},
-					  )
+					{
+						frontPeriodsList: res.data || [],
+					},
+					() => {
+						ctx.state.frontPeriodsList.map((item: any) => {
+							const statusText = taskStatusText(item.status);
+							return menu.addItem(
+								`${item.cycTime} (${statusText})`,
+								null,
+								function () {
+									ctx.loadByJobId(item.jobId);
+								},
+								periodsType,
+							);
+						});
+					},
+					)
 					: ctx.setState(
-							{
-								nextPeriodsList: res.data || [],
-							},
-							() => {
-								ctx.state.nextPeriodsList.map((item: any) => {
-									const statusText = taskStatusText(item.status);
-									return menu.addItem(
-										`${item.cycTime} (${statusText})`,
-										null,
-										function () {
-											ctx.loadByJobId(item.jobId);
-										},
-										periodsType,
-									);
-								});
-							},
-					  );
+					{
+						nextPeriodsList: res.data || [],
+					},
+					() => {
+						ctx.state.nextPeriodsList.map((item: any) => {
+							const statusText = taskStatusText(item.status);
+							return menu.addItem(
+								`${item.cycTime} (${statusText})`,
+								null,
+								function () {
+									ctx.loadByJobId(item.jobId);
+								},
+								periodsType,
+							);
+						});
+					},
+					);
 			}
 		});
 	};
@@ -304,9 +311,9 @@ class TaskJobFlowView extends React.Component<any, any> {
 					null,
 					// 显示终止操作
 					currentNode.status === TASK_STATUS.WAIT_SUBMIT || // 等待提交
-						currentNode.status === TASK_STATUS.SUBMITTING || // 提交中
-						currentNode.status === TASK_STATUS.WAIT_RUN || // 等待运行
-						currentNode.status === TASK_STATUS.RUNNING, // 运行中
+					currentNode.status === TASK_STATUS.SUBMITTING || // 提交中
+					currentNode.status === TASK_STATUS.WAIT_RUN || // 等待运行
+					currentNode.status === TASK_STATUS.RUNNING, // 运行中
 				);
 
 				menu.addItem('刷新任务实例', null, function () {
@@ -331,10 +338,10 @@ class TaskJobFlowView extends React.Component<any, any> {
 					},
 					null,
 					null,
-					// （运行失败、提交失败）重跑并恢复调度
-					currentNode.status === TASK_STATUS.RUN_FAILED ||
-						currentNode.status === TASK_STATUS.STOPED ||
-						currentNode.status === TASK_STATUS.SUBMIT_FAILED,
+					// 所有「失败」任务重跑并恢复调度
+					[FAILED_STATUS, PARENTFAILED_STATUS, RUN_FAILED_STATUS].some((collection) =>
+						collection.includes(currentNode.status),
+					),
 				);
 			};
 		}

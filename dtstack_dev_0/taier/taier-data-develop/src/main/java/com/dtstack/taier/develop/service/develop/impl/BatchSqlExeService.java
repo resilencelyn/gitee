@@ -25,17 +25,17 @@ import com.dtstack.taier.common.enums.ETableType;
 import com.dtstack.taier.common.enums.MultiEngineType;
 import com.dtstack.taier.common.exception.RdosDefineException;
 import com.dtstack.taier.common.util.PublicUtil;
-import com.dtstack.taier.dao.domain.BatchTask;
+import com.dtstack.taier.dao.domain.Task;
 import com.dtstack.taier.dao.domain.TenantComponent;
 import com.dtstack.taier.develop.bo.ExecuteContent;
-import com.dtstack.taier.develop.utils.develop.common.util.SqlFormatUtil;
-import com.dtstack.taier.develop.service.develop.MultiEngineServiceFactory;
+import com.dtstack.taier.develop.dto.devlop.CheckSyntaxResult;
+import com.dtstack.taier.develop.dto.devlop.ExecuteResultVO;
 import com.dtstack.taier.develop.service.develop.ISqlExeService;
+import com.dtstack.taier.develop.service.develop.MultiEngineServiceFactory;
 import com.dtstack.taier.develop.sql.ParseResult;
 import com.dtstack.taier.develop.sql.SqlParserImpl;
 import com.dtstack.taier.develop.sql.parse.SqlParserFactory;
-import com.dtstack.taier.develop.dto.devlop.CheckSyntaxResult;
-import com.dtstack.taier.develop.dto.devlop.ExecuteResultVO;
+import com.dtstack.taier.develop.utils.develop.common.util.SqlFormatUtil;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
@@ -284,7 +284,7 @@ public class BatchSqlExeService {
      * @param executeContent
      */
     private void prepareExecuteContent(final ExecuteContent executeContent) {
-        BatchTask one = batchTaskService.getOneWithError(executeContent.getTaskId());
+        Task one = batchTaskService.getOneWithError(executeContent.getTaskId());
         String taskParam = one.getTaskParams();
 
         ISqlExeService sqlExeService = this.multiEngineServiceFactory.getSqlExeService(executeContent.getTaskType());
@@ -349,7 +349,12 @@ public class BatchSqlExeService {
     private ParseResult parseSql(final ExecuteContent executeContent) {
         String dbName = this.getDbName(executeContent);
         executeContent.setDatabase(dbName);
-        TenantComponent tenantEngine = developTenantComponentService.getByTenantAndEngineType(executeContent.getTenantId(), executeContent.getTaskType());
+        TenantComponent tenantEngine = null;
+        if (executeContent.getTaskType().equals(EScheduleJobType.HIVE_SQL.getType())){
+            tenantEngine = developTenantComponentService.getByTenantAndEngineType(executeContent.getTenantId(), EScheduleJobType.SPARK_SQL.getType());
+        }else {
+             tenantEngine = developTenantComponentService.getByTenantAndEngineType(executeContent.getTenantId(), executeContent.getTaskType());
+        }
         Preconditions.checkNotNull(tenantEngine, String.format("tenantEngine %d not support hadoop engine.", executeContent.getTenantId()));
 
         SqlParserImpl sqlParser = parserFactory.getSqlParser(ETableType.HIVE);

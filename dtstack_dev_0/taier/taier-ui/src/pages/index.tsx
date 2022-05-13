@@ -16,15 +16,17 @@
  * limitations under the License.
  */
 
+import 'reflect-metadata';
 import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import type { IPersonLists } from '@/context';
 import Context from '@/context';
 import { history } from 'umi';
 import { extensions } from '@/extensions';
-import { MoleculeProvider } from '@dtinsight/molecule';
+import molecule, { MoleculeProvider } from '@dtinsight/molecule';
 import Workbench from './workbench';
 import API from '@/api/operation';
 import Task from '@/pages/operation/task';
+import StreamTask from '@/pages/operation/streamTask';
 import Schedule from '@/pages/operation/schedule';
 import Patch from '@/pages/operation/patch';
 import Layout from '@/layout';
@@ -33,24 +35,23 @@ import { Breadcrumb, Button } from 'antd';
 import PatchDetail from './operation/patch/detail';
 import Login from './login';
 import CustomDrawer from '@/components/customDrawer';
-import { CONSOLE, DRAWER_MENU_ENUM, OPERATIONS } from '@/constant';
+import { CONSOLE, DRAWER_MENU_ENUM } from '@/constant';
 import QueueManage from './console/queue';
 import TaskDetail from './console/taskDetail';
 import ResourceManage from './console/resource';
 import ClusterManage from './console/cluster';
 import EditCluster from './console/cluster/newEdit';
+import type { IEditClusterRefProps } from './console/cluster/newEdit/interface';
 import { getCookie } from '@/utils';
 import { isViewMode } from './console/cluster/newEdit/help';
-import 'antd/dist/antd.less';
 import '@dtinsight/molecule/esm/style/mo.css';
-import '@ant-design/compatible/assets/index.css';
 import './index.scss';
 
 export default function HomePage() {
 	const [personList, setPersonList] = useState<IPersonLists[]>([]);
 	const [username, setUsername] = useState<string | undefined>(undefined);
 	const loading = useRef(false);
-	const refs = useRef<any>(null);
+	const refs = useRef<IEditClusterRefProps>(null);
 
 	const checkLoginStatus = () => {
 		const usernameInCookie = getCookie('username');
@@ -61,7 +62,7 @@ export default function HomePage() {
 	};
 
 	const handleTestConnects = async () => {
-		refs.current.testConnects(undefined, (bool: boolean) => {
+		refs.current?.testConnects(undefined, (bool: boolean) => {
 			loading.current = bool;
 			updateDrawer({
 				id: 'root',
@@ -96,7 +97,7 @@ export default function HomePage() {
 				>
 					测试所有组件连通性
 				</Button>
-				<Button type="primary" onClick={() => refs.current.handleComplete()}>
+				<Button type="primary" onClick={() => refs.current?.handleComplete()}>
 					完成
 				</Button>
 			</>
@@ -116,6 +117,7 @@ export default function HomePage() {
 	const openDrawer = (drawerId: string) => {
 		switch (drawerId) {
 			case DRAWER_MENU_ENUM.TASK:
+			case DRAWER_MENU_ENUM.STREAM_TASK:
 			case DRAWER_MENU_ENUM.SCHEDULE:
 			case DRAWER_MENU_ENUM.PATCH:
 				updateDrawer({
@@ -124,7 +126,7 @@ export default function HomePage() {
 					title: (
 						<Breadcrumb>
 							<Breadcrumb.Item>
-								{OPERATIONS.find((i) => i.id === drawerId)?.name || 'Default'}
+								{molecule.menuBar.getMenuById(drawerId)?.name || 'Default'}
 							</Breadcrumb.Item>
 						</Breadcrumb>
 					),
@@ -133,6 +135,8 @@ export default function HomePage() {
 							switch (drawerId) {
 								case DRAWER_MENU_ENUM.TASK:
 									return <Task />;
+								case DRAWER_MENU_ENUM.STREAM_TASK:
+									return <StreamTask />;
 								case DRAWER_MENU_ENUM.SCHEDULE:
 									return <Schedule />;
 								case DRAWER_MENU_ENUM.PATCH:
@@ -294,6 +298,24 @@ export default function HomePage() {
 			}
 		});
 		return unlisten;
+	}, []);
+
+	useEffect(() => {
+		function handleBeforeLeave(e: BeforeUnloadEvent) {
+			const { groups } = molecule.editor.getState();
+			if (groups?.length) {
+				// refer to: https://developer.mozilla.org/en-US/docs/Web/API/BeforeUnloadEvent
+				// prettier-ignore
+				// eslint-disable-next-line no-useless-escape
+				const confirmationMessage = '\o/';
+				e.preventDefault();
+				(e || window.event).returnValue = confirmationMessage; // Gecko + IE
+				return confirmationMessage; // Webkit, Safari, Chrome
+			}
+		}
+		window.addEventListener('beforeunload', handleBeforeLeave);
+
+		return () => window.removeEventListener('beforeunload', handleBeforeLeave);
 	}, []);
 
 	return (

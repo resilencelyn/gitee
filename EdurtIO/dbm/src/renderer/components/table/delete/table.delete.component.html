@@ -1,0 +1,56 @@
+<div>
+  <form nz-form>
+    <nz-form-item *ngIf="tableInfo?.flag">
+      <nz-form-control [nzSpan]="24">
+        <nz-alert nzBanner nzType="error" nzMessage="{{'alert.table_delete_grate_50'|translate}}">
+        </nz-alert>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="24">
+        <nz-alert nzBanner nzMessage="{{'alert.delete_it'|translate}}">
+        </nz-alert>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="24">
+        <nz-tag [nzColor]="'#f50'">{{'common.no_rollback'|translate}}</nz-tag>
+        The metadata will be removed from the Clickhouse metadata
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="24">
+        <nz-tag [nzColor]="'#f50'">{{'common.no_rollback'|translate}}</nz-tag>
+        All data files generated in this table will be removed from the relevant Clickhouse server file system
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="24">
+        To confirm the deletion, enter the table name and click the Delete button below
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="24">
+        <nz-input-group [nzAddOnBefore]="addOnBefore" [nzAddOnAfter]="suffixButton">
+          <input type="text" name="inputValue" nz-input [disabled]="tableInfo?.flag === 1" [(ngModel)]="inputValue"
+                 (change)="handlerValidate()"/>
+        </nz-input-group>
+        <ng-template #addOnBefore>
+          <button nz-button nzDanger nzType="link">{{value}}</button>
+        </ng-template>
+        <ng-template #suffixButton>
+          <button nz-button nzType="link" [disabled]="tableInfo?.flag === 1"
+                  (click)="handlerQuicklyEnter()">{{'common.quicklyEnter'|translate}}</button>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>
+<div class="ant-modal-footer" style="padding: 10px;margin-bottom: -20px;margin-top: 20px;">
+  <div class="ng-star-inserted">
+    <button nz-button nzType="primary" nzDanger [disabled]="disabled.button" [nzLoading]="loading.button"
+            (click)="handlerDelete()">
+      <span>{{'common.delete'|translate}}</span>
+    </button>
+  </div>
+</div>

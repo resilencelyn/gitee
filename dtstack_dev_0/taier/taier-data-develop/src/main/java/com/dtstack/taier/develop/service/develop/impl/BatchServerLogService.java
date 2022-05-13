@@ -31,18 +31,21 @@ import com.dtstack.taier.common.exception.RdosDefineException;
 import com.dtstack.taier.common.metric.batch.IMetric;
 import com.dtstack.taier.common.metric.batch.MetricBuilder;
 import com.dtstack.taier.common.metric.prometheus.PrometheusMetricQuery;
-import com.dtstack.taier.common.util.*;
-import com.dtstack.taier.dao.domain.BatchTask;
+import com.dtstack.taier.common.util.DataFilter;
+import com.dtstack.taier.common.util.JsonUtils;
+import com.dtstack.taier.common.util.MathUtil;
+import com.dtstack.taier.common.util.TaskParamsUtils;
 import com.dtstack.taier.dao.domain.BatchTaskParamShade;
 import com.dtstack.taier.dao.domain.ScheduleJob;
 import com.dtstack.taier.dao.domain.ScheduleTaskShade;
+import com.dtstack.taier.dao.domain.Task;
 import com.dtstack.taier.dao.dto.BatchTaskVersionDetailDTO;
 import com.dtstack.taier.develop.common.convert.BinaryConversion;
 import com.dtstack.taier.develop.dto.devlop.BatchServerLogVO;
 import com.dtstack.taier.develop.dto.devlop.SyncStatusLogInfoVO;
 import com.dtstack.taier.develop.enums.develop.YarnAppLogType;
 import com.dtstack.taier.develop.service.schedule.TaskService;
-import com.dtstack.taier.develop.utils.develop.common.util.SqlFormatterUtil;
+import com.dtstack.taier.develop.utils.develop.common.util.SqlFormatUtil;
 import com.dtstack.taier.develop.utils.develop.service.impl.Engine2DTOService;
 import com.dtstack.taier.develop.vo.develop.result.BatchServerLogByAppLogTypeResultVO;
 import com.dtstack.taier.pluginapi.enums.ComputeType;
@@ -107,8 +110,8 @@ public class BatchServerLogService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String DOWNLOAD_LOG = "/taier/developDownload/downloadJobLog?jobId=%s&taskType=%s&projectId=%s";
-    private static final String DOWNLOAD_TYPE_LOG = "/taier/developDownload/downloadAppTypeLog?jobId=%s&logType=%s&projectId=%s";
+    private static final String DOWNLOAD_LOG = "/taier/developDownload/downloadJobLog?jobId=%s&taskType=%s";
+    private static final String DOWNLOAD_TYPE_LOG = "/taier/developDownload/downloadAppTypeLog?jobId=%s&logType=%s";
 
 
     private static final int SECOND_LENGTH = 10;
@@ -170,17 +173,17 @@ public class BatchServerLogService {
         info.put("status", job.getStatus());
         if (EScheduleJobType.SPARK_SQL.getVal().equals(scheduleTaskShade.getTaskType())) {
             // 处理sql注释，先把注释base64编码，再处理非注释的自定义参数
-            String sql = SqlFormatterUtil.dealAnnotationBefore(scheduleTaskShade.getSqlText());
+            String sql = SqlFormatUtil.dealAnnotationBefore(scheduleTaskShade.getSqlText());
             final List<BatchTaskParamShade> taskParamsToReplace = this.batchTaskParamShadeService.getTaskParam(scheduleTaskShade.getId());
             sql = this.jobParamReplace.paramReplace(sql, taskParamsToReplace, job.getCycTime());
-            sql = SqlFormatterUtil.dealAnnotationAfter(sql);
+            sql = SqlFormatUtil.dealAnnotationAfter(sql);
             info.put("sql", sql);
         } else if (EScheduleJobType.SYNC.getVal().equals(scheduleTaskShade.getTaskType())) {
             final JSONObject jobJson;
             //taskShade 需要解码
             JSONObject sqlJson = null;
             try {
-                sqlJson = JSON.parseObject(Base64Util.baseDecode(scheduleTaskShade.getSqlText()));
+                sqlJson = JSON.parseObject(scheduleTaskShade.getSqlText());
             } catch (final Exception e) {
                 sqlJson = JSON.parseObject(scheduleTaskShade.getSqlText());
             }
@@ -230,7 +233,7 @@ public class BatchServerLogService {
                 && !scheduleTaskShade.getTaskType().equals(EScheduleJobType.VIRTUAL.getVal())
                 && !scheduleTaskShade.getTaskType().equals(EScheduleJobType.WORK_FLOW.getVal())
                 && TaskStatus.getStoppedStatus().contains(job.getStatus())) {
-            batchServerLogVO.setDownloadLog(String.format(DOWNLOAD_LOG, jobId, scheduleTaskShade.getTaskType(),0L));
+            batchServerLogVO.setDownloadLog(String.format(DOWNLOAD_LOG, jobId, scheduleTaskShade.getTaskType()));
         }
 
         batchServerLogVO.setName(scheduleTaskShade.getName());
@@ -564,7 +567,7 @@ public class BatchServerLogService {
 
             String perfLogInfo = jobInfoMap.getOrDefault("perf", StringUtils.EMPTY).toString();
             final boolean parsePerfLog = startTime != null && endTime != null
-                    && jobInfoMap.get("jobid") != null && this.environmentContext.getSyncLogPromethues();
+                    && jobInfoMap.get("jobid") != null;
 
             if (parsePerfLog) {
                 perfLogInfo = this.formatPerfLogInfo(jobInfoMap.get("jobid").toString(),jobId, startTime.getTime(), endTime.getTime(), tenantId);
@@ -621,9 +624,9 @@ public class BatchServerLogService {
         if (job.getTaskId() == null || job.getTaskId() == -1){
             throw new RdosDefineException(ErrorCode.CAN_NOT_FIND_TASK);
         }
-        BatchTask batchTaskById = batchTaskService.getBatchTaskById(job.getTaskId());
+        Task batchTaskById = batchTaskService.getBatchTaskById(job.getTaskId());
         //prometheus的配置信息 从控制台获取
-        final Pair<String, String> prometheusHostAndPort = this.getPrometheusHostAndPort(tenantId,batchTaskById.getTaskParams());
+        final Pair<String, String> prometheusHostAndPort = this.getPrometheusHostAndPort(tenantId,batchTaskById.getTaskParams(),ComputeType.BATCH);
         if (prometheusHostAndPort == null){
             return "promethues配置为空";
         }
@@ -649,7 +652,7 @@ public class BatchServerLogService {
         return formatPerfLogInfo.buildReadableLog();
     }
 
-    private Pair<String,String> getPrometheusHostAndPort(final Long tenantId, final String taskParams){
+    public Pair<String,String> getPrometheusHostAndPort(final Long tenantId, final String taskParams,ComputeType computeType){
         Boolean hasStandAlone = clusterService.hasStandalone(tenantId, EComponentType.FLINK.getTypeCode());
         JSONObject flinkJsonObject ;
         if (hasStandAlone) {
@@ -661,7 +664,7 @@ public class BatchServerLogService {
                 LOGGER.info("console tenantId {} pluginInfo is null", tenantId);
                 return null;
             }
-            EDeployMode deployModeEnum = TaskParamsUtils.parseDeployTypeByTaskParams(taskParams,ComputeType.BATCH.getType());
+            EDeployMode deployModeEnum = TaskParamsUtils.parseDeployTypeByTaskParams(taskParams,computeType.getType());
             flinkJsonObject = jsonObject.getJSONObject(deployModeEnum.name().toLowerCase(Locale.ROOT));
         }
         String prometheusHost = flinkJsonObject.getString("prometheusHost");
@@ -712,7 +715,7 @@ public class BatchServerLogService {
     }
 
 
-    public JSONObject getLogsByAppId(Long tenantId, Integer taskType, String jobId, Long projectId) {
+    public JSONObject getLogsByAppId(Long tenantId, Integer taskType, String jobId) {
         if (EScheduleJobType.SYNC.getVal().equals(taskType)
                 || EScheduleJobType.VIRTUAL.getVal().equals(taskType)
                 || EScheduleJobType.WORK_FLOW.getVal().equals(taskType)) {
@@ -724,14 +727,14 @@ public class BatchServerLogService {
                     type.name().toUpperCase(), taskType);
             final JSONObject typeLog = new JSONObject(2);
             typeLog.put("msg", msg);
-            typeLog.put("download", String.format(BatchServerLogService.DOWNLOAD_TYPE_LOG, jobId, type.name().toUpperCase(),projectId));
+            typeLog.put("download", String.format(BatchServerLogService.DOWNLOAD_TYPE_LOG, jobId, type.name().toUpperCase()));
             result.put(type.name(), typeLog);
         }
 
         return result;
     }
 
-    public BatchServerLogByAppLogTypeResultVO getLogsByAppLogType(Long tenantId, Integer taskType, String jobId, String logType, Long projectId) {
+    public BatchServerLogByAppLogTypeResultVO getLogsByAppLogType(Long tenantId, Integer taskType, String jobId, String logType) {
         if (EScheduleJobType.SYNC.getVal().equals(taskType)
                 || EScheduleJobType.VIRTUAL.getVal().equals(taskType)
                 || EScheduleJobType.WORK_FLOW.getVal().equals(taskType)) {
@@ -746,7 +749,7 @@ public class BatchServerLogService {
                 logType.toUpperCase(), taskType);
         BatchServerLogByAppLogTypeResultVO resultVO = new BatchServerLogByAppLogTypeResultVO();
         resultVO.setMsg(msg);
-        resultVO.setDownload(String.format(BatchServerLogService.DOWNLOAD_TYPE_LOG, jobId, logType,projectId));
+        resultVO.setDownload(String.format(BatchServerLogService.DOWNLOAD_TYPE_LOG, jobId, logType));
 
         return resultVO;
     }

@@ -21,15 +21,42 @@ package com.dtstack.taier.develop.controller.develop;
 import com.alibaba.fastjson.JSONObject;
 import com.dtstack.taier.common.lang.coc.APITemplate;
 import com.dtstack.taier.common.lang.web.R;
-import com.dtstack.taier.develop.dto.devlop.BatchTaskBatchVO;
 import com.dtstack.taier.develop.dto.devlop.TaskResourceParam;
+import com.dtstack.taier.develop.dto.devlop.TaskVO;
 import com.dtstack.taier.develop.mapstruct.vo.TaskMapstructTransfer;
 import com.dtstack.taier.develop.service.develop.impl.BatchTaskService;
-import com.dtstack.taier.develop.vo.develop.query.*;
-import com.dtstack.taier.develop.vo.develop.result.*;
+import com.dtstack.taier.develop.service.develop.impl.FlinkTaskService;
+import com.dtstack.taier.develop.vo.develop.query.AllProductGlobalSearchVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchDataSourceIncreColumnVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchFrozenTaskVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchScheduleTaskVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskCheckIsLoopVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskCheckNameVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskDeleteTaskVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskGetByNameVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskGetChildTasksVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskGetComponentVersionVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskGetSupportJobTypesVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskGetTaskVersionRecordVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskPublishTaskVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskResourceParamVO;
+import com.dtstack.taier.develop.vo.develop.query.BatchTaskTaskVersionScheduleConfVO;
+import com.dtstack.taier.develop.vo.develop.query.OperateTaskVO;
+import com.dtstack.taier.develop.vo.develop.query.StartTaskVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchAllProductGlobalReturnVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchGetChildTasksResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchSysParameterResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchTaskGetComponentVersionResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchTaskGetSupportJobTypesResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchTaskGetTaskByIdResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchTaskPublishTaskResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchTaskResultVO;
+import com.dtstack.taier.develop.vo.develop.result.BatchTaskVersionDetailResultVO;
+import com.dtstack.taier.develop.vo.develop.result.TaskCatalogueResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,11 +67,13 @@ import java.util.List;
 
 @Api(value = "任务管理", tags = {"任务管理"})
 @RestController
-@RequestMapping(value = "/batchTask")
+@RequestMapping(value = "/task")
 public class DevelopTaskController {
 
     @Autowired
     private BatchTaskService batchTaskService;
+    @Autowired
+    private FlinkTaskService flinkTaskService;
 
     @PostMapping(value = "getTaskById")
     @ApiOperation("数据开发-根据任务id，查询详情")
@@ -52,8 +81,8 @@ public class DevelopTaskController {
         return new APITemplate<BatchTaskGetTaskByIdResultVO>() {
             @Override
             protected BatchTaskGetTaskByIdResultVO process() {
-                BatchTaskBatchVO batchTaskBatchVO =  batchTaskService.getTaskById(TaskMapstructTransfer.INSTANCE.BatchScheduleTaskVToScheduleTaskVO(batchScheduleTaskVO));
-                return TaskMapstructTransfer.INSTANCE.BatchTaskBatchVOToBatchTaskGetTaskByIdResultVO(batchTaskBatchVO);
+                TaskVO taskById = batchTaskService.getTaskById(TaskMapstructTransfer.INSTANCE.BatchScheduleTaskVToTaskVO(batchScheduleTaskVO));
+                return TaskMapstructTransfer.INSTANCE.TaskVOToBatchTaskGetTaskByIdResultVO(taskById);
             }
         }.execute();
     }
@@ -75,8 +104,8 @@ public class DevelopTaskController {
         return new APITemplate<BatchTaskPublishTaskResultVO>() {
             @Override
             protected BatchTaskPublishTaskResultVO process() {
-                return TaskMapstructTransfer.INSTANCE.TaskCheckResultVOToBatchTaskPublishTaskResultVO(batchTaskService.publishTask(detailVO.getTenantId(),
-                        detailVO.getId(), detailVO.getUserId(), detailVO.getPublishDesc(), detailVO.getIsRoot(), detailVO.getIgnoreCheck()));
+                return TaskMapstructTransfer.INSTANCE.TaskCheckResultVOToBatchTaskPublishTaskResultVO(batchTaskService.publishTask(detailVO.getId(),
+                        detailVO.getUserId(), detailVO.getPublishDesc(), detailVO.getComponentVersion()));
             }
         }.execute();
     }
@@ -113,7 +142,18 @@ public class DevelopTaskController {
             @Override
             protected TaskCatalogueResultVO process() {
                 TaskResourceParam taskResourceParam = TaskMapstructTransfer.INSTANCE.TaskResourceParamVOToTaskResourceParam(paramVO);
-                return TaskMapstructTransfer.INSTANCE.TaskCatalogueVOToResultVO(batchTaskService.addOrUpdateTask(taskResourceParam));
+                return TaskMapstructTransfer.INSTANCE.TaskVOToResultVO(batchTaskService.addOrUpdateTask(taskResourceParam));
+            }
+        }.execute();
+    }
+
+    @PostMapping(value = "canSetIncreConf")
+    @ApiOperation(value = "判断任务是否可以配置增量标识")
+    public R<Boolean> canSetIncreConf(@RequestBody BatchScheduleTaskVO vo) {
+        return new APITemplate<Boolean>() {
+            @Override
+            protected Boolean process() {
+                return batchTaskService.canSetIncreConf(vo.getId());
             }
         }.execute();
     }
@@ -152,18 +192,6 @@ public class DevelopTaskController {
         }.execute();
     }
 
-    @PostMapping(value = "forceUpdate")
-    @ApiOperation("覆盖更新")
-    public R<TaskCatalogueResultVO> forceUpdate(@RequestBody BatchTaskResourceParamVO paramVO) {
-        return new APITemplate<TaskCatalogueResultVO>() {
-            @Override
-            protected TaskCatalogueResultVO process() {
-                TaskResourceParam taskResource = TaskMapstructTransfer.INSTANCE.TaskResourceParamVOToTaskResourceParam(paramVO);
-                return TaskMapstructTransfer.INSTANCE.TaskCatalogueVOToResultVO(batchTaskService.forceUpdate(taskResource));
-            }
-        }.execute();
-    }
-
     @PostMapping(value = "getSysParams")
     @ApiOperation("获取所有系统参数")
     public R<Collection<BatchSysParameterResultVO>> getSysParams() {
@@ -181,7 +209,7 @@ public class DevelopTaskController {
         return new APITemplate<Void>() {
             @Override
             protected Void process() {
-                batchTaskService.checkName(detailVO.getName(), detailVO.getType(), detailVO.getPid(), detailVO.getIsFile(),  detailVO.getProjectId());
+                batchTaskService.checkName(detailVO.getName(), detailVO.getType(), detailVO.getPid(), detailVO.getIsFile(), detailVO.getTenantId());
                 return null;
             }
         }.execute();
@@ -193,7 +221,7 @@ public class DevelopTaskController {
         return new APITemplate<BatchTaskResultVO>() {
             @Override
             protected BatchTaskResultVO process() {
-                return TaskMapstructTransfer.INSTANCE.BatchTaskToResultVO(batchTaskService.getByName(detailVO.getName(), detailVO.getProjectId()));
+                return TaskMapstructTransfer.INSTANCE.BatchTaskToResultVO(batchTaskService.getByName(detailVO.getName(), detailVO.getTenantId()));
             }
         }.execute();
     }
@@ -205,17 +233,6 @@ public class DevelopTaskController {
             @Override
             protected List<BatchTaskGetComponentVersionResultVO> process() {
                 return batchTaskService.getComponentVersionByTaskType(getComponentVersionVO.getTenantId(), getComponentVersionVO.getTaskType());
-            }
-        }.execute();
-    }
-
-    @PostMapping(value = "trace")
-    @ApiOperation(value = "追踪")
-    public R<JSONObject> trace(@RequestBody BatchDataSourceTraceVO vo) {
-        return new APITemplate<JSONObject>() {
-            @Override
-            protected JSONObject process() {
-                return batchTaskService.trace(vo.getTaskId());
             }
         }.execute();
     }
@@ -239,6 +256,29 @@ public class DevelopTaskController {
             protected Void process() {
                 batchTaskService.frozenTask(vo.getTaskId(), vo.getScheduleStatus(), vo.getUserId());
                 return null;
+            }
+        }.execute();
+    }
+
+
+    @PostMapping(value = "getSupportJobTypes")
+    @ApiOperation("根据支持的引擎类型返回")
+    public R<List<BatchTaskGetSupportJobTypesResultVO>> getSupportJobTypes(@RequestBody(required = false) BatchTaskGetSupportJobTypesVO detailVO) {
+        return new APITemplate<List<BatchTaskGetSupportJobTypesResultVO>>() {
+            @Override
+            protected List<BatchTaskGetSupportJobTypesResultVO>  process() {
+                return batchTaskService.getSupportJobTypes(detailVO.getTenantId());
+            }
+        }.execute();
+    }
+
+    @PostMapping(value = "getIncreColumn")
+    @ApiOperation(value = "获取可以作为增量标识的字段")
+    public R<List<JSONObject>> getIncreColumn(@RequestBody(required = false) BatchDataSourceIncreColumnVO vo) {
+        return new APITemplate<List<JSONObject>>() {
+            @Override
+            protected List<JSONObject> process() {
+                return batchTaskService.getIncreColumn(vo.getSourceId(), vo.getTableName(), vo.getSchema());
             }
         }.execute();
     }

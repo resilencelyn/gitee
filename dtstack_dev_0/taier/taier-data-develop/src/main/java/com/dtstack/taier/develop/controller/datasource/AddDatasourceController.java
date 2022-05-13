@@ -29,6 +29,7 @@ import com.dtstack.taier.develop.vo.develop.query.BatchDataSourceTableListVO;
 import com.dtstack.taier.develop.vo.develop.query.BatchDataSourceTableLocationVO;
 import com.dtstack.taier.develop.vo.develop.query.BatchDatasourceTableCreateSQLVO;
 import com.dtstack.taier.develop.vo.develop.query.BatchDatasourceTableCreateVO;
+import com.dtstack.taier.develop.vo.develop.query.KafkaTopicGetVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -132,7 +133,7 @@ public class AddDatasourceController {
                 params.remove(RESOURCE);
                 DataSourceVO dataSourceVo = PublicUtil.mapToObject(params, DataSourceVO.class);
                 params.put(RESOURCE, resource);
-                return datasourceService.checkConnectionWithKerberos(dataSourceVo, resource, dataSourceVo.getProjectId(), dataSourceVo.getUserId());
+                return datasourceService.checkConnectionWithKerberos(dataSourceVo, resource, dataSourceVo.getUserId());
             }
         }.execute();
     }
@@ -215,7 +216,7 @@ public class AddDatasourceController {
         return new APITemplate<List<JSONObject>>() {
             @Override
             protected List<JSONObject> process() {
-                return datasourceService.tablecolumn(vo.getProjectId(), vo.getUserId(), vo.getSourceId(), vo.getTableName(), vo.getIsIncludePart(), vo.getSchema());
+                return datasourceService.tablecolumn(vo.getUserId(), vo.getSourceId(), vo.getTableName(), vo.getIsIncludePart(), vo.getSchema());
             }
         }.execute();
     }

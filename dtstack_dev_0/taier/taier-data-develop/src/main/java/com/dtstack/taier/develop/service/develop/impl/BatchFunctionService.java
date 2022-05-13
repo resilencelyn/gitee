@@ -19,21 +19,26 @@
 package com.dtstack.taier.develop.service.develop.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.dtstack.taier.common.constant.PatternConstant;
 import com.dtstack.taier.common.enums.CatalogueType;
 import com.dtstack.taier.common.enums.Deleted;
+import com.dtstack.taier.common.enums.EScheduleJobType;
 import com.dtstack.taier.common.enums.ETableType;
 import com.dtstack.taier.common.enums.FuncType;
 import com.dtstack.taier.common.enums.FunctionType;
 import com.dtstack.taier.common.exception.ErrorCode;
 import com.dtstack.taier.common.exception.RdosDefineException;
+import com.dtstack.taier.common.util.AssertUtils;
 import com.dtstack.taier.common.util.PublicUtil;
 import com.dtstack.taier.dao.domain.BatchFunction;
 import com.dtstack.taier.dao.domain.BatchFunctionResource;
 import com.dtstack.taier.dao.domain.BatchResource;
+import com.dtstack.taier.dao.domain.Task;
 import com.dtstack.taier.dao.mapper.DevelopFunctionDao;
 import com.dtstack.taier.develop.dto.devlop.BatchFunctionVO;
 import com.dtstack.taier.develop.dto.devlop.TaskCatalogueVO;
+import com.dtstack.taier.develop.enums.develop.FlinkUDFType;
 import com.dtstack.taier.develop.service.user.UserService;
 import com.dtstack.taier.develop.sql.SqlParserImpl;
 import com.dtstack.taier.develop.sql.parse.SqlParserFactory;
@@ -53,6 +58,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +90,16 @@ public class BatchFunctionService {
     @Autowired
     private BatchTaskService batchTaskService;
 
+
+    @Autowired
+    private StreamSqlFormatService streamSqlFormatService;
+
+    public static final List<String> ADD_FUNCTION_NAME = new ArrayList<>();
+    static {
+        ADD_FUNCTION_NAME.add("TIMETOSECOND");
+        ADD_FUNCTION_NAME.add("TIMETOMILLISECOND");
+    }
+
     private SqlParserFactory parserFactory = SqlParserFactory.getInstance();
 
     /**
@@ -98,6 +114,8 @@ public class BatchFunctionService {
      * 创建临时函数
      */
     private static final String CREATE_TEMP_FUNCTION = "create temporary function %s as '%s' using jar '%s';";
+
+    private static String CUSTOM_FUNCTION_TEMPLATE = "CREATE %s FUNCTION %s WITH %s";
 
 
     /**
@@ -124,7 +142,9 @@ public class BatchFunctionService {
      * @return
      */
     public BatchFunctionVO getFunction(Long functionId) {
-        BatchFunction batchFunction = developFunctionDao.getOne(functionId);
+        BatchFunction batchFunction = developFunctionDao.selectOne(Wrappers.lambdaQuery(BatchFunction.class)
+                .eq(BatchFunction::getId,functionId)
+                .eq(BatchFunction::getIsDeleted,Deleted.NORMAL.getStatus()));
         if (Objects.isNull(batchFunction)) {
             return new BatchFunctionVO();
         }
@@ -144,7 +164,7 @@ public class BatchFunctionService {
      * 添加函数
      */
     @Transactional(rollbackFor = Exception.class)
-    public TaskCatalogueVO addOrUpdateFunction(BatchFunction batchFunction, Long resourceId, Long tenantId) {
+    public TaskCatalogueVO addOrUpdateFunction(BatchFunction batchFunction, Long resourceId, Long tenantId, Long userId) {
         if (!PublicUtil.matcher(batchFunction.getName(), PatternConstant.FUNCTION_PATTERN)) {
             throw new RdosDefineException("注意名称只允许存在字母、数字、下划线、横线，hive函数不支持大写字母", ErrorCode.NAME_FORMAT_ERROR);
         }
@@ -162,8 +182,7 @@ public class BatchFunctionService {
 			}
 
 			batchFunction.setType(FuncType.CUSTOM.getType());
-			batchFunction.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
-			addOrUpdate(batchFunction);
+			addOrUpdate(batchFunction, userId);
             addOrUpdateFunctionResource(batchFunction, resourceId);
 			// 添加类目关系
 			TaskCatalogueVO taskCatalogueVO = new TaskCatalogueVO();
@@ -179,12 +198,7 @@ public class BatchFunctionService {
 			return taskCatalogueVO;
 		} catch (Exception e) {
             LOGGER.error("addFunction, functions={},resource={},tenantId={}", JSONObject.toJSONString(batchFunction), resourceId, tenantId);
-            LOGGER.error(e.getMessage(), e);
-            if (e instanceof RdosDefineException) {
-                throw e;
-            } else {
-                throw new RdosDefineException(String.format("添加函数失败：%s", e.getMessage()));
-            }
+            throw new RdosDefineException(String.format("添加函数失败：%s", e.getMessage()), e);
 		}
     }
 
@@ -199,11 +213,13 @@ public class BatchFunctionService {
         batchFunctionResource.setFunctionId(function.getId());
         batchFunctionResource.setTenantId(function.getTenantId());
         batchFunctionResource.setResourceId(resourceId);
-        batchFunctionResource.setResource_Id(resourceId);
         BatchFunctionResource resourceFunctionByFunctionId = getResourceFunctionByFunctionId(function.getId());
         if (Objects.isNull(resourceFunctionByFunctionId)) {
+            batchFunctionResource.setGmtCreate(Timestamp.valueOf(LocalDateTime.now()));
+            batchFunctionResource.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
             batchFunctionResourceService.insert(batchFunctionResource);
         }else {
+            batchFunctionResource.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
             batchFunctionResourceService.updateByFunctionId(batchFunctionResource);
         }
     }
@@ -229,16 +245,23 @@ public class BatchFunctionService {
         }
     }
 
-
     /**
      * 新增、更新 函数信息
-     * @param batchFunction
+     *
+     * @param batchFunction 函数信息
+     * @param userId        用户ID
      * @return
      */
-    private BatchFunction addOrUpdate(BatchFunction batchFunction) {
+    private BatchFunction addOrUpdate(BatchFunction batchFunction, Long userId) {
         if (batchFunction.getId() > 0) {
-            developFunctionDao.update(batchFunction);
+            batchFunction.setModifyUserId(userId);
+            batchFunction.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
+            developFunctionDao.updateById(batchFunction);
         } else {
+            batchFunction.setCreateUserId(userId);
+            batchFunction.setModifyUserId(userId);
+            batchFunction.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
+            batchFunction.setIsDeleted(Deleted.NORMAL.getStatus());
             developFunctionDao.insert(batchFunction);
         }
         return batchFunction;
@@ -251,7 +274,9 @@ public class BatchFunctionService {
      * @param nodePid
      */
     public void moveFunction(Long userId, Long functionId, Long nodePid) {
-        BatchFunction bf = developFunctionDao.getOne(functionId);
+        BatchFunction bf = developFunctionDao.selectOne(Wrappers.lambdaQuery(BatchFunction.class)
+                .eq(BatchFunction::getId,functionId)
+                .eq(BatchFunction::getIsDeleted,Deleted.NORMAL.getStatus()));
         if (Objects.isNull(bf)) {
             throw new RdosDefineException(ErrorCode.FUNCTION_CAN_NOT_FIND);
         }
@@ -261,8 +286,7 @@ public class BatchFunctionService {
         bf = new BatchFunction();
         bf.setId(functionId);
         bf.setNodePid(nodePid);
-        bf.setModifyUserId(userId);
-        addOrUpdate(bf);
+        addOrUpdate(bf, userId);
     }
 
     /**
@@ -272,7 +296,9 @@ public class BatchFunctionService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void deleteFunction(Long userId, Long functionId) {
-        BatchFunction batchFunction = developFunctionDao.getOne(functionId);
+        BatchFunction batchFunction = developFunctionDao.selectOne(Wrappers.lambdaQuery(BatchFunction.class)
+                .eq(BatchFunction::getId,functionId)
+                .eq(BatchFunction::getIsDeleted,Deleted.NORMAL.getStatus()));
         if (Objects.isNull(batchFunction)) {
             throw new RdosDefineException(ErrorCode.FUNCTION_CAN_NOT_FIND);
         }
@@ -284,8 +310,7 @@ public class BatchFunctionService {
         batchFunction = new BatchFunction();
         batchFunction.setId(functionId);
         batchFunction.setIsDeleted(Deleted.DELETED.getStatus());
-        batchFunction.setModifyUserId(userId);
-        addOrUpdate(batchFunction);
+        addOrUpdate(batchFunction, userId);
     }
 
 
@@ -393,6 +418,80 @@ public class BatchFunctionService {
     public List<BatchFunction> listByNodePidAndTenantId(Long tenantId, Long nodePid){
         return developFunctionDao.listByNodePidAndTenantId(tenantId, nodePid);
     }
+
+    public List<BatchFunction> getFlinkFunctions(Set<String> funcNameSet, Long tenantId) {
+        if (CollectionUtils.isEmpty(funcNameSet)) {
+            return Lists.newArrayList();
+        }
+        List<BatchFunction> streamFunctionList = developFunctionDao.listTenantByFunction(tenantId,funcNameSet, EScheduleJobType.SQL.getType());
+        if (funcNameSet.size() != streamFunctionList.size()) {
+            for (String funcName : funcNameSet) {
+                for (BatchFunction dbFunc : streamFunctionList) {
+                    if (dbFunc.getName().equals(funcName)) {
+                        break;
+                    }
+                }
+            }
+        }
+        return streamFunctionList;
+    }
+
+    public String createRegisterFlinkFuncSQL(BatchFunction function) {
+        FlinkUDFType udfType = FlinkUDFType.fromTypeValue(function.getUdfType());
+        return String.format(CUSTOM_FUNCTION_TEMPLATE, udfType.getName(), function.getName(), function.getClassName());
+    }
+
+    /**
+     * 自定义函数区分大小写
+     *
+     * @param funcNameSet      函数集合
+     * @return create xxx function sql
+     */
+    public List<String> generateFuncSql(Set<String> funcNameSet, Long tenantId) {
+        List<BatchFunction> functionList = getFlinkFunctions(funcNameSet, tenantId);
+        List<String> result = Lists.newArrayList();
+        List<Long> resourceIds = new ArrayList<>();
+        for (BatchFunction function : functionList) {
+            BatchFunctionResource batchFunctionResource = batchFunctionResourceService.getResourceFunctionByFunctionId(function.getId());
+            AssertUtils.notNull(batchFunctionResource, "函数资源为null");
+            resourceIds.add(batchFunctionResource.getResourceId());
+        }
+        //add jar
+        resourceIds.forEach(resourceId -> result.add(streamSqlFormatService.generateAddJarSQL(resourceId, null)));
+        // register function
+        functionList.forEach(streamFunction -> result.add(createRegisterFlinkFuncSQL(streamFunction)));
+        return result;
+    }
+
+
+
+    public Set<String> getFuncSet(Task task, Boolean isFilterSys) {
+        //sql 任务需要解析出关联的资源(eg:自定义function)
+        Set<String> funcSet = streamSqlFormatService.getFuncName(task.getSqlText());
+        Set<String> sourceFuncs = streamSqlFormatService.getFuncName(task.getSourceStr());
+        Set<String> sidFuncs = streamSqlFormatService.getFuncName(task.getTargetStr());
+        Set<String> sideFuncs = streamSqlFormatService.getFuncName(task.getSideStr());
+        funcSet.addAll(sourceFuncs);
+        funcSet.addAll(sidFuncs);
+        funcSet.addAll(sideFuncs);
+        if (!isFilterSys) {
+            return funcSet;
+        }
+        List<BatchFunction> batchFunctions = developFunctionDao.listSystemFunction(EScheduleJobType.SQL.getType());
+        List<String> sysFuncNames = batchFunctions.stream().map(BatchFunction::getName).collect(Collectors.toList());
+
+        //FIXME 区分大小写
+        for (String sysFuncName :  sysFuncNames) {
+            if (funcSet.contains(sysFuncName) && !ADD_FUNCTION_NAME.contains(sysFuncName)) {
+                funcSet.remove(sysFuncName);
+                if (CollectionUtils.isEmpty(funcSet)) {
+                    break;
+                }
+            }
+        }
+        return funcSet;
+    }
+
 
     /**
      * 校验是否包含了函数

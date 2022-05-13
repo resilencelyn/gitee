@@ -24,6 +24,7 @@ import {
 	FILE_TYPE,
 	CONFIG_ITEM_TYPE,
 } from '@/constant';
+import type { IModifyComp, IScheduleComponentComp, IComponentProps } from './interface';
 
 const DEFAULT_PARAMS = [
 	'storeType',
@@ -41,20 +42,12 @@ export function isNeedTemp(typeCode: number): boolean {
 	return temp.indexOf(typeCode) > -1;
 }
 
-export function isKubernetes(typeCode: number): boolean {
-	return false;
-}
-
 export function isYarn(typeCode: number): boolean {
 	return COMPONENT_TYPE_VALUE.YARN === typeCode;
 }
 
 export function isFLink(typeCode: number): boolean {
 	return COMPONENT_TYPE_VALUE.FLINK === typeCode;
-}
-
-export function isDtscriptAgent(typeCode: number): boolean {
-	return false;
 }
 
 export function isHaveGroup(typeCode: number): boolean {
@@ -101,10 +94,6 @@ export function showDataCheckBox(code: number): boolean {
 	return tmp.indexOf(code) > -1;
 }
 
-export function notFileConfig(code: number): boolean {
-	return false;
-}
-
 export function getActionType(mode: string): string {
 	switch (mode) {
 		case 'view':
@@ -126,12 +115,14 @@ export function isSourceTab(activeKey: number): boolean {
 	return activeKey === TABS_TITLE_KEY.SOURCE;
 }
 
-export function initialScheduling(): any[] {
-	const arr = [];
-	return Object.values(TABS_TITLE_KEY).map((tabKey: number) => {
-		// eslint-disable-next-line no-return-assign
-		return (arr[tabKey] = []);
+export function initialScheduling(): IScheduleComponentComp[][] {
+	const arr: IScheduleComponentComp[][] = [];
+	Object.values(TABS_TITLE_KEY).forEach((tabKey: string | number) => {
+		if (typeof tabKey === 'number') {
+			arr[tabKey] = [];
+		}
 	});
+	return arr;
 }
 
 export function giveMeAKey(): string {
@@ -176,10 +167,10 @@ export function getCustomerParams(temps: any[]): any[] {
 	return temps.filter((temp) => isCustomType(temp.type));
 }
 
-export function getCompsId(currentComps: any[], id: number): any[] {
-	const ids: any[] = [];
+export function getCompsId(currentComps: IScheduleComponentComp[], id: number | string): number[] {
+	const ids: number[] = [];
 	currentComps.forEach((comp) => {
-		(comp?.multiVersion ?? []).forEach((vcomp: any) => {
+		(comp?.multiVersion ?? []).forEach((vcomp) => {
 			if (vcomp?.id === id) ids.push(vcomp.id);
 		});
 	});
@@ -204,14 +195,12 @@ export function getOptions(version: any[]): any[] {
 	return opt;
 }
 
-export function getCompsName(comps: any[]): any[] {
-	return Array.from(comps).map((comp: any) => {
+export function getCompsName(comps: Set<IModifyComp>): string[] {
+	return Array.from(comps).map((comp: IModifyComp) => {
 		if (isMultiVersion(comp.typeCode)) {
-			return `${(COMPONENT_CONFIG_NAME as any)[comp.typeCode]} ${(
-				Number(comp.versionName) / 100
-			).toFixed(2)}`;
+			return `${COMPONENT_CONFIG_NAME[comp.typeCode]} ${comp.versionName}`;
 		}
-		return (COMPONENT_CONFIG_NAME as any)[comp.typeCode];
+		return COMPONENT_CONFIG_NAME[comp.typeCode];
 	});
 }
 
@@ -530,10 +519,11 @@ export function includesCurrentComp(
 	params: { typeCode: number; versionName?: string },
 ): boolean {
 	const { typeCode, versionName } = params;
-	modifyComps.forEach((comp) => {
+	for (let i = 0; i < modifyComps.length; i += 1) {
+		const comp = modifyComps[i] || {};
 		if (comp.typeCode === typeCode && !comp.versionName) return true;
 		if (comp.typeCode === typeCode && comp.versionName === versionName) return true;
-	});
+	}
 	return false;
 }
 
@@ -557,11 +547,11 @@ export function getCurrentComp(
 }
 
 export function getCurrent1Comp(
-	initialCompDataArr: any[],
+	initialCompDataArr: IScheduleComponentComp[][],
 	params: { typeCode: number; versionName?: string },
-): any {
+): IComponentProps | Record<string, unknown> {
 	const { typeCode, versionName } = params;
-	let currentComp = {};
+	let currentComp: IComponentProps | Record<string, unknown> = {};
 	// eslint-disable-next-line no-restricted-syntax
 	for (const compArr of initialCompDataArr) {
 		// eslint-disable-next-line no-restricted-syntax
@@ -638,43 +628,48 @@ function handleCurrentComp(comp: any, initialComp: any, typeCode: number): boole
 /**
  * @param comps 已渲染各组件表单值
  * @param initialCompData 各组件初始值
+ * @param versionMap 组件的typeCode与对应的versionName数组映射
  *
  * 通过比对表单值和初始值对比是否变更
  * 返回含有组件code数组
  *
  */
-export function getModifyComp(comps: any, initialCompData: any[]): any {
-	const modifyComps = new Set();
+export function getModifyComp(
+	comps: Record<string, any>,
+	initialCompData: IScheduleComponentComp[][],
+	versionMap?: Record<number, string[]>,
+) {
+	const modifyComps = new Set<IModifyComp>();
 	Object.entries(comps).forEach(([typeCode, comp]) => {
-		if (isMultiVersion(Number(typeCode))) {
-			Object.entries(comp as any).forEach(([versionName, vcomp]) => {
-				if (!DEFAULT_PARAMS.includes(versionName)) {
-					const initialComp = getCurrent1Comp(initialCompData, {
-						typeCode: Number(typeCode),
+		const typeCodeNum = Number(typeCode);
+		if (isMultiVersion(typeCodeNum)) {
+			const versionNames = versionMap?.[typeCodeNum];
+			if (!versionNames) return;
+
+			versionNames.forEach((versionName) => {
+				if (!versionName) return;
+				const versionArr: string[] = versionName.split('.');
+				const currentComp = versionArr.reduce((pre, cur) => pre?.[cur], comp) || {};
+				const initialComp = getCurrent1Comp(initialCompData, {
+					typeCode: typeCodeNum,
+					versionName,
+				});
+				if (handleCurrentComp(currentComp, initialComp, typeCodeNum)) {
+					modifyComps.add({
+						typeCode: typeCodeNum,
 						versionName,
 					});
-					if (handleCurrentComp(vcomp, initialComp, Number(typeCode))) {
-						modifyComps.add({
-							typeCode: Number(typeCode),
-							versionName,
-						});
-					}
 				}
 			});
 		} else {
 			const initialComp = getCurrent1Comp(initialCompData, {
-				typeCode: Number(typeCode),
+				typeCode: typeCodeNum,
 			});
-			if (handleCurrentComp(comp, initialComp, Number(typeCode))) {
-				modifyComps.add({ typeCode: Number(typeCode) });
+			if (handleCurrentComp(comp, initialComp, typeCodeNum)) {
+				modifyComps.add({ typeCode: typeCodeNum });
 			}
 		}
 	});
 
 	return modifyComps;
-}
-
-/** 指定引擎的 jdbcUrl 项展示 hover 提示 */
-export function showHover(componentTypeValue: number, label: string) {
-	return false;
 }

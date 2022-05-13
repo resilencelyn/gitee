@@ -17,27 +17,36 @@
  */
 
 import type {
+	BINARY_ROW_KEY_FLAG,
+	CODE_TYPE,
 	DATA_SOURCE_ENUM,
+	CREATE_MODEL_TYPE,
+	KAFKA_DATA_TYPE,
 	MENU_TYPE_ENUM,
 	PARAMS_ENUM,
 	RESOURCE_TYPE,
 	SCHEDULE_DEPENDENCY,
 	SCHEDULE_STATUS,
+	SOURCE_TIME_TYPE,
 	TASK_PERIOD_ENUM,
 	TASK_STATUS,
 	TASK_TYPE_ENUM,
+	DATA_SYNC_MODE,
+	UDF_TYPE_VALUES,
 } from './constant';
 
 interface IUserProps {}
 
-export interface IResponseProps<T = any> {
+/**
+ * 请求返回体
+ */
+export interface IResponseBodyProps<T = any> {
 	code: number;
-	data: null | T;
-	/**
-	 * 请求异常返回的信息
-	 */
-	message: null | string;
+	data: T;
+	message: string;
 	success: boolean;
+
+	[key: string]: any;
 }
 
 /**
@@ -45,8 +54,14 @@ export interface IResponseProps<T = any> {
  */
 export interface CatalogueDataProps {
 	id: number;
+	/**
+	 * 目录类型，区分 file 或者 folder 等
+	 */
 	type: string;
-	taskType: number;
+	/**
+	 * 任务类型，非任务为 null
+	 */
+	taskType: TASK_TYPE_ENUM | null;
 	resourceType: RESOURCE_TYPE;
 	name: string;
 	children: CatalogueDataProps[] | null;
@@ -54,30 +69,55 @@ export interface CatalogueDataProps {
 	parentId: number;
 }
 
-// 所有任务相关的类型都必要的属性
-export interface ITaskBasicProps {
-	taskId: number;
-	name: string;
-}
-
 // 运维中心-任务类型，@todo 应该是 Job
-export interface ITaskProps extends ITaskBasicProps {
+export interface ITaskProps {
 	gmtModified: number;
 	ownerUserId: number;
 	ownerUserName: null | string;
 	periodType: TASK_PERIOD_ENUM;
 	scheduleStatus: SCHEDULE_STATUS;
 	taskType: TASK_TYPE_ENUM;
+	taskId: number;
+	name: string;
 }
 
-// 查询任务树的遍历方向
+/**
+ * 实时任务(Job)管理——任务类型
+ */
+export interface IStreamJobProps {
+	id: number;
+	name: string;
+	jobId: string;
+	status: TASK_STATUS;
+	componentVersion: string;
+	strategyName: string;
+	taskType: TASK_TYPE_ENUM;
+	createUserName: string;
+	execStartTime: string;
+	gmtModified: string;
+	modifyUserName: string;
+	originSourceType: number;
+	createModel: Valueof<typeof CREATE_MODEL_TYPE>;
+}
+
+/**
+ * 查询任务树的遍历方向
+ */
 export enum DIRECT_TYPE_ENUM {
+	/**
+	 * 向上遍历
+	 */
 	FATHER = 1,
+	/**
+	 * 向下遍历
+	 */
 	CHILD = 2,
 }
 
-// 任务上下游依赖类型
-export interface ITaskStreamProps {
+/**
+ * 任务上下游依赖类型
+ */
+export interface IUpstreamJobProps {
 	taskId: number;
 	taskName: string;
 	taskType: TASK_TYPE_ENUM;
@@ -98,8 +138,8 @@ export interface ITaskStreamProps {
 	 */
 	operatorName: string;
 	status: TASK_STATUS;
-	parentNode: ITaskStreamProps[];
-	childNode: ITaskStreamProps[];
+	parentNode: IUpstreamJobProps[];
+	childNode: IUpstreamJobProps[];
 }
 
 /**
@@ -121,18 +161,17 @@ export interface IResourceProps {
 	resourceName: string;
 	resourceType: RESOURCE_TYPE;
 	tenantId: number;
+	computeType: IComputeType;
 	url: string;
 }
 
 /**
- * 离线任务类型
+ * 所有任务类型
  */
-export interface IOfflineTaskProps {
+export interface IOfflineTaskProps extends ISyncDataProps, IFlinkDataProps {
 	createUserId: number;
 	cron: string;
 	currentProject: boolean;
-	dtuicTenantId: number;
-	forceUpdate: boolean;
 	gmtCreate: number;
 	gmtModified: number;
 	id: number;
@@ -142,16 +181,15 @@ export interface IOfflineTaskProps {
 	nodePName: string;
 	nodePid: number;
 	ownerUserId: number;
-	readWriteLockVO: {
-		getLock: boolean;
-		gmtCreate: number;
-		gmtModified: number;
-		id: number;
-	};
 	scheduleConf: string;
 	scheduleStatus: SCHEDULE_STATUS;
 	/**
-	 * 是否是增量同步模式
+	 * 任务配置模式
+	 */
+	createModel: Valueof<typeof CREATE_MODEL_TYPE>;
+	/**
+	 * @deprecated
+	 * 是否是增量同步模式, 接口要求把该字段放到 sourceMap 中
 	 */
 	syncModel: number;
 	sqlText: string;
@@ -160,11 +198,176 @@ export interface IOfflineTaskProps {
 	taskPeriodId: TASK_PERIOD_ENUM;
 	taskPeriodType: string;
 	taskType: TASK_TYPE_ENUM;
-	taskVOS: null | ITaskVOProps[];
+	/**
+	 * 任务依赖
+	 */
+	dependencyTasks: null | ITaskVOProps[];
 	taskVariables: null | ITaskVariableProps[];
 	tenantId: string | null;
 	tenantName: string | null;
 	userId: number;
+}
+
+/**
+ * 数据同步任务类型
+ */
+export interface ISyncDataProps {
+	settingMap?: IChannelFormProps;
+	sourceMap: ISourceMapProps;
+	targetMap?: ITargetMapProps;
+	taskId: number;
+}
+
+/**
+ * 数据同步任务前端表单域类型
+ */
+export interface ITargetFormField {
+	sourceId?: number;
+	table?: string;
+	preSql?: string;
+	postSql?: string;
+	schema?: string;
+	extralConfig?: string;
+	partition?: string;
+	path?: string;
+	fileName?: string;
+	fileType?: 'orc' | 'text' | 'parquet';
+	fieldDelimiter?: string;
+	encoding?: 'utf-8' | 'gbk';
+	writeMode?: 'NONCONFLICT' | 'APPEND' | 'insert' | 'replace' | 'update';
+	nullMode?: 'skip' | 'empty';
+	writeBufferSize?: number;
+	index?: string;
+	indexType?: string;
+	bulkAction?: number;
+}
+
+/**
+ * 数据同步任务 TargetMap
+ */
+export interface ITargetMapProps extends ITargetFormField {
+	name?: string;
+	column?: IDataColumnsProps[];
+	rowkey?: string;
+	type?: DATA_SOURCE_ENUM;
+}
+
+/**
+ * 数据同步任务通道传输类型
+ */
+export interface IChannelFormProps {
+	speed: string;
+	channel: string;
+	record?: number;
+	percentage?: number;
+	isRestore?: boolean;
+	isSaveDirty?: boolean;
+	tableName?: string;
+	lifeDay?: string | number;
+	restoreColumnName?: string | number;
+}
+
+/**
+ * 数据同步任务 SourceMap 类型
+ */
+export interface ISourceMapProps extends ISourceFormField {
+	name?: string;
+	sourceId?: number;
+	/**
+	 * 数据同步任务「字段映射」
+	 */
+	column?: IDataColumnsProps[];
+	sourceList?: {
+		key: string;
+		tables?: string[] | string;
+		type: DATA_SOURCE_ENUM;
+		name: string;
+		sourceId?: number;
+	}[];
+	type?: DATA_SOURCE_ENUM;
+	/**
+	 * 同步任务是否增量
+	 */
+	syncModel: DATA_SYNC_MODE;
+
+	[key: string]: any;
+}
+
+/**
+ * 数据库表字段信息
+ */
+export interface IDataColumnsProps {
+	comment?: string;
+	isPart?: boolean;
+	key: string | number;
+	part?: boolean;
+	type: string;
+	value?: string;
+	index?: string;
+	cf?: string;
+	format?: string;
+}
+
+/**
+ * 前端表单保存的值
+ */
+export interface ISourceFormField {
+	sourceId?: number;
+	table?: string | string[];
+	/**
+	 * Only used in Oracle and PostgreSQL
+	 */
+	schema?: string;
+	where?: string;
+	splitPK?: string;
+	extralConfig?: string;
+	increColumn?: string | number;
+	/**
+	 * Only used in HDFS
+	 */
+	path?: string;
+	/**
+	 * Only used in HDFS
+	 */
+	fileType?: 'orc' | 'text' | 'parquet';
+	/**
+	 * Only used in HDFS
+	 */
+	fieldDelimiter?: string;
+	encoding?: 'utf-8' | 'gbk';
+	/**
+	 * Only used in Hive and SparkShrift
+	 */
+	partition?: string;
+	/**
+	 * 开始行健
+	 */
+	startRowkey?: string;
+	/**
+	 * 结束行健
+	 */
+	endRowkey?: string;
+	/**
+	 * 行健二进制转换
+	 */
+	isBinaryRowkey?: BINARY_ROW_KEY_FLAG;
+	/**
+	 * 每次 RPC 请求获取行数
+	 */
+	scanCacheSize?: number;
+	/**
+	 * 每次 RPC 请求获取列数
+	 */
+	scanBatchSize?: number;
+	/**
+	 * 索引
+	 */
+	index?: string;
+	/**
+	 * 索引类型
+	 */
+	indexType?: string;
+	query?: string;
 }
 
 /**
@@ -206,10 +409,11 @@ export interface IScheduleConfProps {
 /**
  * 任务上下游依赖类型
  */
-export interface ITaskVOProps extends IOfflineTaskProps {
-	taskId: number;
-}
+export type ITaskVOProps = Pick<IOfflineTaskProps, 'id' | 'name' | 'tenantId' | 'tenantName'>;
 
+/**
+ * 任务参数
+ */
 export interface ITaskVariableProps {
 	paramCommand: string;
 	paramName: string;
@@ -224,27 +428,34 @@ export interface IFunctionProps {
 	 * 命令格式
 	 */
 	commandFormate: string;
-	className?: string | null;
-	createUser?: null | IUserProps;
+	className?: string;
+	createUser?: IUserProps;
 	createUserId: number;
 	gmtCreate: number;
 	gmtModified: number;
 	id: number;
-	modifyUser?: null | IUserProps;
+	modifyUser?: IUserProps;
 	modifyUserId: number;
 	name: string;
 	nodePid: number;
 	paramDesc: string;
 	purpose: string;
-	sqlText?: null | string;
+	sqlText?: string;
 	/**
 	 * 函数类型
 	 */
 	taskType?: TASK_TYPE_ENUM;
-	resources?: number | null;
+	/**
+	 * UDF类型
+	 */
+	udfType?: UDF_TYPE_VALUES;
+	resources?: number;
 	type: number;
 }
 
+/**
+ * 数据源类型
+ */
 export interface IDataSourceProps {
 	dataInfoId: number;
 	dataType: DATA_SOURCE_ENUM;
@@ -259,5 +470,132 @@ export interface IDataSourceProps {
 	schemaName: string;
 	status: number;
 	linkJson: string | null;
-	type?: DATA_SOURCE_ENUM;
+}
+
+/**
+ * 在同步任务中用到的数据源类型
+ */
+export interface IDataSourceUsedInSyncProps {
+	dataInfoId: number;
+	dataName: string;
+	dataTypeCode: DATA_SOURCE_ENUM;
+}
+
+/**
+ * flinkSQL 任务的属性
+ */
+export interface IFlinkDataProps {
+	source: IFlinkSourceProps[];
+	sink: IFlinkSinkProps[];
+	/**
+	 * TODO
+	 */
+	side: any[];
+	/**
+	 * @description 任务类型，目前来说 flinkSQL 暂时只有 1.12
+	 */
+	componentVersion: string;
+}
+
+export interface IFlinkSourceProps {
+	charset: CODE_TYPE;
+	columns: { column: string; type: string }[];
+	columnsText: string;
+	offset: number;
+	offsetReset: string;
+	offsetUnit: string;
+	offsetValue: string;
+	parallelism: number;
+	procTime: string;
+	schemaInfo: string;
+	sourceDataType: string;
+	sourceId: number;
+	sourceName: string;
+	table: string;
+	timeColumn: string;
+	timeType: SOURCE_TIME_TYPE;
+	timeTypeArr: SOURCE_TIME_TYPE[];
+	timeZone: string;
+	topic: string;
+	type: DATA_SOURCE_ENUM;
+	// 自定义参数
+	customParams: any;
+
+	// the unique key for front-end panel
+	panelKey: string;
+}
+
+export interface IFlinkSinkProps {
+	collection?: string;
+	bucket?: string;
+	objectName?: string;
+	schema?: string;
+	columns: Partial<{ type: IDataColumnsProps['type']; column: IDataColumnsProps['key'] }>[];
+	parallelism: number;
+	sourceId: number;
+	sourceName: string;
+	table?: string;
+	tableName: string;
+	index?: string;
+	esId?: string;
+	esType?: string;
+	rowKey?: string;
+	rowKeyType?: string;
+	sinkDataType?: Valueof<typeof KAFKA_DATA_TYPE>;
+	schemaInfo?: string;
+	topic?: string;
+	type: DATA_SOURCE_ENUM;
+	updateMode: 'append' | 'upsert';
+	allReplace?: 'true' | 'false';
+	primaryKey?: string | string[];
+	bulkFlushMaxActions?: number;
+	enableKeyPartitions?: boolean;
+	indexDefinition?: string;
+	partitionKeys?: string[];
+	batchWaitInterval?: number;
+	batchSize?: number;
+	partitionType?: string;
+	columnsText?: string;
+	// 自定义参数
+	customParams: { id: string; key?: string; type?: string }[];
+}
+
+/**
+ * 实时-任务属性参数
+ */
+export interface IStreamJobParamsProps {
+	id: number;
+	name: string;
+	exeArgs: string;
+	sqlText: string;
+	taskDesc: string;
+	mainClass: string;
+	taskParams: string;
+	originSourceType: number;
+	createModel: number;
+	taskType: number;
+	targetSourceType: number;
+	sourceParams: string;
+	sinkParams: string;
+	sideParams: string;
+	resourceList: IResourceList[];
+	additionalResourceList: IResourceList[];
+}
+
+/**
+ * 实时-资源相关的参数
+ */
+export interface IResourceList {
+	id: number;
+	url: string;
+	originFileName: string;
+	projectId: number;
+	resourceDesc: string;
+	resourceName: string;
+	isAdditionResource: number;
+}
+
+export enum IComputeType {
+	STFP = 0,
+	HDFS = 1,
 }

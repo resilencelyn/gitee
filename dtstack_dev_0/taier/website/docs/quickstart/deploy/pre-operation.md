@@ -14,23 +14,20 @@ sidebar_label: 部署依赖
 $   cd ${SPARK_HOME}/sbin && sh start-thriftserver.sh
 ```
 
-### flinkx
-依赖`flinkx` [1.10](https://github.com/DTStack/flinkx/releases/tag/1.10.5) 版本
-[flink源码编译](https://github.com/DTStack/flinkx/blob/master/docs/quickstart.md)
+### Chunjun
+依赖`Chunjun` [1.12](https://github.com/DTStack/chunjun/releases/tag/v1.12.3) 版本
+[Chunjun源码编译](https://github.com/DTStack/chunjun/blob/master/docs/quickstart.md)
 
 ## maven依赖
 ### 构建依赖
-Taier源码编译启动中依赖DatasourceX的core包以及自定义hive的jar包,需要提前install到mvn仓库
+Taier源码编译启动中依赖DatasourceX的core包以及自定义hive的jar包,
+如果maven仓库下载失败，可以[手动下载](https://developer.aliyun.com/mvn/search)并install到mvn仓库
 ```shell
 mvn install:install-file -Dfile=datasourcex-core.jar -DgroupId=com.dtstack.dtcenter -DartifactId=common.loader.core -Dversion=1.7.0-SNAPSHOT -Dpackaging=jar
 ```
 
 ```shell
-mvn install:install-file -Dfile=dt-insight-hive-shade-4.1.2-RELEASE.jar -DgroupId=dt.insight.plat -DartifactId=dt-insight-hive-shade -Dversion=4.1.2-RELEASE -Dpackaging=jar
-```
-
-```shell
-mvn install:install-file -Dfile=carbondata-spark2-1.5.0.jar -DgroupId=org.apache.carbondata -DartifactId=carbondata-spark2 -Dversion=1.5.0-SNAPSHOT -Dpackaging=jar
+mvn install:install-file -Dfile=dt-insight-hive-shade-4.1.3.jar -DgroupId=dt.insight.plat -DartifactId=dt-insight-hive-shade -Dversion=4.1.3 -Dpackaging=jar
 ```
 
 ## 编辑器依赖

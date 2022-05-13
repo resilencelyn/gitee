@@ -18,6 +18,7 @@ public class RdosDefineException extends RuntimeException {
 
     public RdosDefineException(Throwable cause) {
         super(cause);
+        this.errorCode = ErrorCode.UNKNOWN_ERROR;
     }
 
     public RdosDefineException(String errorMessage) {
@@ -53,7 +54,6 @@ public class RdosDefineException extends RuntimeException {
     public RdosDefineException(ErrorCode errorCode, Throwable cause) {
         super(buildErrorInfo(errorCode, errorCode.getDescription()), cause);
         this.errorCode = errorCode;
-        this.errorMessage = errorCode.getDescription();
     }
 
     public RdosDefineException(String message, ErrorCode errorCode, Throwable cause) {

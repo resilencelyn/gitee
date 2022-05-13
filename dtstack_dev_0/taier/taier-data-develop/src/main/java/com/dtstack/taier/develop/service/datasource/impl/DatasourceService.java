@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dtstack.dtcenter.loader.client.ClientCache;
 import com.dtstack.dtcenter.loader.client.IClient;
+import com.dtstack.dtcenter.loader.client.IKafka;
 import com.dtstack.dtcenter.loader.client.IKerberos;
 import com.dtstack.dtcenter.loader.dto.ColumnMetaDTO;
 import com.dtstack.dtcenter.loader.dto.SqlQueryDTO;
@@ -17,6 +18,7 @@ import com.dtstack.taier.common.constant.FormNames;
 import com.dtstack.taier.common.engine.JdbcInfo;
 import com.dtstack.taier.common.enums.DataSourceTypeEnum;
 import com.dtstack.taier.common.enums.EComponentType;
+import com.dtstack.taier.common.enums.EScheduleJobType;
 import com.dtstack.taier.common.env.EnvironmentContext;
 import com.dtstack.taier.common.exception.DtCenterDefException;
 import com.dtstack.taier.common.exception.ErrorCode;
@@ -94,6 +96,7 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -123,6 +126,8 @@ import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static com.dtstack.taier.develop.utils.develop.common.HadoopConfTool.KEY_JAVA_SECURITY_KRB5_CONF;
 
 /**
  * 有关数据源中心
@@ -166,7 +171,7 @@ public class DatasourceService {
      * FIMXE 暂时将数据源读写权限设置在程序    里面
      */
     private static final Map<Integer, Integer> DATASOURCE_PERMISSION_MAP = Maps.newHashMap();
-
+    private static final String IS_OPEN_CDB = "select * from v$database";
     public static final String JDBC_URL = "jdbcUrl";
     public static final String JDBC_USERNAME = "username";
     public static final String JDBC_PASSWORD = "password";
@@ -254,8 +259,8 @@ public class DatasourceService {
 
     // 支持一键建表的数据源类型
     private static final Set<DataSourceType> SUPPORT_CREATE_TABLE_DATASOURCES = Sets.newHashSet(DataSourceType.HIVE, DataSourceType.SparkThrift2_1,
-            DataSourceType.LIBRA, DataSourceType.PostgreSQL, DataSourceType.HIVE1X, DataSourceType.HIVE3X, DataSourceType.HIVE3_CDP, DataSourceType.IMPALA,
-            DataSourceType.TiDB, DataSourceType.Oracle, DataSourceType.GREENPLUM6, DataSourceType.MySQL, DataSourceType.ADB_FOR_PG, DataSourceType.DorisRestful, DataSourceType.SAP_HANA1, DataSourceType.SAP_HANA2);
+            DataSourceType.LIBRA, DataSourceType.PostgreSQL, DataSourceType.HIVE1X, DataSourceType.HIVE3X, DataSourceType.IMPALA,
+            DataSourceType.TiDB, DataSourceType.Oracle, DataSourceType.GREENPLUM6, DataSourceType.MySQL, DataSourceType.ADB_FOR_PG);
 
     // 支持一键建表的数据源类型名称
     private static final String SUPPORT_CREATE_TABLE_DATASOURCES_NAMES = SUPPORT_CREATE_TABLE_DATASOURCES.stream().map(DataSourceType::getName).collect(Collectors.joining("、"));
@@ -410,11 +415,10 @@ public class DatasourceService {
      * 检测kerberos认证的数据源连通性
      * @param source
      * @param resource
-     * @param projectId
      * @param userId
      * @return
      */
-    public Boolean checkConnectionWithKerberos(DataSourceVO source, Pair<String, String> resource, Long projectId, Long userId) {
+    public Boolean checkConnectionWithKerberos(DataSourceVO source, Pair<String, String> resource, Long userId) {
         Map<String, Object> kerberosConfig;
         String localKerberosPath;
         DataSourceTypeEnum typeEnum = DataSourceTypeEnum.typeVersionOf(source.getDataType(), source.getDataVersion());
@@ -617,6 +621,7 @@ public class DatasourceService {
             if (dsInfoService.checkDataNameDup(dsInfo)) {
                 throw new PubSvcDefineException(ErrorCode.DATASOURCE_DUP_NAME);
             }
+            dsInfo.setGmtCreate(DateTime.now().toDate());
             dsInfoService.updateById(dsInfo);
         } else {
             // add 存在授权产品操作
@@ -740,8 +745,54 @@ public class DatasourceService {
         }
     }
 
+    /**
+     * 根据租户ID匹配对应的hadoop引擎默认数据源类型
+     *
+     * @param tenantId
+     * @return
+     */
     public DataSourceType getHadoopDefaultDataSourceByTenantId(Long tenantId) {
-        return DataSourceType.SparkThrift2_1;
+        List<DsInfo> metaDataSourceList = dsInfoService.getAllMetaDataSourceListByTenantId(tenantId);
+        for (DsInfo dsInfo : metaDataSourceList) {
+            if (DataSourceType.HIVE.getVal().equals(dsInfo.getDataTypeCode())) {
+                return DataSourceType.HIVE;
+            }
+            if (DataSourceType.HIVE1X.getVal().equals(dsInfo.getDataTypeCode())) {
+                return DataSourceType.HIVE1X;
+            }
+            if (DataSourceType.HIVE3X.getVal().equals(dsInfo.getDataTypeCode())) {
+                return DataSourceType.HIVE3X;
+            }
+            if (DataSourceType.HIVE3_CDP.getVal().equals(dsInfo.getDataTypeCode())) {
+                return DataSourceType.HIVE3_CDP;
+            }
+            if (DataSourceType.SparkThrift2_1.getVal().equals(dsInfo.getDataTypeCode())) {
+                return DataSourceType.SparkThrift2_1;
+            }
+        }
+        throw new RdosDefineException(ErrorCode.CAN_NOT_FIND_DATA_SOURCE);
+    }
+
+    /**
+     * 根据租户ID匹配对应的hadoop引擎默认数据源类型-及其对应的任务类型
+     *
+     * @param tenantId
+     * @return
+     */
+    public EScheduleJobType getHadoopDefaultJobTypeByTenantId(Long tenantId) {
+        List<DsInfo> metaDataSourceList = dsInfoService.getAllMetaDataSourceListByTenantId(tenantId);
+        for (DsInfo dsInfo : metaDataSourceList) {
+            if (DataSourceType.HIVE.getVal().equals(dsInfo.getDataTypeCode())
+                    || DataSourceType.HIVE1X.getVal().equals(dsInfo.getDataTypeCode())
+                    || DataSourceType.HIVE3X.getVal().equals(dsInfo.getDataTypeCode())
+                    || DataSourceType.HIVE3_CDP.getVal().equals(dsInfo.getDataTypeCode())) {
+                return EScheduleJobType.HIVE_SQL;
+            }
+            if (DataSourceType.SparkThrift2_1.getVal().equals(dsInfo.getDataTypeCode())) {
+                return EScheduleJobType.SPARK_SQL;
+            }
+        }
+        throw new RdosDefineException(ErrorCode.CAN_NOT_FIND_DATA_SOURCE);
     }
 
     public String setJobDataSourceInfo(String jobStr, Long tenantId, Integer createModel) {
@@ -754,7 +805,7 @@ public class DatasourceService {
     }
 
 
-    private void setPluginDataSourceInfo(JSONObject plugin, Long tenantId, Integer createModel) {
+    public void setPluginDataSourceInfo(JSONObject plugin, Long tenantId, Integer createModel) {
         String pluginName = plugin.getString("name");
         JSONObject param = plugin.getJSONObject("parameter");
         if (PluginName.MySQLD_R.equals(pluginName)) {
@@ -1643,10 +1694,52 @@ public class DatasourceService {
         throw new RdosDefineException("暂不支持" + DataSourceType.getSourceType(targetType).name() +"作为数据同步的目标");
     }
 
-    private void setSftpConfig(Long sourceId, JSONObject json, Long tenantId, Map<String, Object> map, String confKey) {
+    public void setSftpConfig(Long sourceId, JSONObject json, Long tenantId, Map<String, Object> map, String confKey) {
         setSftpConfig(sourceId, json, tenantId, map, confKey, true);
     }
 
+    /**
+     * 添加ftp地址
+     *
+     * @param json
+     * @param dtuicTenantId
+     * @param map
+     * @param confKey
+     */
+    public void setSftpConfig(JSONObject json, Long dtuicTenantId, Map<String, Object> map, String confKey) {
+        JSONObject kerberosConfig = json.getJSONObject(KERBEROS_CONFIG);
+        if (MapUtils.isNotEmpty(kerberosConfig)) {
+            Map<String, String> sftpMap = kerberosService.getSftpMap(dtuicTenantId);
+            Map<String, Object> conf = null;
+            Object confObj = map.get(confKey);
+            if (confObj instanceof String) {
+                conf = JSON.parseObject(confObj.toString());
+            } else if (confObj instanceof Map) {
+                conf = (Map<String, Object>) confObj;
+            }
+            conf = Optional.ofNullable(conf).orElse(new HashMap<>());
+            //flinkx参数
+            conf.putAll(kerberosConfig);
+            conf.put("sftpConf", sftpMap);
+            //替换remotePath 就是ftp上kerberos的相对路径和principalFile
+            String remoteDir = sftpMap.get("path") + File.separator + kerberosConfig.getString("kerberosDir");
+            String principalFile = conf.getOrDefault("principalFile", "").toString();
+            ;
+            if (StringUtils.isNotEmpty(principalFile)) {
+                conf.put("principalFile", getFileName(principalFile));
+            }
+            conf.put("remoteDir", remoteDir);
+            map.put(confKey, conf);
+
+            String krb5Conf = conf.getOrDefault(KEY_JAVA_SECURITY_KRB5_CONF, "").toString();
+            if (StringUtils.isNotEmpty(krb5Conf)) {
+                conf.put(KEY_JAVA_SECURITY_KRB5_CONF, getFileName(krb5Conf));
+            }
+            // 开启kerberos认证需要的参数
+            conf.put(IS_HADOOP_AUTHORIZATION, "true");
+            conf.put(HADOOP_AUTH_TYPE, "kerberos");
+        }
+    }
     /**
      * @author toutian
      */
@@ -2055,15 +2148,20 @@ public class DatasourceService {
         dataSourceVO.setActive(1);
         dataSourceVO.setDataName(String.format("%s_%s", dataSourceName, eComponentType.getName().toUpperCase(Locale.ROOT)));
         dataSourceVO.setTenantId(tenantId);
-        dataSourceVO.setDataType(getDatasourceTypeByComponent(eComponentType, jdbcInfo).getDataType());
+        DataSourceTypeEnum datasourceTypeEnum = getDatasourceTypeByComponent(eComponentType, jdbcInfo);
+        dataSourceVO.setDataType(datasourceTypeEnum.getDataType());
         dataSourceVO.setIsMeta(1);
-
+        if (Objects.nonNull(datasourceTypeEnum.getDataVersion())){
+            dataSourceVO.setDataVersion(jdbcInfo.getVersionName());
+        }
         addOrUpdate(dataSourceVO, userId);
     }
 
     public DataSourceTypeEnum getDatasourceTypeByComponent(EComponentType eComponentType, JdbcInfo jdbcInfo){
         if (EComponentType.SPARK_THRIFT == eComponentType){
             return DataSourceTypeEnum.SparkThrift2_1;
+        }else if (EComponentType.HIVE_SERVER == eComponentType && StringUtils.isNotEmpty(jdbcInfo.getVersionName())){
+           return DataSourceTypeEnum.typeVersionOf(DataSourceTypeEnum.HIVE1X.getDataType(),jdbcInfo.getVersionName());
         }
         throw new RdosDefineException("not get datasourceType by componentType");
     }
@@ -2072,6 +2170,8 @@ public class DatasourceService {
         // @TODO 目前先只写SparkThrift类型，后期可扩展
         if (EComponentType.SPARK_THRIFT == eComponentType) {
             return buildSparkThriftDataSourceDataJSON(clusterId, jdbcInfo, dataSourceName);
+        }else if (EComponentType.HIVE_SERVER == eComponentType){
+            return buildHiveServerDataSourceDataJSON(clusterId, jdbcInfo, dataSourceName);
         }
         return null;
     }
@@ -2116,6 +2216,43 @@ public class DatasourceService {
     private JSONObject createHadoopConfigObject(Long clusterId) {
         Map<String, Object> config = HadoopConf.getConfigurationByClusterId(clusterId);
         return new JSONObject(config);
+    }
+
+    public JSONObject buildHiveServerDataSourceDataJSON(Long clusterId, JdbcInfo jdbcInfo, String dataSourceName) {
+        String jdbcUrl = jdbcInfo.getJdbcUrl();
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("username", jdbcInfo.getUsername());
+        dataJson.put("password", jdbcInfo.getPassword());
+
+        if (!jdbcUrl.contains("%s")) {
+            throw new RdosDefineException("控制台 "+ EComponentType.HIVE_SERVER.getName() +" URL中 不包含占位符 %s");
+        }
+        jdbcUrl = String.format(jdbcUrl, dataSourceName);
+        dataJson.put("jdbcUrl", jdbcUrl);
+        String defaultFs = HadoopConf.getDefaultFsByClusterId(clusterId);
+
+        if (StringUtils.isNotBlank(defaultFs)) {
+            dataJson.put("defaultFS", defaultFs);
+        } else {
+            throw new RdosDefineException("默认数据源的defaultFs未找到");
+        }
+
+        JSONObject hdpConfig = createHadoopConfigObject(clusterId);
+        if (!hdpConfig.isEmpty()) {
+            dataJson.put("hadoopConfig", hdpConfig.toJSONString());
+        }
+
+        dataJson.put("hasHdfsConfig", true);
+
+        JSONObject kerberosConfig = jdbcInfo.getKerberosConfig();
+        if (Objects.nonNull(kerberosConfig)) {
+            Map<String, String> sftpMap = getSftpMapByClusterId(clusterId);
+            String remotePath = kerberosConfig.getString("remotePath");
+            kerberosConfig.put("remotePath", remotePath.replaceAll(sftpMap.get("path"), ""));
+            kerberosConfig.put("hive.server2.authentication", "KERBEROS");
+            dataJson.put("kerberosConfig", jdbcInfo.getKerberosConfig());
+        }
+        return dataJson;
     }
 
     public BatchDataSource getOne(Long id) {
@@ -2197,6 +2334,45 @@ public class DatasourceService {
     }
 
 
+    public List<String> getKafkaTopics(Long sourceId) {
+        DsInfo dsInfo = dsInfoService.getOneById(sourceId);
+        String dataJson = dsInfo.getDataJson();
+        JSONObject json = JSON.parseObject(dataJson);
+        ISourceDTO sourceDTO = SourceDTOType.getSourceDTO(json, dsInfo.getDataTypeCode(), null, null, null);
+        IKafka kafka = ClientCache.getKafka(sourceDTO.getSourceType());
+        return kafka.getTopicList(sourceDTO);
+    }
+
+    /**
+     * 判断 oracle 是否开启 cdb
+     * @param sourceId 数据源 id
+     * @return 是否开启 cdb
+     */
+    public Boolean isOpenCdb(Long sourceId) {
+        DsInfo dsInfo = dsInfoService.getOneById(sourceId);
+        String dataJson = dsInfo.getDataJson();
+        JSONObject json = JSON.parseObject(dataJson);
+        ISourceDTO sourceDTO = SourceDTOType.getSourceDTO(json, dsInfo.getDataTypeCode(), null, null, null);
+        // 非 oracle 返回 false
+        if (!DataSourceType.Oracle.getVal().equals(sourceDTO.getSourceType())) {
+            return false;
+        }
+        IClient client = ClientCache.getClient(sourceDTO.getSourceType());
+        List<Map<String, Object>> result;
+        try {
+            result = client.executeQuery(sourceDTO, SqlQueryDTO.builder().sql(IS_OPEN_CDB).build());
+        } catch (Exception e) {
+            LOGGER.error("error in judging whether to open CDB...{}", e.getMessage(), e);
+            return false;
+        }
+        if (CollectionUtils.isEmpty(result)) {
+            return false;
+        }
+        Map<String, Object> cdbResult = result.get(0);
+        return !MapUtils.isEmpty(cdbResult) &&
+                cdbResult.containsKey("CDB") &&
+                StringUtils.equalsIgnoreCase("YES", MapUtils.getString(cdbResult, "CDB"));
+    }
     /**
      * 数据同步-获得表中字段与类型信息
      *
@@ -2204,7 +2380,7 @@ public class DatasourceService {
      * @param tableName 表名
      * @return
      */
-    public List<JSONObject> tablecolumn(Long projectId, Long userId, Long sourceId, String tableName, Boolean isIncludePart, String schema) {
+    public List<JSONObject> tablecolumn(Long userId, Long sourceId, String tableName, Boolean isIncludePart, String schema) {
 
         final BatchDataSource source = this.getOne(sourceId);
         final StringBuffer newTableName = new StringBuffer();
@@ -2735,10 +2911,6 @@ public class DatasourceService {
             Map<String, Object> expandConfigPrepare = expandConfigPrepare(sourceId);
             ISourceDTO sourceDTO = SourceDTOType.getSourceDTO(json, source.getType(), kerberosConfig, expandConfigPrepare);
             IClient iClient = ClientCache.getClient(dataSourceType.getVal());
-            if (DataSourceType.DorisRestful.getVal().equals(source.getType())||DataSourceType.SAP_HANA2.getVal().equals(source.getType())||DataSourceType.SAP_HANA1.getVal().equals(source.getType())){
-                iClient.executeSqlWithoutResultSet(sourceDTO,SqlQueryDTO.builder().schema(targetSchema).sql(sql).build());
-                return;
-            }
             Connection con = iClient.getCon(sourceDTO);
             DBUtil.executeSqlWithoutResultSet(con, sql,false);
         } catch (Exception e) {

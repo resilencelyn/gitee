@@ -19,14 +19,12 @@
 package com.dtstack.taier.develop.vo.develop.query;
 
 import com.dtstack.taier.common.param.DtInsightAuthParam;
+import com.dtstack.taier.develop.enums.develop.FlinkVersion;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel("任务信息")
 public class BatchTaskPublishTaskVO extends DtInsightAuthParam {
-
-    @ApiModelProperty(value = "项目 ID", hidden = true)
-    private Long projectId;
 
     @ApiModelProperty(value = "任务 ID", example = "1", required = true)
     private Long id;
@@ -43,12 +41,15 @@ public class BatchTaskPublishTaskVO extends DtInsightAuthParam {
     @ApiModelProperty(value = "忽略检查", example = "true", required = true)
     private Boolean ignoreCheck;
 
-    public Long getProjectId() {
-        return projectId;
+    @ApiModelProperty(value = "flink版本", example = "1.12", required = true)
+    private String componentVersion;
+
+    public String getComponentVersion() {
+        return componentVersion;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public void setComponentVersion(String componentVersion) {
+        this.componentVersion = componentVersion;
     }
 
     public Long getId() {

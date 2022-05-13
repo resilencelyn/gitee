@@ -1,5 +1,9 @@
 # 前端部署
 
+:::tip
+我们建议通过 [docker 部署](./docker.md)，解决环境安装的烦恼
+:::
+
 ## 准备前端部署环境
 
 1. 首先，通过命令行安装 `Node.js` 的二进制文件。
@@ -145,7 +149,7 @@ $ pm2 start cup
 该命令会查找当前目录下的 `cup.config.js` 文件，并将该文件作为配置文件启动服务器，该文件内容如下：
 
 ```js title="cup.config.js"
-const publicURL = "http://taier.dtstack.cn/"; // 跳转到后端部署的目录
+const publicURL = "http://taier.dtstack.cn"; // 跳转到后端部署的目录
 
 module.exports = {
   name: "taier",

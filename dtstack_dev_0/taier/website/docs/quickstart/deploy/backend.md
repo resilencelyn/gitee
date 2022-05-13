@@ -7,11 +7,13 @@ sidebar_label: 后端部署
 
 ### 库
 请登录 **MySQL** 数据库，创建名为 `taier` 数据库
-### 表结构
-初始化数据库，导入 `sql/create.sql` sql文件进行创建表
 ### 表数据
-初始化数据库，导入 `sql/insert.sql` sql文件进行基础数据导入
+#### 版本升级
+低版本升级到高版本 执行高版本目录下的`increment.sql`
 
+如: 1.0升级到1.1 执行sql/1.1/1.1_increment.sql
+#### 初次部署
+直接执行sql下的`init.sql`创建新库
 ## 项目编译
 
 ### 编译脚本
@@ -48,9 +50,12 @@ Taier 页面功能依赖data-develop.jar 任务提交依赖plugins相关jar
 |-- pluginLibs 
 |---- dummy
 |---- flinkcommon
-|---- yarn2-hdfs2-flink110
+|---- yarn2-hdfs2-flink112
 |---- .......
 ```
+:::caution
+pluginLibs目录需要放到Taier进程的根目录 或者通过在application.properties指定pluginLibs的路径 否则会导致集群测试连通性找不到插件
+:::
 
 ## 配置文件
 
@@ -80,6 +85,9 @@ jdbc.url=jdbc:mysql://127.0.0.1:3306/taier?charset=utf8&autoReconnect=true&tinyI
 jdbc.username=root
 jdbc.password=
 ```
+:::caution
+jdbc需要指定charset=utf8 否则在对接完集群之后，获取开发目录可能会乱码
+:::
 
 #### 配置web
 ```properties
@@ -93,8 +101,9 @@ server.tomcat.basedir = ./tmpSave
 datasource.plugin.path=/opt/dtstack/DTCommon/InsightPlugin/dataSourcePlugin
 ```
 
-:::info
-DatasourceX的依赖版本为v4.3.0 [DatasourceX](https://github.com/DTStack/DatasourceX/releases/tag/v4.3.0)
+:::caution
+DatasourceX的依赖版本为v4.3.0 [DatasourceX](https://github.com/DTStack/DatasourceX/releases/tag/v4.3.0) 需要依赖DatasourceX 去获取数据源表、字段信息
+可以直接下载链接中datasourceX.zip 解压之后配置即可
 :::
 
 完整的application.properties应该如下

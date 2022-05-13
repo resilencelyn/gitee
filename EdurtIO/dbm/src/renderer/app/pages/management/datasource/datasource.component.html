@@ -1,0 +1,271 @@
+<nz-card [nzTitle]="titleTemplate">
+  <nz-empty *ngIf="tableDetails.length <= 0; else notHasValues"
+            [nzNotFoundContent]="contentTemplate"
+            [nzNotFoundFooter]="footerTemplate">
+    <ng-template #contentTemplate>
+    </ng-template>
+    <ng-template #footerTemplate>
+      <button nz-button nzType="primary" (click)="handlerOpenModal(0)">
+        {{'common.add'|translate}}
+      </button>
+    </ng-template>
+  </nz-empty>
+  <ng-template #notHasValues>
+    <nz-table #basicTable [nzData]="tableDetails">
+      <thead>
+      <tr>
+        <th>{{'common.alias' | translate}}</th>
+        <th>{{'common.name' | translate}}</th>
+        <th>{{'common.host' | translate}}</th>
+        <th>{{'common.protocol' | translate}}</th>
+        <th>{{'common.username' | translate}}</th>
+        <th>{{'common.version' | translate}}</th>
+        <th>{{'common.action' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of basicTable.data" style="{{!data.status ? 'color: #F50;': ''}}">
+        <td>{{data.alias}}</td>
+        <td>{{data.name ? data.name : '-'}}</td>
+        <td>{{data.host}}</td>
+        <td>{{data.protocol}}</td>
+        <td>{{data.username ? data.username : '-'}}</td>
+        <td>{{data.version ? data.version : '-'}}</td>
+        <td>
+          <button nz-button nzShape="circle" nzSize="small" nzType="primary"
+                  nz-tooltip nzTooltipTitle="{{'common.edit' | translate}}">
+            <i class="fa fa-edit" (click)="handlerOpenModal(2, data.alias)"></i>
+          </button>
+          <button nz-button nzShape="circle" nzSize="small" nzType="primary" [disabled]="!data.status"
+                  nz-tooltip nzTooltipTitle="{{'common.copy' | translate}}">
+            <i class="fa fa-copy" (click)="handlerOpenModal(3, data.alias)"></i>
+          </button>
+          <button nz-button nzShape="circle" nzSize="small" nzDanger
+                  nz-popconfirm nzPopconfirmTitle="Are you sure?" [nzPopconfirmShowArrow]="false"
+                  nz-tooltip nzTooltipTitle="{{'common.delete' | translate}}"
+                  [nzCancelText]="'common.cancel'|translate"
+                  [nzOkText]="'common.ok'|translate"
+                  (nzOnConfirm)="handlerDelete(data.id)">
+            <i class="fa fa-trash"></i>
+          </button>
+          <button *ngIf="!data.status" nz-button nzShape="circle" nzSize="small" nzType="primary"
+                  nzDanger (click)="handlerShowMessage(data.alias, data?.message?.message)">
+            <i class="fa fa-warning"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </ng-template>
+</nz-card>
+<ng-template #titleTemplate>
+  <button nz-button nzType="primary" nzShape="circle" nzSize="small"
+          nz-tooltip nzTooltipTitle="{{'common.add' | translate}}"
+          (click)="handlerOpenModal(0)">
+    <i class="fa fa-plus"></i>
+  </button>
+  <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
+          nz-tooltip nzTooltipTitle="{{'common.refresh' | translate}}"
+          (click)="handlerRefresh()">
+    <i class="fa fa-refresh"></i>
+  </button>
+</ng-template>
+<nz-modal
+  [(nzVisible)]="dialog.create"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  nzMaskClosable="false"
+  nzWidth="80%"
+  (nzOnCancel)="handlerCloseModal()">
+  <ng-template #modalTitle>
+    {{'common.datasource' | translate}}
+  </ng-template>
+  <ng-template #modalContent>
+    <nz-steps [nzCurrent]="currentStep">
+      <nz-step nzTitle="{{'common.type'|translate}}"></nz-step>
+      <nz-step nzTitle="{{'common.configuration'|translate}}"></nz-step>
+    </nz-steps>
+
+    <div *ngIf="currentStep === 1">
+      <div [nzGutter]="[8, 8]" nz-row>
+        <div [nzSpan]="24" nz-col>
+        </div>
+        <div *ngFor="let engine of sourceTypes" [nzSpan]="24" nz-col>
+          <app-component-antd-drivider [description]="engine.description" [title]="engine.name">
+          </app-component-antd-drivider>
+          <div *ngIf="engine.engines; else notHasEngines" [nzGutter]="[8, 8]" nz-row>
+            <div *ngFor="let value of engine.engines" [nzSpan]="6" nz-col>
+              <div class="">
+                <nz-radio-group [(ngModel)]="formInfo.type" (ngModelChange)="handlerChange(value)">
+                  <label [nzValue]="value.name" nz-radio-button>
+                    <nz-badge nzDot [nzTooltipTitle]="value.description" nz-tooltip>
+                      <nz-avatar [nzShape]="'square'" [nzSize]="64" [nzSrc]="value.icon">
+                      </nz-avatar>
+                    </nz-badge>
+                  </label>
+                </nz-radio-group>
+              </div>
+            </div>
+          </div>
+          <ng-template #notHasEngines>
+            <div [nzSpan]="24" nz-col>
+              <app-component-antd-empty></app-component-antd-empty>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="currentStep === 2">
+      <form nz-form [formGroup]="validateForm" class="login-form">
+        <app-component-antd-drivider title="{{'common.basic'|translate}}">
+        </app-component-antd-drivider>
+        <div [nzGutter]="[8, 8]" nz-row>
+          <div [nzSpan]="3" nz-col>
+          </div>
+          <div [nzSpan]="18" nz-col>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired
+                             nzFor="alias">{{'common.alias'|translate}}</nz-form-label>
+              <nz-form-control nzErrorTip="{{'placeholder.alias'|translate}}">
+                <nz-input-group>
+                  <input type="text" nz-input formControlName="alias" [(ngModel)]="formInfo.alias"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired
+                             nzFor="protocol">{{'common.protocol'|translate}}</nz-form-label>
+              <nz-form-control nzErrorTip="{{'placeholder.protocol'|translate}}">
+                <nz-radio-group formControlName="protocol" [(ngModel)]="formInfo.protocol">
+                  <label nz-radio nzValue="HTTP">HTTP</label>
+                  <label nz-radio nzValue="SSH">SSH</label>
+                  <label nz-radio nzValue="HTTPS" nzDisabled>HTTPS</label>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired
+                             nzFor="host">{{'common.host'| translate}}</nz-form-label>
+              <nz-form-control nzErrorTip="{{'placeholder.host'|translate}}">
+                <nz-input-group>
+                  <input type="text" nz-input formControlName="host" [(ngModel)]="formInfo.host"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzRequired
+                             nzFor="port">{{'common.port'| translate}}</nz-form-label>
+              <nz-form-control nzErrorTip="{{'placeholder.port'|translate}}">
+                <nz-input-group>
+                  <input type="text" nz-input formControlName="port" [(ngModel)]="formInfo.port"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="username">{{'common.username'| translate}}</nz-form-label>
+              <nz-form-control nzErrorTip="{{'placeholder.username'|translate}}">
+                <nz-input-group>
+                  <input type="text" nz-input formControlName="username" [(ngModel)]="formInfo.username"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="password">{{'common.password'| translate}}</nz-form-label>
+              <nz-form-control nzErrorTip="{{'placeholder.password'|translate}}">
+                <nz-input-group>
+                  <input nz-input type="password" formControlName="password" [(ngModel)]="formInfo.password"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div [nzSpan]="3" nz-col>
+          </div>
+        </div>
+        <ng-container *ngIf="formInfo.protocol === 'SSH'">
+          <app-component-antd-drivider title="SSH {{'common.configuration'|translate}}">
+          </app-component-antd-drivider>
+          <div [nzGutter]="[8, 8]" nz-row>
+            <div [nzSpan]="3" nz-col>
+            </div>
+            <div [nzSpan]="18" nz-col>
+              <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24">
+                  <span>{{'common.sshHost'| translate}}</span>
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input id="sshHost" formControlName="sshHost" [(ngModel)]="formInfo.sshHost"/>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24">
+                  <span>{{'common.sshPort'| translate}}</span>
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input id="sshPort" formControlName="sshPort" [(ngModel)]="formInfo.sshPort"/>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24">
+                  <span>{{'common.sshUsername'| translate}}</span>
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input id="sshUsername" formControlName="sshUsername" [(ngModel)]="formInfo.sshUsername"/>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24">
+                  <span>{{'common.sshPassword'| translate}}</span>
+                </nz-form-label>
+                <nz-form-control>
+                  <input nz-input type="password" id="sshPassword" formControlName="sshPassword"
+                         [(ngModel)]="formInfo.sshPassword"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div [nzSpan]="3" nz-col>
+            </div>
+          </div>
+        </ng-container>
+        <app-component-antd-drivider title="{{'common.experimental'|translate}}">
+        </app-component-antd-drivider>
+        <div [nzGutter]="[8, 8]" nz-row>
+          <div [nzSpan]="3" nz-col>
+          </div>
+          <div [nzSpan]="18" nz-col>
+            <nz-form-item>
+              <nz-form-label [nzSm]="4" [nzXs]="24" nzTooltipTitle="{{'placeholder.maxTotal'|translate}}">
+                <span>{{'common.maxTotal'| translate}}</span>
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input id="maxTotal" formControlName="maxTotal" [(ngModel)]="formInfo.maxTotal"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div [nzSpan]="3" nz-col>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handlerNext()" [disabled]="!showButton.next"
+            *ngIf="currentStep === 1">
+      <span>{{'common.next'|translate}}</span>
+    </button>
+    <div *ngIf="currentStep === 2">
+      <button nz-button nzType="default" (click)="handlerPrevious()">
+        <span>{{'common.previous'|translate}}</span>
+      </button>
+      <button [disabled]="loading.button" [nzLoading]="loading.button" nz-button nzType="dashed"
+              (click)="handlerSubmitForm()">
+        {{'common.test' | translate}}
+      </button>
+      <button nz-button nzType="primary" [disabled]="disabled.button"
+              (click)="handlerProcess()">
+        {{'common.ok' | translate}}
+      </button>
+    </div>
+  </ng-template>
+</nz-modal>

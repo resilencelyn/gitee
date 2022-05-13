@@ -20,20 +20,18 @@ import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormInstance, RadioChangeEvent } from 'antd';
 import { Row, Col, Collapse, Radio, message } from 'antd';
-import FormWrap from './scheduleForm';
-import TaskDependence from './taskDependence';
-import molecule from '@dtinsight/molecule/esm';
-import HelpDoc from '../../../components/helpDoc';
-import api from '@/api';
-import type { SCHEDULE_STATUS } from '@/constant';
-import { SCHEDULE_DEPENDENCY, TASK_PERIOD_ENUM } from '@/constant';
-import { TASK_TYPE_ENUM } from '@/constant';
-import classNames from 'classnames';
-import type { IOfflineTaskProps, IScheduleConfProps, ITaskVOProps } from '@/interface';
 import type { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { TAB_WITHOUT_DATA } from '@/pages/rightBar';
+import classNames from 'classnames';
 import moment from 'moment';
 import { isArray } from 'lodash';
+import api from '@/api';
+import { DATA_SYNC_MODE, SCHEDULE_DEPENDENCY, TASK_PERIOD_ENUM } from '@/constant';
+import type { IOfflineTaskProps, IScheduleConfProps, ITaskVOProps } from '@/interface';
+import molecule from '@dtinsight/molecule/esm';
+import FormWrap from './scheduleForm';
+import TaskDependence from './taskDependence';
+import HelpDoc from '../../../components/helpDoc';
+import { isTaskTab } from '@/utils/enums';
 
 const { Panel } = Collapse;
 const RadioGroup = Radio.Group;
@@ -90,14 +88,12 @@ const getDefaultScheduleConf = (value: TASK_PERIOD_ENUM) => {
 
 interface ISchedulingConfigProps extends Pick<molecule.model.IEditor, 'current'> {
 	/**
+	 * @deprecated
 	 * 是否是 workflow 任务, 目前暂不支持
 	 */
 	isWorkflowNode?: boolean;
 	/**
-	 * 是否有增量任务, 目前暂不支持
-	 */
-	isIncrementMode?: boolean;
-	/**
+	 * @deprecated
 	 * 是否是数据科学任务, 目前暂不支持
 	 */
 	isScienceTask?: boolean;
@@ -106,22 +102,19 @@ interface ISchedulingConfigProps extends Pick<molecule.model.IEditor, 'current'>
 	 */
 	changeScheduleConf?: (
 		values: molecule.model.IEditorTab<any>,
-		nextValue: Partial<{
-			scheduleStatus: SCHEDULE_STATUS;
-			scheduleConf: string;
-			taskVOS: ITaskVOProps[];
-		}>,
+		nextValue: Partial<
+			Pick<IOfflineTaskProps, 'scheduleConf' | 'scheduleStatus' | 'dependencyTasks'>
+		>,
 	) => void;
 }
 
 export default function SchedulingConfig({
 	current,
 	isWorkflowNode = false,
-	isIncrementMode = false,
 	isScienceTask = false,
 	changeScheduleConf,
 }: ISchedulingConfigProps) {
-	const [selfReliance, setSelfReliance] = useState<number>(0);
+	const [selfReliance, setSelfReliance] = useState<SCHEDULE_DEPENDENCY>(SCHEDULE_DEPENDENCY.NULL);
 	const form = useRef<FormInstance<IScheduleConfProps & { scheduleStatus: boolean }>>(null);
 
 	const getInitScheduleConf = () => {
@@ -170,7 +163,7 @@ export default function SchedulingConfig({
 				changeScheduleConf?.(current!.tab!, {
 					scheduleStatus: status,
 				});
-				message.info(sucInfo);
+				message.success(sucInfo);
 			} else {
 				message.error(errInfo);
 			}
@@ -262,17 +255,17 @@ export default function SchedulingConfig({
 	};
 
 	const handleAddVOS = (record: Partial<ITaskVOProps>) => {
-		const taskVOS = (current!.tab?.data.taskVOS || []).concat();
-		taskVOS.push(record);
-		changeScheduleConf?.(current!.tab!, { taskVOS });
+		const dependencyTasks = (current!.tab?.data.dependencyTasks || []).concat();
+		dependencyTasks.push(record);
+		changeScheduleConf?.(current!.tab!, { dependencyTasks });
 	};
 
 	const handleDelVOS = (record: ITaskVOProps) => {
-		const taskVOS: ITaskVOProps[] = (current!.tab?.data.taskVOS || []).concat();
-		const index = taskVOS.findIndex((vo) => vo.taskId === record.taskId);
+		const dependencyTasks: ITaskVOProps[] = (current!.tab?.data.dependencyTasks || []).concat();
+		const index = dependencyTasks.findIndex((vo) => vo.id === record.id);
 		if (index === -1) return;
-		taskVOS.splice(index, 1);
-		changeScheduleConf?.(current!.tab!, { taskVOS });
+		dependencyTasks.splice(index, 1);
+		changeScheduleConf?.(current!.tab!, { dependencyTasks });
 	};
 
 	const handleRadioChanged = (evt: RadioChangeEvent) => {
@@ -280,13 +273,7 @@ export default function SchedulingConfig({
 		setSelfReliance(value);
 	};
 
-	const isInValidTab = useMemo(
-		() =>
-			!current ||
-			!current.activeTab ||
-			TAB_WITHOUT_DATA.some((prefix) => current.activeTab?.toString().includes(prefix)),
-		[current],
-	);
+	const isInValidTab = useMemo(() => !isTaskTab(current?.tab?.id), [current]);
 
 	useEffect(() => {
 		if (!isInValidTab) {
@@ -306,6 +293,11 @@ export default function SchedulingConfig({
 			setSelfReliance(Number(initConf.selfReliance));
 		}
 	}, [current]);
+
+	const isIncrementMode = useMemo(
+		() => current?.tab?.data?.sourceMap?.syncModel === DATA_SYNC_MODE.INCREMENT,
+		[],
+	);
 
 	if (isInValidTab) {
 		return <div className={classNames('text-center', 'mt-10px')}>无法获取调度依赖</div>;
@@ -328,17 +320,15 @@ export default function SchedulingConfig({
 							ref={form}
 						/>
 					</Panel>
-					{!isWorkflowNode &&
-						tabData &&
-						tabData.taskType !== TASK_TYPE_ENUM.VIRTUAL_NODE && (
-							<Panel key="2" header="任务间依赖">
-								<TaskDependence
-									handleAddVOS={handleAddVOS}
-									handleDelVOS={handleDelVOS}
-									tabData={tabData}
-								/>
-							</Panel>
-						)}
+					{!isWorkflowNode && tabData && (
+						<Panel key="2" header="任务间依赖">
+							<TaskDependence
+								handleAddVOS={handleAddVOS}
+								handleDelVOS={handleDelVOS}
+								tabData={tabData}
+							/>
+						</Panel>
+					)}
 					{!isWorkflowNode && (
 						<Panel key="3" header="跨周期依赖">
 							<Row style={{ marginBottom: '16px' }}>

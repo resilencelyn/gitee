@@ -16,37 +16,17 @@
  * limitations under the License.
  */
 
+import { useMemo } from 'react';
 import { Row, Pagination, Col } from 'antd';
 import type { PaginationProps } from 'antd';
-import Editor from '@/components/codeEditor';
-import { createLinkMark, createLogMark } from '@/components/codeEditor/utils';
+import Editor from '@/components/editor';
 import { formatDateTime, prettierJSONstring } from '@/utils';
-import { useMemo } from 'react';
-
-const editorOptions: any = {
-	mode: 'text',
-	lineNumbers: true,
-	readOnly: true,
-	autofocus: false,
-	indentWithTabs: true,
-	lineWrapping: true,
-	smartIndent: true,
-};
+import { createLinkMark, createLog } from '@/services/taskResultService';
 
 const defaultEditorStyle: React.CSSProperties = { height: '300px' };
 
 function wrappTitle(title: string) {
 	return `====================${title}====================`;
-}
-
-function getLogsInfo(title: any, data: any, type = 'info') {
-	let res = '';
-	if (data && data.length > 0) {
-		for (let i = 0; i < data.length; i += 1) {
-			res = `${res} \n${wrappTitle(title)} \n${data[i].id} \n${data[i].value}`;
-		}
-	}
-	return createLogMark(res, type);
 }
 
 function showTaskInfo(obj: any) {
@@ -134,10 +114,7 @@ export default function LogInfo(props: ILogInfoProps) {
 			const { engineLogErr } = log;
 			const flinkLog = errors;
 
-			const appLogs = engineLogErr
-				? `${wrappTitle('appLogs')}\n${engineLogErr}\n`
-				: getLogsInfo('appLogs', log.appLog);
-			const driverLog = getLogsInfo('driverLog', log.driverLog);
+			const appLogs = engineLogErr && `${wrappTitle('appLogs')}\n${engineLogErr}\n`;
 			if (props.downloadLog) {
 				text = `完整日志下载地址：${createLinkMark({
 					href: props.downloadLog,
@@ -153,7 +130,7 @@ export default function LogInfo(props: ILogInfoProps) {
 				});
 			}
 			if (log.msg_info) {
-				text = `${text}${wrappTitle('基本日志')}\n${createLogMark(
+				text = `${text}${wrappTitle('基本日志')}\n${createLog(
 					log.msg_info,
 					'info',
 				)} ${safeSpace} \n`;
@@ -173,7 +150,7 @@ export default function LogInfo(props: ILogInfoProps) {
 			}
 
 			if (log.perf) {
-				text = `${text}\n${wrappTitle('性能指标')}\n${createLogMark(
+				text = `${text}\n${wrappTitle('性能指标')}\n${createLog(
 					log.perf,
 					'warning',
 				)}${safeSpace} \n`;
@@ -182,24 +159,21 @@ export default function LogInfo(props: ILogInfoProps) {
 			 * 数据增量同步配置信息
 			 */
 			if (log.increInfo) {
-				text = `${text}\n${wrappTitle('增量标志信息')}\n${createLogMark(
+				text = `${text}\n${wrappTitle('增量标志信息')}\n${createLog(
 					log.increInfo,
 					'info',
 				)}${safeSpace} \n`;
 			}
 
 			if (flinkLog || log['root-exception']) {
-				text = `${text}\n\n${wrappTitle('Flink日志')} \n${createLogMark(
+				text = `${text}\n\n${wrappTitle('Flink日志')} \n${createLog(
 					flinkLog,
 					'error',
-				)} \n ${createLogMark(log['root-exception'], 'error') || ''}`;
+				)} \n ${createLog(log['root-exception'], 'error') || ''}`;
 			}
 
-			if (appLogs || driverLog) {
-				text = `${text} \n${createLogMark(appLogs, 'error')} \n ${createLogMark(
-					driverLog,
-					'error',
-				)}`;
+			if (appLogs) {
+				text = `${text} \n${createLog(appLogs, 'error')} \n`;
 			}
 
 			if (log.msg_info) {
@@ -208,13 +182,13 @@ export default function LogInfo(props: ILogInfoProps) {
 					logSql = JSON.stringify(logSql, null, 2);
 				}
 				if (logSql) {
-					text = `${text}${wrappTitle('任务信息')}\n${createLogMark(logSql, 'info')} \n`;
+					text = `${text}${wrappTitle('任务信息')}\n${createLog(logSql, 'info')} \n`;
 				}
 			}
 			if (Array.isArray(log.ruleLogList) && log.ruleLogList.length > 0) {
 				// eslint-disable-next-line no-restricted-syntax
 				for (const logInfo of log.ruleLogList) {
-					text = `${text}\n${wrappTitle('')}\n${createLogMark(
+					text = `${text}\n${wrappTitle('')}\n${createLog(
 						logInfo,
 						'info',
 					)} ${safeSpace} \n`;
@@ -223,7 +197,10 @@ export default function LogInfo(props: ILogInfoProps) {
 			}
 
 			if (downLoadUrl) {
-				text = `${text}完整日志下载地址：${createLinkMark({ href: downLoadUrl, download: '' })}\n`;
+				text = `${text}完整日志下载地址：${createLinkMark({
+					href: downLoadUrl,
+					download: '',
+				})}\n`;
 			}
 
 			// last to render sqlText
@@ -231,10 +208,7 @@ export default function LogInfo(props: ILogInfoProps) {
 				text = `${text}${wrappTitle('任务信息')}\n${prettierJSONstring(sqlText)}`;
 			}
 		} catch (e: any) {
-			text = `${createLogMark('日志解析错误', 'error')}\n${createLogMark(
-				e,
-				'error',
-			)}\n${createLogMark(props.log, 'warning')}`;
+			text = `${createLog(props.log || '', 'error')}`;
 		}
 
 		return text;
@@ -286,7 +260,13 @@ export default function LogInfo(props: ILogInfoProps) {
 						style={{ height: editorStyle.height }}
 						sync
 						value={logText}
-						options={editorOptions}
+						language="jsonlog"
+						options={{
+							readOnly: true,
+							minimap: {
+								enabled: false,
+							},
+						}}
 					/>
 				</Col>
 			</Row>

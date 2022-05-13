@@ -19,8 +19,6 @@
 package com.dtstack.taier.hdfs;
 
 
-import com.dtstack.taier.pluginapi.pojo.ClusterResource;
-import com.dtstack.taier.pluginapi.pojo.ComponentTestResult;
 import com.dtstack.taier.base.util.HadoopConfTool;
 import com.dtstack.taier.base.util.KerberosUtils;
 import com.dtstack.taier.pluginapi.JobClient;
@@ -29,10 +27,14 @@ import com.dtstack.taier.pluginapi.client.AbstractClient;
 import com.dtstack.taier.pluginapi.enums.TaskStatus;
 import com.dtstack.taier.pluginapi.exception.ExceptionUtil;
 import com.dtstack.taier.pluginapi.exception.PluginDefineException;
+import com.dtstack.taier.pluginapi.pojo.ClusterResource;
+import com.dtstack.taier.pluginapi.pojo.ComponentTestResult;
+import com.dtstack.taier.pluginapi.pojo.FileResult;
 import com.dtstack.taier.pluginapi.pojo.JobResult;
 import com.dtstack.taier.pluginapi.util.PublicUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
@@ -41,9 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 public class DtHdfsClient extends AbstractClient {
 
@@ -208,4 +208,46 @@ public class DtHdfsClient extends AbstractClient {
     }
 
 
+    public List<FileResult> listFile(String hdfsPath,boolean isPathPattern) {
+        try {
+            configuration = this.initYarnConf(config.getYarnConf());
+            return KerberosUtils.login(config, () -> {
+                FileSystem fs = null;
+                try {
+                    Configuration configuration = this.initYarnConf(config.getHadoopConf());
+                    List<FileResult> fileResults = new ArrayList<>();
+                    fs = FileSystem.get(configuration);
+                    Path path = new Path(hdfsPath);
+                    FileStatus[] fileStatuses;
+                    if (isPathPattern) {
+                        fileStatuses = fs.globStatus(path);
+                    } else {
+                        fileStatuses = fs.listStatus(path);
+                    }
+                    for (FileStatus fileStatus : fileStatuses) {
+                        FileResult fileResult = new FileResult();
+                        fileResult.setBlockSize(fileStatus.getBlockSize());
+                        fileResult.setModificationTime(fileStatus.getModificationTime());
+                        fileResult.setName(fileStatus.getPath().toString());
+                        fileResult.setPath(fileStatus.getPath().toString());
+                        fileResult.setOwner(fileStatus.getOwner());
+                        fileResults.add(fileResult);
+                    }
+                    return fileResults;
+                } catch (Exception e) {
+                    LOG.error("list hdfs file {} error", hdfsPath, e);
+                    throw new PluginDefineException("list file error", e);
+                } finally {
+                    if (Objects.nonNull(fs)) {
+                        try {
+                            fs.close();
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+            }, configuration);
+        } catch (Exception e) {
+            throw new PluginDefineException("list file error", e);
+        }
+    }
 }

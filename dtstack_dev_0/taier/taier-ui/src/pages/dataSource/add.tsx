@@ -22,14 +22,14 @@ import { Steps, Button, Spin, message } from 'antd';
 import Base64 from 'base-64';
 import { Scrollable } from '@dtinsight/molecule/esm/components';
 import molecule from '@dtinsight/molecule';
-import { CREATE_DATASOURCE_PREFIX, EDIT_DATASOURCE_PREFIX } from '@/constant';
+import { ID_COLLECTIONS } from '@/constant';
 import { SyncOutlined } from '@ant-design/icons';
 import { utf16to8 } from '@/utils';
 import { API } from '@/api/dataSource';
+import type { IDataSourceProps } from '@/interface';
 import Version from './version';
 import SelectSource from './selectSource';
 import InfoConfig from './InfoConfig';
-import type { IDataSourceProps } from '.';
 import './add.scss';
 
 const { Step } = Steps;
@@ -64,8 +64,8 @@ export default function Add({ record, onSubmit }: IAddProps) {
 	const form = useRef<FormInstance>(null);
 
 	const handleCancel = () => {
-		const groupId = molecule.editor.getGroupIdByTab(CREATE_DATASOURCE_PREFIX);
-		molecule.editor.closeTab(CREATE_DATASOURCE_PREFIX, groupId!);
+		const groupId = molecule.editor.getGroupIdByTab(ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX);
+		molecule.editor.closeTab(ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX, groupId!);
 	};
 
 	const handleSelected = (item: IDataSourceType, menuId: string) => {
@@ -127,10 +127,14 @@ export default function Add({ record, onSubmit }: IAddProps) {
 						message.success(`${infoMsg}`);
 						setTimeout(() => {
 							const groupId = molecule.editor.getGroupIdByTab(
-								edit ? EDIT_DATASOURCE_PREFIX : CREATE_DATASOURCE_PREFIX,
+								edit
+									? ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX
+									: ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
 							);
 							molecule.editor.closeTab(
-								edit ? EDIT_DATASOURCE_PREFIX : CREATE_DATASOURCE_PREFIX,
+								edit
+									? ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX
+									: ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
 								groupId!,
 							);
 							onSubmit?.();
@@ -146,10 +150,14 @@ export default function Add({ record, onSubmit }: IAddProps) {
 						const edit = infoMsg.startsWith('修改');
 						setTimeout(() => {
 							const groupId = molecule.editor.getGroupIdByTab(
-								edit ? EDIT_DATASOURCE_PREFIX : CREATE_DATASOURCE_PREFIX,
+								edit
+									? ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX
+									: ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
 							);
 							molecule.editor.closeTab(
-								edit ? EDIT_DATASOURCE_PREFIX : CREATE_DATASOURCE_PREFIX,
+								edit
+									? ID_COLLECTIONS.EDIT_DATASOURCE_PREFIX
+									: ID_COLLECTIONS.CREATE_DATASOURCE_PREFIX,
 								groupId!,
 							);
 							onSubmit?.();
@@ -222,8 +230,6 @@ export default function Add({ record, onSubmit }: IAddProps) {
 						.then((res: any) => {
 							if (res.success && res.data) {
 								message.success('连接成功');
-							} else {
-								message.error(res.message || '连接失败');
 							}
 						})
 						.catch(() => {

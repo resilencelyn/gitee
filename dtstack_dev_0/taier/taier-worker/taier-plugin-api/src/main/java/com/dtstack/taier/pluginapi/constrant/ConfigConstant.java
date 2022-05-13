@@ -51,6 +51,7 @@ public class ConfigConstant {
 
 
     public static final String VERSION = "version";
+    public static final String VERSION_NAME = "versionName";
     public static final String IS_METADATA = "metadata";
     public static final String CUSTOMER_PRIORITY_VAL = "job.priority";
 
@@ -70,6 +71,7 @@ public class ConfigConstant {
 
     public static final String REMOTE_DIR = "remoteDir";
     public static final String PRINCIPAL_FILE = "principalFile";
+    public static final String KERBEROS_FILE_TIMESTAMP = "kerberosFileTimestamp";
     public static final String PRINCIPAL = "principal";
     public static final String KRB_NAME = "krbName";
     public static final String OPEN_KERBEROS = "openKerberos";
@@ -97,5 +99,6 @@ public class ConfigConstant {
     public final static String CLUSTER = "cluster";
     public final static String QUEUE = "queue";
     public static final String DEPLOY_MODEL = "deployMode";
-
+    public static final String CHECK_POINTS_DIR = "state.checkpoints.dir";
+    public static final String SAVE_POINTS_DIR = "state.savepoints.dir";
 }

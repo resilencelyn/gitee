@@ -3,12 +3,14 @@
 
 # 如需定制，请联系：Lvwl@outlook.com
 
-# FCSVisualChart [Gitee](https://gitee.com/Lvwl-CN/FCSVisualChart)
- 流式细胞术图表控件  
+# FCSVisualChart 流式细胞术图表控件 [Gitee](https://gitee.com/Lvwl-CN/FCSVisualChart) 
  支持Line、Log数据轴  
  支持散点图、直方图、密度图、伪彩图、等高线图  
  支持段选门、椭圆门、多边形门、四边形门、横线门、竖线门、四象限门  
- 支持多数据源
+ 支持多数据源  
+ 支持鼠标滚轮放大缩小，鼠标左键平移操作  
+ 支持直方图多数据源错位显示  
+ 支持门内数据突出显示  
 
 ![直方图](doc/直方图.png)
 ![散点图](doc/散点图.png)  

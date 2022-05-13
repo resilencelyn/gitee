@@ -60,7 +60,7 @@ public abstract class APITemplate<T> {
      */
     protected void onError(Throwable e) {
         if (log.isErrorEnabled()) {
-            log.error("API Error while execute:{}", e);
+            log.error("API Error while execute ", e);
         }
     }
 
@@ -74,7 +74,7 @@ public abstract class APITemplate<T> {
             checkParams();
         } catch (IllegalArgumentException e) {
             if (log.isInfoEnabled()) {
-                log.info("param check error:{}", e);
+                log.info("param check error:", e);
             }
             throw e;
         } catch (RdosDefineException e) {

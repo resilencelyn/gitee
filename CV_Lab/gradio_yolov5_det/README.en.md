@@ -27,7 +27,6 @@
 <a href='https://gitee.com/CV_Lab/gradio_yolov5_det/members'><img src='https://gitee.com/CV_Lab/gradio_yolov5_det/badge/fork.svg?theme=dark' alt='fork'></img></a>
 </p>
 
-
 ## 🚀 About the author
 
 Zeng Yifu, engaged in artificial intelligence research and development; main research field: computer vision; [YOLOv5 official open source project code contributor](https://github.com/ultralytics/yolov5/graphs/contributors); [YOLOv5 v6.1 code Contributor](https://github.com/ultralytics/yolov5/releases/tag/v6.1)

@@ -10,17 +10,11 @@ body {
 }
 
 code {
+	padding: 2px 5px;
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+	background: var(--textBlockQuote-background);
 }
 
 #root {
 	height: 100%;
-}
-
-// priority
-:root:root {
-	--list-focusOutline: #3f87ff;
-
-	// reset molecule theme color
-	--menu-selectionBackground: #3f87ff;
 }

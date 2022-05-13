@@ -82,7 +82,7 @@ public class KerberosService {
      * @param dataSourceKey
      * @return
      */
-    private static String getSftpPath(Map<String, String> configMap, String dataSourceKey) {
+    public static String getSftpPath(Map<String, String> configMap, String dataSourceKey) {
         String dstDir = configMap.get("path");
         return dstDir + File.separator + dataSourceKey;
     }
@@ -103,7 +103,7 @@ public class KerberosService {
      * @return
      */
     public String getLocalKerberosPath(Long sourceId) {
-        String kerberosPath = environmentContext.getKerberosLocalPath();
+        String kerberosPath = environmentContext.getTempDir();
         String key = getSourceKey(sourceId, null);
         return kerberosPath + File.separator + key;
     }

@@ -1,0 +1,7 @@
+{
+	"plugins": [
+		"libplugin-ekuiper.so",
+		"libplugin-mqtt.so",
+		"libplugin-modbus-tcp.so"
+	]
+}

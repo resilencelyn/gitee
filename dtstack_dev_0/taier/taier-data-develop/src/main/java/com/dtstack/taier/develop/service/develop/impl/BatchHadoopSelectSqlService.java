@@ -28,11 +28,13 @@ import com.dtstack.taier.common.enums.TempJobType;
 import com.dtstack.taier.common.exception.RdosDefineException;
 import com.dtstack.taier.common.util.Strings;
 import com.dtstack.taier.dao.domain.BatchSelectSql;
-import com.dtstack.taier.dao.domain.BatchTask;
+import com.dtstack.taier.dao.domain.ScheduleJobExpand;
+import com.dtstack.taier.dao.domain.Task;
 import com.dtstack.taier.dao.domain.TenantComponent;
 import com.dtstack.taier.develop.dto.devlop.BuildSqlVO;
 import com.dtstack.taier.develop.dto.devlop.ExecuteResultVO;
 import com.dtstack.taier.develop.service.develop.IBatchSelectSqlService;
+import com.dtstack.taier.develop.service.schedule.JobExpandService;
 import com.dtstack.taier.develop.sql.ParseResult;
 import com.dtstack.taier.develop.sql.SqlType;
 import com.dtstack.taier.develop.utils.develop.common.IDownload;
@@ -40,6 +42,7 @@ import com.dtstack.taier.develop.utils.develop.service.impl.Engine2DTOService;
 import com.dtstack.taier.pluginapi.enums.TaskStatus;
 import com.dtstack.taier.scheduler.impl.pojo.ParamActionExt;
 import com.dtstack.taier.scheduler.service.ScheduleActionService;
+import com.dtstack.taier.scheduler.service.ScheduleJobService;
 import com.dtstack.taier.scheduler.vo.action.ActionJobEntityVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
@@ -52,7 +55,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -89,6 +97,12 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
 
     @Autowired
     private ScheduleActionService actionService;
+
+    @Autowired
+    private ScheduleJobService scheduleJobService;
+
+    @Autowired
+    private JobExpandService jobExpandService;
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -209,7 +223,7 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
      * @return
      */
     public BuildSqlVO buildSql(ParseResult parseResult, Long tenantId, Long userId, String database, Boolean isCreateAs, Long taskId) {
-        BatchTask batchTask = batchTaskService.getBatchTaskById(taskId);
+        Task task = batchTaskService.getBatchTaskById(taskId);
 
         String originSql = parseResult.getStandardSql();
         // 生成临时表名
@@ -225,24 +239,24 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
         String sql = null;
         if (SqlType.CREATE.equals(parseResult.getSqlType())) {
             isSelectSql = TempJobType.CREATE.getType();
-            sql = buildCustomFunctionAndDbSql(originSql, tenantId, database, true, batchTask.getTaskType());
+            sql = buildCustomFunctionAndDbSql(originSql, tenantId, database, true, task.getTaskType());
         } else if (isCreateAs) {
             isSelectSql = TempJobType.CREATE_AS.getType();
-            sql = buildCustomFunctionAndDbSql(originSql, tenantId, database, true, batchTask.getTaskType());
+            sql = buildCustomFunctionAndDbSql(originSql, tenantId, database, true, task.getTaskType());
         } else if (SqlType.INSERT.equals(parseResult.getSqlType()) || SqlType.INSERT_OVERWRITE.equals(parseResult.getSqlType())) {
             isSelectSql = TempJobType.INSERT.getType();
-            sql = buildCustomFunctionAndDbSql(originSql, tenantId, database, true, batchTask.getTaskType());
+            sql = buildCustomFunctionAndDbSql(originSql, tenantId, database, true, task.getTaskType());
         } else if (witchMatcher.find()) {
             TempJobType jobType = getTempJobType(witchMatcher.group("option"));
             isSelectSql = jobType.getType();
             sql = formatSql(jobType, database, tempTable, originSql);
         } else {
             isSelectSql = TempJobType.SELECT.getType();
-            sql = buildSelectSqlCustomFunction(originSql, tenantId, database, tempTable, batchTask.getTaskType());
+            sql = buildSelectSqlCustomFunction(originSql, tenantId, database, tempTable, task.getTaskType());
         }
 
         //设置需要环境参数
-        String taskParam = batchTask.getTaskParams();
+        String taskParam = task.getTaskParams();
         BuildSqlVO buildSqlVO = new BuildSqlVO();
         buildSqlVO.setSql(sql);
         buildSqlVO.setTaskParam(taskParam);
@@ -271,7 +285,7 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
 
     /**
      * 从临时表查询数据
-     * @param batchTask
+     * @param task
      * @param selectSql
      * @param tenantId
      * @param tenantId
@@ -282,7 +296,7 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
      * @throws Exception
      */
     @Override
-    public ExecuteResultVO selectData(BatchTask batchTask, BatchSelectSql selectSql, Long tenantId, Long userId, Boolean isRoot, Integer taskType) throws Exception {
+    public ExecuteResultVO selectData(Task task, BatchSelectSql selectSql, Long tenantId, Long userId, Boolean isRoot, Integer taskType) throws Exception {
         String jobId = selectSql.getJobId();
         ExecuteResultVO result = new ExecuteResultVO(jobId);
         if (selectSql.getIsSelectSql() == TempJobType.SIMPLE_SELECT.getType()) {
@@ -301,7 +315,9 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
             }
             Integer status = TaskStatus.getShowStatus(engineEntity.getStatus());
             result.setStatus(status);
-
+            if (EScheduleJobType.HIVE_SQL.getVal().equals(taskType)) {
+                buildHiveSqlData(result, status, jobId, taskType, engineEntity, selectSql, tenantId);
+            } else
             if (buildDataWithCheckTaskStatus(selectSql, tenantId, result, status)) {
                 return result;
             }
@@ -313,7 +329,7 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
 
     /**
      * 获取sql运行日志
-     * @param batchTask
+     * @param task
      * @param selectSql
      * @param tenantId
      * @param userId
@@ -322,7 +338,7 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
      * @return
      * @throws Exception
      */
-    public ExecuteResultVO selectRunLog(BatchTask batchTask, BatchSelectSql selectSql, Long tenantId, Long userId, Boolean isRoot, Integer taskType) throws Exception {
+    public ExecuteResultVO selectRunLog(Task task, BatchSelectSql selectSql, Long tenantId, Long userId, Boolean isRoot, Integer taskType) throws Exception {
         String jobId = selectSql.getJobId();
         ExecuteResultVO result = new ExecuteResultVO(jobId);
         // 是否需要脱敏，非admin用户并且是sparkSql needMask才会为true ps:hiveSql不支持脱敏
@@ -342,12 +358,14 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
         }
         Integer status = TaskStatus.getShowStatus(engineEntity.getStatus());
         result.setStatus(status);
-        
-        if (buildLogsWithCheckTaskStatus(selectSql, tenantId, result,
-                StringUtils.isNotEmpty(selectSql.getFatherJobId()) ? selectSql.getFatherJobId() : jobId, engineEntity, status)) {
-            return result;
+        if (EScheduleJobType.HIVE_SQL.getVal().equals(taskType)) {
+            buildHiveSqlRunLog(result, status, jobId, taskType, engineEntity, tenantId);
+        } else {
+            if (buildLogsWithCheckTaskStatus(selectSql, tenantId, result,
+                    StringUtils.isNotEmpty(selectSql.getFatherJobId()) ? selectSql.getFatherJobId() : jobId, engineEntity, status)) {
+                return result;
+            }
         }
-        
         // update time
         batchSelectSqlService.updateGmtModify(jobId, tenantId);
         return result;
@@ -364,7 +382,7 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
      * @return
      */
     @Override
-    public ExecuteResultVO selectStatus(BatchTask task, BatchSelectSql selectSql, Long tenantId, Long userId, Boolean isRoot, Integer taskType) {
+    public ExecuteResultVO selectStatus(Task task, BatchSelectSql selectSql, Long tenantId, Long userId, Boolean isRoot, Integer taskType) {
         ExecuteResultVO executeResultVO = new ExecuteResultVO(selectSql.getJobId());
         executeResultVO.setStatus(getExecuteSqlStatus(selectSql));
         return executeResultVO;
@@ -627,5 +645,55 @@ public class BatchHadoopSelectSqlService implements IBatchSelectSqlService {
             }
         }
         return logBuild.toString();
+    }
+
+
+    /**
+     * 组装HiveSql 执行结果
+     *
+     * @param result
+     * @param status
+     * @param taskType
+     * @param selectSql
+     * @param tenantId
+     * @throws Exception
+     */
+    private void buildHiveSqlData(ExecuteResultVO result, Integer status, String jobId, Integer taskType, ActionJobEntityVO engineEntity,
+                                  BatchSelectSql selectSql, Long tenantId) throws Exception {
+        // HIVE SQL 没有日志统一处理 hive 逻辑，不管成功或者失败都走表查询
+        if ((TaskStatus.FINISHED.getStatus().equals(status)
+                || TaskStatus.FAILED.getStatus().equals(status))
+                && EScheduleJobType.HIVE_SQL.getVal().equals(taskType)) {
+            if (selectSql.getIsSelectSql() == TempJobType.SELECT.getType()
+                    || selectSql.getIsSelectSql() == TempJobType.SIMPLE_SELECT.getType()) {
+                TenantComponent tenantEngine = developTenantComponentService.getByTenantAndEngineType(tenantId, result.getTaskType());
+                List<Object> data = hadoopDataDownloadService.queryDataFromHiveServerTempTable(tenantId, selectSql.getTempTableName(),tenantEngine.getComponentIdentity());
+                result.setResult(data);
+            }
+        }
+    }
+
+
+
+    /**
+     * 组装HiveSql 运行日志
+     *
+     * @param result
+     * @param status
+     * @param jobId
+     * @param taskType
+     * @param engineEntity
+     * @param dtuicTenantId
+     * @throws Exception
+     */
+    private void buildHiveSqlRunLog(ExecuteResultVO result, Integer status, String jobId, Integer taskType, ActionJobEntityVO engineEntity, Long dtuicTenantId) {
+        // HIVE SQL 没有日志统一处理 hive 逻辑，不管成功或者失败都走表查询
+        if ((TaskStatus.FINISHED.getStatus().equals(status) || TaskStatus.FAILED.getStatus().equals(status))
+                && EScheduleJobType.HIVE_SQL.getVal().equals(taskType)) {
+            ScheduleJobExpand scheduleJobExpand = jobExpandService.selectOneByJobId(jobId);
+            buildLog(engineEntity.getLogInfo(), scheduleJobExpand != null && StringUtils.isNotBlank(scheduleJobExpand.getEngineLog()) ?
+                    scheduleJobExpand.getEngineLog() : null, dtuicTenantId, jobId, false, result);
+            result.setDownload(null);
+        }
     }
 }

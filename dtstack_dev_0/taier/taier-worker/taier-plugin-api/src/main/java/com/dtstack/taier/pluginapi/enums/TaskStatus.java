@@ -114,19 +114,25 @@ public enum TaskStatus implements Serializable {
 	}
 
     /**
-     * 需要捕获无法转换异常
+     * Exception cannot be caught. Conversion is required
      * @param taskStatus
      * @return
      */
     public static TaskStatus getTaskStatus(String taskStatus){
 
-        if(Strings.isNullOrEmpty(taskStatus)){
+        if (Strings.isNullOrEmpty(taskStatus)) {
             return null;
-        }else if("error".equalsIgnoreCase(taskStatus)){
+        } else if ("ERROR".equalsIgnoreCase(taskStatus)) {
             return TaskStatus.FAILED;
         } else if ("RESTARTING".equalsIgnoreCase(taskStatus)) {
             //yarn做重试认为运行中
             return TaskStatus.RUNNING;
+        } else if ("INITIALIZING".equalsIgnoreCase(taskStatus)) {
+            return TaskStatus.SCHEDULED;
+        } else if ("SUSPENDED".equalsIgnoreCase(taskStatus)) {
+            return TaskStatus.FINISHED;
+        } else if ("RECONCILING".equalsIgnoreCase(taskStatus)) {
+            return TaskStatus.WAITENGINE;
         }
 
 	    try {
@@ -239,8 +245,21 @@ public enum TaskStatus implements Serializable {
         UNFINISHED_STATUSES.addAll(WAIT_STATUS);
     }
 
+
     /**
-     * 未完成的job
+     * 可以运行的状态
+     */
+    public final static List<Integer> CAN_RUN_STATUS = Lists.newArrayList(
+            TaskStatus.UNSUBMIT.getStatus(),
+            TaskStatus.FAILED.getStatus(),
+            TaskStatus.FINISHED.getStatus(),
+            TaskStatus.CANCELED.getStatus(),
+            TaskStatus.KILLED.getStatus(),
+            TaskStatus.SUBMITFAILD.getStatus()
+    );
+
+    /**
+     * Incomplete job
      */
     public static List<Integer> getUnfinishedStatuses() {
         return UNFINISHED_STATUSES;
@@ -250,19 +269,6 @@ public enum TaskStatus implements Serializable {
         return UN_SUBMIT_STATUSES;
     }
 
-    private final static Map<Integer, List<Integer>> COLLECTION_STATUS = new HashMap<>();
-
-    static {
-        COLLECTION_STATUS.put(UNSUBMIT.getStatus(), Lists.newArrayList(UNSUBMIT.getStatus()));
-        COLLECTION_STATUS.put(RUNNING.getStatus(), RUNNING_STATUS);
-        COLLECTION_STATUS.put(FINISHED.getStatus(), FINISH_STATUS);
-        COLLECTION_STATUS.put(FAILED.getStatus(), FAILED_STATUS);
-        COLLECTION_STATUS.put(PARENTFAILED.getStatus(), PARENTFAILED_STATUS);
-        COLLECTION_STATUS.put(WAITENGINE.getStatus(), WAIT_STATUS);
-        COLLECTION_STATUS.put(SUBMITTING.getStatus(), Lists.newArrayList(SUBMITTING.getStatus()));
-        COLLECTION_STATUS.put(CANCELED.getStatus(), STOP_STATUS);
-        COLLECTION_STATUS.put(FROZEN.getStatus(), Lists.newArrayList(FROZEN.getStatus()));
-    }
 
     private final static Map<Integer, List<Integer>> STATUS_FAILED_DETAIL = new HashMap<>();
 
@@ -275,7 +281,8 @@ public enum TaskStatus implements Serializable {
         STATUS_FAILED_DETAIL.put(PARENTFAILED.getStatus(), Lists.newArrayList(PARENTFAILED.getStatus()));
         STATUS_FAILED_DETAIL.put(WAITENGINE.getStatus(), WAIT_STATUS);
         STATUS_FAILED_DETAIL.put(SUBMITTING.getStatus(), Lists.newArrayList(SUBMITTING.getStatus()));
-        STATUS_FAILED_DETAIL.put(CANCELED.getStatus(), STOP_STATUS);
+        STATUS_FAILED_DETAIL.put(CANCELED.getStatus(), Lists.newArrayList(KILLED.getStatus(),CANCELED.getStatus()));
+        STATUS_FAILED_DETAIL.put(AUTOCANCELED.getStatus(), Lists.newArrayList(AUTOCANCELED.getStatus()));
         STATUS_FAILED_DETAIL.put(FROZEN.getStatus(), Lists.newArrayList(FROZEN.getStatus()));
 
     }
@@ -287,16 +294,6 @@ public enum TaskStatus implements Serializable {
     }
 
 
-    public static List<Integer> getCollectionStatus(Integer status) {
-        return COLLECTION_STATUS.computeIfAbsent(status, k -> new ArrayList<>(0));
-    }
-
-
-
-    public static Map<Integer, List<Integer>> getCollectionStatus() {
-        return COLLECTION_STATUS;
-    }
-
     public static Map<Integer, List<Integer>> getStatusFailedDetail() {
         return STATUS_FAILED_DETAIL;
     }
@@ -306,20 +303,22 @@ public enum TaskStatus implements Serializable {
     }
 
     public static int getShowStatus(Integer status) {
-        if (FAILED_STATUS.contains(status)) {
+        if (SUBMITFAILD.getStatus().equals(status)) {
+            return SUBMITTED.getStatus();
+        } else if (FAILED_STATUS.contains(status)) {
             status = FAILED.getStatus();
         } else if (PARENTFAILED_STATUS.contains(status)) {
             status = PARENTFAILED.getStatus();
-        }else {
+        } else {
             status = getShowStatusWithoutStop(status);
         }
         return status;
     }
 
     /**
-     * 将过程细化的status归并为 已完成、正在运行、等待提交、等待运行、提交中、取消、冻结
-     * 不需要对stop状态做归并处理（stop状态用户需要直接查看）
-     *
+     * Merge the status of process refinement into
+     * completed, running, waiting for submission, waiting for operation, submitting, canceling and freezing
+     * There is no need to merge the stop status (users need to view the stop status directly)
      * @param status
      * @return
      */

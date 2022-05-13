@@ -27,10 +27,7 @@ import com.dtstack.taier.pluginapi.client.IClient;
 import com.dtstack.taier.pluginapi.constrant.ConfigConstant;
 import com.dtstack.taier.pluginapi.enums.TaskStatus;
 import com.dtstack.taier.pluginapi.exception.ExceptionUtil;
-import com.dtstack.taier.pluginapi.pojo.ClusterResource;
-import com.dtstack.taier.pluginapi.pojo.ComponentTestResult;
-import com.dtstack.taier.pluginapi.pojo.JobResult;
-import com.dtstack.taier.pluginapi.pojo.JudgeResult;
+import com.dtstack.taier.pluginapi.pojo.*;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,11 +116,11 @@ public class ClientOperator {
 
 
     public JobResult stopJob(JobClient jobClient) throws Exception {
-        if(jobClient.getEngineTaskId() == null){
+        if (jobClient.getApplicationId() == null) {
             return JobResult.createSuccessResult(jobClient.getJobId());
         }
         JobIdentifier jobIdentifier = new JobIdentifier(jobClient.getEngineTaskId(), jobClient.getApplicationId(), jobClient.getJobId()
-        ,jobClient.getTenantId(),jobClient.getTaskType(),jobClient.getDeployMode(),jobClient.getUserId(),jobClient.getPluginInfo(),jobClient.getComponentVersion());
+                , jobClient.getTenantId(), jobClient.getTaskType(), jobClient.getDeployMode(), jobClient.getUserId(), jobClient.getPluginInfo(), jobClient.getComponentVersion());
         jobIdentifier.setForceCancel(jobClient.getForceCancel());
         checkoutOperator(jobClient.getPluginInfo(), jobIdentifier);
 
@@ -182,5 +179,26 @@ public class ClientOperator {
     public ClusterResource getClusterResource(String pluginInfo) throws ClientAccessException{
         IClient client = clientCache.getClient(pluginInfo);
         return client.getClusterResource();
+    }
+
+    public List<FileResult> listFile(String path,boolean isPathPattern, String pluginInfo) throws Exception {
+        IClient client = clientCache.getClient(pluginInfo);
+        return client.listFile(path,isPathPattern);
+    }
+
+
+    public List<String> getRollingLogBaseInfo(String pluginInfo, JobIdentifier jobIdentifier) {
+        checkoutOperator(pluginInfo, jobIdentifier);
+        try {
+            IClient client = clientCache.getClient(pluginInfo);
+            return client.getRollingLogBaseInfo(jobIdentifier);
+        } catch (Exception e) {
+            throw new RdosDefineException("get job rollingLogBaseInfo:" + jobIdentifier.getEngineJobId() + " exception:" + ExceptionUtil.getErrorMessage(e));
+        }
+    }
+
+    public CheckResult grammarCheck(JobClient jobClient) throws ClientAccessException {
+        IClient clusterClient = clientCache.getClient(jobClient.getPluginInfo());
+        return clusterClient.grammarCheck(jobClient);
     }
 }

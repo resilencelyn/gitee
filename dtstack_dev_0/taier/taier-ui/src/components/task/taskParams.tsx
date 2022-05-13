@@ -23,7 +23,7 @@ import type { IOfflineTaskProps, ITaskVariableProps } from '@/interface';
 import molecule from '@dtinsight/molecule/esm';
 import { formItemLayout, PARAMS_ENUM } from '@/constant';
 import HelpDoc from '../../components/helpDoc';
-import { TAB_WITHOUT_DATA } from '@/pages/rightBar';
+import { isTaskTab } from '@/utils/enums';
 import './taskParams.scss';
 
 const FormItem = Form.Item;
@@ -71,13 +71,7 @@ export default function TaskParams({ current, onChange }: ITaskParamsProps) {
 	/**
 	 * 当前的 tab 是否不合法，如不合法则展示 Empty
 	 */
-	const isInValidTab = useMemo(
-		() =>
-			!current ||
-			!current.activeTab ||
-			TAB_WITHOUT_DATA.some((prefix) => current.activeTab?.toString().includes(prefix)),
-		[current],
-	);
+	const isInValidTab = useMemo(() => !isTaskTab(current?.tab?.id), [current]);
 
 	const systemParams = useMemo(() => {
 		if (isInValidTab) {
@@ -86,7 +80,7 @@ export default function TaskParams({ current, onChange }: ITaskParamsProps) {
 		return (
 			current?.tab?.data?.taskVariables?.filter((p) => p.type === PARAMS_ENUM.SYSTEM) || []
 		);
-	}, [current, isInValidTab]);
+	}, [current?.tab?.data?.taskVariables, isInValidTab]);
 
 	const customParams = useMemo(() => {
 		if (isInValidTab) {
@@ -95,14 +89,13 @@ export default function TaskParams({ current, onChange }: ITaskParamsProps) {
 		return (
 			current?.tab?.data?.taskVariables?.filter((p) => p.type === PARAMS_ENUM.CUSTOM) || []
 		);
-	}, [current, isInValidTab]);
+	}, [current?.tab?.data?.taskVariables, isInValidTab]);
 
 	if (isInValidTab) {
 		return <div className={classNames('text-center', 'mt-10px')}>无法获取任务参数</div>;
 	}
 
 	const tabData = current!.tab!.data!;
-	const isLocked = false;
 
 	return (
 		<molecule.component.Scrollable>
@@ -110,9 +103,7 @@ export default function TaskParams({ current, onChange }: ITaskParamsProps) {
 				form={form}
 				onValuesChange={(changed) => handleFormChanged(changed, tabData)}
 				className="taskParams"
-				style={{ position: 'relative' }}
 			>
-				{isLocked ? <div className="cover-mask" /> : null}
 				<Collapse className="bg-transparent" bordered={false} defaultActiveKey={['1', '2']}>
 					<Panel
 						key="1"

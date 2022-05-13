@@ -43,11 +43,13 @@ FONTSIZE = 25
 
 def parse_args(known=False):
     parser = argparse.ArgumentParser(description="Gradio YOLOv5 Det v0.3")
+    parser.add_argument("--source", "-src", default="upload", type=str, help="input source")
+    parser.add_argument("--img_tool", "-it", default="editor", type=str, help="input image tool")
     parser.add_argument("--model_name", "-mn", default="yolov5s", type=str, help="model name")
     parser.add_argument(
         "--model_cfg",
         "-mc",
-        default="./model_config/model_name_p5_all.yaml",
+        default="./model_config/model_name_p5_p6_all.yaml",
         type=str,
         help="model config",
     )
@@ -66,22 +68,15 @@ def parse_args(known=False):
         help="model NMS confidence threshold",
     )
     parser.add_argument("--nms_iou", "-iou", default=0.45, type=float, help="model NMS IoU threshold")
-
-    parser.add_argument(
-        "--label_dnt_show",
-        "-lds",
-        action="store_true",
-        default=False,
-        help="label show",
-    )
     parser.add_argument(
         "--device",
         "-dev",
-        default="0",
+        default="cuda:0",
         type=str,
         help="cuda or cpu",
     )
     parser.add_argument("--inference_size", "-isz", default=640, type=int, help="model inference size")
+    parser.add_argument("--max_detnum", "-mdn", default="50", type=str, help="model max det num")
 
     args = parser.parse_known_args()[0] if known else parser.parse_args()
     return args
@@ -146,13 +141,13 @@ def export_json(results, model, img_size):
 
 
 # 帧转换
-def pil_draw(img, countdown_msg, textFont, xyxy, font_size, label_opt):
+def pil_draw(img, countdown_msg, textFont, xyxy, font_size, opt):
 
     img_pil = ImageDraw.Draw(img)
 
     img_pil.rectangle(xyxy, fill=None, outline="green")  # 边界框
 
-    if label_opt:
+    if "label" in opt:
         text_w, text_h = textFont.getsize(countdown_msg)  # 标签尺寸
         img_pil.rectangle(
             (xyxy[0], xyxy[1], xyxy[0] + text_w, xyxy[1] + text_h),
@@ -171,7 +166,7 @@ def pil_draw(img, countdown_msg, textFont, xyxy, font_size, label_opt):
 
 
 # YOLOv5图片检测函数
-def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, model_cls, opt):
+def yolo_det(img, device, model_name, inference_size, conf, iou, max_num, model_cls, opt):
 
     global model, model_name_tmp, device_tmp
 
@@ -186,7 +181,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, mode
     # -----------模型调参-----------
     model.conf = conf  # NMS 置信度阈值
     model.iou = iou  # NMS IoU阈值
-    model.max_det = 1000  # 最大检测框数
+    model.max_det = int(max_num)  # 最大检测框数
     model.classes = model_cls  # 模型类别
 
     results = model(img, size=inference_size)  # 检测
@@ -234,7 +229,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, mode
                 textFont,
                 [x0, y0, x1, y1],
                 FONTSIZE,
-                label_opt,
+                opt,
             )
 
     det_json = export_json(results, model, img.size)[0]  # 检测信息
@@ -252,7 +247,9 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, label_opt, mode
     if "json" not in opt:
         det_json = None
 
-    return det_img, det_json, report
+    dataframe = results.pandas().xyxy[0].round(2)
+
+    return det_img, det_json, report, dataframe
 
 
 def main(args):
@@ -262,14 +259,16 @@ def main(args):
 
     slider_step = 0.05  # 滑动步长
 
+    source = args.source
+    img_tool = args.img_tool
     nms_conf = args.nms_conf
     nms_iou = args.nms_iou
-    label_opt = args.label_dnt_show
     model_name = args.model_name
     model_cfg = args.model_cfg
     cls_name = args.cls_name
     device = args.device
     inference_size = args.inference_size
+    max_detnum = args.max_detnum
 
     is_fonts(f"{ROOT_PATH}/fonts")  # 检查字体文件
 
@@ -282,15 +281,19 @@ def main(args):
     model_cls_name_cp = model_cls_name.copy()  # 类别名称
 
     # -------------------输入组件-------------------
-    inputs_img = gr.inputs.Image(type="pil", label="原始图片")
-    inputs_device = gr.inputs.Dropdown(choices=["0", "cpu"], default=device, type="value", label="设备")
+    inputs_img = gr.inputs.Image(image_mode="RGB", source=source, tool=img_tool, type="pil", label="原始图片")
+    inputs_device = gr.inputs.Radio(choices=["cuda:0", "cpu"], default=device, label="设备")
+
     inputs_model = gr.inputs.Dropdown(choices=model_names, default=model_name, type="value", label="模型")
-    inputs_size = gr.inputs.Radio(choices=[320, 640], default=inference_size, label="推理尺寸")
+    inputs_size = gr.inputs.Radio(choices=[320, 640, 1280], default=inference_size, label="推理尺寸")
     input_conf = gr.inputs.Slider(0, 1, step=slider_step, default=nms_conf, label="置信度阈值")
     inputs_iou = gr.inputs.Slider(0, 1, step=slider_step, default=nms_iou, label="IoU 阈值")
-    inputs_label = gr.inputs.Checkbox(default=(not label_opt), label="标签显示")
+    inputs_maxnum = gr.inputs.Textbox(lines=1, placeholder="最大检测数", default=max_detnum, label="最大检测数")
     inputs_clsName = gr.inputs.CheckboxGroup(choices=model_cls_name, default=model_cls_name, type="index", label="类别")
-    inputs_opt = gr.inputs.CheckboxGroup(choices=["pdf", "json"], default=["pdf"], type="value", label="操作")
+    inputs_opt = gr.inputs.CheckboxGroup(choices=["label", "pdf", "json"],
+                                         default=["label", "pdf"],
+                                         type="value",
+                                         label="操作")
 
     # 输入参数
     inputs = [
@@ -300,17 +303,19 @@ def main(args):
         inputs_size,  # 推理尺寸
         input_conf,  # 置信度阈值
         inputs_iou,  # IoU阈值
-        inputs_label,  # 标签显示
+        inputs_maxnum,  # 最大检测数
         inputs_clsName,  # 类别
         inputs_opt,  # 检测操作
     ]
 
     # 输出参数
     outputs_img = gr.outputs.Image(type="pil", label="检测图片")
-    outputs02_json = gr.outputs.JSON(label="检测信息")
-    outputs03_pdf = gr.outputs.File(label="下载检测报告")
+    outputs_json = gr.outputs.JSON(label="检测信息")
+    outputs_pdf = gr.outputs.File(label="下载检测报告")
+    # outputs_df = gr.outputs.Dataframe(headers=["xmin", "ymin", "xmax", "ymax", "置信度", "类别ID", "类别名称"],
+    outputs_df = gr.outputs.Dataframe(max_rows=5, overflow_row_behaviour="paginate", type="pandas", label="检测列表")
 
-    outputs = [outputs_img, outputs02_json, outputs03_pdf]
+    outputs = [outputs_img, outputs_json, outputs_pdf, outputs_df]
 
     # 标题
     title = "基于Gradio的YOLOv5通用目标检测系统v0.3"
@@ -327,9 +332,9 @@ def main(args):
             640,
             0.6,
             0.5,
-            True,
+            10,
             ["人", "公交车"],
-            ["pdf"],],
+            ["label", "pdf"],],
         [
             "./img_example/Millenial-at-work.jpg",
             "0",
@@ -337,9 +342,9 @@ def main(args):
             320,
             0.5,
             0.45,
-            True,
+            12,
             ["人", "椅子", "杯子", "笔记本电脑"],
-            ["json"],],
+            ["label", "pdf"],],
         [
             "./img_example/zidane.jpg",
             "0",
@@ -347,9 +352,19 @@ def main(args):
             640,
             0.25,
             0.5,
-            False,
+            15,
             ["人", "领带"],
-            ["pdf", "json"],],]
+            ["pdf", "json"],],
+        [
+            "./img_example/MichaelMiley.jpg",
+            "0",
+            "yolov5s6",
+            1280,
+            0.5,
+            0.5,
+            20,
+            ["人", "风筝"],
+            ["label", "pdf"],],]
 
     # 接口
     gr.Interface(

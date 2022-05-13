@@ -19,6 +19,11 @@
 import 'whatwg-fetch';
 import { message } from 'antd';
 import ProgressBar from '@/components/progressBar';
+import notification from '@/components/notification';
+import { IResponseBodyProps } from '@/interface';
+
+const controller = new AbortController();
+const { signal } = controller;
 
 class Http {
 	get(url: any, params: any, config: Record<string, any> = {}) {
@@ -30,14 +35,14 @@ class Http {
 		});
 	}
 
-	post(url: any, body?: any, config: Record<string, any> = {}) {
+	post<T = any>(url: any, body?: any, config: Record<string, any> = {}) {
 		// POST请求
 		const options: any = { method: 'POST', ...config };
 		if (body)
 			options.body = JSON.stringify({
 				...body,
 			});
-		return this.request(url, options);
+		return this.request<T>(url, options);
 	}
 
 	postAsFormData(url: any, params: any) {
@@ -61,29 +66,40 @@ class Http {
 		return this.request(url, options);
 	}
 
-	request(url: string, options: RequestInit) {
+	request<T = any>(url: string, options: RequestInit) {
 		ProgressBar.show();
-		options.credentials = 'same-origin';
-		options.headers = {
-			...options.headers,
-		};
-		return fetch(url, options)
+		return fetch(url, { ...options, credentials: 'same-origin', signal })
 			.then((response) => {
 				setTimeout(() => {
 					ProgressBar.hide();
 				}, 300);
 				return response.json();
 			})
-			.then((res) => {
-				if (res.code !== 1) {
-					message.error(res.message);
+			.then((res: IResponseBodyProps<T>) => {
+				if (res.code !== 1 && res.message === '未登录') {
+					notification.error({
+						key: 'NotLogin',
+						message: `未登录，请登陆后进行操作`,
+					});
 				}
 				return res;
 			})
-			.catch((err) => {
-				ProgressBar.hide();
-				console.log('err:', err);
-				return err;
+			.then((res) => {
+				if (res.code !== 1) {
+					// 相同的错误文案只提示一次
+					message.error({ content: res.message, key: res.message });
+				}
+				return res;
+			})
+			.catch((err: Error) => {
+				setTimeout(() => {
+					ProgressBar.hide();
+				}, 300);
+				if (err.name === 'AbortError') {
+					// eslint-disable-next-line no-param-reassign
+					err.stack = '';
+				}
+				throw err;
 			});
 	}
 

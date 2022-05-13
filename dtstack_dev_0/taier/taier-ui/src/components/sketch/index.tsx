@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { useRef, useState, useLayoutEffect, useImperativeHandle } from 'react';
+import { useRef, useState, useLayoutEffect, useImperativeHandle, useEffect } from 'react';
 import type { FormInstance, FormItemProps, PaginationProps } from 'antd';
 import { Form, Pagination, Table } from 'antd';
 import {
@@ -31,6 +31,7 @@ import {
 import { usePagination } from '@/hooks';
 import type { ColumnsType, TablePaginationConfig, TableProps } from 'antd/lib/table';
 import type { FilterValue, SorterResult } from 'antd/lib/table/interface';
+import { useCalcTableScroll } from '@/components/customHooks/index';
 import classnames from 'classnames';
 import './index.scss';
 
@@ -68,7 +69,7 @@ export interface IActionRef {
 	getTableData: () => any[];
 }
 
-interface ISketchProps<T, P> {
+export interface ISketchProps<T, P> {
 	/**
 	 * 通过 actionRef 获取内部值
 	 */
@@ -87,6 +88,10 @@ interface ISketchProps<T, P> {
 	headerClassName?: string;
 	/**
 	 * 在条件满足的情况下，会执行该方法获取表格数据
+	 * @param values 当前表单域的值
+	 * @param pagination 当前分页数据
+	 * @param filters 当前表格过滤条件
+	 * @param sorter 当前表格排序条件
 	 * @required
 	 */
 	request: (
@@ -108,9 +113,9 @@ interface ISketchProps<T, P> {
 	 */
 	columns?: ColumnsType<T>;
 	/**
-	 * 表格的 Props，会透传给表格组件，除了 `columns` | `dataSource` 属性以外
+	 * 表格的 Props，会透传给表格组件，除了 `columns` | `dataSource` | `scroll` 属性以外
 	 */
-	tableProps?: Omit<Partial<TableProps<T>>, 'columns' | 'dataSource'>;
+	tableProps?: Omit<Partial<TableProps<T>>, 'columns' | 'dataSource' | 'scroll'>;
 	/**
 	 * 头部需要额外的组件，如添加按钮，刷新按钮等
 	 */
@@ -175,6 +180,13 @@ export default function Sketch<
 	const [selectedRowKeys, setSelectedKeys] = useState<React.Key[]>([]);
 	const [selectedRows, setSelectedRows] = useState<T[]>([]);
 	const timeout = useRef<number | undefined>(undefined);
+	const { scroll: calcTableScroll } = useCalcTableScroll({ className: 'dt-sketch-table' });
+
+	// we should save the filter and sorter from table
+	const tableInfo = useRef<{
+		filters?: Record<string, FilterValue | null>;
+		sorter?: SorterResult<any> | SorterResult<any>[];
+	}>({});
 
 	useImperativeHandle(actionRef, () => ({
 		selectedRowKeys,
@@ -191,17 +203,14 @@ export default function Sketch<
 		sorter?: SorterResult<any>,
 		silent: boolean = false,
 	) => {
-		if (timeout.current) {
-			window.clearTimeout(timeout.current);
-		}
 		if (!silent) {
 			setLoading(true);
 		}
 		request(
 			form.getFieldsValue(),
 			{ current: nextCurrent, pageSize: nextPageSize },
-			filters || {},
-			sorter,
+			filters || tableInfo.current.filters || {},
+			sorter || (tableInfo.current.sorter as SorterResult<any>),
 		)
 			.then((res) => {
 				if (res) {
@@ -216,18 +225,6 @@ export default function Sketch<
 			})
 			.finally(() => {
 				setLoading(false);
-				if (polling) {
-					const delay = typeof polling === 'object' && polling.delay;
-					timeout.current = window.setTimeout(() => {
-						// 轮训请求不触发 loading 状态的修改
-						getDataSource(
-							{ current: nextCurrent, pageSize: nextPageSize },
-							filters,
-							sorter,
-							true,
-						);
-					}, delay || 36000);
-				}
 			});
 	};
 
@@ -242,10 +239,12 @@ export default function Sketch<
 
 	const handleTableChange = (
 		pagination: TablePaginationConfig,
-		filters: Record<string, FilterValue | null>,
+		filters?: Record<string, FilterValue | null>,
 		sorter?: SorterResult<any> | SorterResult<any>[],
 	) => {
 		setSelectedKeys([]);
+		// save it into ref
+		tableInfo.current = { filters, sorter };
 		getDataSource(pagination, filters, sorter as SorterResult<any>);
 	};
 
@@ -257,13 +256,30 @@ export default function Sketch<
 
 	useLayoutEffect(() => {
 		getDataSource();
+	}, []);
+
+	useEffect(() => {
+		if (polling) {
+			const delay = (typeof polling === 'object' && polling.delay) || 36000;
+			timeout.current = window.setInterval(() => {
+				// 轮训需要静默请求
+				getDataSource(
+					{ current, pageSize },
+					tableInfo.current.filters,
+					tableInfo.current.sorter as SorterResult<any>,
+					true,
+				);
+			}, delay);
+		} else {
+			window.clearInterval(timeout.current);
+		}
 
 		return () => {
 			if (timeout.current) {
-				window.clearTimeout(timeout.current);
+				window.clearInterval(timeout.current);
 			}
 		};
-	}, []);
+	}, [polling]);
 
 	const pagination: PaginationProps = {
 		total,
@@ -274,7 +290,11 @@ export default function Sketch<
 		current,
 		pageSize,
 		onChange: (page, nextPageSize) =>
-			handleTableChange({ current: page, pageSize: nextPageSize }, {}),
+			handleTableChange(
+				{ current: page, pageSize: nextPageSize },
+				tableInfo.current.filters,
+				tableInfo.current.sorter,
+			),
 		...tableProps.pagination,
 	};
 
@@ -373,6 +393,7 @@ export default function Sketch<
 					onChange: handleSelectedRowChanged,
 				}}
 				className={classnames('dt-sketch-table', tableClassName)}
+				scroll={{ ...calcTableScroll }}
 				loading={loading}
 				columns={columns}
 				dataSource={dataSource}

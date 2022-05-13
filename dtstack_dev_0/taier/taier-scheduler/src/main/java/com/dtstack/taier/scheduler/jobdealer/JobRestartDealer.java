@@ -27,7 +27,7 @@ import com.dtstack.taier.pluginapi.pojo.ParamAction;
 import com.dtstack.taier.pluginapi.util.PublicUtil;
 import com.dtstack.taier.scheduler.jobdealer.bo.EngineJobRetry;
 import com.dtstack.taier.scheduler.jobdealer.cache.ShardCache;
-import com.dtstack.taier.scheduler.service.EngineJobCacheService;
+import com.dtstack.taier.scheduler.service.ScheduleJobCacheService;
 import com.dtstack.taier.scheduler.service.ScheduleJobService;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.function.BiConsumer;
 
 
@@ -51,7 +50,7 @@ public class JobRestartDealer {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobRestartDealer.class);
 
     @Autowired
-    private EngineJobCacheService engineJobCacheService;
+    private ScheduleJobCacheService ScheduleJobCacheService;
 
     @Autowired
     private ScheduleJobService scheduleJobService;
@@ -169,7 +168,7 @@ public class JobRestartDealer {
     }
 
     private boolean restartJob(JobClient jobClient,BiConsumer<ScheduleJob,JobClient> saveRetryFunction){
-        ScheduleEngineJobCache jobCache = engineJobCacheService.getByJobId(jobClient.getJobId());
+        ScheduleEngineJobCache jobCache = ScheduleJobCacheService.getByJobId(jobClient.getJobId());
         if (jobCache == null) {
             LOGGER.info("jobId:{} restart but jobCache is null.", jobClient.getJobId());
             return false;
@@ -178,33 +177,32 @@ public class JobRestartDealer {
         try {
             ParamAction paramAction = PublicUtil.jsonStrToObject(jobInfo, ParamAction.class);
             jobClient.setSql(paramAction.getSqlText());
-        } catch (IOException e) {
+            //添加到重试队列中
+            boolean isAdd = jobDealer.addRestartJob(jobClient);
+            if (isAdd) {
+                String jobId = jobClient.getJobId();
+                //重试任务更改在zk的状态，统一做状态清理
+                shardCache.updateLocalMemTaskStatus(jobId, TaskStatus.RESTARTING.getStatus());
+
+                //重试的任务不置为失败，waitengine
+                ScheduleJob scheduleJob = scheduleJobService.getByJobId(jobClient.getJobId());
+                if (saveRetryFunction != null) {
+                    saveRetryFunction.accept(scheduleJob, jobClient);
+                } else {
+                    jobRetryRecord(scheduleJob, jobClient, null);
+                }
+
+                scheduleJobService.updateStatus(jobId, TaskStatus.RESTARTING.getStatus());
+                LOGGER.info("jobId:{} update job status:{}.", jobId, TaskStatus.RESTARTING.getStatus());
+
+                //update retryNum
+                increaseJobRetryNum(jobClient.getJobId());
+            }
+            return isAdd;
+        } catch (Exception e) {
             LOGGER.error("jobId:{} restart but convert paramAction error: ", jobClient.getJobId(), e);
             return false;
         }
-
-        //添加到重试队列中
-        boolean isAdd = jobDealer.addRestartJob(jobClient);
-        if (isAdd) {
-            String jobId = jobClient.getJobId();
-            //重试任务更改在zk的状态，统一做状态清理
-            shardCache.updateLocalMemTaskStatus(jobId, TaskStatus.RESTARTING.getStatus());
-
-            //重试的任务不置为失败，waitengine
-            ScheduleJob scheduleJob = scheduleJobService.getByJobId(jobClient.getJobId());
-            if (saveRetryFunction != null) {
-                saveRetryFunction.accept(scheduleJob, jobClient);
-            } else {
-                jobRetryRecord(scheduleJob, jobClient, null);
-            }
-
-            scheduleJobService.updateStatus(jobId, TaskStatus.RESTARTING.getStatus());
-            LOGGER.info("jobId:{} update job status:{}.", jobId, TaskStatus.RESTARTING.getStatus());
-
-            //update retryNum
-            increaseJobRetryNum(jobClient.getJobId());
-        }
-        return isAdd;
     }
 
     public void jobRetryRecord(ScheduleJob scheduleJob, JobClient jobClient,String engineLog) {
