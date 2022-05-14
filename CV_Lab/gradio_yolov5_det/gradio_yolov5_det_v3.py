@@ -11,6 +11,7 @@ import csv
 import json
 import sys
 from pathlib import Path
+import pandas as pd
 
 import gradio as gr
 import torch
@@ -185,6 +186,8 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, max_num, model_
     model.classes = model_cls  # 模型类别
 
     results = model(img, size=inference_size)  # 检测
+    
+    dataframe = results.pandas().xyxy[0].round(2)
 
     img_size = img.size  # 帧尺寸
 
@@ -235,7 +238,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, max_num, model_
     det_json = export_json(results, model, img.size)[0]  # 检测信息
 
     # JSON格式化
-    det_json_format = json.dumps(det_json, sort_keys=True, indent=4, separators=(",", ":"), ensure_ascii=False)
+    det_json_format = json.dumps(det_json, sort_keys=False, indent=4, separators=(",", ":"), ensure_ascii=False)
 
     # -------pdf-------
     report = "./Det_Report.pdf"
@@ -246,8 +249,6 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, max_num, model_
 
     if "json" not in opt:
         det_json = None
-
-    dataframe = results.pandas().xyxy[0].round(2)
 
     return det_img, det_json, report, dataframe
 
@@ -312,8 +313,7 @@ def main(args):
     outputs_img = gr.outputs.Image(type="pil", label="检测图片")
     outputs_json = gr.outputs.JSON(label="检测信息")
     outputs_pdf = gr.outputs.File(label="下载检测报告")
-    # outputs_df = gr.outputs.Dataframe(headers=["xmin", "ymin", "xmax", "ymax", "置信度", "类别ID", "类别名称"],
-    outputs_df = gr.outputs.Dataframe(max_rows=5, overflow_row_behaviour="paginate", type="pandas", label="检测列表")
+    outputs_df = gr.outputs.Dataframe(max_rows=5, overflow_row_behaviour="paginate", type="pandas", label="检测信息列表")
 
     outputs = [outputs_img, outputs_json, outputs_pdf, outputs_df]
 
@@ -336,18 +336,18 @@ def main(args):
             ["人", "公交车"],
             ["label", "pdf"],],
         [
-            "./img_example/Millenial-at-work.jpg",
-            "0",
+            "./img_example/giraffe.jpg",
+            "cuda:0",
             "yolov5l",
             320,
             0.5,
             0.45,
             12,
-            ["人", "椅子", "杯子", "笔记本电脑"],
+            ["长颈鹿"],
             ["label", "pdf"],],
         [
             "./img_example/zidane.jpg",
-            "0",
+            "cuda:0",
             "yolov5m",
             640,
             0.25,
@@ -356,14 +356,14 @@ def main(args):
             ["人", "领带"],
             ["pdf", "json"],],
         [
-            "./img_example/MichaelMiley.jpg",
-            "0",
+            "./img_example/Millenial-at-work.jpg",
+            "cuda:0",
             "yolov5s6",
             1280,
             0.5,
             0.5,
             20,
-            ["人", "风筝"],
+            ["人", "椅子", "杯子", "笔记本电脑"],
             ["label", "pdf"],],]
 
     # 接口

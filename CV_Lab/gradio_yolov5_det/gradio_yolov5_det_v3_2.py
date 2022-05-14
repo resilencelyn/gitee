@@ -4,7 +4,7 @@
 
 import os
 
-os.system("pip install gradio==3.0b1")
+os.system("pip install gradio==3.0b5")
 
 import argparse
 import csv
@@ -235,7 +235,7 @@ def yolo_det(img, device, model_name, inference_size, conf, iou, max_num, model_
     det_json = export_json(results, model, img.size)[0]  # 检测信息
 
     # JSON格式化
-    det_json_format = json.dumps(det_json, sort_keys=True, indent=4, separators=(",", ":"), ensure_ascii=False)
+    det_json_format = json.dumps(det_json, sort_keys=False, indent=4, separators=(",", ":"), ensure_ascii=False)
 
     # -------pdf-------
     report = "./Det_Report.pdf"
@@ -312,7 +312,6 @@ def main(args):
     outputs_img = gr.outputs.Image(type="pil", label="检测图片")
     outputs_json = gr.outputs.JSON(label="检测信息")
     outputs_pdf = gr.outputs.File(label="下载检测报告")
-    # outputs_df = gr.outputs.Dataframe(headers=["xmin", "ymin", "xmax", "ymax", "置信度", "类别ID", "类别名称"],
     outputs_df = gr.outputs.Dataframe(max_rows=5, overflow_row_behaviour="paginate", type="pandas", label="检测列表")
 
     outputs = [outputs_img, outputs_json, outputs_pdf, outputs_df]

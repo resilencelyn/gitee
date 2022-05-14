@@ -47,6 +47,7 @@
 
 <h2 align="center">🚀更新走势</h2>
 
+- `2022-05-14` **🚀 \[好消息\] [Gradio YOLOv5 Det v0.3](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v3)** 正式加入到[Gradio官方demo列表](https://github.com/gradio-app/awesome-demos) 🎉🎉🎉🎉🎉
 - `2022-05-13` **🚀\[推荐\] [Gradio YOLOv5 Det 开发版 脚本指令操作](https://gitee.com/CV_Lab/gradio_yolov5_det#-%E8%84%9A%E6%9C%AC%E6%8C%87%E4%BB%A4%E6%93%8D%E4%BD%9C-%E6%8E%A8%E8%8D%90)**
 - `2022-05-12` **⚡ [Gradio YOLOv5 Det v0.2.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2.2)正式上线**
 - `2022-05-08` **⚡ [Gradio YOLOv5 Det v0.2](https://gitee.com/CV_Lab/gradio_yolov5_det/releases/v0.2)正式上线**
@@ -54,7 +55,22 @@
 
 <h2 align="center">🤗在线demo</h2>
 
-❤️ 本项目提供了**在线demo**，点击下面的logo，进入**Hugging Face Spaces**中快速体验：
+### **🚀 [Gradio YOLOv5 Det v0.3](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v3)** 正式加入到[Gradio官方demo列表](https://github.com/gradio-app/awesome-demos) 🤗
+
+❤️ 点击下图进入[Gradio awesome-demos](https://github.com/gradio-app/awesome-demos) ，在**Computer vision**列表中***Find Me!***
+
+<div align="center" >
+<a href="https://github.com/gradio-app/awesome-demos#-computer-vision">
+<img src="https://pycver.gitee.io/ows-pics/imgs/gradio_awesome_demos.png">
+</a>
+</div>
+
+
+
+
+### ❤️ 快速体验
+
+本项目提供了**在线demo**，点击下面的logo，进入**Hugging Face Spaces**中快速体验：
 
 <div align="center" >
 <a href="https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2">
@@ -66,11 +82,12 @@
 
 ❤️ 点击列表中的链接，进入对应版本的**Hugging Face Spaces**界面中快速体验：
 
-|                                               Demo 名称                                               | 输入类型 |    输出类型     |                                                                     整体界面                                                                      |                                                                                                              状态                                                                                                               |
-| :-------------------------------------------------------------------------------------------------: | :--: | :---------: | :-------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| [Gradio YOLOv5 Det v0.2.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) \[推荐\] |  图片  | 图片，JSON，PDF | [检测前](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_2_screenshot.png) , [检测后](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_2_screenshot02.png) | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) |
-|      [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2)       |  图片  | 图片，JSON，PDF |   [检测前](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_screenshot.png) , [检测后](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot02.png)   |   [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2)   |
-|        [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)        |  图片  |   图片，JSON   |   [检测前](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot.png) , [检测后](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot02.png)   |      [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det)      |
+|                          Demo 名称                           | 输入类型 |        输出类型         |                           整体界面                           |                             状态                             |
+| :----------------------------------------------------------: | :------: | :---------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| 🚀 [Gradio YOLOv5 Det v0.3](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v3) |   图片   | 图片，JSON，PDF，数据表 |                                                              | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v3/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v3) |
+| 🚀 [Gradio YOLOv5 Det v0.2.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) |   图片   |     图片，JSON，PDF     | [检测前](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_2_screenshot.png) , [检测后](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_2_screenshot02.png) | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2_2) |
+| [Gradio YOLOv5 Det v0.2](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |   图片   |     图片，JSON，PDF     | [检测前](https://pycver.gitee.io/ows-pics/imgs/gyd_v2_screenshot.png) , [检测后](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot02.png) | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/Gradio_YOLOv5_Det_v2/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/Gradio_YOLOv5_Det_v2) |
+| [Gradio YOLOv5 Det v0.1](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |   图片   |       图片，JSON        | [检测前](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot.png) , [检测后](https://pycver.gitee.io/ows-pics/imgs/gyd_v1_screenshot02.png) | [![demo status](https://img.shields.io/website-up-down-green-red/https/hf.space/gradioiframe/Zengyf-CVer/gradio_yolov5_det/+.svg?label=demo%20status)](https://huggingface.co/spaces/Zengyf-CVer/gradio_yolov5_det) |
 
 ❗ 注：点击`整体界面`链接，查看项目**整体界面大图**
 
